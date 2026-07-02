@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Quantro Lab — Türkiye'nin İlk Kuantum Araç Seti">
+<title>Quantro Lab — Kuantum Araçları</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@300;400;500&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --void:#020810;--deep:#07111f;--surface:#0d1f35;--subtle:#1e3248;
+  --cyan:#00c8f0;--cyanD:rgba(0,200,240,0.12);--cyanM:rgba(0,200,240,0.35);
+  --text:#e8edf5;--muted:#7a93a8;--red:#ff4466;--green:#00f0a0;--purple:#a060ff;--gold:#f0c040;
+  --fd:'Syne',sans-serif;--fb:'Space Grotesk',sans-serif;--fm:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{background:var(--void);color:var(--text);font-family:var(--fb);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:var(--cyanM)}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+
+/* ── BG ── */
+.bg{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-stars{position:absolute;inset:0;background-image:
+  radial-gradient(1px 1px at 8% 6%,rgba(255,255,255,.7) 0%,transparent 100%),
+  radial-gradient(1px 1px at 25% 14%,rgba(255,255,255,.5) 0%,transparent 100%),
+  radial-gradient(1.5px 1.5px at 55% 5%,rgba(200,230,255,.8) 0%,transparent 100%),
+  radial-gradient(1px 1px at 78% 11%,rgba(255,255,255,.6) 0%,transparent 100%),
+  radial-gradient(1px 1px at 92% 20%,rgba(255,255,255,.4) 0%,transparent 100%),
+  radial-gradient(1px 1px at 12% 42%,rgba(255,255,255,.4) 0%,transparent 100%),
+  radial-gradient(1px 1px at 65% 38%,rgba(255,255,255,.3) 0%,transparent 100%),
+  radial-gradient(1px 1px at 88% 55%,rgba(255,255,255,.5) 0%,transparent 100%),
+  radial-gradient(1px 1px at 35% 70%,rgba(255,255,255,.4) 0%,transparent 100%),
+  radial-gradient(1px 1px at 72% 80%,rgba(200,220,255,.5) 0%,transparent 100%),
+  radial-gradient(1px 1px at 18% 88%,rgba(255,255,255,.3) 0%,transparent 100%),
+  radial-gradient(1px 1px at 50% 94%,rgba(255,255,255,.4) 0%,transparent 100%);}
+.bg-grid{position:absolute;inset:0;
+  background-image:linear-gradient(rgba(0,200,240,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,200,240,.025) 1px,transparent 1px);
+  background-size:64px 64px;}
+.bg-neb{position:absolute;width:600px;height:600px;top:-100px;right:-100px;
+  background:radial-gradient(ellipse at 50% 50%,rgba(0,80,200,.15) 0%,rgba(60,0,160,.08) 45%,transparent 70%);
+  border-radius:50%;filter:blur(60px);}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:22px 0;transition:background .4s,padding .3s}
+nav.sc{background:rgba(2,8,16,.92);backdrop-filter:blur(20px);padding:13px 0;border-bottom:1px solid rgba(0,200,240,.07)}
+.ni{max-width:1200px;margin:0 auto;padding:0 40px;display:flex;justify-content:space-between;align-items:center}
+.nl{font-family:var(--fd);font-size:17px;font-weight:800;letter-spacing:5px;text-transform:uppercase;color:var(--text);text-decoration:none}
+.nl em{color:var(--cyan);font-style:normal}
+.nb{font-family:var(--fm);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--cyan);border:1px solid var(--cyanM);padding:9px 18px;text-decoration:none;transition:background .2s,color .2s}
+.nb:hover{background:var(--cyan);color:var(--void)}
+
+/* ── HERO ── */
+#hero{position:relative;width:100%;height:100vh;min-height:560px;overflow:hidden}
+#hero-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+#hero::after{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 70% 60% at 50% 50%,transparent 30%,rgba(2,8,16,.55) 100%),
+  linear-gradient(to bottom,rgba(2,8,16,.2) 0%,transparent 20%,transparent 70%,rgba(2,8,16,1) 100%);
+  pointer-events:none;z-index:2;}
+.hud{position:absolute;z-index:3;width:30px;height:30px}
+.hud-tl{top:20px;left:20px;border-top:1.5px solid rgba(0,200,240,.45);border-left:1.5px solid rgba(0,200,240,.45)}
+.hud-tr{top:20px;right:20px;border-top:1.5px solid rgba(0,200,240,.45);border-right:1.5px solid rgba(0,200,240,.45)}
+.hud-bl{bottom:20px;left:20px;border-bottom:1.5px solid rgba(0,200,240,.45);border-left:1.5px solid rgba(0,200,240,.45)}
+.hud-br{bottom:20px;right:20px;border-bottom:1.5px solid rgba(0,200,240,.45);border-right:1.5px solid rgba(0,200,240,.45)}
+.hero-content{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;justify-content:flex-end;padding-bottom:80px}
+.hc{max-width:1200px;margin:0 auto;padding:0 40px;width:100%}
+.hero-ey{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.hero-ey::before{content:'';display:block;width:32px;height:1px;background:var(--cyan)}
+.hero-ey span{font-family:var(--fm);font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--cyan)}
+.hero-h1{font-family:var(--fd);font-size:clamp(44px,8vw,100px);font-weight:800;line-height:.92;letter-spacing:-2px;text-transform:uppercase;margin-bottom:20px}
+.hero-h1 .o{color:transparent;-webkit-text-stroke:1.5px var(--cyan);display:block}
+.hero-row{display:flex;align-items:flex-end;justify-content:space-between;gap:32px;flex-wrap:wrap}
+.hero-desc{font-size:14px;font-weight:300;color:rgba(232,237,245,.45);line-height:1.85;max-width:400px}
+.hero-badge{font-family:var(--fm);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--green);border:1px solid rgba(0,240,160,.2);padding:8px 18px;white-space:nowrap}
+.scroll-ind{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);z-index:3;display:flex;flex-direction:column;align-items:center;gap:7px}
+.scroll-ind span{font-family:var(--fm);font-size:9px;letter-spacing:3px;color:rgba(232,237,245,.25);text-transform:uppercase}
+.scroll-ln{width:1px;height:36px;background:linear-gradient(to bottom,rgba(0,200,240,.5),transparent);animation:sp 2s ease-in-out infinite}
+@keyframes sp{0%,100%{opacity:.3}50%{opacity:1}}
+
+/* ── TOOLS ── */
+.tools{position:relative;z-index:1;padding:0 0 100px}
+.tw{max-width:1200px;margin:0 auto;padding:0 40px}
+.tools-intro{padding:60px 0 40px;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:20px}
+.tools-intro h2{font-family:var(--fd);font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-1px;text-transform:uppercase}
+.tools-count{font-family:var(--fm);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted)}
+.tool-card{background:var(--deep);border:1px solid rgba(0,200,240,.08);margin-bottom:3px;overflow:hidden;transition:border-color .3s}
+.tool-card:hover{border-color:rgba(0,200,240,.18)}
+.tool-header{display:flex;align-items:center;gap:16px;padding:24px 32px;cursor:pointer;user-select:none;transition:background .2s}
+.tool-header:hover{background:rgba(0,200,240,.03)}
+.tn{font-family:var(--fm);font-size:10px;letter-spacing:2px;color:var(--cyan);opacity:.5;width:24px;flex-shrink:0}
+.tt{font-family:var(--fd);font-size:18px;font-weight:800;letter-spacing:1px;text-transform:uppercase;flex:1}
+.tb-badge{font-family:var(--fm);font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;border:1px solid}
+.tb-badge.first{color:var(--green);border-color:rgba(0,240,160,.2)}
+.tb-badge.new{color:var(--gold);border-color:rgba(240,192,64,.2)}
+.tg{font-family:var(--fm);font-size:20px;color:var(--cyan);transition:transform .3s;flex-shrink:0}
+.tg.open{transform:rotate(45deg)}
+.tool-body{display:none;padding:32px;border-top:1px solid rgba(0,200,240,.06)}
+.tool-body.open{display:block}
+
+/* ── SHARED COMPONENTS ── */
+.btn{font-family:var(--fm);font-size:10px;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;padding:11px 24px;transition:opacity .2s,transform .15s;display:inline-flex;align-items:center;gap:7px}
+.btn:hover{opacity:.85;transform:translateY(-1px)}
+.btn:active{transform:translateY(0)}
+.btn-p{background:var(--cyan);color:var(--void);font-weight:700}
+.btn-g{background:transparent;color:var(--text);border:1px solid var(--subtle)}
+.btn-g:hover{border-color:var(--cyanM);color:var(--cyan)}
+.btn-r{background:transparent;color:var(--red);border:1px solid rgba(255,68,102,.2)}
+.explain{margin-top:20px;padding:18px;background:rgba(0,200,240,.03);border-left:2px solid var(--cyan)}
+.explain p{font-size:13px;color:var(--muted);line-height:1.75}
+.explain strong{color:var(--cyan)}
+.canvas3d{width:100%;height:280px;display:block;cursor:grab}
+.canvas3d:active{cursor:grabbing}
+
+/* ── T1: QRNG ── */
+.qrng-display{background:var(--void);border:1px solid rgba(0,200,240,.1);padding:36px;text-align:center;margin-bottom:20px;position:relative;overflow:hidden}
+.qrng-num{font-family:var(--fm);font-size:clamp(40px,8vw,72px);color:var(--cyan);letter-spacing:4px;line-height:1;text-shadow:0 0 40px rgba(0,200,240,.4);transition:all .1s}
+.qrng-lbl{font-family:var(--fm);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-top:10px}
+.qwave{position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);animation:qs 2s linear infinite}
+@keyframes qs{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.qrng-ctrl{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.qin{background:var(--void);border:1px solid rgba(0,200,240,.15);color:var(--text);font-family:var(--fm);font-size:13px;padding:8px 12px;width:90px}
+.qin:focus{outline:none;border-color:var(--cyan)}
+.qlbl{font-family:var(--fm);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+.qhist{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.qhi{font-family:var(--fm);font-size:11px;color:rgba(0,200,240,.5);border:1px solid rgba(0,200,240,.1);padding:3px 9px}
+
+/* ── T2: CIRCUIT ── */
+.circ-wrap{display:grid;grid-template-columns:180px 1fr;gap:16px}
+.gate-panel h4{font-family:var(--fm);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.gate-btn{width:100%;font-family:var(--fm);font-size:11px;background:var(--void);border:1px solid rgba(0,200,240,.12);color:var(--cyan);padding:9px 12px;cursor:pointer;text-align:left;display:flex;justify-content:space-between;transition:background .2s;margin-bottom:6px}
+.gate-btn:hover{background:rgba(0,200,240,.08);border-color:var(--cyan)}
+.gate-btn .gd{font-size:9px;color:var(--muted)}
+.circ-area{background:var(--void);border:1px solid rgba(0,200,240,.08);padding:18px;min-height:240px}
+.clane{display:flex;align-items:center;gap:0;margin-bottom:28px}
+.clane-lbl{font-family:var(--fm);font-size:11px;color:var(--muted);width:28px;flex-shrink:0}
+.clane-line{flex:1;height:1px;background:rgba(0,200,240,.2);position:relative;display:flex;align-items:center;gap:8px;padding:0 8px}
+.gel{width:34px;height:34px;border:1.5px solid var(--cyan);background:var(--deep);display:flex;align-items:center;justify-content:center;font-family:var(--fm);font-size:10px;color:var(--cyan);cursor:pointer;flex-shrink:0;position:relative;top:-17px;transition:background .2s}
+.gel:hover{background:rgba(0,200,240,.15)}
+.gel.X{border-color:var(--red);color:var(--red)}
+.gel.Z{border-color:var(--purple);color:var(--purple)}
+.gel.CNOT{border-color:var(--green);color:var(--green);width:auto;padding:0 6px}
+.cr-bars{display:flex;gap:10px;align-items:flex-end;height:70px;margin-top:12px}
+.crb-w{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1}
+.crb{width:100%;background:rgba(0,200,240,.15);transition:height .5s;min-height:3px}
+.crb.active{background:var(--cyan);box-shadow:0 0 8px rgba(0,200,240,.4)}
+.crb-lbl{font-family:var(--fm);font-size:9px;color:var(--muted)}
+.crb-val{font-family:var(--fm);font-size:10px;color:var(--cyan)}
+
+/* ── T3: UNIVERSE ── */
+.univ-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.param-item{margin-bottom:16px}
+.param-lbl{display:flex;justify-content:space-between;margin-bottom:6px}
+.param-lbl span{font-family:var(--fm);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+.param-lbl strong{font-family:var(--fm);font-size:11px;color:var(--cyan)}
+.slider{width:100%;-webkit-appearance:none;height:2px;background:rgba(0,200,240,.2);outline:none}
+.slider::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--cyan);cursor:pointer;box-shadow:0 0 8px rgba(0,200,240,.5)}
+.univ-res{background:var(--void);border:1px solid rgba(0,200,240,.1);padding:28px;text-align:center}
+.univ-age{font-family:var(--fd);font-size:clamp(36px,6vw,52px);font-weight:800;line-height:1}
+.univ-age span{font-size:18px;color:var(--cyan)}
+.univ-age-lbl{font-family:var(--fm);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin:8px 0 20px}
+.upd{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(0,200,240,.05)}
+.upd-k{font-family:var(--fm);font-size:10px;color:var(--muted)}
+.upd-v{font-family:var(--fm);font-size:11px;color:var(--cyan)}
+.utl-item{display:flex;gap:10px;padding:7px 10px;border-left:2px solid transparent;transition:border-color .3s;margin-bottom:2px}
+.utl-item:hover{border-color:var(--cyan)}
+.utl-t{font-family:var(--fm);font-size:10px;color:var(--cyan);width:90px;flex-shrink:0}
+.utl-d{font-size:12px;color:var(--muted)}
+
+/* ── T4: QKD ── */
+.qkd-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.qkd-party{background:var(--void);border:1px solid rgba(0,200,240,.08);padding:20px}
+.qkd-party h4{font-family:var(--fd);font-size:14px;font-weight:800;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px}
+.qkd-party h4 em{color:var(--cyan);font-style:normal}
+.qkd-lbl{font-family:var(--fm);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;margin-top:10px}
+.qbits{display:flex;flex-wrap:wrap;gap:5px;min-height:40px}
+.qbit{width:28px;height:28px;border:1px solid rgba(0,200,240,.18);display:flex;align-items:center;justify-content:center;font-family:var(--fm);font-size:10px;color:var(--muted);transition:all .3s}
+.qbit.sent{border-color:var(--cyan);color:var(--cyan);background:rgba(0,200,240,.06)}
+.qbit.match{border-color:var(--green);color:var(--green);background:rgba(0,240,160,.06)}
+.qbit.mismatch{border-color:var(--red);color:var(--red);background:rgba(255,68,102,.06)}
+.qkd-key{font-family:var(--fm);font-size:13px;color:var(--green);letter-spacing:3px;min-height:18px}
+.eve-toggle{display:flex;align-items:center;gap:10px;padding:14px;background:rgba(160,96,255,.05);border:1px solid rgba(160,96,255,.12);margin-bottom:14px}
+.eve-toggle label{font-family:var(--fm);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--purple);cursor:pointer}
+input[type=checkbox]{accent-color:var(--purple);width:14px;height:14px;cursor:pointer}
+.sec-bar{flex:1;height:3px;background:rgba(0,200,240,.1)}
+.sec-fill{height:100%;transition:width .8s,background .8s}
+.sec-pct{font-family:var(--fm);font-size:12px}
+.qkd-log{background:var(--void);border:1px solid rgba(0,200,240,.06);padding:14px;max-height:150px;overflow-y:auto;margin-top:14px}
+.qkd-log p{font-family:var(--fm);font-size:11px;color:var(--muted);line-height:1.9;border-bottom:1px solid rgba(0,200,240,.03);padding:1px 0}
+.qkd-log p.ok{color:var(--green)}.qkd-log p.err{color:var(--red)}.qkd-log p.warn{color:var(--purple)}
+
+/* ── T5: HEISENBERG VISUALIZER ── */
+.heis-wrap{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.heis-left{}
+.heis-param{margin-bottom:16px}
+.heis-canvas-wrap{background:var(--void);border:1px solid rgba(0,200,240,.1);padding:8px}
+.heis-result{background:var(--void);border:1px solid rgba(0,200,240,.1);padding:24px;margin-top:16px}
+.heis-eq{font-family:var(--fm);font-size:20px;color:var(--cyan);text-align:center;margin-bottom:16px}
+.heis-vals{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.hv-item{text-align:center;padding:12px;background:rgba(0,200,240,.03);border:1px solid rgba(0,200,240,.07)}
+.hv-val{font-family:var(--fm);font-size:16px;color:var(--cyan);margin-bottom:4px}
+.hv-lbl{font-family:var(--fm);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+.heis-status{text-align:center;font-family:var(--fm);font-size:11px;margin-top:12px;padding:10px;border:1px solid}
+
+/* ── T6: BLACKHOLE VISUALIZER ── */
+.bh-wrap{position:relative}
+.bh-info{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
+.bh-stat{background:var(--void);border:1px solid rgba(0,200,240,.08);padding:14px;text-align:center}
+.bh-stat-val{font-family:var(--fm);font-size:18px;color:var(--cyan);margin-bottom:4px}
+.bh-stat-lbl{font-family:var(--fm);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+.bh-ctrl{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+.bh-ctrl label{font-family:var(--fm);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+
+/* ── T7: DOPPLER ── */
+.dop-wrap{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.dop-canvas-wrap{background:var(--void);border:1px solid rgba(0,200,240,.1);padding:8px}
+.dop-result{padding:20px;background:rgba(0,200,240,.03);border:1px solid rgba(0,200,240,.08)}
+.dop-val{font-family:var(--fd);font-size:36px;font-weight:800;color:var(--text);margin-bottom:4px}
+.dop-val span{font-size:16px;color:var(--cyan)}
+.dop-lbl{font-family:var(--fm);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
+.dop-shift{display:flex;gap:0;margin-top:16px;height:36px;overflow:hidden}
+.dop-blue{flex:1;background:linear-gradient(to right,transparent,rgba(0,100,255,.6));display:flex;align-items:center;padding:0 12px;font-family:var(--fm);font-size:10px;color:#6699ff}
+.dop-red{flex:1;background:linear-gradient(to right,rgba(255,60,60,.6),transparent);display:flex;align-items:center;justify-content:flex-end;padding:0 12px;font-family:var(--fm);font-size:10px;color:#ff6666}
+
+/* ── FOOTER ── */
+footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:36px 0;position:relative;z-index:1}
+.fi{max-width:1200px;margin:0 auto;padding:0 40px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px}
+.fl{font-family:var(--fd);font-size:14px;font-weight:800;letter-spacing:4px;text-transform:uppercase;color:var(--muted);text-decoration:none}
+.fl em{color:var(--cyan);font-style:normal}
+.fc{font-family:var(--fm);font-size:10px;letter-spacing:2px;color:var(--muted)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  .ni{padding:0 20px}
+  .tw{padding:0 20px}
+  .hc{padding:0 20px}
+  .tool-header{padding:18px 20px}
+  .tool-body{padding:20px}
+  .hero-h1{font-size:clamp(36px,10vw,64px)}
+  .hero-row{flex-direction:column;align-items:flex-start}
+  .circ-wrap{grid-template-columns:1fr}
+  .univ-grid,.heis-wrap,.dop-wrap{grid-template-columns:1fr}
+  .qkd-grid{grid-template-columns:1fr}
+  .bh-info{grid-template-columns:1fr 1fr}
+  .heis-vals{grid-template-columns:1fr 1fr}
+  .fi{padding:0 20px}
+  .canvas3d{height:200px}
+  .tools-intro{flex-direction:column;align-items:flex-start}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.1ms!important}}
+</style>
+</head>
+<body>
+
+<div class="bg"><div class="bg-stars"></div><div class="bg-grid"></div><div class="bg-neb"></div></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="ni">
+    <a href="index.html" class="nl">Q<em>U</em>ANTRO</a>
+    <a href="index.html" class="nb">← Ana Sayfa</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hud hud-tl"></div><div class="hud hud-tr"></div>
+  <div class="hud hud-bl"></div><div class="hud hud-br"></div>
+  <div class="hero-content">
+    <div class="hc">
+      <div class="hero-ey"><span>Quantro Lab · Etkileşimli Araçlar · 7 Modül</span></div>
+      <h1 class="hero-h1">KUANTUM<br><span class="o">LAB</span></h1>
+      <div class="hero-row">
+        <p class="hero-desc">Kuantum mekaniğini ve astrofiziki bizzat deneyimleyin. Türkiye'nin ilk interaktif kuantum araç seti.</p>
+        <div class="hero-badge">🇹🇷 Türkiye'de İlk — Quantro ARGE 2025</div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-ind"><span>Keşfet</span><div class="scroll-ln"></div></div>
+</section>
+
+<!-- TOOLS -->
+<div class="tools">
+<div class="tw">
+  <div class="tools-intro">
+    <h2>7 Özgün<br>Araç</h2>
+    <span class="tools-count">Türkiye'de İlk · Quantro ARGE · 2025</span>
+  </div>
+
+  <!-- T1: QRNG -->
+  <div class="tool-card">
+    <div class="tool-header" onclick="tog(1)">
+      <span class="tn">01</span>
+      <span class="tt">Kuantum Rastgelelik Motoru</span>
+      <span class="tb-badge first">Türkiye'de İlk</span>
+      <span class="tg" id="tg1">+</span>
+    </div>
+    <div class="tool-body" id="tb1">
+      <div class="qrng-display">
+        <div class="qrng-num" id="qn">—</div>
+        <div class="qrng-lbl">Kuantum Süperpozisyon Tabanlı Rastgele Sayı</div>
+        <div class="qwave"></div>
+      </div>
+      <div class="qrng-ctrl">
+        <span class="qlbl">Min</span><input class="qin" id="qmin" type="number" value="1">
+        <span class="qlbl">Max</span><input class="qin" id="qmax" type="number" value="1000000">
+        <button class="btn btn-p" onclick="genQ()">⚛ Üret</button>
+        <button class="btn btn-g" onclick="genQS()">10x Seri</button>
+        <button class="btn btn-r" onclick="clearQ()">Temizle</button>
+      </div>
+      <div class="qhist" id="qh"></div>
+      <div class="explain"><p><strong>Nasıl çalışır?</strong> Klasik bilgisayarlar algoritma tabanlı sahte rastgelelik üretir. Bu motor Web Crypto API ile kuantum <strong>süperpozisyon</strong> ve <strong>dalga fonksiyonu çöküşü</strong> prensibini modelleyerek her ölçümde gerçek belirsizlik uygular. Heisenberg: <strong>Δx · Δp ≥ ℏ/2</strong></p></div>
+    </div>
+  </div>
+
+  <!-- T2: CIRCUIT -->
+  <div class="tool-card">
+    <div class="tool-header" onclick="tog(2)">
+      <span class="tn">02</span>
+      <span class="tt">Kuantum Devre Simülatörü</span>
+      <span class="tb-badge first">Türkiye'de İlk</span>
+      <span class="tg" id="tg2">+</span>
+    </div>
+    <div class="tool-body" id="tb2">
+      <div class="circ-wrap">
+        <div class="gate-panel">
+          <h4>Kuantum Kapıları</h4>
+          <button class="gate-btn" onclick="ag('H',0)">H <span class="gd">Hadamard q0</span></button>
+          <button class="gate-btn" onclick="ag('H',1)">H <span class="gd">Hadamard q1</span></button>
+          <button class="gate-btn" onclick="ag('X',0)">X <span class="gd">Pauli-X q0</span></button>
+          <button class="gate-btn" onclick="ag('X',1)">X <span class="gd">Pauli-X q1</span></button>
+          <button class="gate-btn" onclick="ag('Z',0)">Z <span class="gd">Pauli-Z q0</span></button>
+          <button class="gate-btn" onclick="ag('CNOT',0)">CNOT <span class="gd">q0→q1</span></button>
+          <button class="btn btn-r" onclick="rc()" style="width:100%;margin-top:4px">Sıfırla</button>
+        </div>
+        <div class="circ-area">
+          <div style="margin-bottom:20px">
+            <div class="clane"><span class="clane-lbl">q0</span><div class="clane-line" id="l0"></div></div>
+            <div class="clane"><span class="clane-lbl">q1</span><div class="clane-line" id="l1"></div></div>
+          </div>
+          <div style="display:flex;gap:10px">
+            <button class="btn btn-p" onclick="mc()">⟨ψ| Ölç</button>
+            <button class="btn btn-g" onclick="rc()">Temizle</button>
+          </div>
+          <div id="cr" style="display:none;margin-top:16px;background:rgba(0,200,240,.03);border:1px solid rgba(0,200,240,.07);padding:14px">
+            <div style="font-family:var(--fm);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:10px">Ölçüm Sonuçları (1024 atış)</div>
+            <div class="cr-bars" id="crb"></div>
+          </div>
+        </div>
+      </div>
+      <div class="explain"><p><strong>Kuantum kapıları nedir?</strong> H kapısı kubiti süperpozisyona sokar. X kubiti döndürür (NOT). CNOT iki kubiti dolanıklığa sokar. <strong>Bell durumu: |Φ⁺⟩ = (|00⟩+|11⟩)/√2</strong></p></div>
+    </div>
+  </div>
+
+  <!-- T3: UNIVERSE -->
+  <div class="tool-card">
+    <div class="tool-header" onclick="tog(3)">
+      <span class="tn">03</span>
+      <span class="tt">Evren Yaşı Hesaplayıcı</span>
+      <span class="tb-badge first">Türkiye'de İlk</span>
+      <span class="tg" id="tg3">+</span>
+    </div>
+    <div class="tool-body" id="tb3">
+      <div class="univ-grid">
+        <div>
+          <div class="param-item">
+            <div class="param-lbl"><span>Hubble Sabiti H₀</span><strong id="h0v">67.4 km/s/Mpc</strong></div>
+            <input class="slider" type="range" id="h0" min="60" max="80" value="67.4" step="0.1" oninput="uU()">
+          </div>
+          <div class="param-item">
+            <div class="param-lbl"><span>Madde Ωₘ</span><strong id="omv">0.315</strong></div>
+            <input class="slider" type="range" id="om" min="0.1" max="0.9" value="0.315" step="0.001" oninput="uU()">
+          </div>
+          <div class="param-item">
+            <div class="param-lbl"><span>Karanlık Enerji ΩΛ</span><strong id="olv">0.685</strong></div>
+            <input class="slider" type="range" id="ol" min="0.1" max="0.9" value="0.685" step="0.001" oninput="uU()">
+          </div>
+          <div class="param-item">
+            <div class="param-lbl"><span>Radyasyon Ωᵣ</span><strong id="orv">0.00009</strong></div>
+            <input class="slider" type="range" id="orr" min="0.00001" max="0.001" value="0.00009" step="0.00001" oninput="uU()">
+          </div>
+          <button class="btn btn-g" onclick="rU()">↺ Planck 2018 Değerleri</button>
+          <div class="explain" style="margin-top:16px"><p>Friedmann denklemi: <strong>H²(a) = H₀²(Ωᵣ/a⁴ + Ωₘ/a³ + ΩΛ)</strong> — 10.000 adımlı nümerik integral ile hesaplanır.</p></div>
+        </div>
+        <div>
+          <div class="univ-res">
+            <div class="univ-age" id="ua">13.8<span> Gyr</span></div>
+            <div class="univ-age-lbl">Evrenin Tahmini Yaşı</div>
+            <div class="upd"><span class="upd-k">Hubble Zamanı</span><span class="upd-v" id="ht">—</span></div>
+            <div class="upd"><span class="upd-k">Işık Ufku</span><span class="upd-v">46.5 Gly</span></div>
+            <div class="upd"><span class="upd-k">Geometri</span><span class="upd-v" id="geo">Düz (k=0)</span></div>
+            <div style="margin-top:16px">
+              <div style="font-family:var(--fm);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Kozmik Zaman Çizelgesi</div>
+              <div class="utl-item"><span class="utl-t">10⁻⁴³ s</span><span class="utl-d">Planck Çağı</span></div>
+              <div class="utl-item"><span class="utl-t">380.000 yıl</span><span class="utl-d">CMB yayıldı</span></div>
+              <div class="utl-item"><span class="utl-t">200 Myr</span><span class="utl-d">İlk yıldızlar</span></div>
+              <div class="utl-item"><span class="utl-t">9.2 Gyr</span><span class="utl-d">Güneş Sistemi</span></div>
+              <div class="utl-item"><span class="utl-t" id="nowt">13.8 Gyr</span><span class="utl-d">Şimdi — Buradasınız</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- T4: QKD -->
+  <div class="tool-card">
+    <div class="tool-header" onclick="tog(4)">
+      <span class="tn">04</span>
+      <span class="tt">Kuantum Şifreleme — BB84</span>
+      <span class="tb-badge first">Türkiye'de İlk</span>
+      <span class="tg" id="tg4">+</span>
+    </div>
+    <div class="tool-body" id="tb4">
+      <div class="eve-toggle">
+        <input type="checkbox" id="eve">
+        <label for="eve">👁 Dinleyici (Eve) aktif — Kuantum kanalı izleniyor</label>
+      </div>
+      <div class="qkd-grid">
+        <div class="qkd-party">
+          <h4><em>Alice</em> — Gönderici</h4>
+          <div class="qkd-lbl">Gönderilen Kubitler</div><div class="qbits" id="ab"></div>
+          <div class="qkd-lbl">Bazlar</div><div class="qbits" id="aba"></div>
+          <div class="qkd-lbl">Gizli Anahtar</div><div class="qkd-key" id="ak">—</div>
+        </div>
+        <div class="qkd-party">
+          <h4><em>Bob</em> — Alıcı</h4>
+          <div class="qkd-lbl">Ölçüm Bazları</div><div class="qbits" id="bb"></div>
+          <div class="qkd-lbl">Sonuçlar</div><div class="qbits" id="br"></div>
+          <div class="qkd-lbl">Ortak Anahtar</div><div class="qkd-key" id="bk">—</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;margin-bottom:14px">
+        <button class="btn btn-p" onclick="rBB84()">▶ BB84 Çalıştır</button>
+        <button class="btn btn-g" onclick="rstBB84()">Sıfırla</button>
+      </div>
+      <div style="background:rgba(0,200,240,.03);border:1px solid rgba(0,200,240,.07);padding:14px">
+        <div style="font-family:var(--fm);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Güvenlik Düzeyi</div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="sec-bar"><div class="sec-fill" id="sf" style="width:0%"></div></div>
+          <span class="sec-pct" id="sp">0%</span>
+        </div>
+      </div>
+      <div class="qkd-log" id="ql"></div>
+    </div>
+  </div>
+
+  <!-- T5: HEISENBERG -->
+  <div class="tool-card">
+    <div class="tool-header" onclick="tog(5)">
+      <span class="tn">05</span>
+      <span class="tt">Heisenberg Belirsizlik Görselleştiricisi</span>
+      <span class="tb-badge new">Yeni</span>
+      <span class="tg" id="tg5">+</span>
+    </div>
+    <div class="tool-body" id="tb5">
+      <div class="heis-wrap">
+        <div class="heis-left">
+          <div class="heis-param">
+            <div class="param-lbl"><span>Konum Belirsizliği Δx</span><strong id="dxv">1.00</strong></div>
+            <input class="slider" type="range" id="dx" min="0.1" max="10" value="1" step="0.01" oninput="uH()">
+          </div>
+          <div class="heis-canvas-wrap">
+            <canvas id="heis-canvas" width="400" height="200" style="width:100%;height:auto;display:block"></canvas>
+          </div>
+          <div class="explain" style="margin-top:12px">
+            <p><strong>Heisenberg Belirsizlik İlkesi:</strong> Bir parçacığın konumunu ne kadar kesin bilirsek, momentumunu o kadar az bileceğiz. <strong>Δx · Δp ≥ ℏ/2</strong> — Bu bir ölçüm hatası değil, doğanın kendisidir.</p>
+          </div>
+        </div>
+        <div>
+          <div class="heis-result">
+            <div class="heis-eq">Δx · Δp ≥ ℏ/2</div>
+            <div class="heis-vals">
+              <div class="hv-item"><div class="hv-val" id="hv-dx">1.00</div><div class="hv-lbl">Δx (konum)</div></div>
+              <div class="hv-item"><div class="hv-val" id="hv-dp">0.50</div><div class="hv-lbl">Δp (min)</div></div>
+              <div class="hv-item"><div class="hv-val" id="hv-prod">0.50</div><div class="hv-lbl">Δx·Δp</div></div>
+            </div>
+            <div class="heis-status" id="heis-status" style="border-color:rgba(0,240,160,.3);color:var(--green)">✓ Belirsizlik ilkesi sağlanıyor</div>
+          </div>
+          <canvas id="heis3d" class="canvas3d" style="margin-top:12px;height:200px"></canvas>
+          <div style="font-family:var(--fm);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-align:center;margin-top:6px">3D Faz Uzayı — Kaydır</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- T6: BLACK HOLE -->
+  <div class="tool-card">
+    <div class="tool-header" onclick="tog(6)">
+      <span class="tn">06</span>
+      <span class="tt">Kara Delik Fizik Simülatörü</span>
+      <span class="tb-badge new">Yeni</span>
+      <span class="tg" id="tg6">+</span>
+    </div>
+    <div class="tool-body" id="tb6">
+      <div class="bh-ctrl">
+        <span class="qlbl">Kütle (Güneş kütlesi ×)</span>
+        <input class="qin" id="bh-mass" type="number" value="10" min="1" max="1000000000" style="width:120px">
+        <button class="btn btn-p" onclick="uBH()">Hesapla</button>
+        <button class="btn btn-g" onclick="()=>{ document.getElementById('bh-mass').value=4000000; uBH(); }">Sgr A* (Samanyolu)</button>
+        <button class="btn btn-g" onclick="()=>{ document.getElementById('bh-mass').value=6500000000; uBH(); }">M87*</button>
+      </div>
+      <canvas id="bh-canvas" class="canvas3d" style="height:320px"></canvas>
+      <div class="bh-info">
+        <div class="bh-stat"><div class="bh-stat-val" id="bh-rs">—</div><div class="bh-stat-lbl">Schwarzschild Yarıçapı</div></div>
+        <div class="bh-stat"><div class="bh-stat-val" id="bh-temp">—</div><div class="bh-stat-lbl">Hawking Sıcaklığı</div></div>
+        <div class="bh-stat"><div class="bh-stat-val" id="bh-ent">—</div><div class="bh-stat-lbl">Bekenstein Entropisi</div></div>
+      </div>
+      <div class="explain" style="margin-top:14px"><p><strong>Schwarzschild yarıçapı:</strong> <strong>r_s = 2GM/c²</strong> — Bu sınırın içine giren hiçbir şey, ışık dahil, dışarı çıkamaz. Hawking radyasyonu: <strong>T = ℏc³/(8πGMk_B)</strong></p></div>
+    </div>
+  </div>
+
+  <!-- T7: DOPPLER -->
+  <div class="tool-card">
+    <div class="tool-header" onclick="tog(7)">
+      <span class="tn">07</span>
+      <span class="tt">Kozmik Doppler Kayması Hesaplayıcı</span>
+      <span class="tb-badge new">Yeni</span>
+      <span class="tg" id="tg7">+</span>
+    </div>
+    <div class="tool-body" id="tb7">
+      <div class="dop-wrap">
+        <div>
+          <div class="param-item">
+            <div class="param-lbl"><span>Kırmızıya Kayma z</span><strong id="zv">0.1</strong></div>
+            <input class="slider" type="range" id="zs" min="0" max="10" value="0.1" step="0.01" oninput="uD()">
+          </div>
+          <div class="param-item">
+            <div class="param-lbl"><span>Kaynak Dalga Boyu λ₀ (nm)</span><strong id="lv">656 nm</strong></div>
+            <input class="slider" type="range" id="ls" min="380" max="780" value="656" step="1" oninput="uD()">
+          </div>
+          <div class="dop-canvas-wrap">
+            <canvas id="dop-canvas" width="400" height="160" style="width:100%;height:auto;display:block"></canvas>
+          </div>
+          <div class="explain" style="margin-top:12px"><p>Kozmolojik kırmızıya kayma: <strong>z = (λ_obs - λ₀)/λ₀</strong>. Hubble yasası: <strong>v = H₀ · d</strong>. Evren genişledikçe uzak galaksilerden gelen ışık kırmızıya kayar.</p></div>
+        </div>
+        <div>
+          <div class="dop-result">
+            <div class="dop-val" id="dv">—<span> nm</span></div>
+            <div class="dop-lbl">Gözlemlenen Dalga Boyu</div>
+            <div class="upd"><span class="upd-k">Hız (v/c)</span><span class="upd-v" id="dvc">—</span></div>
+            <div class="upd"><span class="upd-k">Uzaklık</span><span class="upd-v" id="ddist">—</span></div>
+            <div class="upd"><span class="upd-k">Bakış Uzaklığı</span><span class="upd-v" id="dlb">—</span></div>
+            <div class="upd"><span class="upd-k">Yön</span><span class="upd-v" id="ddir">—</span></div>
+          </div>
+          <div class="dop-shift" id="dshift">
+            <div class="dop-blue">← Maviye Kayma</div>
+            <div class="dop-red">Kırmızıya Kayma →</div>
+          </div>
+          <div style="margin-top:12px;padding:14px;background:rgba(0,200,240,.03);border:1px solid rgba(0,200,240,.07)">
+            <div style="font-family:var(--fm);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Referans Galaksiler</div>
+            <div class="utl-item" onclick="setZ(0.008)"><span class="utl-t">z = 0.008</span><span class="utl-d">Andromeda (M31)</span></div>
+            <div class="utl-item" onclick="setZ(0.23)"><span class="utl-t">z = 0.23</span><span class="utl-d">Hubble Deep Field</span></div>
+            <div class="utl-item" onclick="setZ(1.0)"><span class="utl-t">z = 1.0</span><span class="utl-d">3C 273 Quasar</span></div>
+            <div class="utl-item" onclick="setZ(6.5)"><span class="utl-t">z = 6.5</span><span class="utl-d">İlk Galaksiler Çağı</span></div>
+            <div class="utl-item" onclick="setZ(10.0)"><span class="utl-t">z = 10.0</span><span class="utl-d">Reiyonizasyon Çağı</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /tw -->
+</div><!-- /tools -->
+
+<footer>
+  <div class="fi">
+    <a href="index.html" class="fl">Q<em>U</em>ANTRO</a>
+    <span class="fc">© 2025 Quantro ARGE · Kayseri, Türkiye</span>
+    <span class="fc" style="color:rgba(0,200,240,.3)">Türkiye'de İlk · 7 Kuantum Aracı</span>
+  </div>
+</footer>
+
+<!-- THREE.JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* ══ UTILS ══ */
+const mq=window.matchMedia('(prefers-reduced-motion:reduce)');
+window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('sc',scrollY>60),{passive:true});
+
+function tog(n){
+  const tb=document.getElementById('tb'+n);
+  const tg=document.getElementById('tg'+n);
+  const open=tb.classList.toggle('open');
+  tg.textContent=open?'×':'+';
+  tg.classList.toggle('open',open);
+  if(open){
+    if(n===5&&!heis3dInit)initHeis3D();
+    if(n===6&&!bhInit)initBH();
+    if(n===7)uD();
+    if(n===5)uH();
+  }
+}
+
+/* ══ HERO THREE.JS ══ */
+(function(){
+  const canvas=document.getElementById('hero-canvas');
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false,powerPreference:'low-power'});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,1.5));
+  renderer.setSize(window.innerWidth,window.innerHeight);
+  renderer.setClearColor(0x020810,1);
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(55,window.innerWidth/window.innerHeight,0.1,1000);
+  camera.position.set(0,16,40);
+  camera.lookAt(0,0,0);
+  scene.fog=new THREE.FogExp2(0x020810,0.018);
+
+  const SEGS=120,SIZE=80;
+  const geo=new THREE.PlaneGeometry(SIZE,SIZE,SEGS,SEGS);
+  geo.rotateX(-Math.PI/2);
+  const vN=geo.attributes.position.array.length/3;
+  const cols=new Float32Array(vN*3);
+  geo.setAttribute('color',new THREE.BufferAttribute(cols,3));
+  const wMat=new THREE.MeshBasicMaterial({vertexColors:true,wireframe:true,transparent:true,opacity:0.45});
+  scene.add(new THREE.Mesh(geo,wMat));
+
+  const fGeo=new THREE.PlaneGeometry(SIZE,SIZE,SEGS,SEGS);
+  fGeo.rotateX(-Math.PI/2);
+  const fMesh=new THREE.Mesh(fGeo,new THREE.MeshBasicMaterial({color:0x001520,transparent:true,opacity:0.6,side:THREE.DoubleSide}));
+  fMesh.position.y=-0.05;
+  scene.add(fMesh);
+
+  // particles
+  const PC=1800,pG=new THREE.BufferGeometry();
+  const pP=new Float32Array(PC*3),pC=new Float32Array(PC*3);
+  for(let i=0;i<PC;i++){
+    const i3=i*3;
+    pP[i3]=(Math.random()-.5)*130;pP[i3+1]=Math.random()*55-4;pP[i3+2]=(Math.random()-.5)*130;
+    const b=Math.random();
+    if(b>.7){pC[i3]=0;pC[i3+1]=.78;pC[i3+2]=.94}
+    else if(b>.4){pC[i3]=.28;pC[i3+1]=.15;pC[i3+2]=.7}
+    else{pC[i3]=.85;pC[i3+1]=.92;pC[i3+2]=1}
+  }
+  pG.setAttribute('position',new THREE.BufferAttribute(pP,3));
+  pG.setAttribute('color',new THREE.BufferAttribute(pC,3));
+  const pts=new THREE.Points(pG,new THREE.PointsMaterial({size:.28,vertexColors:true,transparent:true,opacity:.6,sizeAttenuation:true}));
+  scene.add(pts);
+
+  const sph=new THREE.Mesh(new THREE.SphereGeometry(1.2,24,24),new THREE.MeshBasicMaterial({color:0x00c8f0,transparent:true,opacity:.85}));
+  scene.add(sph);
+
+  const cC=new THREE.Color(0x00c8f0),pC2=new THREE.Color(0x5020a0),dC=new THREE.Color(0x001224),tmp=new THREE.Color();
+  const posW=geo.attributes.position,posF=fGeo.attributes.position,colA=geo.attributes.color;
+  let mx=0,my=0,trx=0,try_=0;
+  document.addEventListener('mousemove',e=>{mx=(e.clientX/window.innerWidth-.5)*2;my=(e.clientY/window.innerHeight-.5)*2},{passive:true});
+
+  function wY(x,z,t){
+    const r1=Math.sqrt(x*x+z*z);
+    const w1=Math.sin(r1*.38-t*2.2)*Math.exp(-r1*.044)*3.5;
+    const dx2=x-8,dz2=z-4,r2=Math.sqrt(dx2*dx2+dz2*dz2);
+    const w2=Math.sin(r2*.32-t*1.85+1.2)*Math.exp(-r2*.054)*2;
+    const higgs=r1<6?(-1.4+.06*r1*r1)*Math.exp(-r1*.11):0;
+    return w1+w2+higgs;
+  }
+
+  function animate(ms){
+    requestAnimationFrame(animate);
+    if(mq.matches)return;
+    const t=ms*.001;
+    for(let i=0;i<vN;i++){
+      const i3=i*3;
+      const x=posW.array[i3],z=posW.array[i3+2];
+      const y=wY(x,z,t);
+      posW.array[i3+1]=y;posF.array[i3+1]=y;
+      const n=(y+4)/8;
+      if(n>.5)tmp.lerpColors(dC,cC,(n-.5)*2);else tmp.lerpColors(pC2,dC,n*2);
+      colA.array[i3]=tmp.r;colA.array[i3+1]=tmp.g;colA.array[i3+2]=tmp.b;
+    }
+    posW.needsUpdate=true;posF.needsUpdate=true;colA.needsUpdate=true;
+    const pulse=1+.16*Math.sin(t*2.8);
+    sph.scale.setScalar(pulse);
+    pts.rotation.y=t*.012;
+    trx+=(my*.04-trx)*.04;try_+=(mx*.06-try_)*.04;
+    camera.position.x=Math.sin(t*.04)*3+try_*5;
+    camera.position.y=16+Math.sin(t*.06)*2-trx*3;
+    camera.position.z=40+Math.sin(t*.08)*2;
+    camera.lookAt(0,0,0);
+    renderer.render(scene,camera);
+  }
+  requestAnimationFrame(animate);
+  window.addEventListener('resize',()=>{
+    camera.aspect=window.innerWidth/window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth,window.innerHeight);
+  },{passive:true});
+})();
+
+/* ══ T1: QRNG ══ */
+let qh=[];
+function qRNG(mn,mx){const b=new Uint32Array(4);crypto.getRandomValues(b);let v=0;for(let i=0;i<4;i++)v^=b[i];return mn+Math.abs(v)%(mx-mn+1)}
+function genQ(){
+  const mn=parseInt(document.getElementById('qmin').value)||1;
+  const mx=parseInt(document.getElementById('qmax').value)||1000000;
+  if(mn>=mx)return;
+  const el=document.getElementById('qn');
+  let c=0;const iv=setInterval(()=>{el.textContent=qRNG(mn,mx).toLocaleString('tr-TR');if(++c>10)clearInterval(iv)},60);
+  setTimeout(()=>{const f=qRNG(mn,mx);el.textContent=f.toLocaleString('tr-TR');addQH(f)},700);
+}
+function genQS(){
+  const mn=parseInt(document.getElementById('qmin').value)||1;
+  const mx=parseInt(document.getElementById('qmax').value)||1000000;
+  for(let i=0;i<10;i++)setTimeout(()=>{const n=qRNG(mn,mx);document.getElementById('qn').textContent=n.toLocaleString('tr-TR');addQH(n)},i*120);
+}
+function addQH(n){qh.unshift(n);if(qh.length>12)qh.pop();document.getElementById('qh').innerHTML=qh.map(x=>`<div class="qhi">${x.toLocaleString('tr-TR')}</div>`).join('')}
+function clearQ(){qh=[];document.getElementById('qh').innerHTML='';document.getElementById('qn').textContent='—'}
+
+/* ══ T2: CIRCUIT ══ */
+let circ=[[],[]];
+function ag(g,q){if(g==='CNOT'){circ[0].push({g:'CNOT'});rend();return}circ[q].push({g});rend()}
+function rend(){
+  for(let q=0;q<2;q++){
+    document.getElementById('l'+q).innerHTML=circ[q].map(g=>`<div class="gel ${g.g}" onclick="rmG('${g.g}',${q})">${g.g}</div>`).join('');
+    if(q===1&&circ[0].some(g=>g.g==='CNOT'))document.getElementById('l1').innerHTML+=`<div class="gel CNOT" style="border-style:dashed">⊕</div>`;
+  }
+  document.getElementById('cr').style.display='none';
+}
+function rmG(g,q){const i=circ[q].findIndex(x=>x.g===g);if(i>-1)circ[q].splice(i,1);rend()}
+function rc(){circ=[[],[]];rend()}
+function mc(){
+  let q0=[1,0],q1=[1,0];
+  circ[0].forEach(g=>{if(g.g==='H')q0=[.707,.707];if(g.g==='X')q0=[q0[1],q0[0]];if(g.g==='Z')q0=[q0[0],-q0[1]]});
+  circ[1].forEach(g=>{if(g.g==='H')q1=[.707,.707];if(g.g==='X')q1=[q1[1],q1[0]];if(g.g==='Z')q1=[q1[0],-q1[1]]});
+  const hasCNOT=circ[0].some(g=>g.g==='CNOT');
+  const probs=hasCNOT?[.5,0,0,.5]:[q0[0]*q0[0]*q1[0]*q1[0],q0[0]*q0[0]*q1[1]*q1[1],q0[1]*q0[1]*q1[0]*q1[0],q0[1]*q0[1]*q1[1]*q1[1]];
+  const counts=[0,0,0,0];
+  for(let i=0;i<1024;i++){let r=Math.random(),cum=0;for(let j=0;j<4;j++){cum+=probs[j];if(r<cum){counts[j]++;break}}}
+  const mx=Math.max(...counts);
+  document.getElementById('crb').innerHTML=['|00⟩','|01⟩','|10⟩','|11⟩'].map((l,i)=>`<div class="crb-w"><div class="crb-val">${counts[i]}</div><div class="crb ${counts[i]===mx&&counts[i]>0?'active':''}" style="height:${mx>0?Math.round(counts[i]/mx*60):3}px"></div><div class="crb-lbl">${l}</div></div>`).join('');
+  document.getElementById('cr').style.display='block';
+}
+
+/* ══ T3: UNIVERSE ══ */
+function uU(){
+  const H0=parseFloat(document.getElementById('h0').value);
+  const Om=parseFloat(document.getElementById('om').value);
+  const Ol=parseFloat(document.getElementById('ol').value);
+  const Or=parseFloat(document.getElementById('orr').value);
+  document.getElementById('h0v').textContent=H0.toFixed(1)+' km/s/Mpc';
+  document.getElementById('omv').textContent=Om.toFixed(3);
+  document.getElementById('olv').textContent=Ol.toFixed(3);
+  document.getElementById('orv').textContent=Or.toFixed(5);
+  const H0s=H0*1000/3.0857e22;
+  const tH=(1/H0s)/3.156e16;
+  const H0g=H0s*3.156e16;
+  let age=0;
+  for(let i=1;i<=8000;i++){const a=i/8000;const E2=Or/(a*a)+Om/a+Ol*a*a;if(E2>0)age+=1/(Math.sqrt(E2)*8000)}
+  age/=H0g;
+  const tot=Om+Ol+Or;
+  const geo=Math.abs(tot-1)<0.05?'Düz (k=0)':tot>1?'Kapalı (k=+1)':'Açık (k=-1)';
+  document.getElementById('ua').innerHTML=age.toFixed(2)+'<span> Gyr</span>';
+  document.getElementById('ht').textContent=tH.toFixed(2)+' Gyr';
+  document.getElementById('geo').textContent=geo;
+  document.getElementById('nowt').textContent=age.toFixed(1)+' Gyr';
+}
+function rU(){document.getElementById('h0').value=67.4;document.getElementById('om').value=0.315;document.getElementById('ol').value=0.685;document.getElementById('orr').value=0.00009;uU()}
+uU();
+
+/* ══ T4: BB84 ══ */
+function qlog(m,t=''){const l=document.getElementById('ql');const p=document.createElement('p');p.className=t;p.textContent=m;l.prepend(p)}
+function rstBB84(){['ab','aba','bb','br'].forEach(id=>document.getElementById(id).innerHTML='');['ak','bk'].forEach(id=>document.getElementById(id).textContent='—');document.getElementById('ql').innerHTML='';document.getElementById('sf').style.width='0%';document.getElementById('sp').textContent='0%'}
+function rBB84(){
+  rstBB84();const N=16;const eve=document.getElementById('eve').checked;
+  const aB=Array.from({length:N},()=>Math.round(Math.random()));
+  const aBas=Array.from({length:N},()=>Math.random()>.5?'+':'×');
+  const evBas=eve?Array.from({length:N},()=>Math.random()>.5?'+':'×'):null;
+  const bBas=Array.from({length:N},()=>Math.random()>.5?'+':'×');
+  const bRes=aB.map((b,i)=>eve&&evBas[i]!==aBas[i]?Math.round(Math.random()):bBas[i]===aBas[i]?b:Math.round(Math.random()));
+  const mi=aBas.map((b,i)=>b===bBas[i]?i:-1).filter(i=>i>=0);
+  const ak=mi.map(i=>aB[i]).join('');const bk=mi.map(i=>bRes[i]).join('');
+  let errs=0;mi.forEach(i=>{if(aB[i]!==bRes[i])errs++});
+  const sec=eve?Math.max(0,Math.round((1-errs/Math.max(mi.length,1)*2)*100)):100;
+  const mkBits=(arr,cls)=>arr.map(b=>`<div class="qbit ${cls}">${b}</div>`).join('');
+  document.getElementById('ab').innerHTML=mkBits(aB,'sent');
+  document.getElementById('aba').innerHTML=mkBits(aBas,'sent');
+  document.getElementById('bb').innerHTML=bBas.map((b,i)=>`<div class="qbit ${aBas[i]===b?'match':'mismatch'}">${b}</div>`).join('');
+  document.getElementById('br').innerHTML=bRes.map((b,i)=>`<div class="qbit ${mi.includes(i)?'match':''}">${b}</div>`).join('');
+  document.getElementById('ak').textContent=ak||'(eşleşme yok)';
+  document.getElementById('bk').textContent=bk||'(eşleşme yok)';
+  setTimeout(()=>{
+    const sf=document.getElementById('sf');sf.style.width=sec+'%';
+    sf.style.background=sec>70?'var(--green)':sec>40?'var(--cyan)':'var(--red)';
+    const sp=document.getElementById('sp');sp.textContent=sec+'%';sp.style.color=sec>70?'var(--green)':sec>40?'var(--cyan)':'var(--red)';
+  },100);
+  qlog('━━ BB84 Başladı ━━');
+  qlog(`Alice ${N} kubit gönderdi`,'ok');
+  if(eve)qlog('⚠ Eve kanalı dinliyor!','warn');
+  qlog(`Eşleşen baz: ${mi.length}/${N}`,'ok');
+  if(errs>0)qlog(`Hata: ${errs} bit — Olası dinleme!`,'err');
+  else qlog('Hata yok — Kanal güvenli ✓','ok');
+  qlog(`Anahtar: ${ak.length} bit`,'ok');
+}
+
+/* ══ T5: HEISENBERG ══ */
+let heis3dInit=false;
+function uH(){
+  const dx=parseFloat(document.getElementById('dx').value);
+  const dp=0.5/dx;
+  const prod=dx*dp;
+  document.getElementById('dxv').textContent=dx.toFixed(2);
+  document.getElementById('hv-dx').textContent=dx.toFixed(2);
+  document.getElementById('hv-dp').textContent=dp.toFixed(3);
+  document.getElementById('hv-prod').textContent=prod.toFixed(3);
+  const ok=prod>=0.499;
+  const st=document.getElementById('heis-status');
+  st.textContent=ok?'✓ Belirsizlik ilkesi sağlanıyor':'✗ İhlal — Doğada imkânsız!';
+  st.style.borderColor=ok?'rgba(0,240,160,.3)':'rgba(255,68,102,.3)';
+  st.style.color=ok?'var(--green)':'var(--red)';
+  drawHeis(dx,dp);
+}
+function drawHeis(dx,dp){
+  const c=document.getElementById('heis-canvas');
+  if(!c)return;
+  const ctx=c.getContext('2d');
+  const W=c.width,H=c.height;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#020810';ctx.fillRect(0,0,W,H);
+  // position wave
+  const sigma=dx*10;
+  ctx.beginPath();ctx.strokeStyle='rgba(0,200,240,0.8)';ctx.lineWidth=1.5;
+  for(let x=0;x<=W;x++){
+    const xv=(x-W/2)/10;
+    const y=H*0.3-Math.exp(-xv*xv/(2*sigma*sigma))*H*0.22;
+    x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+  // momentum wave
+  const sigmaP=0.5/dx;
+  ctx.beginPath();ctx.strokeStyle='rgba(160,96,255,0.7)';ctx.lineWidth=1.5;
+  for(let x=0;x<=W;x++){
+    const xv=(x-W/2)/10;
+    const y=H*0.7-Math.exp(-xv*xv/(2*sigmaP*sigmaP))*H*0.22;
+    x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+  ctx.font='10px JetBrains Mono,monospace';
+  ctx.fillStyle='rgba(0,200,240,.6)';ctx.fillText('ψ(x) — Konum',8,16);
+  ctx.fillStyle='rgba(160,96,255,.6)';ctx.fillText('φ(p) — Momentum',8,H/2+24);
+}
+
+function initHeis3D(){
+  heis3dInit=true;
+  const canvas=document.getElementById('heis3d');
+  if(!canvas||!window.THREE)return;
+  const r=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true,powerPreference:'low-power'});
+  r.setPixelRatio(Math.min(window.devicePixelRatio,1.5));
+  r.setSize(canvas.clientWidth,200);
+  r.setClearColor(0x020810,1);
+  const scene=new THREE.Scene();
+  const cam=new THREE.PerspectiveCamera(50,canvas.clientWidth/200,0.1,100);
+  cam.position.set(4,3,6);cam.lookAt(0,0,0);
+  // phase space ellipse
+  const pts=[];
+  for(let i=0;i<=200;i++){
+    const t=(i/200)*Math.PI*2;
+    const dx=parseFloat(document.getElementById('dx')?document.getElementById('dx').value:1);
+    const dp=0.5/dx;
+    pts.push(new THREE.Vector3(dx*Math.cos(t)*1.5,dp*Math.sin(t)*1.5,0));
+  }
+  const geo=new THREE.BufferGeometry().setFromPoints(pts);
+  scene.add(new THREE.Line(geo,new THREE.LineBasicMaterial({color:0x00c8f0,opacity:.8,transparent:true})));
+  // axes
+  [[1,0,0,0xff4466],[0,1,0,0x00f0a0],[0,0,1,0xa060ff]].forEach(([x,y,z,c])=>{
+    const g2=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,0,0),new THREE.Vector3(x*2,y*2,z*2)]);
+    scene.add(new THREE.Line(g2,new THREE.LineBasicMaterial({color:c,opacity:.4,transparent:true})));
+  });
+  let drag=false,ox=0,oy=0,rotX=0,rotY=0;
+  canvas.addEventListener('mousedown',e=>{drag=true;ox=e.clientX;oy=e.clientY});
+  canvas.addEventListener('touchstart',e=>{drag=true;ox=e.touches[0].clientX;oy=e.touches[0].clientY},{passive:true});
+  window.addEventListener('mouseup',()=>drag=false);
+  window.addEventListener('touchend',()=>drag=false);
+  window.addEventListener('mousemove',e=>{if(!drag)return;rotY+=(e.clientX-ox)*.01;rotX+=(e.clientY-oy)*.01;ox=e.clientX;oy=e.clientY});
+  window.addEventListener('touchmove',e=>{if(!drag)return;rotY+=(e.touches[0].clientX-ox)*.01;rotX+=(e.touches[0].clientY-oy)*.01;ox=e.touches[0].clientX;oy=e.touches[0].clientY},{passive:true});
+  function anim(){
+    requestAnimationFrame(anim);
+    if(mq.matches)return;
+    scene.rotation.y+=0.005+rotY*.05;
+    scene.rotation.x=rotX*.3;
+    r.render(scene,cam);
+  }
+  anim();
+}
+
+/* ══ T6: BLACK HOLE ══ */
+let bhInit=false,bhRenderer,bhScene,bhCamera,bhMeshes=[];
+function uBH(){
+  const M=parseFloat(document.getElementById('bh-mass').value)||10;
+  const Ms=1.989e30;const G=6.674e-11;const c=3e8;const hbar=1.055e-34;const kB=1.38e-23;
+  const rs=2*G*M*Ms/(c*c);
+  const T=hbar*c*c*c/(8*Math.PI*G*M*Ms*kB);
+  const S=4*Math.PI*G*M*Ms*M*Ms/(hbar*c);
+  const fmt=(v,u)=>{
+    if(Math.abs(v)>1e12)return(v/1e12).toFixed(2)+' T'+u;
+    if(Math.abs(v)>1e9)return(v/1e9).toFixed(2)+' G'+u;
+    if(Math.abs(v)>1e6)return(v/1e6).toFixed(2)+' M'+u;
+    if(Math.abs(v)>1e3)return(v/1e3).toFixed(2)+' k'+u;
+    return v.toExponential(2)+' '+u;
+  };
+  document.getElementById('bh-rs').textContent=fmt(rs,'m');
+  document.getElementById('bh-temp').textContent=T<1e-10?T.toExponential(2)+' K':fmt(T,'K');
+  document.getElementById('bh-ent').textContent=S.toExponential(2)+' J/K';
+  if(bhInit)animateBH();
+}
+function initBH(){
+  bhInit=true;
+  const canvas=document.getElementById('bh-canvas');
+  if(!canvas||!window.THREE)return;
+  bhRenderer=new THREE.WebGLRenderer({canvas,antialias:true,powerPreference:'low-power'});
+  bhRenderer.setPixelRatio(Math.min(window.devicePixelRatio,1.5));
+  bhRenderer.setSize(canvas.clientWidth,320);
+  bhRenderer.setClearColor(0x020810,1);
+  bhScene=new THREE.Scene();
+  bhCamera=new THREE.PerspectiveCamera(50,canvas.clientWidth/320,0.1,1000);
+  bhCamera.position.set(0,8,20);bhCamera.lookAt(0,0,0);
+  bhScene.fog=new THREE.FogExp2(0x020810,0.02);
+
+  // Black hole sphere
+  const bhSph=new THREE.Mesh(new THREE.SphereGeometry(2,32,32),new THREE.MeshBasicMaterial({color:0x000000}));
+  bhScene.add(bhSph);
+
+  // Event horizon glow ring
+  const ring=new THREE.Mesh(new THREE.RingGeometry(2.1,2.6,64),new THREE.MeshBasicMaterial({color:0x00c8f0,transparent:true,opacity:.7,side:THREE.DoubleSide}));
+  ring.rotation.x=Math.PI/2;
+  bhScene.add(ring);
+
+  // Accretion disk
+  for(let i=0;i<3;i++){
+    const r1=3+i*1.5,r2=r1+1.2;
+    const disk=new THREE.Mesh(new THREE.RingGeometry(r1,r2,64),new THREE.MeshBasicMaterial({color:i===0?0x00c8f0:i===1?0x4060ff:0xff8800,transparent:true,opacity:.3-i*.07,side:THREE.DoubleSide}));
+    disk.rotation.x=Math.PI/2+i*.05;
+    bhScene.add(disk);bhMeshes.push(disk);
+  }
+
+  // Particles
+  const pN=800,pGeo=new THREE.BufferGeometry();
+  const pPos=new Float32Array(pN*3),pCol=new Float32Array(pN*3);
+  for(let i=0;i<pN;i++){
+    const a=Math.random()*Math.PI*2;const r=3+Math.random()*8;const h=(Math.random()-.5)*.5;
+    pPos[i*3]=Math.cos(a)*r;pPos[i*3+1]=h;pPos[i*3+2]=Math.sin(a)*r;
+    const b=Math.random();
+    if(b>.6){pCol[i*3]=0;pCol[i*3+1]=.78;pCol[i*3+2]=.94}
+    else{pCol[i*3]=1;pCol[i*3+1]=.5+b*.5;pCol[i*3+2]=b*.3}
+  }
+  pGeo.setAttribute('position',new THREE.BufferAttribute(pPos,3));
+  pGeo.setAttribute('color',new THREE.BufferAttribute(pCol,3));
+  const bhPts=new THREE.Points(pGeo,new THREE.PointsMaterial({size:.15,vertexColors:true,transparent:true,opacity:.7}));
+  bhScene.add(bhPts);
+  bhMeshes.push(bhPts);
+  bhMeshes.push(ring);
+
+  let drag=false,ox=0,oy=0,rY=0;
+  canvas.addEventListener('mousedown',e=>{drag=true;ox=e.clientX});
+  canvas.addEventListener('touchstart',e=>{drag=true;ox=e.touches[0].clientX},{passive:true});
+  window.addEventListener('mouseup',()=>drag=false);
+  window.addEventListener('touchend',()=>drag=false);
+  window.addEventListener('mousemove',e=>{if(drag)rY+=(e.clientX-ox)*.01,ox=e.clientX});
+  window.addEventListener('touchmove',e=>{if(drag)rY+=(e.touches[0].clientX-ox)*.01,ox=e.touches[0].clientX},{passive:true});
+
+  function anim(){
+    requestAnimationFrame(anim);
+    if(mq.matches)return;
+    bhMeshes[0].rotation.y+=.01;bhMeshes[1].rotation.y+=.008;bhMeshes[2].rotation.y+=.006;
+    bhMeshes[3].rotation.y+=.004;
+    bhScene.rotation.y+=.003+rY*.05;
+    rY*=.95;
+    bhRenderer.render(bhScene,bhCamera);
+  }
+  anim();
+  uBH();
+}
+function animateBH(){}
+
+/* ══ T7: DOPPLER ══ */
+function uD(){
+  const z=parseFloat(document.getElementById('zs').value);
+  const l0=parseFloat(document.getElementById('ls').value);
+  document.getElementById('zv').textContent=z.toFixed(2);
+  document.getElementById('lv').textContent=l0.toFixed(0)+' nm';
+  const lobs=l0*(1+z);
+  const vcRatio=((z+1)**2-1)/((z+1)**2+1);
+  const H0=67.4;const dist=vcRatio*3e5/H0*1000;
+  const lb=z*3e5/H0;
+  document.getElementById('dv').innerHTML=lobs.toFixed(1)+'<span> nm</span>';
+  document.getElementById('dvc').textContent=(vcRatio*100).toFixed(1)+'% c';
+  document.getElementById('ddist').textContent=dist>1000?(dist/1000).toFixed(1)+' Gpc':dist.toFixed(0)+' Mpc';
+  document.getElementById('dlb').textContent=lb.toFixed(0)+' Mly';
+  document.getElementById('ddir').textContent=z>0?'Uzaklaşıyor (Kırmızıya kayma)':z<0?'Yaklaşıyor (Maviye kayma)':'Durağan';
+  drawDop(l0,lobs,z);
+}
+function setZ(val){document.getElementById('zs').value=val;uD()}
+function nmToRgb(nm){
+  let r,g,b;
+  if(nm<380)return[0.5,0,0.5];
+  else if(nm<440){r=(440-nm)/60;g=0;b=1}
+  else if(nm<490){r=0;g=(nm-440)/50;b=1}
+  else if(nm<510){r=0;g=1;b=(510-nm)/20}
+  else if(nm<580){r=(nm-510)/70;g=1;b=0}
+  else if(nm<645){r=1;g=(645-nm)/65;b=0}
+  else if(nm<=780){r=1;g=0;b=0}
+  else return[0.5,0,0];
+  return[r,g,b];
+}
+function drawDop(l0,lobs,z){
+  const c=document.getElementById('dop-canvas');
+  if(!c)return;
+  const ctx=c.getContext('2d');
+  const W=c.width,H=c.height;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#020810';ctx.fillRect(0,0,W,H);
+  function drawWave(lam,y,amp,label){
+    const [r,g,b]=nmToRgb(lam);
+    ctx.beginPath();ctx.strokeStyle=`rgb(${Math.round(r*255)},${Math.round(g*255)},${Math.round(b*255)})`;ctx.lineWidth=2;
+    const freq=400/lam;
+    for(let x=0;x<=W;x++){ctx.lineTo(x,y+amp*Math.sin(x*freq*Math.PI/W*20))}
+    ctx.stroke();
+    ctx.fillStyle=`rgba(${Math.round(r*255)},${Math.round(g*255)},${Math.round(b*255)},.7)`;
+    ctx.font='10px JetBrains Mono,monospace';ctx.fillText(label,6,y-amp-4);
+  }
+  drawWave(l0,H*.35,18,`λ₀ = ${l0.toFixed(0)}nm`);
+  drawWave(Math.min(780,Math.max(380,lobs)),H*.7,18,`λ_obs = ${lobs.toFixed(0)}nm (z=${z.toFixed(2)})`);
+  ctx.strokeStyle='rgba(0,200,240,.15)';ctx.setLineDash([4,8]);ctx.beginPath();ctx.moveTo(0,H*.5);ctx.lineTo(W,H*.5);ctx.stroke();ctx.setLineDash([]);
+}
+
+// Init tools on load
+window.addEventListener('load',()=>{
+  uH();
+  document.getElementById('bh-mass');
+});
+</script>
+</body>
+</html>
