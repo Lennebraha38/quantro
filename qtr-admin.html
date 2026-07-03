@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>QTR</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@300;400&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --void:#020810;--deep:#07111f;--surface:#0d1f35;
+  --cyan:#00c8f0;--cyanM:rgba(0,200,240,0.3);
+  --text:#e8edf5;--muted:#7a93a8;--green:#00f0a0;--red:#ff4466;--gold:#f0c040;
+  --fd:'Syne',sans-serif;--fb:'Space Grotesk',sans-serif;--fm:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{background:var(--void);color:var(--text);font-family:var(--fb);min-height:100vh;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:var(--cyanM)}
+
+/* BG */
+.bg{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg-grid{position:absolute;inset:0;
+  background-image:linear-gradient(rgba(0,200,240,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(0,200,240,.02) 1px,transparent 1px);
+  background-size:64px 64px;}
+.bg-neb{position:absolute;width:500px;height:500px;top:-100px;right:-100px;
+  background:radial-gradient(ellipse at 50% 50%,rgba(0,80,200,.12) 0%,transparent 70%);
+  border-radius:50%;filter:blur(60px);}
+
+/* ── LOGIN SCREEN ── */
+#login-screen{
+  position:fixed;inset:0;z-index:50;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--void);
+}
+.login-box{
+  width:100%;max-width:400px;padding:0 24px;
+  display:flex;flex-direction:column;align-items:center;
+}
+.login-logo{
+  font-family:var(--fd);font-size:22px;font-weight:800;
+  letter-spacing:6px;text-transform:uppercase;color:var(--text);
+  margin-bottom:8px;
+}
+.login-logo em{color:var(--cyan);font-style:normal}
+.login-sub{
+  font-family:var(--fm);font-size:9px;letter-spacing:4px;
+  text-transform:uppercase;color:var(--muted);margin-bottom:48px;
+}
+.login-label{
+  font-family:var(--fm);font-size:9px;letter-spacing:3px;
+  text-transform:uppercase;color:var(--muted);
+  margin-bottom:8px;align-self:flex-start;
+}
+.login-input{
+  width:100%;background:var(--deep);border:1px solid rgba(0,200,240,.15);
+  color:var(--text);font-family:var(--fm);font-size:16px;
+  padding:16px 20px;letter-spacing:4px;
+  transition:border-color .2s;margin-bottom:16px;text-align:center;
+}
+.login-input:focus{outline:none;border-color:var(--cyan)}
+.login-btn{
+  width:100%;font-family:var(--fm);font-size:11px;letter-spacing:3px;
+  text-transform:uppercase;background:var(--cyan);color:var(--void);
+  border:none;padding:16px;cursor:pointer;font-weight:700;
+  transition:opacity .2s;
+}
+.login-btn:hover{opacity:.85}
+.login-err{
+  font-family:var(--fm);font-size:10px;letter-spacing:2px;
+  color:var(--red);margin-top:12px;min-height:16px;text-align:center;
+}
+.login-attempts{
+  font-family:var(--fm);font-size:9px;letter-spacing:2px;
+  color:rgba(255,68,102,.4);margin-top:8px;text-align:center;
+}
+
+/* ── ADMIN PANEL ── */
+#admin-panel{display:none;position:relative;z-index:1;padding:80px 0 100px}
+.admin-wrap{max-width:1000px;margin:0 auto;padding:0 40px}
+
+/* top bar */
+.admin-topbar{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:40px;padding-bottom:24px;
+  border-bottom:1px solid rgba(0,200,240,.1);
+}
+.admin-logo{font-family:var(--fd);font-size:16px;font-weight:800;letter-spacing:4px;text-transform:uppercase}
+.admin-logo em{color:var(--cyan);font-style:normal}
+.admin-status{display:flex;align-items:center;gap:8px;font-family:var(--fm);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--green)}
+.admin-status::before{content:'';display:block;width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green)}
+.logout-btn{font-family:var(--fm);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);background:none;border:1px solid rgba(122,147,168,.2);padding:8px 16px;cursor:pointer;transition:color .2s,border-color .2s}
+.logout-btn:hover{color:var(--red);border-color:rgba(255,68,102,.3)}
+
+/* stats */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-bottom:32px}
+.stat-card{background:var(--deep);padding:22px 24px;border-bottom:2px solid transparent;transition:border-color .3s}
+.stat-card:hover{border-color:var(--cyan)}
+.stat-val{font-family:var(--fd);font-size:32px;font-weight:800;color:var(--text);line-height:1;margin-bottom:6px}
+.stat-lbl{font-family:var(--fm);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted)}
+
+/* section titles */
+.section-title{
+  font-family:var(--fm);font-size:10px;letter-spacing:4px;
+  text-transform:uppercase;color:var(--cyan);
+  margin-bottom:16px;display:flex;align-items:center;gap:12px;
+}
+.section-title::after{content:'';flex:1;height:1px;background:rgba(0,200,240,.1)}
+
+/* post list */
+.post-list{margin-bottom:40px}
+.pi{
+  display:flex;align-items:center;gap:16px;
+  padding:16px 20px;background:var(--deep);
+  border:1px solid rgba(0,200,240,.07);margin-bottom:3px;
+  transition:border-color .2s;
+}
+.pi:hover{border-color:rgba(0,200,240,.2)}
+.pi-emoji{font-size:20px;flex-shrink:0}
+.pi-info{flex:1;min-width:0}
+.pi-title{font-family:var(--fd);font-size:14px;font-weight:700;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pi-date{font-family:var(--fm);font-size:9px;letter-spacing:2px;color:var(--muted);margin-top:3px}
+.pi-status{font-family:var(--fm);font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;border:1px solid;flex-shrink:0}
+.pi-status.pub{color:var(--green);border-color:rgba(0,240,160,.25)}
+.pi-status.draft{color:var(--muted);border-color:rgba(122,147,168,.2)}
+.pi-actions{display:flex;gap:6px;flex-shrink:0}
+.act-btn{font-family:var(--fm);font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:6px 10px;border:1px solid;background:none;cursor:pointer;transition:all .2s}
+.act-btn.toggle-pub{color:var(--gold);border-color:rgba(240,192,64,.2)}
+.act-btn.toggle-pub:hover{background:rgba(240,192,64,.08)}
+.act-btn.toggle-draft{color:var(--muted);border-color:rgba(122,147,168,.2)}
+.act-btn.toggle-draft:hover{background:rgba(122,147,168,.08)}
+.act-btn.del{color:var(--red);border-color:rgba(255,68,102,.2)}
+.act-btn.del:hover{background:rgba(255,68,102,.08)}
+
+/* form */
+.form-card{background:var(--deep);border:1px solid rgba(0,200,240,.1);padding:32px;position:relative;overflow:hidden}
+.form-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),transparent)}
+.fgroup{margin-bottom:16px}
+.flbl{font-family:var(--fm);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px}
+.finput{
+  width:100%;background:var(--void);border:1px solid rgba(0,200,240,.12);
+  color:var(--text);font-family:var(--fb);font-size:14px;
+  padding:11px 14px;transition:border-color .2s;
+}
+.finput:focus{outline:none;border-color:var(--cyan)}
+textarea.finput{min-height:220px;resize:vertical;font-family:var(--fm);font-size:12px;line-height:1.8}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.frow3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.form-actions{display:flex;gap:10px;align-items:center;margin-top:20px}
+.btn{font-family:var(--fm);font-size:10px;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;padding:12px 22px;transition:opacity .2s,transform .15s}
+.btn:hover{opacity:.85;transform:translateY(-1px)}
+.btn-p{background:var(--cyan);color:var(--void);font-weight:700}
+.btn-g{background:transparent;color:var(--text);border:1px solid rgba(30,50,72,1)}
+.btn-g:hover{border-color:var(--cyanM);color:var(--cyan)}
+.fstatus{font-family:var(--fm);font-size:11px;letter-spacing:1px;margin-top:10px;min-height:16px}
+.fstatus.ok{color:var(--green)}.fstatus.err{color:var(--red)}
+
+/* markdown helper */
+.md-help{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.md-chip{font-family:var(--fm);font-size:9px;letter-spacing:1px;color:var(--muted);border:1px solid rgba(0,200,240,.08);padding:3px 8px;cursor:pointer;transition:all .2s}
+.md-chip:hover{color:var(--cyan);border-color:rgba(0,200,240,.2)}
+
+/* preview */
+.preview-area{background:var(--void);border:1px solid rgba(0,200,240,.08);padding:20px;margin-top:12px;display:none;min-height:100px;font-size:14px;line-height:1.8;color:rgba(232,237,245,.7)}
+.preview-area h2{font-family:var(--fd);font-size:22px;font-weight:800;text-transform:uppercase;color:var(--text);margin:24px 0 10px}
+.preview-area h3{font-family:var(--fd);font-size:16px;font-weight:700;color:var(--text);margin:18px 0 8px}
+.preview-area strong{color:var(--cyan)}
+.preview-area code{font-family:var(--fm);font-size:14px;color:var(--cyan);background:rgba(0,200,240,.07);padding:10px 16px;display:block;margin:12px 0;border-left:2px solid var(--cyan)}
+
+/* contact messages */
+.msg-list{margin-bottom:40px}
+.msg-item{padding:18px 20px;background:var(--deep);border:1px solid rgba(0,200,240,.07);margin-bottom:3px;transition:border-color .2s}
+.msg-item:hover{border-color:rgba(0,200,240,.15)}
+.msg-item.unread{border-left:2px solid var(--cyan)}
+.msg-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.msg-from{font-family:var(--fd);font-size:13px;font-weight:700;text-transform:uppercase}
+.msg-email{font-family:var(--fm);font-size:10px;color:var(--cyan);letter-spacing:1px}
+.msg-date{font-family:var(--fm);font-size:9px;letter-spacing:2px;color:var(--muted)}
+.msg-body{font-size:13px;color:rgba(232,237,245,.5);line-height:1.7}
+.msg-actions{margin-top:10px;display:flex;gap:8px}
+
+/* responsive */
+@media(max-width:768px){
+  .admin-wrap{padding:0 20px}
+  .frow,.frow3{grid-template-columns:1fr}
+  .stats-row{grid-template-columns:1fr 1fr}
+  .pi{flex-wrap:wrap}
+  .pi-actions{width:100%}
+}
+</style>
+</head>
+<body>
+
+<div class="bg"><div class="bg-grid"></div><div class="bg-neb"></div></div>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">Q<em>U</em>ANTRO</div>
+    <div class="login-sub">Yönetim Paneli · Gizli Erişim</div>
+    <label class="login-label">Erişim Kodu</label>
+    <input class="login-input" id="pwd-input" type="password" placeholder="••••••••" maxlength="32"
+      onkeydown="if(event.key==='Enter')tryLogin()">
+    <button class="login-btn" onclick="tryLogin()">Sisteme Gir</button>
+    <div class="login-err" id="login-err"></div>
+    <div class="login-attempts" id="login-attempts"></div>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="admin-panel">
+  <div class="admin-wrap">
+
+    <!-- Top bar -->
+    <div class="admin-topbar">
+      <div class="admin-logo">Q<em>U</em>ANTRO <span style="font-size:11px;opacity:.4;letter-spacing:3px">ADMIN</span></div>
+      <div class="admin-status">Sistem Aktif</div>
+      <button class="logout-btn" onclick="logout()">Çıkış Yap</button>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-val" id="stat-total">—</div>
+        <div class="stat-lbl">Toplam Yazı</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" id="stat-pub">—</div>
+        <div class="stat-lbl">Yayında</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" id="stat-msg">—</div>
+        <div class="stat-lbl">Mesaj</div>
+      </div>
+    </div>
+
+    <!-- Posts -->
+    <div class="section-title">Blog Yazıları</div>
+    <div class="post-list" id="post-list">
+      <div style="font-family:var(--fm);font-size:10px;letter-spacing:2px;color:var(--muted);padding:16px 0">Yükleniyor...</div>
+    </div>
+
+    <!-- New post form -->
+    <div class="section-title">Yeni Yazı</div>
+    <div class="form-card">
+      <div class="frow">
+        <div class="fgroup">
+          <label class="flbl">Başlık</label>
+          <input class="finput" id="f-title" placeholder="Yazı başlığı">
+        </div>
+        <div class="fgroup">
+          <label class="flbl">Slug (otomatik)</label>
+          <input class="finput" id="f-slug" placeholder="yazi-basligi">
+        </div>
+      </div>
+      <div class="frow3">
+        <div class="fgroup">
+          <label class="flbl">Emoji</label>
+          <input class="finput" id="f-emoji" placeholder="⚛" style="font-size:22px;text-align:center">
+        </div>
+        <div class="fgroup" style="grid-column:span 2">
+          <label class="flbl">Etiketler (virgülle ayırın)</label>
+          <input class="finput" id="f-tags" placeholder="Kuantum, Astrofizik, Higgs">
+        </div>
+      </div>
+      <div class="fgroup">
+        <label class="flbl">Özet (kart ve meta için)</label>
+        <input class="finput" id="f-summary" placeholder="Yazının kısa özeti...">
+      </div>
+      <div class="fgroup">
+        <label class="flbl">İçerik</label>
+        <div class="md-help">
+          <span class="md-chip" onclick="ins('## ')">## Başlık</span>
+          <span class="md-chip" onclick="ins('### ')">### Alt Başlık</span>
+          <span class="md-chip" onclick="ins('**','**')">**kalın**</span>
+          <span class="md-chip" onclick="ins('\n\n')">Paragraf</span>
+          <span class="md-chip" onclick="ins('`','`')">kod</span>
+          <span class="md-chip" onclick="togglePreview()">Önizle</span>
+        </div>
+        <textarea class="finput" id="f-content" placeholder="## Başlık&#10;&#10;İçerik buraya...&#10;&#10;### Alt Başlık&#10;&#10;**Önemli** bir şey." oninput="livePreview()"></textarea>
+        <div class="preview-area" id="preview"></div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-p" onclick="submit(true)">✓ Yayınla</button>
+        <button class="btn btn-g" onclick="submit(false)">Taslak Kaydet</button>
+        <button class="btn btn-g" onclick="clearForm()">Temizle</button>
+      </div>
+      <div class="fstatus" id="fstatus"></div>
+    </div>
+
+    <!-- Messages -->
+    <div class="section-title" style="margin-top:48px">İletişim Mesajları</div>
+    <div class="msg-list" id="msg-list">
+      <div style="font-family:var(--fm);font-size:10px;letter-spacing:2px;color:var(--muted);padding:16px 0">Yükleniyor...</div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const SB='https://mzlludkzkddxbbcrjmfu.supabase.co';
+const KEY='sb_publishable_MsSvoJUyhPO8HJ4d3FFBdg_bnw1D3BD';
+
+/* ── GİRİŞ ── */
+// Şifreyi değiştirmek için aşağıdaki değeri güncelleyin
+const PASS_HASH='quantro2025arge';
+let attempts=0;
+
+function tryLogin(){
+  const val=document.getElementById('pwd-input').value;
+  const err=document.getElementById('login-err');
+  const att=document.getElementById('login-attempts');
+
+  if(attempts>=5){
+    err.textContent='Çok fazla hatalı giriş. Sayfayı yenileyin.';
+    return;
+  }
+
+  if(val===PASS_HASH){
+    sessionStorage.setItem('qtr_auth','1');
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('admin-panel').style.display='block';
+    loadAll();
+  } else {
+    attempts++;
+    err.textContent='Hatalı erişim kodu.';
+    att.textContent=`${5-attempts} deneme hakkı kaldı`;
+    document.getElementById('pwd-input').value='';
+    document.getElementById('pwd-input').focus();
+  }
+}
+
+function logout(){
+  sessionStorage.removeItem('qtr_auth');
+  location.reload();
+}
+
+// Oturum kontrolü
+if(sessionStorage.getItem('qtr_auth')==='1'){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('admin-panel').style.display='block';
+  setTimeout(loadAll,100);
+}
+
+document.getElementById('pwd-input').focus();
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&document.getElementById('login-screen').style.display!=='none')tryLogin()});
+
+/* ── VERİ ── */
+async function api(path,opts={}){
+  const res=await fetch(SB+path,{
+    ...opts,
+    headers:{
+      'apikey':KEY,'Authorization':'Bearer '+KEY,
+      'Content-Type':'application/json',
+      ...(opts.headers||{})
+    }
+  });
+  return res.ok?res.json().catch(()=>({})):null;
+}
+
+async function loadAll(){
+  await Promise.all([loadPosts(),loadMessages()]);
+}
+
+async function loadPosts(){
+  const data=await api('/rest/v1/blog_posts?order=created_at.desc')||[];
+  const pub=data.filter(p=>p.published).length;
+  document.getElementById('stat-total').textContent=data.length;
+  document.getElementById('stat-pub').textContent=pub;
+
+  document.getElementById('post-list').innerHTML=data.length?
+    data.map(p=>`
+      <div class="pi">
+        <span class="pi-emoji">${p.cover_emoji||'⚛'}</span>
+        <div class="pi-info">
+          <div class="pi-title">${p.title}</div>
+          <div class="pi-date">${new Date(p.created_at).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'})}</div>
+        </div>
+        <span class="pi-status ${p.published?'pub':'draft'}">${p.published?'Yayında':'Taslak'}</span>
+        <div class="pi-actions">
+          <button class="act-btn ${p.published?'toggle-draft':'toggle-pub'}" onclick="togglePub('${p.id}',${p.published})">
+            ${p.published?'Gizle':'Yayınla'}
+          </button>
+          <button class="act-btn del" onclick="delPost('${p.id}')">Sil</button>
+        </div>
+      </div>
+    `).join('')
+    :'<div style="font-family:var(--fm);font-size:10px;letter-spacing:2px;color:var(--muted);padding:16px 0">Henüz yazı yok.</div>';
+}
+
+async function loadMessages(){
+  const data=await api('/rest/v1/contact_messages?order=created_at.desc')||[];
+  document.getElementById('stat-msg').textContent=data.length;
+  document.getElementById('msg-list').innerHTML=data.length?
+    data.map(m=>`
+      <div class="msg-item ${!m.is_read?'unread':''}">
+        <div class="msg-header">
+          <div>
+            <div class="msg-from">${m.name}</div>
+            <div class="msg-email">${m.email}</div>
+          </div>
+          <div class="msg-date">${new Date(m.created_at).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'})}</div>
+        </div>
+        <div class="msg-body">${m.message}</div>
+        <div class="msg-actions">
+          <button class="act-btn toggle-pub" onclick="markRead('${m.id}')">Okundu İşaretle</button>
+          <button class="act-btn del" onclick="delMsg('${m.id}')">Sil</button>
+        </div>
+      </div>
+    `).join('')
+    :'<div style="font-family:var(--fm);font-size:10px;letter-spacing:2px;color:var(--muted);padding:16px 0">Henüz mesaj yok.</div>';
+}
+
+/* ── BLOG İŞLEMLERİ ── */
+async function submit(publish){
+  const title=document.getElementById('f-title').value.trim();
+  const slug=document.getElementById('f-slug').value.trim();
+  const emoji=document.getElementById('f-emoji').value.trim()||'⚛';
+  const tags=document.getElementById('f-tags').value.split(',').map(t=>t.trim()).filter(Boolean);
+  const summary=document.getElementById('f-summary').value.trim();
+  const content=document.getElementById('f-content').value.trim();
+  const st=document.getElementById('fstatus');
+
+  if(!title||!content){st.textContent='Başlık ve içerik zorunlu.';st.className='fstatus err';return}
+
+  st.textContent='Kaydediliyor...';st.className='fstatus';
+  const res=await fetch(`${SB}/rest/v1/blog_posts`,{
+    method:'POST',
+    headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
+    body:JSON.stringify({title,slug:slug||autoSlug(title),summary,content,cover_emoji:emoji,tags,published:publish})
+  });
+
+  if(res.ok){
+    st.textContent=publish?'✓ Yazı yayınlandı!':'✓ Taslak kaydedildi.';
+    st.className='fstatus ok';
+    clearForm();loadPosts();
+  } else {
+    st.textContent='Hata oluştu. Slug çakışıyor olabilir.';st.className='fstatus err';
+  }
+}
+
+async function togglePub(id,current){
+  await api(`/rest/v1/blog_posts?id=eq.${id}`,{method:'PATCH',body:JSON.stringify({published:!current})});
+  loadPosts();
+}
+
+async function delPost(id){
+  if(!confirm('Bu yazıyı kalıcı olarak silmek istediğinize emin misiniz?'))return;
+  await api(`/rest/v1/blog_posts?id=eq.${id}`,{method:'DELETE'});
+  loadPosts();
+}
+
+async function markRead(id){
+  await api(`/rest/v1/contact_messages?id=eq.${id}`,{method:'PATCH',body:JSON.stringify({is_read:true})});
+  loadMessages();
+}
+
+async function delMsg(id){
+  if(!confirm('Bu mesajı silmek istediğinize emin misiniz?'))return;
+  await api(`/rest/v1/contact_messages?id=eq.${id}`,{method:'DELETE'});
+  loadMessages();
+}
+
+/* ── FORM YARDIMCI ── */
+function autoSlug(t){
+  return t.toLowerCase()
+    .replace(/ç/g,'c').replace(/ğ/g,'g').replace(/ı/g,'i').replace(/ö/g,'o').replace(/ş/g,'s').replace(/ü/g,'u')
+    .replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'');
+}
+
+document.getElementById('f-title').addEventListener('input',function(){
+  document.getElementById('f-slug').value=autoSlug(this.value);
+});
+
+function ins(before,after=''){
+  const ta=document.getElementById('f-content');
+  const s=ta.selectionStart,e=ta.selectionEnd;
+  const sel=ta.value.substring(s,e);
+  ta.value=ta.value.substring(0,s)+before+sel+after+ta.value.substring(e);
+  ta.focus();ta.selectionStart=s+before.length;ta.selectionEnd=s+before.length+sel.length;
+  livePreview();
+}
+
+let previewOpen=false;
+function togglePreview(){
+  previewOpen=!previewOpen;
+  const p=document.getElementById('preview');
+  p.style.display=previewOpen?'block':'none';
+  if(previewOpen)livePreview();
+}
+
+function livePreview(){
+  if(!previewOpen)return;
+  document.getElementById('preview').innerHTML=mdToHtml(document.getElementById('f-content').value);
+}
+
+function mdToHtml(md){
+  return md
+    .replace(/^## (.+)$/gm,'<h2>$1</h2>')
+    .replace(/^### (.+)$/gm,'<h3>$1</h3>')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/`([^`]+)`/g,'<code>$1</code>')
+    .split('\n\n').map(p=>p.startsWith('<')?p:`<p>${p}</p>`).join('');
+}
+
+function clearForm(){
+  ['f-title','f-slug','f-emoji','f-tags','f-summary','f-content'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('fstatus').textContent='';
+  document.getElementById('preview').style.display='none';
+  previewOpen=false;
+}
+</script>
+</body>
+</html>
