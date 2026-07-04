@@ -1,0 +1,1425 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Quantro — Kuantum Mekaniği ve Astrofizik alanında ileri araştırmalar yürüten bağımsız ARGE merkezi.">
+<meta name="theme-color" content="#020810">
+<meta property="og:title" content="Quantro · ARGE Merkezi">
+<meta property="og:description" content="Kuantum sınırında araştırma. Evrenin dokusunu anlama yolculuğu.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://quantro-arge.vercel.app/">
+<meta property="og:image" content="https://quantro-arge.vercel.app/og-image.jpg">
+<link rel="canonical" href="https://quantro-arge.vercel.app/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Quantro · ARGE Merkezi">
+<meta name="twitter:description" content="Kuantum sınırında araştırma. Evrenin dokusunu anlama yolculuğu.">
+<meta name="google-site-verification" content="6kVae3BCWZqzRghV6XfTETawe0JeVPFZ7KcPkiu6sIQ" />
+<title>Quantro · ARGE Merkezi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Syne:wght@700;800&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+
+<style>
+/* ═══════════════════════════════════════════════════
+   DESIGN TOKENS
+   Void #020810 · Deep #07111f · Surface #0d1f35
+   Cyan #00c8f0 · Text #e8edf5 · Muted #4a6070
+   ═══════════════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --void:    #020810;
+  --deep:    #07111f;
+  --surface: #0d1f35;
+  --subtle:  #1e3248;
+  --cyan:    #00c8f0;
+  --cyanM:   rgba(0,200,240,0.35);
+  --cyanD:   rgba(0,200,240,0.12);
+  --text:    #e8edf5;
+  --muted:   #7a93a8;
+  --fd: 'Syne',sans-serif;
+  --fb: 'Space Grotesk',sans-serif;
+  --fm: 'JetBrains Mono',monospace;
+}
+
+html{scroll-behavior:smooth}
+body{
+  background:var(--void);color:var(--text);
+  font-family:var(--fb);font-weight:400;line-height:1.6;
+  overflow-x:hidden;-webkit-font-smoothing:antialiased;
+}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:var(--void)}
+::-webkit-scrollbar-thumb{background:var(--cyanM)}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+
+.skip-link{
+  position:absolute;top:-100px;left:16px;z-index:200;
+  background:var(--cyan);color:var(--void);
+  font-family:var(--fm);font-size:11px;letter-spacing:2px;text-transform:uppercase;
+  padding:12px 22px;text-decoration:none;font-weight:700;
+  transition:top .2s;
+}
+.skip-link:focus{top:16px}
+
+/* ══════════════════════════════════════
+   NAVIGATION
+   ══════════════════════════════════════ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:28px 0;transition:background .4s,padding .4s;
+}
+nav.scrolled{
+  background:rgba(2,8,16,0.88);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  padding:16px 0;border-bottom:1px solid rgba(0,200,240,0.07);
+}
+.nav-inner{
+  display:flex;justify-content:space-between;align-items:center;
+  max-width:1200px;margin:0 auto;padding:0 48px;
+}
+.nav-logo{
+  font-family:var(--fd);font-size:19px;font-weight:800;
+  letter-spacing:5px;text-transform:uppercase;
+  color:var(--text);text-decoration:none;
+}
+.nav-logo span{color:var(--cyan)}
+.nav-links{display:flex;gap:36px;list-style:none}
+.nav-links a{
+  font-family:var(--fm);font-size:10px;letter-spacing:3px;
+  text-transform:uppercase;color:var(--muted);text-decoration:none;
+  transition:color .2s;
+}
+.nav-links a:hover{color:var(--cyan)}
+.nav-cta{
+  font-family:var(--fm);font-size:10px;letter-spacing:2.5px;
+  text-transform:uppercase;color:var(--cyan);
+  border:1px solid var(--cyanM);padding:10px 22px;
+  text-decoration:none;transition:background .2s,color .2s;
+}
+.nav-cta:hover{background:var(--cyan);color:var(--void)}
+.nav-burger{
+  display:none;flex-direction:column;gap:5px;
+  background:none;border:none;cursor:pointer;padding:4px;
+}
+.nav-burger span{display:block;width:22px;height:1.5px;background:var(--text);transition:transform .3s,opacity .3s}
+.mob-nav{
+  display:none;position:fixed;inset:0;z-index:99;
+  background:rgba(2,8,16,0.97);backdrop-filter:blur(20px);
+  flex-direction:column;justify-content:center;align-items:center;gap:32px;
+}
+.mob-nav.open{display:flex}
+.mob-nav a{
+  font-family:var(--fd);font-size:30px;font-weight:800;
+  text-transform:uppercase;color:var(--text);
+  text-decoration:none;letter-spacing:2px;transition:color .2s;
+}
+.mob-nav a:hover{color:var(--cyan)}
+
+/* ══════════════════════════════════════
+   HERO  — full-viewport Three.js stage
+   ══════════════════════════════════════ */
+#hero{
+  position:relative;width:100%;height:100vh;
+  min-height:640px;overflow:hidden;
+}
+#three-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+
+/* cinematic vignette */
+#hero::after{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 50%, transparent 30%, rgba(2,8,16,0.5) 100%),
+    linear-gradient(to bottom, rgba(2,8,16,0.2) 0%, transparent 18%, transparent 72%, rgba(2,8,16,1) 100%);
+  pointer-events:none;z-index:2;
+}
+
+/* HUD corners */
+.hud{position:absolute;z-index:3;width:34px;height:34px}
+.hud-tl{top:22px;left:22px;border-top:1.5px solid rgba(0,200,240,.4);border-left:1.5px solid rgba(0,200,240,.4)}
+.hud-tr{top:22px;right:22px;border-top:1.5px solid rgba(0,200,240,.4);border-right:1.5px solid rgba(0,200,240,.4)}
+.hud-bl{bottom:22px;left:22px;border-bottom:1.5px solid rgba(0,200,240,.4);border-left:1.5px solid rgba(0,200,240,.4)}
+.hud-br{bottom:22px;right:22px;border-bottom:1.5px solid rgba(0,200,240,.4);border-right:1.5px solid rgba(0,200,240,.4)}
+
+/* live telemetry badges */
+.badge{
+  position:absolute;z-index:3;
+  font-family:var(--fm);font-size:9px;letter-spacing:2px;
+  color:rgba(0,200,240,.5);text-transform:uppercase;line-height:1.7;
+}
+.badge-tl{top:70px;left:52px}
+.badge-tr{top:70px;right:52px;text-align:right}
+
+/* hero content overlay */
+.hero-content{
+  position:absolute;inset:0;z-index:3;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  padding-bottom:88px;
+}
+.hc-wrap{max-width:1200px;margin:0 auto;padding:0 48px;width:100%}
+
+.hero-eyebrow{
+  display:flex;align-items:center;gap:14px;margin-bottom:24px;
+}
+.hero-eyebrow::before{content:'';display:block;width:38px;height:1px;background:var(--cyan)}
+.hero-eyebrow span{
+  font-family:var(--fm);font-size:10px;letter-spacing:4px;
+  text-transform:uppercase;color:var(--cyan);
+}
+.hero-h1{
+  font-family:var(--fd);
+  font-size:clamp(54px,9vw,128px);
+  font-weight:800;line-height:.9;letter-spacing:-3px;
+  text-transform:uppercase;color:var(--text);margin-bottom:36px;
+}
+.hero-h1 .outline{
+  color:transparent;
+  -webkit-text-stroke:1.5px var(--cyan);
+  display:block;
+}
+.hero-row{
+  display:flex;align-items:flex-end;
+  justify-content:space-between;gap:40px;flex-wrap:wrap;
+}
+.hero-desc{
+  font-size:15px;font-weight:300;
+  color:rgba(232,237,245,0.48);line-height:1.85;max-width:420px;
+}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;margin-top:8px}
+.btn-p{
+  font-family:var(--fm);font-size:10px;letter-spacing:3px;text-transform:uppercase;
+  background:var(--cyan);color:var(--void);padding:15px 34px;
+  text-decoration:none;font-weight:700;display:inline-block;
+  transition:opacity .2s,transform .2s;
+}
+.btn-p:hover{opacity:.85;transform:translateY(-2px)}
+.btn-g{
+  font-family:var(--fm);font-size:10px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--text);border:1px solid rgba(255,255,255,0.12);padding:15px 34px;
+  text-decoration:none;display:inline-block;transition:border-color .2s,color .2s;
+}
+.btn-g:hover{border-color:var(--cyanM);color:var(--cyan)}
+
+/* scroll indicator */
+.scroll-ind{
+  position:absolute;bottom:36px;left:50%;transform:translateX(-50%);
+  z-index:3;display:flex;flex-direction:column;align-items:center;gap:8px;
+}
+.scroll-ind span{
+  font-family:var(--fm);font-size:9px;letter-spacing:3px;
+  color:rgba(232,237,245,0.28);text-transform:uppercase;
+}
+.scroll-ln{
+  width:1px;height:44px;
+  background:linear-gradient(to bottom,rgba(0,200,240,.5),transparent);
+  animation:scrlP 2s ease-in-out infinite;
+}
+@keyframes scrlP{0%,100%{opacity:.3;transform:scaleY(1)}50%{opacity:1;transform:scaleY(1.1)}}
+
+/* ══════════════════════════════════════
+   METRICS BAR
+   ══════════════════════════════════════ */
+.metrics-bar{
+  border-top:1px solid rgba(0,200,240,.06);
+  border-bottom:1px solid rgba(0,200,240,.06);
+}
+.mb-inner{
+  max-width:1200px;margin:0 auto;padding:0 48px;
+  display:grid;grid-template-columns:repeat(4,1fr);
+}
+.mb-item{
+  padding:44px 36px;
+  border-left:1px solid rgba(0,200,240,.07);
+  transition:background .3s;
+}
+.mb-item:hover{background:rgba(0,200,240,.025)}
+.mb-item:first-child{border-left:none;padding-left:0}
+.mb-num{
+  font-family:var(--fd);font-size:38px;font-weight:800;
+  color:var(--text);line-height:1;margin-bottom:7px;
+}
+.mb-num sup{font-size:16px;color:var(--cyan)}
+.mb-lbl{
+  font-family:var(--fm);font-size:9px;letter-spacing:3px;
+  text-transform:uppercase;color:var(--muted);
+}
+
+/* ══════════════════════════════════════
+   SHARED LAYOUT
+   ══════════════════════════════════════ */
+.container{max-width:1200px;margin:0 auto;padding:0 48px}
+section{padding:120px 0}
+
+.sec-label{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.sec-label::before{content:'';width:28px;height:1px;background:var(--cyan);flex-shrink:0}
+.sec-label span{
+  font-family:var(--fm);font-size:10px;letter-spacing:4px;
+  text-transform:uppercase;color:var(--cyan);
+}
+.sec-h2{
+  font-family:var(--fd);
+  font-size:clamp(36px,4.8vw,66px);
+  font-weight:800;line-height:1;letter-spacing:-1px;
+  text-transform:uppercase;color:var(--text);margin-bottom:24px;
+}
+.sec-sub{
+  font-size:15px;font-weight:300;
+  color:rgba(232,237,245,.42);line-height:1.85;max-width:520px;
+}
+
+/* ══════════════════════════════════════
+   ABOUT
+   ══════════════════════════════════════ */
+.about{background:var(--deep)}
+.about-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:100px;align-items:center;
+}
+
+/* 3D atom visual */
+.about-visual{position:relative;height:460px}
+.atom-stage{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+}
+.atom-core{position:relative;width:340px;height:340px}
+.a-nucleus{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:22px;height:22px;
+  background:radial-gradient(circle,#fff 0%,var(--cyan) 60%);
+  border-radius:50%;
+  box-shadow:0 0 30px var(--cyan),0 0 60px rgba(0,200,240,.4);
+  animation:nucP 2.5s ease-in-out infinite alternate;z-index:2;
+}
+@keyframes nucP{
+  from{box-shadow:0 0 20px var(--cyan),0 0 40px rgba(0,200,240,.3)}
+  to  {box-shadow:0 0 45px var(--cyan),0 0 90px rgba(0,200,240,.55)}
+}
+.a-ring{
+  position:absolute;top:50%;left:50%;
+  border-radius:50%;border:1px solid rgba(0,200,240,.3);
+}
+.a-r1{width:110px;height:110px;margin:-55px 0 0 -55px;animation:sA 4s linear infinite}
+.a-r2{width:195px;height:195px;margin:-97.5px 0 0 -97.5px;animation:sB 7s linear infinite reverse;border-color:rgba(120,70,255,.3);transform:rotateX(65deg)}
+.a-r3{width:300px;height:300px;margin:-150px 0 0 -150px;animation:sC 11s linear infinite;border-color:rgba(0,200,240,.15);transform:rotateX(65deg) rotateZ(50deg)}
+@keyframes sA{to{transform:rotateZ(360deg)}}
+@keyframes sB{to{transform:rotateX(65deg) rotateZ(360deg)}}
+@keyframes sC{to{transform:rotateX(65deg) rotateZ(410deg)}}
+.a-dot{
+  position:absolute;width:7px;height:7px;
+  background:var(--cyan);border-radius:50%;
+  box-shadow:0 0 10px var(--cyan);
+  top:50%;left:50%;margin:-3.5px 0 0 -3.5px;
+}
+.a-r1 .a-dot{transform:translateX(52px)}
+.a-r2 .a-dot{transform:translateX(94px);background:rgba(160,100,255,.9);box-shadow:0 0 8px rgba(160,100,255,.8)}
+.a-r3 .a-dot{transform:translateX(147px)}
+
+/* floating equations */
+.eq-f{
+  position:absolute;font-family:var(--fm);font-size:12px;
+  color:rgba(0,200,240,.4);letter-spacing:1px;pointer-events:none;
+}
+.ef-a{top:10%;left:0%;animation:efD 6s ease-in-out infinite alternate}
+.ef-b{bottom:15%;right:2%;animation:efD 8s ease-in-out infinite alternate-reverse}
+.ef-c{top:52%;left:-2%;animation:efD 7s ease-in-out infinite alternate}
+.ef-d{top:25%;right:0%;animation:efD 9s ease-in-out infinite alternate-reverse;color:rgba(120,80,255,.4)}
+@keyframes efD{from{opacity:.25;transform:translateY(0)}to{opacity:.65;transform:translateY(-9px)}}
+
+.about-text .sec-sub{max-width:100%;margin-bottom:40px}
+.pillars{display:flex;flex-direction:column;gap:20px;margin-top:40px}
+.pillar{
+  display:flex;gap:20px;align-items:flex-start;
+  padding:22px;border:1px solid rgba(0,200,240,.08);
+  background:rgba(0,200,240,.02);transition:border-color .3s,background .3s;
+}
+.pillar:hover{border-color:rgba(0,200,240,.22);background:rgba(0,200,240,.05)}
+.pi-icon{
+  font-family:var(--fm);font-size:18px;color:var(--cyan);
+  flex-shrink:0;padding-top:2px;opacity:.8;
+}
+.pi-title{
+  font-family:var(--fd);font-size:13px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;color:var(--text);margin-bottom:5px;
+}
+.pi-desc{font-size:13px;color:rgba(232,237,245,.42);line-height:1.65}
+
+/* ══════════════════════════════════════
+   DOMAINS
+   ══════════════════════════════════════ */
+.domains{background:var(--void)}
+.domains-hd{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:80px;align-items:end;margin-bottom:72px;
+}
+.d-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.d-card{
+  background:var(--deep);padding:44px 36px;
+  border-top:2px solid transparent;position:relative;overflow:hidden;
+  transition:border-color .3s,background .3s,transform .3s;
+}
+.d-card::after{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 110%,rgba(0,200,240,.07) 0%,transparent 60%);
+  opacity:0;transition:opacity .4s;
+}
+.d-card:hover{border-color:var(--cyan);background:var(--surface);transform:translateY(-4px)}
+.d-card:hover::after{opacity:1}
+.d-glyph{font-family:var(--fm);font-size:22px;color:var(--cyan);opacity:.65;display:block;margin-bottom:26px}
+.d-title{font-family:var(--fd);font-size:16px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--text);margin-bottom:11px}
+.d-desc{font-size:13px;color:rgba(232,237,245,.38);line-height:1.75;margin-bottom:22px}
+.d-tags{display:flex;flex-wrap:wrap;gap:7px}
+.dtag{font-family:var(--fm);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(0,200,240,.55);border:1px solid rgba(0,200,240,.12);padding:4px 10px}
+
+/* ══════════════════════════════════════
+   WAVE VISUALIZER  (canvas)
+   ══════════════════════════════════════ */
+.visualizer{background:var(--deep);padding:0;overflow:hidden}
+.vis-top{padding:100px 0 60px}
+.vis-stage{
+  width:100%;height:340px;position:relative;overflow:hidden;
+  border-top:1px solid rgba(0,200,240,.07);
+  border-bottom:1px solid rgba(0,200,240,.07);
+}
+#waveCanvas{display:block;width:100%;height:100%}
+.vis-veil{
+  position:absolute;inset:0;
+  background:linear-gradient(to right,var(--deep) 0%,transparent 7%,transparent 93%,var(--deep) 100%);
+  pointer-events:none;
+}
+.vis-bottom{padding:60px 0 100px}
+.vs-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:2px;margin-top:48px;
+}
+.vs-item{
+  background:var(--surface);padding:26px 22px;
+  border-bottom:2px solid transparent;transition:border-color .3s;
+}
+.vs-item:hover{border-color:var(--cyan)}
+.vs-val{font-family:var(--fm);font-size:20px;color:var(--cyan);letter-spacing:1px;margin-bottom:5px}
+.vs-lbl{font-size:11px;color:var(--muted);letter-spacing:1px}
+
+/* ══════════════════════════════════════
+   METHODOLOGY
+   ══════════════════════════════════════ */
+.method{background:var(--void)}
+.method-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:80px;align-items:start;margin-top:72px;
+}
+.method-steps{display:flex;flex-direction:column}
+.m-step{
+  display:grid;grid-template-columns:52px 1fr;
+  gap:22px;padding:30px 0;
+  border-bottom:1px solid rgba(0,200,240,.07);
+  transition:padding-left .3s;
+}
+.m-step:hover{padding-left:8px}
+.step-num{font-family:var(--fm);font-size:10px;letter-spacing:2px;color:var(--cyan);padding-top:4px}
+.step-title{font-family:var(--fd);font-size:15px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text);margin-bottom:7px}
+.step-desc{font-size:13px;color:rgba(232,237,245,.38);line-height:1.7}
+.method-panel{
+  background:var(--surface);padding:48px;
+  border:1px solid rgba(0,200,240,.08);
+  position:sticky;top:120px;
+}
+.panel-hd{
+  font-family:var(--fm);font-size:10px;letter-spacing:4px;text-transform:uppercase;
+  color:var(--cyan);margin-bottom:28px;padding-bottom:16px;
+  border-bottom:1px solid rgba(0,200,240,.1);
+}
+.p-eq{font-family:var(--fm);font-size:13px;color:rgba(232,237,245,.65);line-height:2.3}
+.p-eq .eb{color:var(--cyan)}
+.p-eq .ed{color:var(--muted)}
+.panel-note{
+  margin-top:28px;padding-top:22px;
+  border-top:1px solid rgba(0,200,240,.07);
+  font-size:12px;color:var(--muted);line-height:1.75;font-style:italic;
+}
+
+/* ══════════════════════════════════════
+   HIGGS POTENTIAL WELL (SVG visual)
+   ══════════════════════════════════════ */
+.higgs{background:var(--deep);overflow:hidden;position:relative}
+.higgs-inner{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:100px;align-items:center;
+}
+.higgs-svg-wrap{
+  position:relative;height:420px;
+  display:flex;align-items:center;justify-content:center;
+}
+.higgs-svg-wrap svg{width:100%;max-width:480px;height:auto;overflow:visible}
+.higgs-text .sec-sub{max-width:100%;margin-bottom:36px}
+.higgs-quote{
+  border-left:2px solid var(--cyan);padding:22px 26px;
+  background:rgba(0,200,240,.03);margin-top:36px;
+}
+.higgs-quote p{font-family:var(--fd);font-size:18px;font-weight:700;color:var(--text);line-height:1.45;margin-bottom:10px}
+.higgs-quote cite{font-family:var(--fm);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);font-style:normal}
+
+/* ══════════════════════════════════════
+   FOUNDER
+   ══════════════════════════════════════ */
+.founder{background:var(--void)}
+.founder-inner{
+  display:grid;grid-template-columns:1fr 1.4fr;
+  gap:100px;align-items:center;
+}
+.founder-card{
+  background:var(--surface);border:1px solid rgba(0,200,240,.1);
+  padding:52px 44px;position:relative;overflow:hidden;
+}
+.founder-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--cyan),transparent);
+}
+.f-avatar{
+  width:80px;height:80px;border-radius:50%;
+  background:linear-gradient(135deg,var(--surface),var(--subtle));
+  border:1.5px solid rgba(0,200,240,.3);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:28px;font-family:var(--fd);font-size:28px;font-weight:800;color:var(--cyan);
+}
+.f-name{font-family:var(--fd);font-size:26px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--text);margin-bottom:6px}
+.f-role{font-family:var(--fm);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--cyan);margin-bottom:26px}
+.f-bio{font-size:13px;color:rgba(232,237,245,.42);line-height:1.8;margin-bottom:28px}
+.f-domains{display:flex;flex-direction:column;gap:8px}
+.fdi{display:flex;align-items:center;gap:12px;font-family:var(--fm);font-size:11px;letter-spacing:1.5px;color:rgba(232,237,245,.45)}
+.fdi::before{content:'';display:block;width:20px;height:1px;background:var(--cyanM);flex-shrink:0}
+.founder-text .sec-sub{max-width:100%;margin-bottom:34px}
+.founder-quote{border-left:2px solid var(--cyan);padding:22px 26px;background:rgba(0,200,240,.03);margin-top:36px}
+.founder-quote p{font-family:var(--fd);font-size:19px;font-weight:700;color:var(--text);line-height:1.45;margin-bottom:10px}
+.founder-quote cite{font-family:var(--fm);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);font-style:normal}
+
+/* ══════════════════════════════════════
+   CONTACT
+   ══════════════════════════════════════ */
+.contact{
+  padding:160px 0;background:var(--deep);
+  text-align:center;position:relative;overflow:hidden;
+}
+.contact::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 50%,rgba(0,80,180,.1) 0%,transparent 70%);
+  pointer-events:none;
+}
+.contact-inner{max-width:680px;margin:0 auto;padding:0 48px;position:relative}
+.contact-inner .sec-label{justify-content:center}
+.contact-h2{font-family:var(--fd);font-size:clamp(38px,6vw,80px);font-weight:800;line-height:.95;letter-spacing:-1.5px;text-transform:uppercase;color:var(--text);margin-bottom:22px}
+.contact-sub{font-size:15px;font-weight:300;color:rgba(232,237,245,.38);line-height:1.85;margin-bottom:52px}
+.contact-email{font-family:var(--fd);font-size:20px;font-weight:800;letter-spacing:1.5px;color:var(--cyan);text-decoration:none;display:block;margin-bottom:48px;transition:opacity .2s}
+.contact-email:hover{opacity:.65}
+.contact-cta{font-family:var(--fm);font-size:10px;letter-spacing:3px;text-transform:uppercase;background:var(--cyan);color:var(--void);padding:17px 46px;text-decoration:none;font-weight:700;display:inline-block;transition:opacity .2s,transform .2s}
+.contact-cta:hover{opacity:.85;transform:translateY(-2px)}
+.cg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:80px;text-align:left}
+.cg-item{background:var(--void);padding:30px 26px;border-bottom:1px solid transparent;transition:border-color .3s}
+.cg-item:hover{border-color:var(--cyan)}
+.cg-lbl{font-family:var(--fm);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.cg-val{font-family:var(--fd);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text)}
+
+/* ── CONTACT FORM ── */
+.contact-form{max-width:520px;margin:0 auto 0;text-align:left}
+.cf-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.contact-form input,.contact-form textarea{
+  width:100%;background:var(--void);border:1px solid rgba(0,200,240,.15);
+  color:var(--text);font-family:var(--fb);font-size:14px;
+  padding:14px 16px;transition:border-color .2s;resize:vertical;
+}
+.contact-form input::placeholder,.contact-form textarea::placeholder{color:var(--muted)}
+.contact-form input:focus,.contact-form textarea:focus{
+  outline:none;border-color:var(--cyan);
+}
+.contact-form textarea{margin-bottom:20px;min-height:110px}
+.contact-form button{
+  width:100%;border:none;cursor:pointer;
+}
+.contact-form button:disabled{opacity:.5;cursor:not-allowed}
+.cf-status{
+  margin-top:16px;font-family:var(--fm);font-size:11px;
+  letter-spacing:1px;text-align:center;min-height:16px;
+}
+.cf-status.ok{color:var(--cyan)}
+.cf-status.err{color:#ff6b6b}
+@media(max-width:540px){.cf-row{grid-template-columns:1fr}}
+
+/* ══════════════════════════════════════
+   FOOTER
+   ══════════════════════════════════════ */
+footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:44px 0}
+.footer-inner{max-width:1200px;margin:0 auto;padding:0 48px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.footer-logo{font-family:var(--fd);font-size:15px;font-weight:800;letter-spacing:4px;text-transform:uppercase;color:var(--muted);text-decoration:none}
+.footer-logo span{color:var(--cyan)}
+.footer-copy{font-family:var(--fm);font-size:10px;letter-spacing:2px;color:var(--muted)}
+.footer-sys{font-family:var(--fm);font-size:10px;letter-spacing:2px;color:rgba(0,200,240,.25)}
+
+/* ══════════════════════════════════════
+   SCROLL REVEAL
+   ══════════════════════════════════════ */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .75s ease,transform .75s ease}
+.reveal.vis{opacity:1;transform:translateY(0)}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════ */
+@media(max-width:900px){
+  .nav-links,.nav-cta{display:none}
+  .nav-burger{display:flex}
+  .nav-inner{padding:0 24px}
+  .hc-wrap,.contact-inner,.footer-inner{padding:0 24px}
+  .container{padding:0 24px}
+  .hero-h1{font-size:clamp(44px,12vw,78px)}
+  .hero-row{flex-direction:column;align-items:flex-start}
+  .mb-inner{grid-template-columns:1fr 1fr;padding:0 24px}
+  .mb-item:nth-child(3){border-left:none;padding-left:0}
+  .about-grid,.founder-inner,.higgs-inner{grid-template-columns:1fr;gap:52px}
+  .about-visual,.higgs-svg-wrap{height:300px}
+  .domains-hd{grid-template-columns:1fr;gap:16px;margin-bottom:48px}
+  .d-grid,.cg-grid{grid-template-columns:1fr}
+  .vs-grid{grid-template-columns:repeat(2,1fr)}
+  .method-grid{grid-template-columns:1fr;gap:44px}
+  .method-panel{position:static}
+  .badge-tl,.badge-tr{display:none}
+}
+@media(max-width:540px){
+  .hero-btns{flex-direction:column}
+  .btn-p,.btn-g{width:100%;text-align:center}
+  .mb-inner{grid-template-columns:1fr 1fr}
+  .vs-grid{grid-template-columns:1fr 1fr}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.1ms!important}
+}
+</style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">İçeriğe Geç</a>
+
+<!-- ══ NAV ══ -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">Q<span>U</span>ANTRO</a>
+    <ul class="nav-links">
+      <li><a href="#about">Hakkımızda</a></li>
+      <li><a href="#domains">Araştırma</a></li>
+      <li><a href="#method">Metodoloji</a></li>
+      <li><a href="#blog">Blog</a></li>
+      <li><a href="#founder">Vizyon</a></li>
+      <li><a href="quantro-lab.html">Lab ⚗</a></li>
+    </ul>
+    <a href="#contact" class="nav-cta">İletişim</a>
+    <button class="nav-burger" id="burger" aria-label="Menü" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="mob-nav" id="mobnav">
+  <a href="#about"   class="ml">Hakkımızda</a>
+  <a href="#domains" class="ml">Araştırma</a>
+  <a href="#method"  class="ml">Metodoloji</a>
+  <a href="#blog"    class="ml">Blog</a>
+  <a href="#founder" class="ml">Vizyon</a>
+  <a href="quantro-lab.html" class="ml">Lab ⚗</a>
+  <a href="#contact" class="ml">İletişim</a>
+</div>
+
+<!-- ══ HERO — Three.js gravitational wave ══ -->
+<section id="hero" role="banner" tabindex="-1">
+  <a id="main-content"></a>
+  <canvas id="three-canvas" aria-hidden="true"></canvas>
+
+  <div class="hud hud-tl" aria-hidden="true"></div>
+  <div class="hud hud-tr" aria-hidden="true"></div>
+  <div class="hud hud-bl" aria-hidden="true"></div>
+  <div class="hud hud-br" aria-hidden="true"></div>
+
+  <div class="badge badge-tl" aria-hidden="true">
+    SYS :: QTR-Ω-ACTIVE<br>
+    FIELD :: HIGGS ψ(x,t)<br>
+    MODE :: GW-INTERFERENCE
+  </div>
+  <div class="badge badge-tr" aria-hidden="true" id="live-hud">
+    AMP :: 3.80 · ω=0.380 rad/s
+  </div>
+
+  <div class="hero-content">
+    <div class="hc-wrap">
+      <div class="hero-eyebrow">
+        <span>Quantro · Kuantum &amp; Astrofizik ARGE · Est. 2025</span>
+      </div>
+      <h1 class="hero-h1">
+        Evrenin<br>
+        <span class="outline">Dokusu</span><br>
+        Titreşiyor
+      </h1>
+      <div class="hero-row">
+        <p class="hero-desc">
+          Kuantum alanlarının simetri kırılmasından galaktik ölçek yapılarına kadar — evrenin en derin katmanlarını araştırıyoruz.
+        </p>
+        <div class="hero-btns">
+          <a href="#domains" class="btn-p">Araştırma Alanları</a>
+          <a href="#method"  class="btn-g">Metodoloji</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-ind" aria-hidden="true">
+    <span>Kaydır</span>
+    <div class="scroll-ln"></div>
+  </div>
+</section>
+
+<!-- ══ METRICS ══ -->
+<div class="metrics-bar">
+  <div class="mb-inner">
+    <div class="mb-item reveal">
+      <div class="mb-num">10<sup>−35</sup></div>
+      <div class="mb-lbl">Planck Uzunluğu · m</div>
+    </div>
+    <div class="mb-item reveal d1">
+      <div class="mb-num">13.8<sup>Gyr</sup></div>
+      <div class="mb-lbl">Kozmik Yaş</div>
+    </div>
+    <div class="mb-item reveal d2">
+      <div class="mb-num">ℏ/2</div>
+      <div class="mb-lbl">Heisenberg Sınırı</div>
+    </div>
+    <div class="mb-item reveal d3">
+      <div class="mb-num">125<sup>GeV</sup></div>
+      <div class="mb-lbl">Higgs Bozon Kütlesi</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ABOUT ══ -->
+<section class="about" id="about">
+  <div class="container">
+    <div class="about-grid">
+
+      <!-- animated atom -->
+      <div class="about-visual" aria-hidden="true">
+        <div class="atom-stage">
+          <div class="atom-core">
+            <div class="a-nucleus"></div>
+            <div class="a-ring a-r1"><div class="a-dot"></div></div>
+            <div class="a-ring a-r2"><div class="a-dot"></div></div>
+            <div class="a-ring a-r3"><div class="a-dot"></div></div>
+          </div>
+          <div class="eq-f ef-a">Ĥ|ψ⟩ = iℏ ∂|ψ⟩/∂t</div>
+          <div class="eq-f ef-b">∇²Φ = 4πGρ</div>
+          <div class="eq-f ef-c">|ψ⟩ = α|0⟩ + β|1⟩</div>
+          <div class="eq-f ef-d">Δx·Δp ≥ ℏ/2</div>
+        </div>
+      </div>
+
+      <div class="about-text">
+        <div class="sec-label reveal"><span>Hakkımızda</span></div>
+        <h2 class="sec-h2 reveal">Bağımsız<br>Bilim Üssü</h2>
+        <p class="sec-sub reveal">
+          Quantro; kuantum mekaniği ve astrofizik alanlarında bağımsız, derinlemesine araştırma yürüten bir ARGE merkezidir. Planck ölçeğinden kozmolojik ufka uzanan geniş bir spektrumda çalışmalar yürütülür.
+        </p>
+        <div class="pillars">
+          <div class="pillar reveal">
+            <div class="pi-icon">ψ</div>
+            <div>
+              <div class="pi-title">Kuantum Araştırması</div>
+              <div class="pi-desc">Dalga fonksiyonları, kuantum dolanıklığı ve ölçüm problemleri üzerine teorik çalışmalar.</div>
+            </div>
+          </div>
+          <div class="pillar reveal d1">
+            <div class="pi-icon">★</div>
+            <div>
+              <div class="pi-title">Astrofizik Modelleme</div>
+              <div class="pi-desc">Kozmik yapıların oluşumu, karanlık madde ve büyük ölçekli evren modelleri.</div>
+            </div>
+          </div>
+          <div class="pillar reveal d2">
+            <div class="pi-icon">∇</div>
+            <div>
+              <div class="pi-title">Teori &amp; Analiz</div>
+              <div class="pi-desc">Matematiksel fizik temelli yaklaşımlarla özgün teorik çerçeveler geliştirme.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ DOMAINS ══ -->
+<section class="domains" id="domains">
+  <div class="container">
+    <div class="domains-hd">
+      <div>
+        <div class="sec-label reveal"><span>Araştırma Alanları</span></div>
+        <h2 class="sec-h2 reveal">Altı Temel<br>Disiplin</h2>
+      </div>
+      <p class="sec-sub reveal">Kuantumdan kozmosa uzanan altı araştırma alanında özgün teorik çalışmalar ve modelleme.</p>
+    </div>
+    <div class="d-grid">
+      <article class="d-card reveal">
+        <span class="d-glyph">⟨ψ|Ĥ|ψ⟩</span>
+        <h3 class="d-title">Kuantum Mekaniği</h3>
+        <p class="d-desc">Dalga-parçacık dualitesi, tünel etkisi ve kuantum ölçüm teorisi.</p>
+        <div class="d-tags"><span class="dtag">Süperpozisyon</span><span class="dtag">Dolanıklık</span><span class="dtag">Decoherence</span></div>
+      </article>
+      <article class="d-card reveal d1">
+        <span class="d-glyph">G_μν+Λg_μν</span>
+        <h3 class="d-title">Genel Görelilik</h3>
+        <p class="d-desc">Uzay-zaman eğriliği, kara delik fiziği ve gravitasyonel dalgalar.</p>
+        <div class="d-tags"><span class="dtag">Uzay-Zaman</span><span class="dtag">GW Fiziği</span><span class="dtag">Kara Delikler</span></div>
+      </article>
+      <article class="d-card reveal d2">
+        <span class="d-glyph">φ → v + H(x)</span>
+        <h3 class="d-title">Higgs Alanı</h3>
+        <p class="d-desc">Simetri kırılması, kütle kazanım mekanizması ve skaler alan dinamikleri.</p>
+        <div class="d-tags"><span class="dtag">Simetri Kırılması</span><span class="dtag">Vakum</span><span class="dtag">Skaler Alan</span></div>
+      </article>
+      <article class="d-card reveal">
+        <span class="d-glyph">ρ_Λ = Λc²/8πG</span>
+        <h3 class="d-title">Kozmoloji</h3>
+        <p class="d-desc">Büyük patlama, CMB ve evrenin büyük ölçekli yapısının modellenmesi.</p>
+        <div class="d-tags"><span class="dtag">CMB</span><span class="dtag">Enflasyon</span><span class="dtag">Karanlık Enerji</span></div>
+      </article>
+      <article class="d-card reveal d1">
+        <span class="d-glyph">ρ_DM ≈ 0.27ρ_c</span>
+        <h3 class="d-title">Karanlık Madde</h3>
+        <p class="d-desc">Galaktik rotasyon eğrileri, WIMP adayları ve halo modelleri.</p>
+        <div class="d-tags"><span class="dtag">WIMP</span><span class="dtag">Aksiyon</span><span class="dtag">Halo</span></div>
+      </article>
+      <article class="d-card reveal d2">
+        <span class="d-glyph">S = −k_B Σ p·ln p</span>
+        <h3 class="d-title">Kuantum Termodinamik</h3>
+        <p class="d-desc">Von Neumann entropisi, bilgi teorisi ve kuantum sınırındaki ısıl süreçler.</p>
+        <div class="d-tags"><span class="dtag">Entropi</span><span class="dtag">Bilgi</span><span class="dtag">Decoherence</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ══ WAVE VISUALIZER ══ -->
+<section class="visualizer" id="visualizer">
+  <div class="vis-top">
+    <div class="container">
+      <div class="sec-label reveal"><span>Canlı Simülasyon</span></div>
+      <h2 class="sec-h2 reveal">Dalga Fonksiyonu<br>Görselleştirici</h2>
+    </div>
+  </div>
+  <div class="vis-stage" role="img" aria-label="Kuantum dalga fonksiyonu animasyonu">
+    <canvas id="waveCanvas"></canvas>
+    <div class="vis-veil" aria-hidden="true"></div>
+  </div>
+  <div class="vis-bottom">
+    <div class="container">
+      <div class="vs-grid">
+        <div class="vs-item reveal">   <div class="vs-val">ψ(x,t)</div><div class="vs-lbl">Dalga Fonksiyonu</div></div>
+        <div class="vs-item reveal d1"><div class="vs-val">|ψ|²</div>  <div class="vs-lbl">Olasılık Yoğunluğu</div></div>
+        <div class="vs-item reveal d2"><div class="vs-val">ℏω</div>    <div class="vs-lbl">Kuantum Enerjisi</div></div>
+        <div class="vs-item reveal d3"><div class="vs-val">e^iφ</div>  <div class="vs-lbl">Faz Faktörü</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ METHODOLOGY ══ -->
+<section class="method" id="method">
+  <div class="container">
+    <div class="sec-label reveal"><span>Metodoloji</span></div>
+    <h2 class="sec-h2 reveal">Araştırma<br>Süreci</h2>
+    <div class="method-grid">
+      <div class="method-steps">
+        <div class="m-step reveal">
+          <div class="step-num">01</div>
+          <div><div class="step-title">Problemin Tanımlanması</div><div class="step-desc">Her araştırma döngüsü, fiziksel bir gözlem anomalisi veya teorik tutarsızlığın kesin biçimde formüle edilmesiyle başlar.</div></div>
+        </div>
+        <div class="m-step reveal d1">
+          <div class="step-num">02</div>
+          <div><div class="step-title">Matematiksel Çerçeveleme</div><div class="step-desc">Problem, diferansiyel denklemler, topoloji veya operatör cebiri içinde yeniden ifade edilir.</div></div>
+        </div>
+        <div class="m-step reveal d2">
+          <div class="step-num">03</div>
+          <div><div class="step-title">Analitik &amp; Nümerik Analiz</div><div class="step-desc">Kapalı form çözümler aranır; analitik yaklaşım yetersiz kaldığında nümerik simülasyon devreye girer.</div></div>
+        </div>
+        <div class="m-step reveal d3">
+          <div class="step-num">04</div>
+          <div><div class="step-title">Sonuçların Sentezi</div><div class="step-desc">Bulgular mevcut literatürle karşılaştırılır, tutarsızlıklar irdelenir ve özgün katkı netleştirilir.</div></div>
+        </div>
+      </div>
+      <div class="method-panel reveal">
+        <div class="panel-hd">// Temel Denklemler</div>
+        <div class="p-eq">
+          <span class="eb">Ĥ|ψ⟩ = iℏ ∂|ψ⟩/∂t</span><br>
+          <span class="ed">— Schrödinger Denklemi</span><br><br>
+          <span class="eb">G_μν + Λg_μν = 8πG/c⁴·T_μν</span><br>
+          <span class="ed">— Einstein Alan Denklemi</span><br><br>
+          <span class="eb">Δx · Δp ≥ ℏ/2</span><br>
+          <span class="ed">— Heisenberg Belirsizlik</span><br><br>
+          <span class="eb">V(φ) = −μ²φ² + λφ⁴</span><br>
+          <span class="ed">— Higgs Potansiyeli (Meksika Şapkası)</span><br><br>
+          <span class="eb">S = −k_B Σ pᵢ ln pᵢ</span><br>
+          <span class="ed">— Von Neumann Entropisi</span>
+        </div>
+        <div class="panel-note">
+          "Tanrı zar atmaz" — ancak kuantum mekaniği aksini göstermektedir. Belirsizlik, fiziksel gerçekliğin özündedir.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ HIGGS POTENTIAL WELL ══ -->
+<section class="higgs" id="higgs">
+  <div class="container">
+    <div class="higgs-inner">
+      <div class="higgs-svg-wrap" aria-hidden="true">
+        <!-- animated SVG Mexican hat potential -->
+        <svg viewBox="-120 -80 240 180" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="hg" cx="50%" cy="50%" r="50%">
+              <stop offset="0%"   stop-color="#00c8f0" stop-opacity="0.9"/>
+              <stop offset="100%" stop-color="#0d1f35" stop-opacity="0"/>
+            </radialGradient>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="2.5" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+
+          <!-- grid lines -->
+          <g stroke="rgba(0,200,240,0.06)" stroke-width="0.5">
+            <line x1="-110" y1="0" x2="110" y2="0"/>
+            <line x1="0" y1="-70" x2="0" y2="100"/>
+            <line x1="-80" y1="-70" x2="-80" y2="100" stroke-dasharray="3,6"/>
+            <line x1="80" y1="-70" x2="80" y2="100" stroke-dasharray="3,6"/>
+          </g>
+
+          <!-- Mexican hat — right side profile -->
+          <path d="M-110,80 C-90,80 -70,60 -55,20 C-45,-5 -35,-30 -25,-55
+                   C-18,-72 -8,-75 0,-60
+                   C8,-45 12,-18 20,8
+                   C32,40 50,65 70,75 C85,82 100,82 110,80"
+                fill="none" stroke="rgba(0,200,240,0.7)" stroke-width="1.5"
+                filter="url(#glow)">
+            <animate attributeName="stroke-opacity" values="0.5;0.9;0.5" dur="3s" repeatCount="indefinite"/>
+          </path>
+
+          <!-- symmetric left side -->
+          <path d="M110,80 C90,80 70,60 55,20 C45,-5 35,-30 25,-55
+                   C18,-72 8,-75 0,-60"
+                fill="none" stroke="rgba(0,200,240,0.45)" stroke-width="1"
+                stroke-dasharray="4,4">
+            <animate attributeName="stroke-opacity" values="0.3;0.7;0.3" dur="3s" repeatCount="indefinite"/>
+          </path>
+
+          <!-- vacuum state dots (minima) -->
+          <circle cx="-46" cy="5" r="4" fill="#00c8f0" opacity="0.9" filter="url(#glow)">
+            <animate attributeName="r" values="3;5;3" dur="2.5s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="46" cy="5" r="4" fill="#00c8f0" opacity="0.9" filter="url(#glow)">
+            <animate attributeName="r" values="3;5;3" dur="2.5s" begin="1.25s" repeatCount="indefinite"/>
+          </circle>
+
+          <!-- false vacuum (top) -->
+          <circle cx="0" cy="-60" r="3" fill="rgba(255,100,80,0.8)" filter="url(#glow)">
+            <animate attributeName="opacity" values="0.4;1;0.4" dur="2s" repeatCount="indefinite"/>
+          </circle>
+
+          <!-- labels -->
+          <text x="-46" y="22" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(0,200,240,0.6)">v₋</text>
+          <text x="46"  y="22" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(0,200,240,0.6)">v₊</text>
+          <text x="8"   y="-64" font-family="JetBrains Mono,monospace" font-size="6" fill="rgba(255,100,80,0.7)">φ=0</text>
+          <text x="72"  y="-60" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(0,200,240,0.4)">V(φ)</text>
+          <text x="95"  y="4"   font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(0,200,240,0.4)">φ</text>
+
+          <!-- V(φ) = -μ²φ² + λφ⁴ label -->
+          <text x="0" y="105" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="rgba(0,200,240,0.5)">V(φ) = −μ²φ² + λφ⁴</text>
+
+          <!-- animated particle rolling down to vacuum -->
+          <circle r="3.5" fill="rgba(255,200,0,0.9)" filter="url(#glow)">
+            <animateMotion dur="4s" repeatCount="indefinite" calcMode="spline"
+              keyTimes="0;0.45;1"
+              keySplines="0.4 0 0.2 1;0.4 0 0.2 1"
+              path="M0,-60 C5,-40 12,-15 22,2 C30,15 38,8 46,5"/>
+          </circle>
+        </svg>
+      </div>
+
+      <div class="higgs-text">
+        <div class="sec-label reveal"><span>Higgs Fiziği</span></div>
+        <h2 class="sec-h2 reveal">Meksika Şapkası<br>Potansiyeli</h2>
+        <p class="sec-sub reveal">
+          Higgs alanının V(φ) = −μ²φ² + λφ⁴ potansiyeli, evrenin simetri kırılmasının matematiksel kalbidir. Gerçek vakum, φ = 0 noktası değil, ±v noktalarında yatar — bu kırılma tüm kütlelere kaynak olur.
+        </p>
+        <div class="higgs-quote reveal">
+          <p>"İbni Rüşd'ün dediği gibi: Bilgi, gözlemle başlar ve akılla olgunlaşır."</p>
+          <cite>— Quantro Araştırma Felsefesi</cite>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOUNDER ══ -->
+<section class="founder" id="founder">
+  <div class="container">
+    <div class="founder-inner">
+      <div class="founder-card reveal">
+        <div class="f-avatar" aria-hidden="true">Q</div>
+        <div class="f-name">Quantro</div>
+        <div class="f-role">Kurucu · Baş Araştırmacı</div>
+        <p class="f-bio">Kuantum mekaniği ve astrofizik kesişiminde özgün teorik araştırmalar yürüten bağımsız bir ARGE merkezi. Evrenin temel yapısını anlamaya adanmış çalışmalar.</p>
+        <div class="f-domains">
+          <div class="fdi">Kuantum Mekaniği</div>
+          <div class="fdi">Astrofizik &amp; Kozmoloji</div>
+          <div class="fdi">Higgs Fiziği</div>
+          <div class="fdi">Matematiksel Fizik</div>
+        </div>
+      </div>
+      <div class="founder-text">
+        <div class="sec-label reveal"><span>Vizyon</span></div>
+        <h2 class="sec-h2 reveal">Sınırları<br>Zorlayan<br>Araştırma</h2>
+        <p class="sec-sub reveal">
+          Quantro, kurumsal kısıtlamalardan bağımsız biçimde en temel fizik sorularına odaklanmak amacıyla kuruldu. Büyük laboratuvarların görmezden geldiği teorik açıkları kapatmak, özgün matematiksel çerçeveler geliştirmek ve evren hakkındaki anlayışımızı ilerletmek temel misyonumuzdur.
+        </p>
+        <div class="founder-quote reveal">
+          <p>"İbni Haldun'un dediği gibi: Geleceği inşa etmek isteyenler, önce vizyonlarını netleştirmelidir."</p>
+          <cite>— Quantro Araştırma Felsefesi</cite>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CONTACT ══ -->
+<!-- ══ BLOG ══ -->
+<section style="background:var(--deep);padding:120px 0" id="blog">
+  <div class="container">
+    <div class="sec-label reveal"><span>Araştırma Blogu</span></div>
+    <h2 class="sec-h2 reveal">Son<br>Yazılar</h2>
+
+    <!-- Blog list -->
+    <div id="blog-list" style="margin-top:52px;display:grid;grid-template-columns:repeat(3,1fr);gap:2px">
+      <div style="font-family:var(--font-mono);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);padding:20px 0">Yazılar yükleniyor...</div>
+    </div>
+
+    <!-- Post reader (hidden by default) -->
+    <div id="blog-post" style="display:none;margin-top:52px">
+      <button onclick="closeBlogPost()" style="font-family:var(--font-mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:8px;margin-bottom:40px;padding:0;transition:color .2s" onmouseover="this.style.color='var(--cyan)'" onmouseout="this.style.color='var(--muted)'">← Tüm Yazılar</button>
+      <span id="bp-emoji" style="font-size:48px;display:block;margin-bottom:20px"></span>
+      <div id="bp-tags" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px"></div>
+      <h2 id="bp-title" style="font-family:var(--font-display);font-size:clamp(28px,4vw,52px);font-weight:800;letter-spacing:-1px;text-transform:uppercase;color:var(--text);margin-bottom:16px;line-height:1"></h2>
+      <p id="bp-summary" style="font-size:15px;font-weight:300;color:rgba(232,237,245,.5);line-height:1.85;margin-bottom:28px;border-left:2px solid var(--cyan);padding-left:18px"></p>
+      <div style="display:flex;gap:20px;margin-bottom:44px;padding-bottom:28px;border-bottom:1px solid rgba(0,200,240,.1)">
+        <span id="bp-date" style="font-family:var(--font-mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted)"></span>
+        <span id="bp-readtime" style="font-family:var(--font-mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted)"></span>
+      </div>
+      <div id="bp-content" style="font-size:15px;line-height:1.9;color:rgba(232,237,245,.72);max-width:720px"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ LAB CTA ══ -->
+<section style="background:var(--void);padding:80px 0">
+  <div class="container">
+    <div style="background:var(--deep);border:1px solid rgba(0,200,240,.12);padding:52px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:32px;position:relative;overflow:hidden">
+      <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),transparent)"></div>
+      <div>
+        <div style="font-family:var(--font-mono);font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--cyan);margin-bottom:12px">Türkiye'de İlk · 7 Araç</div>
+        <div style="font-family:var(--font-display);font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-1px;text-transform:uppercase;color:var(--text);line-height:1">Quantro Lab'ı<br>Deneyin</div>
+        <div style="font-size:14px;font-weight:300;color:rgba(232,237,245,.4);margin-top:12px;line-height:1.7;max-width:420px">Kuantum Rastgelelik Motoru, Devre Simülatörü, Evren Yaşı Hesaplayıcı ve daha fazlası.</div>
+      </div>
+      <a href="quantro-lab.html" style="font-family:var(--font-mono);font-size:11px;letter-spacing:3px;text-transform:uppercase;background:var(--cyan);color:var(--void);padding:18px 44px;text-decoration:none;font-weight:700;white-space:nowrap;transition:opacity .2s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">⚗ Lab'a Git →</a>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="contact-inner">
+    <div class="sec-label reveal"><span>İletişim</span></div>
+    <h2 class="contact-h2 reveal">Birlikte<br>Keşfedelim</h2>
+    <p class="contact-sub reveal">Araştırma iş birlikleri, teorik tartışmalar veya evrenin yapısı üzerine konuşmak için ulaşın.</p>
+    <a href="mailto:quantro38@gmail.com" class="contact-email reveal">quantro38@gmail.com</a>
+
+    <form id="contact-form" class="contact-form reveal" novalidate>
+      <div class="cf-row">
+        <input type="text" id="cf-name" name="name" placeholder="Adınız" required>
+        <input type="email" id="cf-email" name="email" placeholder="E-posta Adresiniz" required>
+      </div>
+      <textarea id="cf-message" name="message" placeholder="Mesajınız..." required rows="4"></textarea>
+      <button type="submit" class="contact-cta" id="cf-submit">Mesaj Gönder</button>
+      <p id="cf-status" class="cf-status" role="status" aria-live="polite"></p>
+    </form>
+    <div class="cg-grid">
+      <div class="cg-item reveal">   <div class="cg-lbl">Merkez</div>     <div class="cg-val">Kayseri / Türkiye</div></div>
+      <div class="cg-item reveal d1"><div class="cg-lbl">Faaliyet</div>   <div class="cg-val">ARGE</div></div>
+      <div class="cg-item reveal d2"><div class="cg-lbl">Instagram</div>  <a href="https://instagram.com/quantro38" target="_blank" rel="noopener" class="cg-val" style="color:var(--cyan);text-decoration:none;transition:opacity .2s" onmouseover="this.style.opacity='.65'" onmouseout="this.style.opacity='1'">@quantro38</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="footer-inner">
+    <a href="#" class="footer-logo">Q<span>U</span>ANTRO</a>
+    <span class="footer-copy">© 2025 Quantro ARGE Merkezi</span>
+    <span class="footer-sys">SYS :: QTR-Ω-ACTIVE</span>
+  </div>
+</footer>
+
+<!-- ══════════════════════════════════════════
+     THREE.JS — gravitational wave / Higgs field
+     ══════════════════════════════════════════ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+  const canvas = document.getElementById('three-canvas');
+  const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:false});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setClearColor(0x020810, 1);
+
+  const scene  = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(55, window.innerWidth/window.innerHeight, 0.1, 1000);
+  camera.position.set(0, 18, 44);
+  camera.lookAt(0, 0, 0);
+  scene.fog = new THREE.FogExp2(0x020810, 0.017);
+
+  /* ── Gravitational wave mesh ── */
+  const SEGS = 190, SIZE = 88;
+  const geo  = new THREE.PlaneGeometry(SIZE, SIZE, SEGS, SEGS);
+  geo.rotateX(-Math.PI/2);
+  const vCount = geo.attributes.position.array.length / 3;
+  const colors = new Float32Array(vCount * 3);
+  geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+  const wireMat = new THREE.MeshBasicMaterial({vertexColors:true, wireframe:true, transparent:true, opacity:0.5});
+  const wireMesh = new THREE.Mesh(geo, wireMat);
+  scene.add(wireMesh);
+
+  /* fill layer */
+  const fGeo  = new THREE.PlaneGeometry(SIZE, SIZE, SEGS, SEGS);
+  fGeo.rotateX(-Math.PI/2);
+  const fMat  = new THREE.MeshBasicMaterial({color:0x001520, transparent:true, opacity:0.65, side:THREE.DoubleSide});
+  const fMesh = new THREE.Mesh(fGeo, fMat);
+  fMesh.position.y = -0.05;
+  scene.add(fMesh);
+
+  /* ── Particle field ── */
+  const PC = 3200;
+  const pG = new THREE.BufferGeometry();
+  const pP = new Float32Array(PC*3);
+  const pC = new Float32Array(PC*3);
+  for(let i=0;i<PC;i++){
+    const i3=i*3;
+    pP[i3]  =(Math.random()-.5)*150;
+    pP[i3+1]=Math.random()*65-4;
+    pP[i3+2]=(Math.random()-.5)*150;
+    const b=Math.random();
+    if(b>.72){pC[i3]=0;pC[i3+1]=.78;pC[i3+2]=.94}
+    else if(b>.44){pC[i3]=.28;pC[i3+1]=.15;pC[i3+2]=.7}
+    else{pC[i3]=.85;pC[i3+1]=.92;pC[i3+2]=1}
+  }
+  pG.setAttribute('position', new THREE.BufferAttribute(pP,3));
+  pG.setAttribute('color',    new THREE.BufferAttribute(pC,3));
+  const pMat = new THREE.PointsMaterial({size:.32,vertexColors:true,transparent:true,opacity:.65,sizeAttenuation:true});
+  scene.add(new THREE.Points(pG, pMat));
+
+  /* ── Central Higgs glow sphere ── */
+  const sGeo = new THREE.SphereGeometry(1.3,32,32);
+  const sMat = new THREE.MeshBasicMaterial({color:0x00c8f0,transparent:true,opacity:.85});
+  const sMesh = new THREE.Mesh(sGeo, sMat);
+  scene.add(sMesh);
+
+  const rGeo = new THREE.RingGeometry(2,3.6,64);
+  const rMat = new THREE.MeshBasicMaterial({color:0x00c8f0,transparent:true,opacity:.07,side:THREE.DoubleSide});
+  const rMesh = new THREE.Mesh(rGeo,rMat);
+  rMesh.rotation.x = -Math.PI/2;
+  scene.add(rMesh);
+
+  /* ── Wave function: 3 GW sources + Higgs well ── */
+  function wY(x,z,t){
+    const r1=Math.sqrt(x*x+z*z);
+    const w1=Math.sin(r1*.38-t*2.2)*Math.exp(-r1*.044)*3.9;
+    const dx2=x-9,dz2=z-5,r2=Math.sqrt(dx2*dx2+dz2*dz2);
+    const w2=Math.sin(r2*.32-t*1.85+1.2)*Math.exp(-r2*.054)*2.3;
+    const dx3=x+11,dz3=z-7,r3=Math.sqrt(dx3*dx3+dz3*dz3);
+    const w3=Math.sin(r3*.28-t*2.6+2.5)*Math.exp(-r3*.047)*1.7;
+    const higgs=r1<7?(-1.6+.068*r1*r1)*Math.exp(-r1*.11):0;
+    return w1+w2+w3+higgs;
+  }
+
+  /* ── Mouse parallax ── */
+  let mx=0,my=0,trx=0,try_=0;
+  document.addEventListener('mousemove',e=>{
+    mx=(e.clientX/window.innerWidth-.5)*2;
+    my=(e.clientY/window.innerHeight-.5)*2;
+  },{passive:true});
+
+  /* ── Live HUD ── */
+  const hudEl=document.getElementById('live-hud');
+  let htick=0;
+  function updateHUD(t){
+    if(htick++%20!==0)return;
+    const amp=(3.9+Math.sin(t)*.4).toFixed(2);
+    const freq=(0.38+Math.sin(t*.3)*.02).toFixed(3);
+    if(hudEl) hudEl.textContent=`AMP :: ${amp} · ω=${freq} rad/s`;
+  }
+
+  /* ── Color lerp ── */
+  const cCyan=new THREE.Color(0x00c8f0);
+  const cPurp=new THREE.Color(0x5020a0);
+  const cDeep=new THREE.Color(0x001224);
+  const tmp  =new THREE.Color();
+  const posW =geo.attributes.position;
+  const posF =fGeo.attributes.position;
+  const colA =geo.attributes.color;
+
+  /* ── Animate ── */
+  function animate(ms){
+    requestAnimationFrame(animate);
+    const t=ms*.001;
+
+    for(let i=0;i<vCount;i++){
+      const i3=i*3;
+      const x=posW.array[i3], z=posW.array[i3+2];
+      const y=wY(x,z,t);
+      posW.array[i3+1]=y;
+      posF.array[i3+1]=y;
+      const n=(y+4.5)/9;
+      if(n>.5) tmp.lerpColors(cDeep,cCyan,(n-.5)*2);
+      else     tmp.lerpColors(cPurp,cDeep,n*2);
+      colA.array[i3]=tmp.r; colA.array[i3+1]=tmp.g; colA.array[i3+2]=tmp.b;
+    }
+    posW.needsUpdate=true; posF.needsUpdate=true; colA.needsUpdate=true;
+
+    const pulse=1+.18*Math.sin(t*2.8);
+    sMesh.scale.setScalar(pulse);
+    sMat.opacity=.7+.2*Math.sin(t*2.8);
+    rMesh.rotation.z=t*.28;
+    rMat.opacity=.04+.04*Math.sin(t*1.5);
+    pMat.opacity=.5+.15*Math.sin(t*.5);
+
+    trx+=(my*.04-trx)*.04;
+    try_+=(mx*.06-try_)*.04;
+    camera.position.x=Math.sin(t*.04)*4+try_*6;
+    camera.position.y=18+Math.sin(t*.06)*2-trx*4;
+    camera.position.z=44+Math.sin(t*.08)*3;
+    camera.lookAt(0,0,0);
+
+    updateHUD(t);
+    renderer.render(scene,camera);
+  }
+  requestAnimationFrame(animate);
+
+  window.addEventListener('resize',()=>{
+    camera.aspect=window.innerWidth/window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth,window.innerHeight);
+  },{passive:true});
+})();
+
+/* ══════════════════════════════
+   CANVAS WAVE VISUALIZER
+   ══════════════════════════════ */
+(function(){
+  const canvas=document.getElementById('waveCanvas');
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  let W,H,t=0;
+  const mq=window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  function resize(){
+    const r=canvas.parentElement.getBoundingClientRect();
+    W=canvas.width=r.width; H=canvas.height=r.height;
+    canvas.style.width=r.width+'px'; canvas.style.height=r.height+'px';
+  }
+
+  function draw(){
+    if(mq.matches)return;
+    ctx.clearRect(0,0,W,H);
+    const waves=[
+      {amp:65,freq:.008,speed:.016,phase:0,   color:'rgba(0,200,240,0.75)',lw:1.5},
+      {amp:42,freq:.014,speed:.022,phase:1.5, color:'rgba(120,80,255,0.55)',lw:1.0},
+      {amp:28,freq:.022,speed:.011,phase:3.0, color:'rgba(0,200,240,0.3)', lw:0.8},
+      {amp:85,freq:.005,speed:.009,phase:0.8, color:'rgba(0,200,240,0.12)',lw:2.0},
+    ];
+    waves.forEach(w=>{
+      ctx.beginPath();
+      ctx.strokeStyle=w.color; ctx.lineWidth=w.lw;
+      for(let x=0;x<=W;x+=2){
+        const env=Math.exp(-Math.pow((x/W-.5)*2.5,2)*.3);
+        const y=H/2+w.amp*env*Math.sin(x*w.freq+t*w.speed+w.phase);
+        x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+    });
+    const g=ctx.createLinearGradient(0,H/2-85,0,H/2+85);
+    g.addColorStop(0,'rgba(0,200,240,0)');
+    g.addColorStop(.5,'rgba(0,200,240,0.04)');
+    g.addColorStop(1,'rgba(0,200,240,0)');
+    ctx.beginPath(); ctx.fillStyle=g;
+    ctx.moveTo(0,H/2);
+    for(let x=0;x<=W;x+=2){
+      const env=Math.exp(-Math.pow((x/W-.5)*2.5,2)*.3);
+      ctx.lineTo(x,H/2+65*env*Math.sin(x*.008+t*.016));
+    }
+    ctx.lineTo(W,H/2); ctx.fill();
+    t++; requestAnimationFrame(draw);
+  }
+  window.addEventListener('resize',resize,{passive:true});
+  resize(); draw();
+})();
+
+/* ══════════════════════════════
+   NAV + MOBILE MENU + REVEAL
+   ══════════════════════════════ */
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>60),{passive:true});
+
+const burger=document.getElementById('burger'), mobnav=document.getElementById('mobnav');
+burger.addEventListener('click',()=>{
+  const o=mobnav.classList.toggle('open');
+  burger.setAttribute('aria-expanded',o);
+  document.body.style.overflow=o?'hidden':'';
+});
+document.querySelectorAll('.ml').forEach(l=>l.addEventListener('click',()=>{
+  mobnav.classList.remove('open');
+  burger.setAttribute('aria-expanded',false);
+  document.body.style.overflow='';
+}));
+
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');obs.unobserve(e.target);}});
+},{threshold:.1,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+/* ══ BLOG ══ */
+const SB_URL_BLOG='https://mzlludkzkddxbbcrjmfu.supabase.co';
+const SB_KEY_BLOG='sb_publishable_MsSvoJUyhPO8HJ4d3FFBdg_bnw1D3BD';
+let blogPosts=[];
+
+async function loadBlog(){
+  try{
+    const res=await fetch(`${SB_URL_BLOG}/rest/v1/blog_posts?published=eq.true&order=created_at.desc`,{
+      headers:{'apikey':SB_KEY_BLOG,'Authorization':'Bearer '+SB_KEY_BLOG}
+    });
+    blogPosts=await res.json()||[];
+    renderBlog();
+  }catch(e){
+    document.getElementById('blog-list').innerHTML='<div style="font-family:var(--font-mono);font-size:10px;letter-spacing:3px;color:var(--muted)">Yazılar yüklenemedi.</div>';
+  }
+}
+
+function renderBlog(){
+  const grid=document.getElementById('blog-list');
+  if(!blogPosts.length){grid.innerHTML='<div style="font-family:var(--font-mono);font-size:10px;letter-spacing:3px;color:var(--muted);padding:20px 0">Henüz yazı yok.</div>';return}
+  grid.innerHTML=blogPosts.map(p=>`
+    <div onclick="openBlogPost('${p.slug}')" style="background:var(--void);padding:36px;border-top:2px solid transparent;cursor:pointer;transition:border-color .3s,background .3s,transform .3s" onmouseover="this.style.borderColor='var(--cyan)';this.style.background='var(--surface)';this.style.transform='translateY(-3px)'" onmouseout="this.style.borderColor='transparent';this.style.background='var(--void)';this.style.transform='translateY(0)'">
+      <span style="font-size:32px;display:block;margin-bottom:18px">${p.cover_emoji||'⚛'}</span>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">${(p.tags||[]).map(t=>`<span style="font-family:var(--font-mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(0,200,240,.55);border:1px solid rgba(0,200,240,.12);padding:3px 8px">${t}</span>`).join('')}</div>
+      <div style="font-family:var(--font-display);font-size:18px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--text);margin-bottom:10px;line-height:1.15">${p.title}</div>
+      <div style="font-size:13px;color:rgba(232,237,245,.38);line-height:1.75;margin-bottom:18px">${p.summary}</div>
+      <div style="display:flex;justify-content:space-between;border-top:1px solid rgba(0,200,240,.07);padding-top:12px">
+        <span style="font-family:var(--font-mono);font-size:10px;letter-spacing:2px;color:var(--muted)">${new Date(p.created_at).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'})}</span>
+        <span style="font-family:var(--font-mono);font-size:10px;letter-spacing:2px;color:var(--cyan)">${Math.ceil(p.content.split(' ').length/200)} dk →</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openBlogPost(slug){
+  const p=blogPosts.find(x=>x.slug===slug);
+  if(!p)return;
+  document.getElementById('blog-list').style.display='none';
+  document.getElementById('blog-post').style.display='block';
+  document.getElementById('bp-emoji').textContent=p.cover_emoji||'⚛';
+  document.getElementById('bp-tags').innerHTML=(p.tags||[]).map(t=>`<span style="font-family:var(--font-mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(0,200,240,.55);border:1px solid rgba(0,200,240,.12);padding:3px 8px">${t}</span>`).join('');
+  document.getElementById('bp-title').textContent=p.title;
+  document.getElementById('bp-summary').textContent=p.summary;
+  document.getElementById('bp-date').textContent=new Date(p.created_at).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'});
+  document.getElementById('bp-readtime').textContent=Math.ceil(p.content.split(' ').length/200)+' dakika okuma';
+  document.getElementById('bp-content').innerHTML=blogMd(p.content);
+  document.getElementById('blog').scrollIntoView({behavior:'smooth'});
+}
+
+function closeBlogPost(){
+  document.getElementById('blog-post').style.display='none';
+  document.getElementById('blog-list').style.display='grid';
+}
+
+function blogMd(md){
+  return md
+    .replace(/^## (.+)$/gm,'<h2 style="font-family:var(--font-display);font-size:26px;font-weight:800;text-transform:uppercase;color:var(--text);margin:36px 0 14px;letter-spacing:.5px">$1</h2>')
+    .replace(/^### (.+)$/gm,'<h3 style="font-family:var(--font-display);font-size:18px;font-weight:700;color:var(--text);margin:24px 0 10px">$1</h3>')
+    .replace(/\*\*(.+?)\*\*/g,'<strong style="color:var(--cyan)">$1</strong>')
+    .replace(/`([^`]+)`/g,'<code style="font-family:var(--font-mono);font-size:15px;color:var(--cyan);background:rgba(0,200,240,.07);padding:10px 16px;display:block;margin:16px 0;border-left:2px solid var(--cyan)">$1</code>')
+    .split('\n\n').map(p=>p.startsWith('<')?p:`<p style="margin-bottom:16px">${p}</p>`).join('');
+}
+
+loadBlog();
+
+/* ══ SUPABASE — Contact Form ══ */
+const SUPABASE_URL = 'https://mzlludkzkddxbbcrjmfu.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_MsSvoJUyhPO8HJ4d3FFBdg_bnw1D3BD';
+
+const cform = document.getElementById('contact-form');
+if (cform) {
+  cform.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('cf-submit');
+    const status = document.getElementById('cf-status');
+    const name = document.getElementById('cf-name').value.trim();
+    const email = document.getElementById('cf-email').value.trim();
+    const message = document.getElementById('cf-message').value.trim();
+
+    if (!name || !email || !message) {
+      status.textContent = 'Lütfen tüm alanları doldurun.';
+      status.className = 'cf-status err';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Gönderiliyor...';
+    status.textContent = '';
+
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/contact_messages`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({ name, email, message })
+      });
+
+      if (res.ok) {
+        status.textContent = 'Mesajınız iletildi. Teşekkürler.';
+        status.className = 'cf-status ok';
+        cform.reset();
+      } else {
+        const err = await res.json().catch(() => ({}));
+        status.textContent = 'Bir hata oluştu. Lütfen tekrar deneyin.';
+        status.className = 'cf-status err';
+        console.error('Supabase error:', err);
+      }
+    } catch (err) {
+      status.textContent = 'Bağlantı hatası. Lütfen tekrar deneyin.';
+      status.className = 'cf-status err';
+      console.error(err);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Mesaj Gönder';
+    }
+  });
+}
+</script>
+</body>
+</html>
