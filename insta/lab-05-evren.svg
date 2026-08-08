@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#020810"/>
+      <stop offset="0.5" stop-color="#07111f"/>
+      <stop offset="1" stop-color="#0d1f35"/>
+    </linearGradient>
+    <radialGradient id="neb" cx="0.5" cy="0.35" r="0.55">
+      <stop offset="0" stop-color="#00c8f0" stop-opacity="0.18"/>
+      <stop offset="0.5" stop-color="#6020d0" stop-opacity="0.08"/>
+      <stop offset="1" stop-color="#00c8f0" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="cyan" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#00c8f0"/>
+      <stop offset="1" stop-color="#7ae6ff"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="8" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="soft" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="26"/>
+    </filter>
+  </defs>
+
+  <rect width="1080" height="1080" fill="url(#bg)"/>
+  <circle cx="540" cy="380" r="560" fill="url(#neb)"/>
+
+  <!-- HUD -->
+  <g stroke="#00c8f0" stroke-opacity="0.7" stroke-width="3" fill="none">
+    <path d="M34,64 V34 H64"/><path d="M1016,64 V34 H986"/>
+    <path d="M34,1016 V1046 H64"/><path d="M1016,1016 V1046 H986"/>
+  </g>
+  <text x="84" y="44" font-family="'DejaVu Sans Mono',monospace" font-size="16" fill="#00c8f0" letter-spacing="2">MOD.03+06+07 ▸ COSMO</text>
+  <text x="996" y="44" text-anchor="end" font-family="'DejaVu Sans Mono',monospace" font-size="16" fill="#7a93a8" letter-spacing="2">04 / 05</text>
+
+  <text x="540" y="196" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="800" font-size="72" letter-spacing="3" fill="url(#cyan)" filter="url(#glow)">EVRE &amp; ÖTESİ</text>
+  <text x="540" y="250" text-anchor="middle" font-family="'DejaVu Sans Mono',monospace" font-size="16" letter-spacing="4" fill="#7a93a8">03 · 06 · 07 :: ASTROFİZİK ARAÇ SETİ</text>
+
+  <!-- three astro cards -->
+  <g>
+    <!-- Universe age -->
+    <rect x="120" y="310" width="256" height="250" rx="14" fill="#0d1f35" stroke="#00c8f0" stroke-opacity="0.3" stroke-width="1.5"/>
+    <text x="248" y="352" font-family="'DejaVu Sans Mono',monospace" font-size="13" letter-spacing="2" fill="#00c8f0" text-anchor="middle">03 · EVREN YAŞI</text>
+    <text x="248" y="440" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="800" font-size="58" fill="#e8edf5">13.8<span font-size="28" fill="#00c8f0"> Gyr</span></text>
+    <text x="248" y="486" text-anchor="middle" font-family="'DejaVu Sans Mono',monospace" font-size="12" letter-spacing="1" fill="#7a93a8">H₀ · Ωₘ · ΩΛ kaydırıcılı</text>
+    <line x1="160" y1="512" x2="336" y2="512" stroke="rgba(0,200,240,0.3)" stroke-width="1.5"/>
+    <text x="248" y="540" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="400" font-size="17" fill="#7a93a8">Friedmann integrali</text>
+
+    <!-- Black hole -->
+    <rect x="412" y="310" width="256" height="250" rx="14" fill="#0d1f35" stroke="#a060ff" stroke-opacity="0.3" stroke-width="1.5"/>
+    <text x="540" y="352" font-family="'DejaVu Sans Mono',monospace" font-size="13" letter-spacing="2" fill="#a060ff" text-anchor="middle">06 · KARA DELİK</text>
+    <circle cx="540" cy="430" r="14" fill="#020810" stroke="#a060ff" stroke-width="2"/>
+    <ellipse cx="540" cy="430" rx="66" ry="16" fill="none" stroke="url(#cyan)" stroke-width="3" filter="url(#glow)"/>
+    <ellipse cx="540" cy="430" rx="100" ry="24" fill="none" stroke="rgba(0,200,240,0.3)" stroke-width="1.5"/>
+    <text x="540" y="486" text-anchor="middle" font-family="'DejaVu Sans Mono',monospace" font-size="12" letter-spacing="1" fill="#7a93a8">r_s · Hawking · entropi</text>
+    <line x1="452" y1="512" x2="628" y2="512" stroke="rgba(160,96,255,0.3)" stroke-width="1.5"/>
+    <text x="540" y="540" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="400" font-size="17" fill="#7a93a8">r_s = 2GM/c²</text>
+
+    <!-- Doppler -->
+    <rect x="704" y="310" width="256" height="250" rx="14" fill="#0d1f35" stroke="#00f0a0" stroke-opacity="0.3" stroke-width="1.5"/>
+    <text x="832" y="352" font-family="'DejaVu Sans Mono',monospace" font-size="13" letter-spacing="2" fill="#00f0a0" text-anchor="middle">07 · DOPPLER</text>
+    <rect x="738" y="400" width="140" height="26" rx="13" fill="#ff4466" fill-opacity="0.85"/>
+    <text x="808" y="418" text-anchor="middle" font-family="'DejaVu Sans Mono',monospace" font-size="11" fill="#020810">KIRMIZIYA →</text>
+    <rect x="738" y="434" width="140" height="26" rx="13" fill="#4466ff" fill-opacity="0.85"/>
+    <text x="808" y="452" text-anchor="middle" font-family="'DejaVu Sans Mono',monospace" font-size="11" fill="#e8edf5">← MAVİYE</text>
+    <text x="832" y="486" text-anchor="middle" font-family="'DejaVu Sans Mono',monospace" font-size="12" letter-spacing="1" fill="#7a93a8">z · hız · uzaklık</text>
+    <line x1="744" y1="512" x2="920" y2="512" stroke="rgba(0,240,160,0.3)" stroke-width="1.5"/>
+    <text x="832" y="540" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="400" font-size="17" fill="#7a93a8">Hubble yasası</text>
+  </g>
+
+  <!-- footer line -->
+  <text x="540" y="612" text-anchor="middle" font-family="'DejaVu Sans Mono',monospace" font-size="14" letter-spacing="2" fill="#7a93a8">▸ 9 MODÜLÜN 3'Ü DAHA: RASTGELELİK · DEVRE · ŞİFRELEME · BLOCH · IŞINLANMA</text>
+
+  <!-- CTA -->
+  <text x="540" y="700" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="500" font-size="26" fill="#e8edf5">Kuantumu ve evreni şimdi eline al:</text>
+  <rect x="300" y="740" width="480" height="96" rx="48" fill="url(#cyan)" filter="url(#glow)"/>
+  <text x="540" y="802" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="800" font-size="34" letter-spacing="4" fill="#020810">LAB'DA DENE ▸</text>
+
+  <text x="540" y="880" text-anchor="middle" font-family="'DejaVu Sans Mono',monospace" font-size="15" letter-spacing="3" fill="#7a93a8">quantro-1.vercel.app</text>
+  <text x="540" y="920" text-anchor="middle" font-family="'DejaVu Sans Mono',monospace" font-size="13" letter-spacing="2" fill="#4a6070">ÜCRETSİZ · TÜRKÇE · TARAYICINDA ÇALIŞIR</text>
+
+  <!-- bottom HUD ticker -->
+  <line x1="84" y1="962" x2="996" y2="962" stroke="rgba(0,200,240,0.2)" stroke-width="1"/>
+  <text x="84" y="990" font-family="'DejaVu Sans Mono',monospace" font-size="13" letter-spacing="2" fill="#4a6070">SYS.OFFLINE? YOK — HER ŞEY TARAYICINDA</text>
+  <text x="996" y="990" text-anchor="end" font-family="'DejaVu Sans Mono',monospace" font-size="13" letter-spacing="2" fill="#4a6070">@quantro38</text>
+</svg>
