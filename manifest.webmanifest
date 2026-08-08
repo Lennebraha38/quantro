@@ -1,0 +1,15 @@
+{
+  "name": "Quantro — Kuantum + Astrofizik ARGE",
+  "short_name": "Quantro",
+  "description": "Kuantum mekaniği ve astrofizik alanında interaktif araç seti ve ARGE merkezi. Gerçek kuantum rastgelelik dahil.",
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#020810",
+  "theme_color": "#020810",
+  "lang": "tr",
+  "icons": [
+    { "src": "/img/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

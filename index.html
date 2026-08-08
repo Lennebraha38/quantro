@@ -8,9 +8,12 @@
 <meta property="og:title" content="Quantro · ARGE Merkezi">
 <meta property="og:description" content="Kuantum sınırında araştırma. Evrenin dokusunu anlama yolculuğu.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://quantro-arge.vercel.app/">
-<meta property="og:image" content="https://quantro-arge.vercel.app/og-image.jpg">
-<link rel="canonical" href="https://quantro-arge.vercel.app/">
+<meta property="og:url" content="https://quantro-1.vercel.app/">
+<meta property="og:image" content="https://quantro-1.vercel.app/img/icon.svg">
+<link rel="canonical" href="https://quantro-1.vercel.app/">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Quantro · ARGE Merkezi">
 <meta name="twitter:description" content="Kuantum sınırında araştırma. Evrenin dokusunu anlama yolculuğu.">
@@ -2550,6 +2553,7 @@ if (cform) {
     }
   });
 }
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(function(){})}
 </script>
 </body>
 </html>
