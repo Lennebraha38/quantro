@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#020810"/>
+      <stop offset="0.5" stop-color="#07111f"/>
+      <stop offset="1" stop-color="#0d1f35"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.3" r="0.5">
+      <stop offset="0" stop-color="#00c8f0" stop-opacity="0.3"/>
+      <stop offset="1" stop-color="#00c8f0" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="cyan" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#00c8f0"/>
+      <stop offset="1" stop-color="#7ae6ff"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1080" height="1080" fill="url(#bg)"/>
+  <circle cx="540" cy="360" r="430" fill="url(#glow)"/>
+
+  <text x="540" y="110" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="700" font-size="26" letter-spacing="8" fill="#4a6070">QUANTRO</text>
+  <circle cx="90" cy="98" r="34" fill="none" stroke="#00c8f0" stroke-opacity="0.5" stroke-width="2"/>
+  <text x="90" y="107" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="700" font-size="30" fill="#00c8f0">5</text>
+  <circle cx="990" cy="98" r="34" fill="none" stroke="#00c8f0" stroke-opacity="0.5" stroke-width="2"/>
+  <text x="990" y="107" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="700" font-size="30" fill="#00c8f0">5</text>
+
+  <text x="540" y="250" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="800" font-size="76" letter-spacing="3" fill="url(#cyan)">DEĞERLERİMİZ</text>
+
+  <line x1="380" y1="310" x2="700" y2="310" stroke="#00c8f0" stroke-opacity="0.35" stroke-width="2"/>
+
+  <!-- 3 values -->
+  <g font-family="'Space Grotesk',sans-serif">
+    <rect x="120" y="380" width="240" height="250" rx="18" fill="#0d1f35" stroke="#00c8f0" stroke-opacity="0.3" stroke-width="1.5"/>
+    <text x="240" y="470" text-anchor="middle" font-weight="700" font-size="30" letter-spacing="2" fill="#e8edf5">MERAK</text>
+    <text x="240" y="530" text-anchor="middle" font-weight="400" font-size="20" fill="#4a6070">Sürekli soru sormak,</text>
+    <text x="240" y="562" text-anchor="middle" font-weight="400" font-size="20" fill="#4a6070">hiç durmadan</text>
+    <text x="240" y="594" text-anchor="middle" font-weight="400" font-size="20" fill="#4a6070">keşfetmek.</text>
+
+    <rect x="420" y="380" width="240" height="250" rx="18" fill="#0d1f35" stroke="#00c8f0" stroke-opacity="0.3" stroke-width="1.5"/>
+    <text x="540" y="470" text-anchor="middle" font-weight="700" font-size="30" letter-spacing="2" fill="#e8edf5">DERİNLİK</text>
+    <text x="540" y="530" text-anchor="middle" font-weight="400" font-size="20" fill="#4a6070">Yüzeysel değil,</text>
+    <text x="540" y="562" text-anchor="middle" font-weight="400" font-size="20" fill="#4a6070">en derin</text>
+    <text x="540" y="594" text-anchor="middle" font-weight="400" font-size="20" fill="#4a6070">katmanlara inmek.</text>
+
+    <rect x="720" y="380" width="240" height="250" rx="18" fill="#0d1f35" stroke="#00c8f0" stroke-opacity="0.3" stroke-width="1.5"/>
+    <text x="840" y="470" text-anchor="middle" font-weight="700" font-size="30" letter-spacing="2" fill="#e8edf5">AÇIKLIK</text>
+    <text x="840" y="530" text-anchor="middle" font-weight="400" font-size="20" fill="#4a6070">Bilgiyi paylaşmak,</text>
+    <text x="840" y="562" text-anchor="middle" font-weight="400" font-size="20" fill="#4a6070">herkes için</text>
+    <text x="840" y="594" text-anchor="middle" font-weight="400" font-size="20" fill="#4a6070">erişilebilir kılmak.</text>
+  </g>
+
+  <!-- CTA -->
+  <text x="540" y="742" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="500" font-size="30" letter-spacing="1" fill="#e8edf5">Bilimi kendin deneyimle:</text>
+
+  <rect x="350" y="790" width="380" height="86" rx="43" fill="#00c8f0"/>
+  <text x="540" y="843" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="700" font-size="30" letter-spacing="4" fill="#020810">QUANTRO LAB</text>
+
+  <text x="540" y="930" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="400" font-size="24" letter-spacing="2" fill="#4a6070">kuantum-rastgelelik · devre · BB84</text>
+
+  <text x="540" y="990" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="400" font-size="22" letter-spacing="3" fill="#4a6070">quantro-1.vercel.app</text>
+</svg>

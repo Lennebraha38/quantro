@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#020810"/>
+      <stop offset="0.5" stop-color="#07111f"/>
+      <stop offset="1" stop-color="#0d1f35"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.35" r="0.5">
+      <stop offset="0" stop-color="#00c8f0" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#00c8f0" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="cyan" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#00c8f0"/>
+      <stop offset="1" stop-color="#7ae6ff"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1080" height="1080" fill="url(#bg)"/>
+  <circle cx="540" cy="360" r="430" fill="url(#glow)"/>
+
+  <text x="540" y="110" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="700" font-size="26" letter-spacing="8" fill="#4a6070">QUANTRO</text>
+  <circle cx="90" cy="98" r="34" fill="none" stroke="#00c8f0" stroke-opacity="0.5" stroke-width="2"/>
+  <text x="90" y="107" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="700" font-size="30" fill="#00c8f0">3</text>
+  <circle cx="990" cy="98" r="34" fill="none" stroke="#00c8f0" stroke-opacity="0.5" stroke-width="2"/>
+  <text x="990" y="107" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="700" font-size="30" fill="#00c8f0">5</text>
+
+  <text x="540" y="250" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="800" font-size="76" letter-spacing="3" fill="url(#cyan)">MİSYONUMUZ</text>
+
+  <line x1="380" y1="310" x2="700" y2="310" stroke="#00c8f0" stroke-opacity="0.35" stroke-width="2"/>
+
+  <text x="540" y="430" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="400" font-size="30" letter-spacing="1" fill="#e8edf5">Kuantum alanlarının simetri kırılmasından</text>
+  <text x="540" y="480" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="400" font-size="30" letter-spacing="1" fill="#e8edf5">galaktik ölçek yapılarına kadar —</text>
+
+  <text x="540" y="570" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="500" font-size="34" letter-spacing="1" fill="#00c8f0">evrenin en derin katmanlarını</text>
+  <text x="540" y="618" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="500" font-size="34" letter-spacing="1" fill="#00c8f0">araştırıyoruz.</text>
+
+  <!-- 3 mission points -->
+  <g font-family="'Space Grotesk',sans-serif">
+    <circle cx="240" cy="730" r="26" fill="#00c8f0" fill-opacity="0.12" stroke="#00c8f0" stroke-width="2"/>
+    <text x="240" y="738" text-anchor="middle" font-weight="700" font-size="26" fill="#00c8f0">1</text>
+    <text x="300" y="738" text-anchor="start" font-weight="500" font-size="24" fill="#e8edf5">Derin teorik araştırma</text>
+
+    <circle cx="240" cy="806" r="26" fill="#00c8f0" fill-opacity="0.12" stroke="#00c8f0" stroke-width="2"/>
+    <text x="240" y="814" text-anchor="middle" font-weight="700" font-size="26" fill="#00c8f0">2</text>
+    <text x="300" y="814" text-anchor="start" font-weight="500" font-size="24" fill="#e8edf5">İnteraktif kuantum araçları</text>
+
+    <circle cx="240" cy="882" r="26" fill="#00c8f0" fill-opacity="0.12" stroke="#00c8f0" stroke-width="2"/>
+    <text x="240" y="890" text-anchor="middle" font-weight="700" font-size="26" fill="#00c8f0">3</text>
+    <text x="300" y="890" text-anchor="start" font-weight="500" font-size="24" fill="#e8edf5">Bilgiyi herkes için erişilebilir kılmak</text>
+  </g>
+
+  <text x="540" y="972" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="400" font-size="22" letter-spacing="3" fill="#4a6070">quantro-1.vercel.app</text>
+</svg>
