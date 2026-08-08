@@ -368,20 +368,21 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
     <div class="tool-header" onclick="tog(2)">
       <span class="tn">02</span>
       <span class="tt" data-i18n="t2.title">Kuantum Devre Simülatörü</span>
-      <span class="tb-badge first">Türkiye'de İlk</span>
+      <span class="tb-badge first" data-i18n="badge.first">Türkiye'de İlk</span>
       <span class="tg" id="tg2">+</span>
     </div>
     <div class="tool-body" id="tb2">
       <div class="circ-wrap">
         <div class="gate-panel">
-          <h4>Kuantum Kapıları</h4>
-          <button class="gate-btn" onclick="ag('H',0)">H <span class="gd">Hadamard q0</span></button>
-          <button class="gate-btn" onclick="ag('H',1)">H <span class="gd">Hadamard q1</span></button>
-          <button class="gate-btn" onclick="ag('X',0)">X <span class="gd">Pauli-X q0</span></button>
-          <button class="gate-btn" onclick="ag('X',1)">X <span class="gd">Pauli-X q1</span></button>
-          <button class="gate-btn" onclick="ag('Z',0)">Z <span class="gd">Pauli-Z q0</span></button>
-          <button class="gate-btn" onclick="ag('CNOT',0)">CNOT <span class="gd">q0→q1</span></button>
-          <button class="btn btn-r" onclick="rc()" style="width:100%;margin-top:4px">Sıfırla</button>
+          <h4 data-i18n="t2.gates.title">Kuantum Kapıları</h4>
+          <button class="gate-btn" onclick="ag('H',0)" data-i18n="t2.gate.h0">H <span class="gd">Hadamard q0</span></button>
+          <button class="gate-btn" onclick="ag('H',1)" data-i18n="t2.gate.h1">H <span class="gd">Hadamard q1</span></button>
+          <button class="gate-btn" onclick="ag('X',0)" data-i18n="t2.gate.x0">X <span class="gd">Pauli-X q0</span></button>
+          <button class="gate-btn" onclick="ag('X',1)" data-i18n="t2.gate.x1">X <span class="gd">Pauli-X q1</span></button>
+          <button class="gate-btn" onclick="ag('Z',0)" data-i18n="t2.gate.z0">Z <span class="gd">Pauli-Z q0</span></button>
+          <button class="gate-btn" onclick="ag('Z',1)" data-i18n="t2.gate.z1">Z <span class="gd">Pauli-Z q1</span></button>
+          <button class="gate-btn" onclick="ag('CNOT',0)" data-i18n="t2.gate.cnot">CNOT <span class="gd">q0→q1</span></button>
+          <button class="btn btn-r" onclick="rc()" style="width:100%;margin-top:4px" data-i18n="t2.reset">Sıfırla</button>
         </div>
         <div class="circ-area">
           <div style="margin-bottom:20px">
@@ -389,17 +390,17 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
             <div class="clane"><span class="clane-lbl">q1</span><div class="clane-line" id="l1"></div></div>
           </div>
           <div style="display:flex;gap:10px">
-            <button class="btn btn-p" onclick="mc()">⟨ψ| Ölç</button>
-            <button class="btn btn-g" onclick="bellDemo()">⚛ Bell |00⟩+|11⟩</button>
-            <button class="btn btn-g" onclick="rc()">Temizle</button>
+            <button class="btn btn-p" onclick="mc()" data-i18n="t2.measure">⟨ψ| Ölç</button>
+            <button class="btn btn-g" onclick="bellDemo()" data-i18n="t2.bell">⚛ Bell |00⟩+|11⟩</button>
+            <button class="btn btn-g" onclick="rc()" data-i18n="t2.clear">Temizle</button>
           </div>
           <div id="cr" style="display:none;margin-top:16px;background:rgba(0,200,240,.03);border:1px solid rgba(0,200,240,.07);padding:14px">
-            <div style="font-family:var(--fm);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:10px">Ölçüm Sonuçları (1024 atış)</div>
+            <div style="font-family:var(--fm);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:10px" data-i18n="t2.results">Ölçüm Sonuçları (1024 atış)</div>
             <div class="cr-bars" id="crb"></div>
           </div>
         </div>
       </div>
-      <div class="explain"><p><strong>Kuantum kapıları nedir?</strong> H kapısı kubiti süperpozisyona sokar. X kubiti döndürür (NOT). CNOT iki kubiti dolanıklığa sokar. <strong>Bell durumu: |Φ⁺⟩ = (|00⟩+|11⟩)/√2</strong></p></div>
+      <div class="explain"><p data-i18n="t2.explain"><strong>Kuantum kapıları nedir?</strong> H kapısı kubiti süperpozisyona sokar. X kubiti döndürür (NOT). CNOT iki kubiti dolanıklığa sokar. <strong>Bell durumu: |Φ⁺⟩ = (|00⟩+|11⟩)/√2</strong></p></div>
     </div>
   </div>
 
@@ -408,45 +409,45 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
     <div class="tool-header" onclick="tog(3)">
       <span class="tn">03</span>
       <span class="tt" data-i18n="t3.title">Evren Yaşı Hesaplayıcı</span>
-      <span class="tb-badge first">Türkiye'de İlk</span>
+      <span class="tb-badge first" data-i18n="badge.first">Türkiye'de İlk</span>
       <span class="tg" id="tg3">+</span>
     </div>
     <div class="tool-body" id="tb3">
       <div class="univ-grid">
         <div>
           <div class="param-item">
-            <div class="param-lbl"><span>Hubble Sabiti H₀</span><strong id="h0v">67.4 km/s/Mpc</strong></div>
+            <div class="param-lbl"><span data-i18n="t3.h0">Hubble Sabiti H₀</span><strong id="h0v">67.4 km/s/Mpc</strong></div>
             <input class="slider" type="range" id="h0" min="60" max="80" value="67.4" step="0.1" oninput="uU()">
           </div>
           <div class="param-item">
-            <div class="param-lbl"><span>Madde Ωₘ</span><strong id="omv">0.315</strong></div>
+            <div class="param-lbl"><span data-i18n="t3.om">Madde Ωₘ</span><strong id="omv">0.315</strong></div>
             <input class="slider" type="range" id="om" min="0.1" max="0.9" value="0.315" step="0.001" oninput="uU()">
           </div>
           <div class="param-item">
-            <div class="param-lbl"><span>Karanlık Enerji ΩΛ</span><strong id="olv">0.685</strong></div>
+            <div class="param-lbl"><span data-i18n="t3.ol">Karanlık Enerji ΩΛ</span><strong id="olv">0.685</strong></div>
             <input class="slider" type="range" id="ol" min="0.1" max="0.9" value="0.685" step="0.001" oninput="uU()">
           </div>
           <div class="param-item">
-            <div class="param-lbl"><span>Radyasyon Ωᵣ</span><strong id="orv">0.00009</strong></div>
+            <div class="param-lbl"><span data-i18n="t3.orr">Radyasyon Ωᵣ</span><strong id="orv">0.00009</strong></div>
             <input class="slider" type="range" id="orr" min="0.00001" max="0.001" value="0.00009" step="0.00001" oninput="uU()">
           </div>
-          <button class="btn btn-g" onclick="rU()">↺ Planck 2018 Değerleri</button>
-          <div class="explain" style="margin-top:16px"><p>Friedmann denklemi: <strong>H²(a) = H₀²(Ωᵣ/a⁴ + Ωₘ/a³ + ΩΛ)</strong> — 10.000 adımlı nümerik integral ile hesaplanır.</p></div>
+          <button class="btn btn-g" onclick="rU()" data-i18n="t3.planck">↺ Planck 2018 Değerleri</button>
+          <div class="explain" style="margin-top:16px"><p data-i18n="t3.explain">Friedmann denklemi: <strong>H²(a) = H₀²(Ωᵣ/a⁴ + Ωₘ/a³ + ΩΛ)</strong> — 10.000 adımlı nümerik integral ile hesaplanır.</p></div>
         </div>
         <div>
           <div class="univ-res">
             <div class="univ-age" id="ua">13.8<span> Gyr</span></div>
-            <div class="univ-age-lbl">Evrenin Tahmini Yaşı</div>
-            <div class="upd"><span class="upd-k">Hubble Zamanı</span><span class="upd-v" id="ht">—</span></div>
-            <div class="upd"><span class="upd-k">Işık Ufku</span><span class="upd-v">46.5 Gly</span></div>
-            <div class="upd"><span class="upd-k">Geometri</span><span class="upd-v" id="geo">Düz (k=0)</span></div>
+            <div class="univ-age-lbl" data-i18n="t3.age.lbl">Evrenin Tahmini Yaşı</div>
+            <div class="upd"><span class="upd-k" data-i18n="t3.hubble.time">Hubble Zamanı</span><span class="upd-v" id="ht">—</span></div>
+            <div class="upd"><span class="upd-k" data-i18n="t3.horizon">Işık Ufku</span><span class="upd-v">46.5 Gly</span></div>
+            <div class="upd"><span class="upd-k" data-i18n="t3.geometry">Geometri</span><span class="upd-v" id="geo">Düz (k=0)</span></div>
             <div style="margin-top:16px">
-              <div style="font-family:var(--fm);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Kozmik Zaman Çizelgesi</div>
-              <div class="utl-item"><span class="utl-t">10⁻⁴³ s</span><span class="utl-d">Planck Çağı</span></div>
-              <div class="utl-item"><span class="utl-t">380.000 yıl</span><span class="utl-d">CMB yayıldı</span></div>
-              <div class="utl-item"><span class="utl-t">200 Myr</span><span class="utl-d">İlk yıldızlar</span></div>
-              <div class="utl-item"><span class="utl-t">9.2 Gyr</span><span class="utl-d">Güneş Sistemi</span></div>
-              <div class="utl-item"><span class="utl-t" id="nowt">13.8 Gyr</span><span class="utl-d">Şimdi — Buradasınız</span></div>
+              <div style="font-family:var(--fm);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:8px" data-i18n="t3.timeline">Kozmik Zaman Çizelgesi</div>
+              <div class="utl-item"><span class="utl-t">10⁻⁴³ s</span><span class="utl-d" data-i18n="t3.tl.planck">Planck Çağı</span></div>
+              <div class="utl-item"><span class="utl-t" data-i18n="t3.tl.cmb.t">380.000 yıl</span><span class="utl-d" data-i18n="t3.tl.cmb">CMB yayıldı</span></div>
+              <div class="utl-item"><span class="utl-t">200 Myr</span><span class="utl-d" data-i18n="t3.tl.stars">İlk yıldızlar</span></div>
+              <div class="utl-item"><span class="utl-t">9.2 Gyr</span><span class="utl-d" data-i18n="t3.tl.solar">Güneş Sistemi</span></div>
+              <div class="utl-item"><span class="utl-t" id="nowt">13.8 Gyr</span><span class="utl-d" data-i18n="t3.tl.now">Şimdi — Buradasınız</span></div>
             </div>
           </div>
         </div>
@@ -459,34 +460,34 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
     <div class="tool-header" onclick="tog(4)">
       <span class="tn">04</span>
       <span class="tt" data-i18n="t4.title">Kuantum Şifreleme — BB84</span>
-      <span class="tb-badge first">Türkiye'de İlk</span>
+      <span class="tb-badge first" data-i18n="badge.first">Türkiye'de İlk</span>
       <span class="tg" id="tg4">+</span>
     </div>
     <div class="tool-body" id="tb4">
       <div class="eve-toggle">
         <input type="checkbox" id="eve">
-        <label for="eve">👁 Dinleyici (Eve) aktif — Kuantum kanalı izleniyor</label>
+        <label for="eve" data-i18n="t4.eve">👁 Dinleyici (Eve) aktif — Kuantum kanalı izleniyor</label>
       </div>
       <div class="qkd-grid">
         <div class="qkd-party">
-          <h4><em>Alice</em> — Gönderici</h4>
-          <div class="qkd-lbl">Gönderilen Kubitler</div><div class="qbits" id="ab"></div>
-          <div class="qkd-lbl">Bazlar</div><div class="qbits" id="aba"></div>
-          <div class="qkd-lbl">Gizli Anahtar</div><div class="qkd-key" id="ak">—</div>
+          <h4 data-i18n="t4.alice"><em>Alice</em> — Gönderici</h4>
+          <div class="qkd-lbl" data-i18n="t4.sent.qubits">Gönderilen Kubitler</div><div class="qbits" id="ab"></div>
+          <div class="qkd-lbl" data-i18n="t4.bases">Bazlar</div><div class="qbits" id="aba"></div>
+          <div class="qkd-lbl" data-i18n="t4.secret.key">Gizli Anahtar</div><div class="qkd-key" id="ak">—</div>
         </div>
         <div class="qkd-party">
-          <h4><em>Bob</em> — Alıcı</h4>
-          <div class="qkd-lbl">Ölçüm Bazları</div><div class="qbits" id="bb"></div>
-          <div class="qkd-lbl">Sonuçlar</div><div class="qbits" id="br"></div>
-          <div class="qkd-lbl">Ortak Anahtar</div><div class="qkd-key" id="bk">—</div>
+          <h4 data-i18n="t4.bob"><em>Bob</em> — Alıcı</h4>
+          <div class="qkd-lbl" data-i18n="t4.meas.bases">Ölçüm Bazları</div><div class="qbits" id="bb"></div>
+          <div class="qkd-lbl" data-i18n="t4.results">Sonuçlar</div><div class="qbits" id="br"></div>
+          <div class="qkd-lbl" data-i18n="t4.shared.key">Ortak Anahtar</div><div class="qkd-key" id="bk">—</div>
         </div>
       </div>
       <div style="display:flex;gap:10px;margin-bottom:14px">
-        <button class="btn btn-p" onclick="rBB84()">▶ BB84 Çalıştır</button>
-        <button class="btn btn-g" onclick="rstBB84()">Sıfırla</button>
+        <button class="btn btn-p" onclick="rBB84()" data-i18n="t4.run">▶ BB84 Çalıştır</button>
+        <button class="btn btn-g" onclick="rstBB84()" data-i18n="t4.reset">Sıfırla</button>
       </div>
       <div style="background:rgba(0,200,240,.03);border:1px solid rgba(0,200,240,.07);padding:14px">
-        <div style="font-family:var(--fm);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Güvenlik Düzeyi</div>
+        <div style="font-family:var(--fm);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:8px" data-i18n="t4.security">Güvenlik Düzeyi</div>
         <div style="display:flex;align-items:center;gap:12px">
           <div class="sec-bar"><div class="sec-fill" id="sf" style="width:0%"></div></div>
           <span class="sec-pct" id="sp">0%</span>
@@ -501,35 +502,35 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
     <div class="tool-header" onclick="tog(5)">
       <span class="tn">05</span>
       <span class="tt" data-i18n="t5.title">Heisenberg Belirsizlik Görselleştiricisi</span>
-      <span class="tb-badge new">Yeni</span>
+      <span class="tb-badge new" data-i18n="badge.new">Yeni</span>
       <span class="tg" id="tg5">+</span>
     </div>
     <div class="tool-body" id="tb5">
       <div class="heis-wrap">
         <div class="heis-left">
           <div class="heis-param">
-            <div class="param-lbl"><span>Konum Belirsizliği Δx</span><strong id="dxv">1.00</strong></div>
+            <div class="param-lbl"><span data-i18n="t5.dx">Konum Belirsizliği Δx</span><strong id="dxv">1.00</strong></div>
             <input class="slider" type="range" id="dx" min="0.1" max="10" value="1" step="0.01" oninput="uH()">
           </div>
           <div class="heis-canvas-wrap">
             <canvas id="heis-canvas" width="400" height="200" style="width:100%;height:auto;display:block"></canvas>
           </div>
           <div class="explain" style="margin-top:12px">
-            <p><strong>Heisenberg Belirsizlik İlkesi:</strong> Bir parçacığın konumunu ne kadar kesin bilirsek, momentumunu o kadar az bileceğiz. <strong>Δx · Δp ≥ ℏ/2</strong> — Bu bir ölçüm hatası değil, doğanın kendisidir.</p>
+            <p data-i18n="t5.explain"><strong>Heisenberg Belirsizlik İlkesi:</strong> Bir parçacığın konumunu ne kadar kesin bilirsek, momentumunu o kadar az bileceğiz. <strong>Δx · Δp ≥ ℏ/2</strong> — Bu bir ölçüm hatası değil, doğanın kendisidir.</p>
           </div>
         </div>
         <div>
           <div class="heis-result">
             <div class="heis-eq">Δx · Δp ≥ ℏ/2</div>
             <div class="heis-vals">
-              <div class="hv-item"><div class="hv-val" id="hv-dx">1.00</div><div class="hv-lbl">Δx (konum)</div></div>
-              <div class="hv-item"><div class="hv-val" id="hv-dp">0.50</div><div class="hv-lbl">Δp (min)</div></div>
-              <div class="hv-item"><div class="hv-val" id="hv-prod">0.50</div><div class="hv-lbl">Δx·Δp</div></div>
+              <div class="hv-item"><div class="hv-val" id="hv-dx">1.00</div><div class="hv-lbl" data-i18n="t5.lbl.dx">Δx (konum)</div></div>
+              <div class="hv-item"><div class="hv-val" id="hv-dp">0.50</div><div class="hv-lbl" data-i18n="t5.lbl.dp">Δp (min)</div></div>
+              <div class="hv-item"><div class="hv-val" id="hv-prod">0.50</div><div class="hv-lbl" data-i18n="t5.lbl.prod">Δx·Δp</div></div>
             </div>
-            <div class="heis-status" id="heis-status" style="border-color:rgba(0,240,160,.3);color:var(--green)">✓ Belirsizlik ilkesi sağlanıyor</div>
+            <div class="heis-status" id="heis-status" data-i18n="t5.status.ok" style="border-color:rgba(0,240,160,.3);color:var(--green)">✓ Belirsizlik ilkesi sağlanıyor</div>
           </div>
           <canvas id="heis3d" class="canvas3d" style="margin-top:12px;height:200px"></canvas>
-          <div style="font-family:var(--fm);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-align:center;margin-top:6px">3D Faz Uzayı — Kaydır</div>
+          <div style="font-family:var(--fm);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-align:center;margin-top:6px" data-i18n="t5.phase3d">3D Faz Uzayı — Kaydır</div>
         </div>
       </div>
     </div>
@@ -540,24 +541,24 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
     <div class="tool-header" onclick="tog(6)">
       <span class="tn">06</span>
       <span class="tt" data-i18n="t6.title">Kara Delik Fizik Simülatörü</span>
-      <span class="tb-badge new">Yeni</span>
+      <span class="tb-badge new" data-i18n="badge.new">Yeni</span>
       <span class="tg" id="tg6">+</span>
     </div>
     <div class="tool-body" id="tb6">
       <div class="bh-ctrl">
-        <span class="qlbl">Kütle (Güneş kütlesi ×)</span>
+        <span class="qlbl" data-i18n="t6.mass">Kütle (Güneş kütlesi ×)</span>
         <input class="qin" id="bh-mass" type="number" value="10" min="1" max="1000000000" style="width:120px">
-        <button class="btn btn-p" onclick="uBH()">Hesapla</button>
-        <button class="btn btn-g" onclick="()=>{ document.getElementById('bh-mass').value=4000000; uBH(); }">Sgr A* (Samanyolu)</button>
-        <button class="btn btn-g" onclick="()=>{ document.getElementById('bh-mass').value=6500000000; uBH(); }">M87*</button>
+        <button class="btn btn-p" onclick="uBH()" data-i18n="t6.calc">Hesapla</button>
+        <button class="btn btn-g" onclick="()=>{ document.getElementById('bh-mass').value=4000000; uBH(); }" data-i18n="t6.sgra">Sgr A* (Samanyolu)</button>
+        <button class="btn btn-g" onclick="()=>{ document.getElementById('bh-mass').value=6500000000; uBH(); }" data-i18n="t6.m87">M87*</button>
       </div>
       <canvas id="bh-canvas" class="canvas3d" style="height:320px"></canvas>
       <div class="bh-info">
-        <div class="bh-stat"><div class="bh-stat-val" id="bh-rs">—</div><div class="bh-stat-lbl">Schwarzschild Yarıçapı</div></div>
-        <div class="bh-stat"><div class="bh-stat-val" id="bh-temp">—</div><div class="bh-stat-lbl">Hawking Sıcaklığı</div></div>
-        <div class="bh-stat"><div class="bh-stat-val" id="bh-ent">—</div><div class="bh-stat-lbl">Bekenstein Entropisi</div></div>
+        <div class="bh-stat"><div class="bh-stat-val" id="bh-rs">—</div><div class="bh-stat-lbl" data-i18n="t6.rs">Schwarzschild Yarıçapı</div></div>
+        <div class="bh-stat"><div class="bh-stat-val" id="bh-temp">—</div><div class="bh-stat-lbl" data-i18n="t6.temp">Hawking Sıcaklığı</div></div>
+        <div class="bh-stat"><div class="bh-stat-val" id="bh-ent">—</div><div class="bh-stat-lbl" data-i18n="t6.entropy">Bekenstein Entropisi</div></div>
       </div>
-      <div class="explain" style="margin-top:14px"><p><strong>Schwarzschild yarıçapı:</strong> <strong>r_s = 2GM/c²</strong> — Bu sınırın içine giren hiçbir şey, ışık dahil, dışarı çıkamaz. Hawking radyasyonu: <strong>T = ℏc³/(8πGMk_B)</strong></p></div>
+      <div class="explain" style="margin-top:14px"><p data-i18n="t6.explain"><strong>Schwarzschild yarıçapı:</strong> <strong>r_s = 2GM/c²</strong> — Bu sınırın içine giren hiçbir şey, ışık dahil, dışarı çıkamaz. Hawking radyasyonu: <strong>T = ℏc³/(8πGMk_B)</strong></p></div>
     </div>
   </div>
 
@@ -566,45 +567,45 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
     <div class="tool-header" onclick="tog(7)">
       <span class="tn">07</span>
       <span class="tt" data-i18n="t7.title">Kozmik Doppler Kayması Hesaplayıcı</span>
-      <span class="tb-badge new">Yeni</span>
+      <span class="tb-badge new" data-i18n="badge.new">Yeni</span>
       <span class="tg" id="tg7">+</span>
     </div>
     <div class="tool-body" id="tb7">
       <div class="dop-wrap">
         <div>
           <div class="param-item">
-            <div class="param-lbl"><span>Kırmızıya Kayma z</span><strong id="zv">0.1</strong></div>
+            <div class="param-lbl"><span data-i18n="t7.z">Kırmızıya Kayma z</span><strong id="zv">0.1</strong></div>
             <input class="slider" type="range" id="zs" min="0" max="10" value="0.1" step="0.01" oninput="uD()">
           </div>
           <div class="param-item">
-            <div class="param-lbl"><span>Kaynak Dalga Boyu λ₀ (nm)</span><strong id="lv">656 nm</strong></div>
+            <div class="param-lbl"><span data-i18n="t7.l0">Kaynak Dalga Boyu λ₀ (nm)</span><strong id="lv">656 nm</strong></div>
             <input class="slider" type="range" id="ls" min="380" max="780" value="656" step="1" oninput="uD()">
           </div>
           <div class="dop-canvas-wrap">
             <canvas id="dop-canvas" width="400" height="160" style="width:100%;height:auto;display:block"></canvas>
           </div>
-          <div class="explain" style="margin-top:12px"><p>Kozmolojik kırmızıya kayma: <strong>z = (λ_obs - λ₀)/λ₀</strong>. Hubble yasası: <strong>v = H₀ · d</strong>. Evren genişledikçe uzak galaksilerden gelen ışık kırmızıya kayar.</p></div>
+          <div class="explain" style="margin-top:12px"><p data-i18n="t7.explain">Kozmolojik kırmızıya kayma: <strong>z = (λ_obs - λ₀)/λ₀</strong>. Hubble yasası: <strong>v = H₀ · d</strong>. Evren genişledikçe uzak galaksilerden gelen ışık kırmızıya kayar.</p></div>
         </div>
         <div>
           <div class="dop-result">
             <div class="dop-val" id="dv">—<span> nm</span></div>
-            <div class="dop-lbl">Gözlemlenen Dalga Boyu</div>
-            <div class="upd"><span class="upd-k">Hız (v/c)</span><span class="upd-v" id="dvc">—</span></div>
-            <div class="upd"><span class="upd-k">Uzaklık</span><span class="upd-v" id="ddist">—</span></div>
-            <div class="upd"><span class="upd-k">Bakış Uzaklığı</span><span class="upd-v" id="dlb">—</span></div>
-            <div class="upd"><span class="upd-k">Yön</span><span class="upd-v" id="ddir">—</span></div>
+            <div class="dop-lbl" data-i18n="t7.obs.wl">Gözlemlenen Dalga Boyu</div>
+            <div class="upd"><span class="upd-k" data-i18n="t7.velocity">Hız (v/c)</span><span class="upd-v" id="dvc">—</span></div>
+            <div class="upd"><span class="upd-k" data-i18n="t7.distance">Uzaklık</span><span class="upd-v" id="ddist">—</span></div>
+            <div class="upd"><span class="upd-k" data-i18n="t7.lookback">Bakış Uzaklığı</span><span class="upd-v" id="dlb">—</span></div>
+            <div class="upd"><span class="upd-k" data-i18n="t7.direction">Yön</span><span class="upd-v" id="ddir">—</span></div>
           </div>
           <div class="dop-shift" id="dshift">
-            <div class="dop-blue">← Maviye Kayma</div>
-            <div class="dop-red">Kırmızıya Kayma →</div>
+            <div class="dop-blue" data-i18n="t7.blue">← Maviye Kayma</div>
+            <div class="dop-red" data-i18n="t7.red">Kırmızıya Kayma →</div>
           </div>
           <div style="margin-top:12px;padding:14px;background:rgba(0,200,240,.03);border:1px solid rgba(0,200,240,.07)">
-            <div style="font-family:var(--fm);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Referans Galaksiler</div>
+            <div style="font-family:var(--fm);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:6px" data-i18n="t7.refs">Referans Galaksiler</div>
             <div class="utl-item" onclick="setZ(0.008)"><span class="utl-t">z = 0.008</span><span class="utl-d">Andromeda (M31)</span></div>
             <div class="utl-item" onclick="setZ(0.23)"><span class="utl-t">z = 0.23</span><span class="utl-d">Hubble Deep Field</span></div>
             <div class="utl-item" onclick="setZ(1.0)"><span class="utl-t">z = 1.0</span><span class="utl-d">3C 273 Quasar</span></div>
-            <div class="utl-item" onclick="setZ(6.5)"><span class="utl-t">z = 6.5</span><span class="utl-d">İlk Galaksiler Çağı</span></div>
-            <div class="utl-item" onclick="setZ(10.0)"><span class="utl-t">z = 10.0</span><span class="utl-d">Reiyonizasyon Çağı</span></div>
+            <div class="utl-item" onclick="setZ(6.5)"><span class="utl-t">z = 6.5</span><span class="utl-d" data-i18n="t7.ref.epoch.first">İlk Galaksiler Çağı</span></div>
+            <div class="utl-item" onclick="setZ(10.0)"><span class="utl-t">z = 10.0</span><span class="utl-d" data-i18n="t7.ref.epoch.reion">Reiyonizasyon Çağı</span></div>
           </div>
         </div>
       </div>
@@ -803,7 +804,18 @@ const I18N={
 tr:{
  'nav.home':'← Ana Sayfa','hero.ey':'Quantro Lab · Etkileşimli Araçlar · 9 Modül','hero.desc':'Kuantum mekaniğini ve astrofiziki bizzat deneyimleyin. Türkiye\'nin ilk interaktif kuantum araç seti.','hero.badge':'🇹🇷 Türkiye\'de İlk — Quantro ARGE 2025','hero.scroll':'Keşfet','intro.h2':'9 Özgün<br>Araç','intro.count':'Türkiye\'de İlk · Quantro ARGE · 2025','badge.first':'Türkiye\'de İlk',
  't1.title':'Kuantum Rastgelelik Motoru','t1.lbl':'Kuantum Süperpozisyon Tabanlı Rastgele Sayı','t1.min':'Min','t1.max':'Max','t1.src':'Kaynak','src.q':'⚛ Gerçek Kuantum (ANU)','src.s':'◌ Simüle (Web Crypto)','t1.gen':'⚛ Üret','t1.series':'10x Seri','t1.chi':'𝝌² Test','t1.clear':'Temizle','t1.chi.title':'Rastgelelik Testi (Ki-Kare)','t1.chi.run':'Çalıştır','t1.explain':'Klasik bilgisayarlar algoritma tabanlı sahte rastgelelik üretir. Quantro, Avustralya Ulusal Üniversitesi\'nin (ANU) gerçek kuantum rastgelelik motoruna bağlanır: lazerler, vakumun kuantum <strong>dalgalanmalarını</strong> ölçerek gerçek belirsizlik üretir. API erişilemezse Web Crypto simülasyonuna düşer. Heisenberg: <strong>Δx · Δp ≥ ℏ/2</strong>',
- 't2.title':'Kuantum Devre Simülatörü','t3.title':'Evren Yaşı Hesaplayıcı','t4.title':'Kuantum Şifreleme — BB84','t5.title':'Heisenberg Belirsizlik Görselleştiricisi','t6.title':'Kara Delik Fizik Simülatörü','t7.title':'Kozmik Doppler Kayması Hesaplayıcı',
+  't2.title':'Kuantum Devre Simülatörü','badge.new':'Yeni',
+  't2.gates.title':'Kuantum Kapıları','t2.gate.h0':'H <span class="gd">Hadamard q0</span>','t2.gate.h1':'H <span class="gd">Hadamard q1</span>','t2.gate.x0':'X <span class="gd">Pauli-X q0</span>','t2.gate.x1':'X <span class="gd">Pauli-X q1</span>','t2.gate.z0':'Z <span class="gd">Pauli-Z q0</span>','t2.gate.z1':'Z <span class="gd">Pauli-Z q1</span>','t2.gate.cnot':'CNOT <span class="gd">q0→q1</span>','t2.reset':'Sıfırla','t2.measure':'⟨ψ| Ölç','t2.bell':'⚛ Bell |00⟩+|11⟩','t2.clear':'Temizle','t2.results':'Ölçüm Sonuçları (1024 atış)','t2.explain':'<strong>Kuantum kapıları nedir?</strong> H kapısı kubiti süperpozisyona sokar. X kubiti döndürür (NOT). CNOT iki kubiti dolanıklığa sokar. <strong>Bell durumu: |Φ⁺⟩ = (|00⟩+|11⟩)/√2</strong>',
+  't3.title':'Evren Yaşı Hesaplayıcı',
+  't3.h0':'Hubble Sabiti H₀','t3.om':'Madde Ωₘ','t3.ol':'Karanlık Enerji ΩΛ','t3.orr':'Radyasyon Ωᵣ','t3.planck':'↺ Planck 2018 Değerleri','t3.explain':'Friedmann denklemi: <strong>H²(a) = H₀²(Ωᵣ/a⁴ + Ωₘ/a³ + ΩΛ)</strong> — 10.000 adımlı nümerik integral ile hesaplanır.','t3.age.lbl':'Evrenin Tahmini Yaşı','t3.hubble.time':'Hubble Zamanı','t3.horizon':'Işık Ufku','t3.geometry':'Geometri','t3.timeline':'Kozmik Zaman Çizelgesi','t3.tl.planck':'Planck Çağı','t3.tl.cmb.t':'380.000 yıl','t3.tl.cmb':'CMB yayıldı','t3.tl.stars':'İlk yıldızlar','t3.tl.solar':'Güneş Sistemi','t3.tl.now':'Şimdi — Buradasınız','t3.geo.flat':'Düz (k=0)','t3.geo.closed':'Kapalı (k=+1)','t3.geo.open':'Açık (k=-1)',
+  't4.title':'Kuantum Şifreleme — BB84',
+  't4.eve':'👁 Dinleyici (Eve) aktif — Kuantum kanalı izleniyor','t4.alice':'<em>Alice</em> — Gönderici','t4.bob':'<em>Bob</em> — Alıcı','t4.sent.qubits':'Gönderilen Kubitler','t4.bases':'Bazlar','t4.secret.key':'Gizli Anahtar','t4.meas.bases':'Ölçüm Bazları','t4.results':'Sonuçlar','t4.shared.key':'Ortak Anahtar','t4.run':'▶ BB84 Çalıştır','t4.reset':'Sıfırla','t4.security':'Güvenlik Düzeyi','t4.nomatch':'(eşleşme yok)','t4.log.start':'━━ BB84 Başladı ━━','t4.log.sent':'Alice {0} kubit gönderdi','t4.log.eve':'⚠ Eve kanalı dinliyor!','t4.log.match':'Eşleşen baz: {0}/{1}','t4.log.err':'Hata: {0} bit — Olası dinleme!','t4.log.safe':'Hata yok — Kanal güvenli ✓','t4.log.key':'Anahtar: {0} bit',
+  't5.title':'Heisenberg Belirsizlik Görselleştiricisi',
+  't5.dx':'Konum Belirsizliği Δx','t5.explain':'<strong>Heisenberg Belirsizlik İlkesi:</strong> Bir parçacığın konumunu ne kadar kesin bilirsek, momentumunu o kadar az bileceğiz. <strong>Δx · Δp ≥ ℏ/2</strong> — Bu bir ölçüm hatası değil, doğanın kendisidir.','t5.lbl.dx':'Δx (konum)','t5.lbl.dp':'Δp (min)','t5.lbl.prod':'Δx·Δp','t5.status.ok':'✓ Belirsizlik ilkesi sağlanıyor','t5.status.violation':'✗ İhlal — Doğada imkânsız!','t5.phase3d':'3D Faz Uzayı — Kaydır','t5.canvas.pos':'ψ(x) — Konum','t5.canvas.mom':'φ(p) — Momentum',
+  't6.title':'Kara Delik Fizik Simülatörü',
+  't6.mass':'Kütle (Güneş kütlesi ×)','t6.calc':'Hesapla','t6.sgra':'Sgr A* (Samanyolu)','t6.m87':'M87*','t6.rs':'Schwarzschild Yarıçapı','t6.temp':'Hawking Sıcaklığı','t6.entropy':'Bekenstein Entropisi','t6.explain':'<strong>Schwarzschild yarıçapı:</strong> <strong>r_s = 2GM/c²</strong> — Bu sınırın içine giren hiçbir şey, ışık dahil, dışarı çıkamaz. Hawking radyasyonu: <strong>T = ℏc³/(8πGMk_B)</strong>',
+  't7.title':'Kozmik Doppler Kayması Hesaplayıcı',
+  't7.z':'Kırmızıya Kayma z','t7.l0':'Kaynak Dalga Boyu λ₀ (nm)','t7.explain':'Kozmolojik kırmızıya kayma: <strong>z = (λ_obs - λ₀)/λ₀</strong>. Hubble yasası: <strong>v = H₀ · d</strong>. Evren genişledikçe uzak galaksilerden gelen ışık kırmızıya kayar.','t7.obs.wl':'Gözlemlenen Dalga Boyu','t7.velocity':'Hız (v/c)','t7.distance':'Uzaklık','t7.lookback':'Bakış Uzaklığı','t7.direction':'Yön','t7.blue':'← Maviye Kayma','t7.red':'Kırmızıya Kayma →','t7.refs':'Referans Galaksiler','t7.ref.epoch.first':'İlk Galaksiler Çağı','t7.ref.epoch.reion':'Reiyonizasyon Çağı','t7.dir.receding':'Uzaklaşıyor (Kırmızıya kayma)','t7.dir.approaching':'Yaklaşıyor (Maviye kayma)','t7.dir.stationary':'Durağan',
  't8.title':'Kuantum Işınlanma','t8.go':'⚛ Işınla','t8.reset':'Sıfırla','t8.ready':'Hazır — "Işınla"ya bas.','t8.explain':'Kuantum ışınlanma maddeyi değil <strong>bilgiyi</strong> taşır. Alice dolaşık bir Bell çiftinin bir yarısını paylaştığı Bob\'a, ölçtüğü kübitin durumunu 2 klasik bit ile iletir; Bob düzeltme kapılarını uygulayarak kübiti <strong>birebir</strong> yeniden oluşturur. Ölçüm sonuçları gerçek kuantum rastgeleliğiyle seçilir.',
  't9.title':'Bloch Küresi','t9.theta':'θ (zenit)','t9.phi':'φ (azimut)','t9.explain':'Bloch küresi bir kübitin durumunu birim küre üzerinde gösterir. <strong>Kuzey kutup |0⟩</strong>, <strong>güney kutup |1⟩</strong>, ekvator saf süperpozisyonlardır (|+⟩, |−⟩, |+i⟩, |−i⟩). θ/φ kaydırıcıları veya ön ayar butonlarıyla durumu değiştirin; küreyi sürükleyerek görünümü döndürebilirsiniz.',
  'stat.proxy':'⚛ ANU (proxy) — gerçek kuantum','stat.anu':'⚛ ANU — gerçek kuantum (vakum dalgalanması)','stat.nist':'◇ NIST Beacon — kriptografik rastgele (kuantum değil)','stat.none':'◌ Dış API yok — simüle (Web Crypto)','stat.init.ok':'⚛ ANU erişilebilir — gerçek kuantum hazır','stat.init.fail':'◌ ANU erişilemedi — NIST/Web Crypto devrede',
@@ -812,7 +824,18 @@ tr:{
 en:{
  'nav.home':'← Home','hero.ey':'Quantro Lab · Interactive Tools · 9 Modules','hero.desc':'Experience quantum mechanics and astrophysics firsthand. Türkiye\'s first interactive quantum toolkit.','hero.badge':'🇹🇷 First in Türkiye — Quantro R&D 2025','hero.scroll':'Explore','intro.h2':'9 Original<br>Tools','intro.count':'First in Türkiye · Quantro R&D · 2025','badge.first':'First in Türkiye',
  't1.title':'Quantum Randomness Engine','t1.lbl':'Quantum Superposition Based Random Number','t1.min':'Min','t1.max':'Max','t1.src':'Source','src.q':'⚛ Real Quantum (ANU)','src.s':'◌ Simulated (Web Crypto)','t1.gen':'⚛ Generate','t1.series':'10x Series','t1.chi':'𝝌² Test','t1.clear':'Clear','t1.chi.title':'Randomness Test (Chi-Square)','t1.chi.run':'Run','t1.explain':'Classical computers produce pseudo-random numbers with algorithms. Quantro connects to the Australian National University\'s (ANU) real quantum randomness engine: lasers measure quantum <strong>fluctuations of vacuum</strong> to generate true uncertainty. Falls back to Web Crypto simulation if the API is unreachable. Heisenberg: <strong>Δx · Δp ≥ ℏ/2</strong>',
- 't2.title':'Quantum Circuit Simulator','t3.title':'Universe Age Calculator','t4.title':'Quantum Cryptography — BB84','t5.title':'Heisenberg Uncertainty Visualizer','t6.title':'Black Hole Physics Simulator','t7.title':'Cosmic Doppler Shift Calculator',
+  't2.title':'Quantum Circuit Simulator','badge.new':'New',
+  't2.gates.title':'Quantum Gates','t2.gate.h0':'H <span class="gd">Hadamard q0</span>','t2.gate.h1':'H <span class="gd">Hadamard q1</span>','t2.gate.x0':'X <span class="gd">Pauli-X q0</span>','t2.gate.x1':'X <span class="gd">Pauli-X q1</span>','t2.gate.z0':'Z <span class="gd">Pauli-Z q0</span>','t2.gate.z1':'Z <span class="gd">Pauli-Z q1</span>','t2.gate.cnot':'CNOT <span class="gd">q0→q1</span>','t2.reset':'Reset','t2.measure':'⟨ψ| Measure','t2.bell':'⚛ Bell |00⟩+|11⟩','t2.clear':'Clear','t2.results':'Measurement Results (1024 shots)','t2.explain':'<strong>What are quantum gates?</strong> The H gate puts a qubit into superposition. X flips the qubit (NOT). CNOT entangles two qubits. <strong>Bell state: |Φ⁺⟩ = (|00⟩+|11⟩)/√2</strong>',
+  't3.title':'Universe Age Calculator',
+  't3.h0':'Hubble Constant H₀','t3.om':'Matter Ωₘ','t3.ol':'Dark Energy ΩΛ','t3.orr':'Radiation Ωᵣ','t3.planck':'↺ Planck 2018 Values','t3.explain':'Friedmann equation: <strong>H²(a) = H₀²(Ωᵣ/a⁴ + Ωₘ/a³ + ΩΛ)</strong> — computed with a 10,000-step numerical integral.','t3.age.lbl':'Estimated Age of the Universe','t3.hubble.time':'Hubble Time','t3.horizon':'Light Horizon','t3.geometry':'Geometry','t3.timeline':'Cosmic Timeline','t3.tl.planck':'Planck Epoch','t3.tl.cmb.t':'380,000 yr','t3.tl.cmb':'CMB emitted','t3.tl.stars':'First stars','t3.tl.solar':'Solar System','t3.tl.now':'Now — You are here','t3.geo.flat':'Flat (k=0)','t3.geo.closed':'Closed (k=+1)','t3.geo.open':'Open (k=-1)',
+  't4.title':'Quantum Cryptography — BB84',
+  't4.eve':'👁 Eavesdropper (Eve) active — Quantum channel monitored','t4.alice':'<em>Alice</em> — Sender','t4.bob':'<em>Bob</em> — Receiver','t4.sent.qubits':'Sent Qubits','t4.bases':'Bases','t4.secret.key':'Secret Key','t4.meas.bases':'Measurement Bases','t4.results':'Results','t4.shared.key':'Shared Key','t4.run':'▶ Run BB84','t4.reset':'Reset','t4.security':'Security Level','t4.nomatch':'(no match)','t4.log.start':'━━ BB84 Started ━━','t4.log.sent':'Alice sent {0} qubits','t4.log.eve':'⚠ Eve is listening to the channel!','t4.log.match':'Matching bases: {0}/{1}','t4.log.err':'Errors: {0} bits — Possible eavesdropping!','t4.log.safe':'No errors — Channel secure ✓','t4.log.key':'Key: {0} bits',
+  't5.title':'Heisenberg Uncertainty Visualizer',
+  't5.dx':'Position Uncertainty Δx','t5.explain':'<strong>Heisenberg Uncertainty Principle:</strong> The more precisely we know a particle\'s position, the less we know its momentum. <strong>Δx · Δp ≥ ℏ/2</strong> — This is not a measurement error, it is nature itself.','t5.lbl.dx':'Δx (position)','t5.lbl.dp':'Δp (min)','t5.lbl.prod':'Δx·Δp','t5.status.ok':'✓ Uncertainty principle satisfied','t5.status.violation':'✗ Violation — Impossible in nature!','t5.phase3d':'3D Phase Space — Drag','t5.canvas.pos':'ψ(x) — Position','t5.canvas.mom':'φ(p) — Momentum',
+  't6.title':'Black Hole Physics Simulator',
+  't6.mass':'Mass (Solar masses ×)','t6.calc':'Calculate','t6.sgra':'Sgr A* (Milky Way)','t6.m87':'M87*','t6.rs':'Schwarzschild Radius','t6.temp':'Hawking Temperature','t6.entropy':'Bekenstein Entropy','t6.explain':'<strong>Schwarzschild radius:</strong> <strong>r_s = 2GM/c²</strong> — Nothing inside this boundary can escape, not even light. Hawking radiation: <strong>T = ℏc³/(8πGMk_B)</strong>',
+  't7.title':'Cosmic Doppler Shift Calculator',
+  't7.z':'Redshift z','t7.l0':'Source Wavelength λ₀ (nm)','t7.explain':'Cosmological redshift: <strong>z = (λ_obs - λ₀)/λ₀</strong>. Hubble\'s law: <strong>v = H₀ · d</strong>. As the universe expands, light from distant galaxies shifts toward the red.','t7.obs.wl':'Observed Wavelength','t7.velocity':'Velocity (v/c)','t7.distance':'Distance','t7.lookback':'Lookback Distance','t7.direction':'Direction','t7.blue':'← Blueshift','t7.red':'Redshift →','t7.refs':'Reference Galaxies','t7.ref.epoch.first':'Epoch of First Galaxies','t7.ref.epoch.reion':'Epoch of Reionization','t7.dir.receding':'Receding (Redshift)','t7.dir.approaching':'Approaching (Blueshift)','t7.dir.stationary':'Stationary',
  't8.title':'Quantum Teleportation','t8.go':'⚛ Teleport','t8.reset':'Reset','t8.ready':'Ready — press "Teleport".','t8.explain':'Quantum teleportation carries <strong>information</strong>, not matter. Alice shares one half of an entangled Bell pair with Bob, sends the measured qubit state as 2 classical bits; Bob applies correction gates to <strong>exactly</strong> recreate the qubit. Measurement results are chosen with real quantum randomness.',
  't9.title':'Bloch Sphere','t9.theta':'θ (zenith)','t9.phi':'φ (azimuth)','t9.explain':'The Bloch sphere represents a qubit\'s state on a unit sphere. The <strong>north pole is |0⟩</strong>, the <strong>south pole is |1⟩</strong>, and the equator holds pure superpositions (|+⟩, |−⟩, |+i⟩, |−i⟩). Change the state with the θ/φ sliders or preset buttons; drag the sphere to rotate the view.',
  'stat.proxy':'⚛ ANU (proxy) — real quantum','stat.anu':'⚛ ANU — real quantum (vacuum fluctuation)','stat.nist':'◇ NIST Beacon — cryptographic random (not quantum)','stat.none':'◌ No external API — simulated (Web Crypto)','stat.init.ok':'⚛ ANU reachable — real quantum ready','stat.init.fail':'◌ ANU unreachable — NIST/Web Crypto active',
@@ -820,7 +843,7 @@ en:{
 }
 };
 let LANG=(localStorage.getItem('qlang')==='en')?'en':'tr';
-function t(k){return (I18N[LANG]&&I18N[LANG][k])||I18N.tr[k]||k}
+function t(k,...a){let s=(I18N[LANG]&&I18N[LANG][k])||I18N.tr[k]||k;if(a.length)for(let i=0;i<a.length;i++)s=s.split('{'+i+'}').join(a[i]);return s}
 function applyLang(){
   document.documentElement.lang=LANG;
   const btn=document.getElementById('langbtn');
@@ -1129,7 +1152,7 @@ function uU(){
   for(let i=1;i<=8000;i++){const a=i/8000;const E2=Or/(a*a)+Om/a+Ol*a*a;if(E2>0)age+=1/(Math.sqrt(E2)*8000)}
   age/=H0g;
   const tot=Om+Ol+Or;
-  const geo=Math.abs(tot-1)<0.05?'Düz (k=0)':tot>1?'Kapalı (k=+1)':'Açık (k=-1)';
+  const geo=Math.abs(tot-1)<0.05?t('t3.geo.flat'):tot>1?t('t3.geo.closed'):t('t3.geo.open');
   document.getElementById('ua').innerHTML=age.toFixed(2)+'<span> Gyr</span>';
   document.getElementById('ht').textContent=tH.toFixed(2)+' Gyr';
   document.getElementById('geo').textContent=geo;
@@ -1157,20 +1180,20 @@ function rBB84(){
   document.getElementById('aba').innerHTML=mkBits(aBas,'sent');
   document.getElementById('bb').innerHTML=bBas.map((b,i)=>`<div class="qbit ${aBas[i]===b?'match':'mismatch'}">${b}</div>`).join('');
   document.getElementById('br').innerHTML=bRes.map((b,i)=>`<div class="qbit ${mi.includes(i)?'match':''}">${b}</div>`).join('');
-  document.getElementById('ak').textContent=ak||'(eşleşme yok)';
-  document.getElementById('bk').textContent=bk||'(eşleşme yok)';
+  document.getElementById('ak').textContent=ak||t('t4.nomatch');
+  document.getElementById('bk').textContent=bk||t('t4.nomatch');
   setTimeout(()=>{
     const sf=document.getElementById('sf');sf.style.width=sec+'%';
     sf.style.background=sec>70?'var(--green)':sec>40?'var(--cyan)':'var(--red)';
     const sp=document.getElementById('sp');sp.textContent=sec+'%';sp.style.color=sec>70?'var(--green)':sec>40?'var(--cyan)':'var(--red)';
   },100);
-  qlog('━━ BB84 Başladı ━━');
-  qlog(`Alice ${N} kubit gönderdi`,'ok');
-  if(eve)qlog('⚠ Eve kanalı dinliyor!','warn');
-  qlog(`Eşleşen baz: ${mi.length}/${N}`,'ok');
-  if(errs>0)qlog(`Hata: ${errs} bit — Olası dinleme!`,'err');
-  else qlog('Hata yok — Kanal güvenli ✓','ok');
-  qlog(`Anahtar: ${ak.length} bit`,'ok');
+  qlog(t('t4.log.start'));
+  qlog(t('t4.log.sent',N),'ok');
+  if(eve)qlog(t('t4.log.eve'),'warn');
+  qlog(t('t4.log.match',mi.length,N),'ok');
+  if(errs>0)qlog(t('t4.log.err',errs),'err');
+  else qlog(t('t4.log.safe'),'ok');
+  qlog(t('t4.log.key',ak.length),'ok');
 }
 
 /* ══ T5: HEISENBERG ══ */
@@ -1185,7 +1208,7 @@ function uH(){
   document.getElementById('hv-prod').textContent=prod.toFixed(3);
   const ok=prod>=0.499;
   const st=document.getElementById('heis-status');
-  st.textContent=ok?'✓ Belirsizlik ilkesi sağlanıyor':'✗ İhlal — Doğada imkânsız!';
+  st.textContent=ok?t('t5.status.ok'):t('t5.status.violation');
   st.style.borderColor=ok?'rgba(0,240,160,.3)':'rgba(255,68,102,.3)';
   st.style.color=ok?'var(--green)':'var(--red)';
   drawHeis(dx,dp);
@@ -1216,8 +1239,8 @@ function drawHeis(dx,dp){
   }
   ctx.stroke();
   ctx.font='10px JetBrains Mono,monospace';
-  ctx.fillStyle='rgba(0,200,240,.6)';ctx.fillText('ψ(x) — Konum',8,16);
-  ctx.fillStyle='rgba(160,96,255,.6)';ctx.fillText('φ(p) — Momentum',8,H/2+24);
+  ctx.fillStyle='rgba(0,200,240,.6)';ctx.fillText(t('t5.canvas.pos'),8,16);
+  ctx.fillStyle='rgba(160,96,255,.6)';ctx.fillText(t('t5.canvas.mom'),8,H/2+24);
 }
 
 function initHeis3D(){
@@ -1366,7 +1389,7 @@ function uD(){
   document.getElementById('dvc').textContent=(vcRatio*100).toFixed(1)+'% c';
   document.getElementById('ddist').textContent=dist>1000?(dist/1000).toFixed(1)+' Gpc':dist.toFixed(0)+' Mpc';
   document.getElementById('dlb').textContent=lb.toFixed(0)+' Mly';
-  document.getElementById('ddir').textContent=z>0?'Uzaklaşıyor (Kırmızıya kayma)':z<0?'Yaklaşıyor (Maviye kayma)':'Durağan';
+  document.getElementById('ddir').textContent=z>0?t('t7.dir.receding'):z<0?t('t7.dir.approaching'):t('t7.dir.stationary');
   drawDop(l0,lobs,z);
 }
 function setZ(val){document.getElementById('zs').value=val;uD()}
