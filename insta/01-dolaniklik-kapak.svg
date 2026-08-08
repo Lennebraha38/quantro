@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#020810"/>
+      <stop offset="0.55" stop-color="#07111f"/>
+      <stop offset="1" stop-color="#0d1f35"/>
+    </linearGradient>
+    <linearGradient id="cyan" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#00c8f0"/>
+      <stop offset="1" stop-color="#7ae6ff"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.42" r="0.45">
+      <stop offset="0" stop-color="#00c8f0" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#00c8f0" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1080" height="1080" fill="url(#bg)"/>
+  <circle cx="540" cy="450" r="420" fill="url(#glow)"/>
+
+  <!-- grid lines -->
+  <g stroke="#00c8f0" stroke-opacity="0.08" stroke-width="1">
+    <line x1="0" y1="270" x2="1080" y2="270"/>
+    <line x1="0" y1="540" x2="1080" y2="540"/>
+    <line x1="0" y1="810" x2="1080" y2="810"/>
+    <line x1="270" y1="0" x2="270" y2="1080"/>
+    <line x1="540" y1="0" x2="540" y2="1080"/>
+    <line x1="810" y1="0" x2="810" y2="1080"/>
+  </g>
+
+  <!-- logo -->
+  <text x="540" y="86" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="700" font-size="28" letter-spacing="6" fill="#4a6070">QUANTRO</text>
+
+  <!-- top small label -->
+  <text x="540" y="230" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="500" font-size="34" letter-spacing="8" fill="#00c8f0">60 SANIYEDE</text>
+
+  <!-- main title -->
+  <text x="540" y="330" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="800" font-size="108" letter-spacing="4" fill="#e8edf5">KUANTUM</text>
+  <text x="540" y="440" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="800" font-size="108" letter-spacing="4" fill="url(#cyan)">DOLANIKLIK</text>
+
+  <!-- entangled particles illustration -->
+  <circle cx="380" cy="640" r="26" fill="none" stroke="#e8edf5" stroke-width="6"/>
+  <circle cx="700" cy="640" r="26" fill="#00c8f0"/>
+  <path d="M 410 620 Q 540 730 674 620" fill="none" stroke="url(#cyan)" stroke-width="7" stroke-linecap="round" stroke-dasharray="2 18"/>
+  <text x="540" y="740" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="500" font-size="30" letter-spacing="3" fill="#4a6070">BIRINI OLCTUGUNDA DIGERI ANINDA BELLI OLUR</text>
+
+  <!-- bottom CTA -->
+  <rect x="340" y="900" width="400" height="90" rx="45" fill="none" stroke="#00c8f0" stroke-width="3"/>
+  <text x="540" y="956" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="700" font-size="34" letter-spacing="4" fill="#00c8f0">LAB'DA DENE</text>
+
+  <text x="540" y="1030" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="400" font-size="24" letter-spacing="2" fill="#4a6070">quantro-1.vercel.app</text>
+</svg>
