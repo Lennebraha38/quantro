@@ -12,7 +12,11 @@
   .card{background:#0d1f35;border-radius:16px;padding:16px;text-align:center}
   .card img{width:100%;border-radius:10px;display:block}
   .card h3{color:#00c8f0;margin:12px 0 4px;letter-spacing:2px}
-  .card a{color:#e8edf5;font-size:13px;text-decoration:none;border:1px solid #00c8f0;padding:6px 14px;border-radius:20px;display:inline-block;margin-top:6px}
+  .row{display:flex;gap:10px;justify-content:center;margin-top:10px}
+  .btn{color:#e8edf5;font-size:13px;text-decoration:none;border:1px solid #00c8f0;padding:8px 16px;border-radius:20px;display:inline-block;cursor:pointer;background:none;font-family:inherit}
+  .btn:hover{background:#00c8f0;color:#020810}
+  .zip{margin-top:24px;text-align:center}
+  .zip .btn{font-size:15px;padding:12px 26px;background:#00c8f0;color:#020810;font-weight:700}
 </style>
 </head>
 <body>
@@ -22,21 +26,33 @@
   <div class="card">
     <img src="insta/01-dolaniklik-kapak.png" alt="Dolanıklık kapak">
     <h3>01 · Karusel Kapağı</h3>
-    <a href="insta/01-dolaniklik-kapak.png" download>PNG İndir</a>
-    <a href="insta/01-dolaniklik-kapak.svg" download>SVG</a>
+    <div class="row"><button class="btn" onclick="dl('01-dolaniklik-kapak.png')">PNG İndir</button><button class="btn" onclick="dl('01-dolaniklik-kapak.svg')">SVG</button></div>
   </div>
   <div class="card">
     <img src="insta/02-planck-kart.png" alt="Planck kartı">
     <h3>02 · Bilgi Kartı</h3>
-    <a href="insta/02-planck-kart.png" download>PNG İndir</a>
-    <a href="insta/02-planck-kart.svg" download>SVG</a>
+    <div class="row"><button class="btn" onclick="dl('02-planck-kart.png')">PNG İndir</button><button class="btn" onclick="dl('02-planck-kart.svg')">SVG</button></div>
   </div>
   <div class="card">
     <img src="insta/03-quiz.png" alt="Quiz">
     <h3>03 · Quiz</h3>
-    <a href="insta/03-quiz.png" download>PNG İndir</a>
-    <a href="insta/03-quiz.svg" download>SVG</a>
+    <div class="row"><button class="btn" onclick="dl('03-quiz.png')">PNG İndir</button><button class="btn" onclick="dl('03-quiz.svg')">SVG</button></div>
   </div>
 </div>
+<div class="zip">
+  <a class="btn" href="insta/quantro-instagram-prototipler.zip">⬇ TÜMÜNÜ TEK ZIP OLARAK İNDİR</a>
+</div>
+<script>
+function dl(f){
+  fetch('insta/'+f).then(r=>r.blob()).then(b=>{
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(b);
+    a.download=f;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000);
+  });
+}
+</script>
 </body>
 </html>
