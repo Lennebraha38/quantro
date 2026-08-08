@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Quantro Lab — Türkiye'nin İlk Kuantum Araç Seti">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#020810">
+<link rel="icon" type="image/svg+xml" href="img/icon.svg">
 <title>Quantro Lab — Kuantum Araçları</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@300;400;500&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
 <style>
@@ -124,6 +127,35 @@ nav.sc{background:rgba(2,8,16,.92);backdrop-filter:blur(20px);padding:13px 0;bor
 .qhist{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
 .qhi{font-family:var(--fm);font-size:11px;color:rgba(0,200,240,.5);border:1px solid rgba(0,200,240,.1);padding:3px 9px}
 
+/* ── T1: CHI-SQUARE ── */
+.qstats{margin-top:14px;padding:18px;background:rgba(0,240,160,.03);border:1px solid rgba(0,240,160,.12)}
+.qstats-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px}
+.qbars{display:flex;gap:4px;align-items:flex-end;height:132px;margin-bottom:12px;overflow-x:auto;padding-bottom:4px}
+.qbar{flex:1;min-width:26px;display:flex;flex-direction:column;align-items:center;gap:4px}
+.qbar-f{width:100%;background:linear-gradient(to top,var(--cyan),rgba(0,200,240,.25));border-radius:2px;min-height:2px}
+.qbar-l{font-family:var(--fm);font-size:8px;color:var(--muted)}
+.qbar-v{font-family:var(--fm);font-size:9px;color:var(--text)}
+.qstats-text{font-family:var(--fm);font-size:11px;color:var(--muted);line-height:1.8}
+
+/* ── T8: TELEPORT ── */
+.tele-wrap{display:flex;flex-direction:column;gap:14px}
+.tele-btns{display:flex;gap:10px;flex-wrap:wrap}
+.tele-log{background:var(--void);border:1px solid rgba(0,200,240,.1);padding:16px;font-family:var(--fm);font-size:12px;line-height:1.9;max-height:340px;overflow-y:auto}
+.tele-line{color:rgba(232,237,245,.75);animation:qin .3s ease-out;white-space:pre-wrap}
+.tele-line b{color:var(--cyan)}
+.tele-line.ok{color:var(--green)}
+@keyframes qin{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+/* ── T9: BLOCH SPHERE ── */
+.bloch-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.bloch-canvas-wrap{background:var(--void);border:1px solid rgba(0,200,240,.1);padding:8px}
+.bloch-canvas{width:100%;height:320px;display:block;touch-action:none;cursor:grab}
+.bloch-canvas:active{cursor:grabbing}
+.bloch-sliders{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.bloch-presets{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.bloch-readout{background:var(--void);border:1px solid rgba(0,200,240,.1);padding:16px;font-family:var(--fm);font-size:12px;line-height:2;color:var(--muted)}
+.bloch-readout b{color:var(--cyan)}
+
 /* ── T2: CIRCUIT ── */
 .circ-wrap{display:grid;grid-template-columns:180px 1fr;gap:16px}
 .gate-panel h4{font-family:var(--fm);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
@@ -238,7 +270,7 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
   .hero-h1{font-size:clamp(36px,10vw,64px)}
   .hero-row{flex-direction:column;align-items:flex-start}
   .circ-wrap{grid-template-columns:1fr}
-  .univ-grid,.heis-wrap,.dop-wrap{grid-template-columns:1fr}
+  .univ-grid,.heis-wrap,.dop-wrap,.bloch-grid{grid-template-columns:1fr}
   .qkd-grid{grid-template-columns:1fr}
   .bh-info{grid-template-columns:1fr 1fr}
   .heis-vals{grid-template-columns:1fr 1fr}
@@ -257,7 +289,10 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
 <nav id="nav">
   <div class="ni">
     <a href="index.html" class="nl">Q<em>U</em>ANTRO</a>
-    <a href="index.html" class="nb">← Ana Sayfa</a>
+    <div style="display:flex;gap:10px;align-items:center">
+      <a href="index.html" class="nb" data-i18n="nav.home">← Ana Sayfa</a>
+      <button class="nb" id="langbtn" onclick="toggleLang()" style="background:none;cursor:pointer">EN</button>
+    </div>
   </div>
 </nav>
 
@@ -268,48 +303,63 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
   <div class="hud hud-bl"></div><div class="hud hud-br"></div>
   <div class="hero-content">
     <div class="hc">
-      <div class="hero-ey"><span>Quantro Lab · Etkileşimli Araçlar · 7 Modül</span></div>
+      <div class="hero-ey"><span data-i18n="hero.ey">Quantro Lab · Etkileşimli Araçlar · 9 Modül</span></div>
       <h1 class="hero-h1">KUANTUM<br><span class="o">LAB</span></h1>
       <div class="hero-row">
-        <p class="hero-desc">Kuantum mekaniğini ve astrofiziki bizzat deneyimleyin. Türkiye'nin ilk interaktif kuantum araç seti.</p>
-        <div class="hero-badge">🇹🇷 Türkiye'de İlk — Quantro ARGE 2025</div>
+        <p class="hero-desc" data-i18n="hero.desc">Kuantum mekaniğini ve astrofiziki bizzat deneyimleyin. Türkiye'nin ilk interaktif kuantum araç seti.</p>
+        <div class="hero-badge" data-i18n="hero.badge">🇹🇷 Türkiye'de İlk — Quantro ARGE 2025</div>
       </div>
     </div>
   </div>
-  <div class="scroll-ind"><span>Keşfet</span><div class="scroll-ln"></div></div>
+  <div class="scroll-ind"><span data-i18n="hero.scroll">Keşfet</span><div class="scroll-ln"></div></div>
 </section>
 
 <!-- TOOLS -->
 <div class="tools">
 <div class="tw">
   <div class="tools-intro">
-    <h2>7 Özgün<br>Araç</h2>
-    <span class="tools-count">Türkiye'de İlk · Quantro ARGE · 2025</span>
+    <h2 data-i18n="intro.h2">9 Özgün<br>Araç</h2>
+    <span class="tools-count" data-i18n="intro.count">Türkiye'de İlk · Quantro ARGE · 2025</span>
   </div>
 
   <!-- T1: QRNG -->
   <div class="tool-card">
     <div class="tool-header" onclick="tog(1)">
       <span class="tn">01</span>
-      <span class="tt">Kuantum Rastgelelik Motoru</span>
-      <span class="tb-badge first">Türkiye'de İlk</span>
+      <span class="tt" data-i18n="t1.title">Kuantum Rastgelelik Motoru</span>
+      <span class="tb-badge first" data-i18n="badge.first">Türkiye'de İlk</span>
       <span class="tg" id="tg1">+</span>
     </div>
     <div class="tool-body" id="tb1">
       <div class="qrng-display">
         <div class="qrng-num" id="qn">—</div>
-        <div class="qrng-lbl">Kuantum Süperpozisyon Tabanlı Rastgele Sayı</div>
+        <div class="qrng-lbl" data-i18n="t1.lbl">Kuantum Süperpozisyon Tabanlı Rastgele Sayı</div>
         <div class="qwave"></div>
       </div>
       <div class="qrng-ctrl">
-        <span class="qlbl">Min</span><input class="qin" id="qmin" type="number" value="1">
-        <span class="qlbl">Max</span><input class="qin" id="qmax" type="number" value="1000000">
-        <button class="btn btn-p" onclick="genQ()">⚛ Üret</button>
-        <button class="btn btn-g" onclick="genQS()">10x Seri</button>
-        <button class="btn btn-r" onclick="clearQ()">Temizle</button>
+        <span class="qlbl" data-i18n="t1.min">Min</span><input class="qin" id="qmin" type="number" value="1">
+        <span class="qlbl" data-i18n="t1.max">Max</span><input class="qin" id="qmax" type="number" value="1000000">
+        <span class="qlbl" data-i18n="t1.src">Kaynak</span>
+        <select class="qin" id="qsrc" style="width:auto">
+          <option value="quantum" selected data-i18n="src.q">⚛ Gerçek Kuantum (ANU)</option>
+          <option value="sim" data-i18n="src.s">◌ Simüle (Web Crypto)</option>
+        </select>
+        <button class="btn btn-p" onclick="genQ()" data-i18n="t1.gen">⚛ Üret</button>
+        <button class="btn btn-g" onclick="genQS()" data-i18n="t1.series">10x Seri</button>
+        <button class="btn btn-g" onclick="chiToggle()" data-i18n="t1.chi">𝝌² Test</button>
+        <button class="btn btn-r" onclick="clearQ()" data-i18n="t1.clear">Temizle</button>
+        <span class="qlbl" id="qstat" style="color:var(--muted)">…</span>
       </div>
       <div class="qhist" id="qh"></div>
-      <div class="explain"><p><strong>Nasıl çalışır?</strong> Klasik bilgisayarlar algoritma tabanlı sahte rastgelelik üretir. Bu motor Web Crypto API ile kuantum <strong>süperpozisyon</strong> ve <strong>dalga fonksiyonu çöküşü</strong> prensibini modelleyerek her ölçümde gerçek belirsizlik uygular. Heisenberg: <strong>Δx · Δp ≥ ℏ/2</strong></p></div>
+      <div class="qstats" id="qstats" hidden>
+        <div class="qstats-head">
+          <span class="qlbl" data-i18n="t1.chi.title">Rastgelelik Testi (Ki-Kare)</span>
+          <button class="btn btn-p" onclick="chiRun()" data-i18n="t1.chi.run">Çalıştır</button>
+        </div>
+        <div class="qbars" id="qbars"></div>
+        <div class="qstats-text" id="qstatstext">—</div>
+      </div>
+      <div class="explain"><p data-i18n="t1.explain">Klasik bilgisayarlar algoritma tabanlı sahte rastgelelik üretir. Quantro, Avustralya Ulusal Üniversitesi'nin (ANU) gerçek kuantum rastgelelik motoruna bağlanır: lazerler, vakumun kuantum <strong>dalgalanmalarını</strong> ölçerek gerçek belirsizlik üretir. API erişilemezse Web Crypto simülasyonuna düşer. Heisenberg: <strong>Δx · Δp ≥ ℏ/2</strong></p></div>
     </div>
   </div>
 
@@ -317,7 +367,7 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
   <div class="tool-card">
     <div class="tool-header" onclick="tog(2)">
       <span class="tn">02</span>
-      <span class="tt">Kuantum Devre Simülatörü</span>
+      <span class="tt" data-i18n="t2.title">Kuantum Devre Simülatörü</span>
       <span class="tb-badge first">Türkiye'de İlk</span>
       <span class="tg" id="tg2">+</span>
     </div>
@@ -340,6 +390,7 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
           </div>
           <div style="display:flex;gap:10px">
             <button class="btn btn-p" onclick="mc()">⟨ψ| Ölç</button>
+            <button class="btn btn-g" onclick="bellDemo()">⚛ Bell |00⟩+|11⟩</button>
             <button class="btn btn-g" onclick="rc()">Temizle</button>
           </div>
           <div id="cr" style="display:none;margin-top:16px;background:rgba(0,200,240,.03);border:1px solid rgba(0,200,240,.07);padding:14px">
@@ -356,7 +407,7 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
   <div class="tool-card">
     <div class="tool-header" onclick="tog(3)">
       <span class="tn">03</span>
-      <span class="tt">Evren Yaşı Hesaplayıcı</span>
+      <span class="tt" data-i18n="t3.title">Evren Yaşı Hesaplayıcı</span>
       <span class="tb-badge first">Türkiye'de İlk</span>
       <span class="tg" id="tg3">+</span>
     </div>
@@ -407,7 +458,7 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
   <div class="tool-card">
     <div class="tool-header" onclick="tog(4)">
       <span class="tn">04</span>
-      <span class="tt">Kuantum Şifreleme — BB84</span>
+      <span class="tt" data-i18n="t4.title">Kuantum Şifreleme — BB84</span>
       <span class="tb-badge first">Türkiye'de İlk</span>
       <span class="tg" id="tg4">+</span>
     </div>
@@ -449,7 +500,7 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
   <div class="tool-card">
     <div class="tool-header" onclick="tog(5)">
       <span class="tn">05</span>
-      <span class="tt">Heisenberg Belirsizlik Görselleştiricisi</span>
+      <span class="tt" data-i18n="t5.title">Heisenberg Belirsizlik Görselleştiricisi</span>
       <span class="tb-badge new">Yeni</span>
       <span class="tg" id="tg5">+</span>
     </div>
@@ -488,7 +539,7 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
   <div class="tool-card">
     <div class="tool-header" onclick="tog(6)">
       <span class="tn">06</span>
-      <span class="tt">Kara Delik Fizik Simülatörü</span>
+      <span class="tt" data-i18n="t6.title">Kara Delik Fizik Simülatörü</span>
       <span class="tb-badge new">Yeni</span>
       <span class="tg" id="tg6">+</span>
     </div>
@@ -514,7 +565,7 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
   <div class="tool-card">
     <div class="tool-header" onclick="tog(7)">
       <span class="tn">07</span>
-      <span class="tt">Kozmik Doppler Kayması Hesaplayıcı</span>
+      <span class="tt" data-i18n="t7.title">Kozmik Doppler Kayması Hesaplayıcı</span>
       <span class="tb-badge new">Yeni</span>
       <span class="tg" id="tg7">+</span>
     </div>
@@ -560,6 +611,65 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
     </div>
   </div>
 
+  <!-- T8: TELEPORTATION -->
+  <div class="tool-card">
+    <div class="tool-header" onclick="tog(8)">
+      <span class="tn">08</span>
+      <span class="tt" data-i18n="t8.title">Kuantum Işınlanma</span>
+      <span class="tb-badge new">New · v1.1</span>
+      <span class="tg" id="tg8">+</span>
+    </div>
+    <div class="tool-body" id="tb8">
+      <div class="tele-wrap">
+        <div class="tele-btns">
+          <button class="btn btn-p" onclick="teleRun()" data-i18n="t8.go">⚛ Işınla</button>
+          <button class="btn btn-r" onclick="teleReset()" data-i18n="t8.reset">Sıfırla</button>
+        </div>
+        <div class="tele-log" id="tele-log"><div class="tele-line" style="color:var(--muted)" data-i18n="t8.ready">Hazır — "Işınla"ya bas.</div></div>
+      </div>
+      <div class="explain"><p data-i18n="t8.explain">Kuantum ışınlanma maddeyi değil <strong>bilgiyi</strong> taşır. Alice dolaşık bir Bell çiftinin bir yarısını paylaştığı Bob'a, ölçtüğü kübitin durumunu 2 klasik bit ile iletir; Bob düzeltme kapılarını uygulayarak kübiti <strong>birebir</strong> yeniden oluşturur. Ölçüm sonuçları gerçek kuantum rastgeleliğiyle seçilir.</p></div>
+    </div>
+  </div>
+
+  <!-- T9: BLOCH SPHERE -->
+  <div class="tool-card">
+    <div class="tool-header" onclick="tog(9)">
+      <span class="tn">09</span>
+      <span class="tt" data-i18n="t9.title">Bloch Küresi</span>
+      <span class="tb-badge new">New · v1.1</span>
+      <span class="tg" id="tg9">+</span>
+    </div>
+    <div class="tool-body" id="tb9">
+      <div class="bloch-grid">
+        <div>
+          <div class="bloch-canvas-wrap"><canvas id="bloch-canvas" class="bloch-canvas"></canvas></div>
+          <div class="explain"><p data-i18n="t9.explain">Bloch küresi bir kübitin durumunu birim küre üzerinde gösterir. <strong>Kuzey kutup |0⟩</strong>, <strong>güney kutup |1⟩</strong>, ekvator saf süperpozisyonlardır (|+⟩, |−⟩, |+i⟩, |−i⟩). θ/φ kaydırıcıları veya ön ayar butonlarıyla durumu değiştirin; küreyi sürükleyerek görünümü döndürebilirsiniz.</p></div>
+        </div>
+        <div>
+          <div class="bloch-sliders">
+            <div class="param-item">
+              <div class="param-lbl"><span data-i18n="t9.theta">θ (zenit)</span><strong id="bloch-theta">90°</strong></div>
+              <input class="slider" id="bloch-th" type="range" min="0" max="180" value="90" oninput="blochSet(this.value,phv())">
+            </div>
+            <div class="param-item">
+              <div class="param-lbl"><span data-i18n="t9.phi">φ (azimut)</span><strong id="bloch-phi">0°</strong></div>
+              <input class="slider" id="bloch-ph" type="range" min="0" max="360" value="0" oninput="blochSet(thv(),this.value)">
+            </div>
+          </div>
+          <div class="bloch-presets">
+            <button class="btn btn-g" onclick="blochSet(0,0)">|0⟩</button>
+            <button class="btn btn-g" onclick="blochSet(180,0)">|1⟩</button>
+            <button class="btn btn-g" onclick="blochSet(90,0)">|+⟩</button>
+            <button class="btn btn-g" onclick="blochSet(90,180)">|−⟩</button>
+            <button class="btn btn-g" onclick="blochSet(90,90)">|+i⟩</button>
+            <button class="btn btn-g" onclick="blochSet(90,270)">|−i⟩</button>
+          </div>
+          <div class="bloch-readout" id="bloch-readout">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div><!-- /tw -->
 </div><!-- /tools -->
 
@@ -567,12 +677,14 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
   <div class="fi">
     <a href="index.html" class="fl">Q<em>U</em>ANTRO</a>
     <span class="fc">© 2025 Quantro ARGE · Kayseri, Türkiye</span>
-    <span class="fc" style="color:rgba(0,200,240,.3)">Türkiye'de İlk · 7 Kuantum Aracı</span>
+    <span class="fc" style="color:rgba(0,200,240,.3)">Türkiye'de İlk · 9 Kuantum Aracı</span>
+    <span class="fc" style="color:rgba(0,200,240,.5)"><a href="https://github.com/quantro38/quantro/issues/new" target="_blank" rel="noopener" style="color:rgba(0,200,240,.7)">Hata bildir / Fikir öner →</a></span>
   </div>
 </footer>
 
 <!-- THREE.JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="quantro.js"></script>
 <script>
 /* ══ UTILS ══ */
 const mq=window.matchMedia('(prefers-reduced-motion:reduce)');
@@ -589,6 +701,7 @@ function tog(n){
     if(n===6&&!bhInit)initBH();
     if(n===7)uD();
     if(n===5)uH();
+    if(n===9)blochStart();
   }
 }
 
@@ -685,24 +798,288 @@ function tog(n){
   },{passive:true});
 })();
 
+/* ══ I18N ══ */
+const I18N={
+tr:{
+ 'nav.home':'← Ana Sayfa','hero.ey':'Quantro Lab · Etkileşimli Araçlar · 9 Modül','hero.desc':'Kuantum mekaniğini ve astrofiziki bizzat deneyimleyin. Türkiye\'nin ilk interaktif kuantum araç seti.','hero.badge':'🇹🇷 Türkiye\'de İlk — Quantro ARGE 2025','hero.scroll':'Keşfet','intro.h2':'9 Özgün<br>Araç','intro.count':'Türkiye\'de İlk · Quantro ARGE · 2025','badge.first':'Türkiye\'de İlk',
+ 't1.title':'Kuantum Rastgelelik Motoru','t1.lbl':'Kuantum Süperpozisyon Tabanlı Rastgele Sayı','t1.min':'Min','t1.max':'Max','t1.src':'Kaynak','src.q':'⚛ Gerçek Kuantum (ANU)','src.s':'◌ Simüle (Web Crypto)','t1.gen':'⚛ Üret','t1.series':'10x Seri','t1.chi':'𝝌² Test','t1.clear':'Temizle','t1.chi.title':'Rastgelelik Testi (Ki-Kare)','t1.chi.run':'Çalıştır','t1.explain':'Klasik bilgisayarlar algoritma tabanlı sahte rastgelelik üretir. Quantro, Avustralya Ulusal Üniversitesi\'nin (ANU) gerçek kuantum rastgelelik motoruna bağlanır: lazerler, vakumun kuantum <strong>dalgalanmalarını</strong> ölçerek gerçek belirsizlik üretir. API erişilemezse Web Crypto simülasyonuna düşer. Heisenberg: <strong>Δx · Δp ≥ ℏ/2</strong>',
+ 't2.title':'Kuantum Devre Simülatörü','t3.title':'Evren Yaşı Hesaplayıcı','t4.title':'Kuantum Şifreleme — BB84','t5.title':'Heisenberg Belirsizlik Görselleştiricisi','t6.title':'Kara Delik Fizik Simülatörü','t7.title':'Kozmik Doppler Kayması Hesaplayıcı',
+ 't8.title':'Kuantum Işınlanma','t8.go':'⚛ Işınla','t8.reset':'Sıfırla','t8.ready':'Hazır — "Işınla"ya bas.','t8.explain':'Kuantum ışınlanma maddeyi değil <strong>bilgiyi</strong> taşır. Alice dolaşık bir Bell çiftinin bir yarısını paylaştığı Bob\'a, ölçtüğü kübitin durumunu 2 klasik bit ile iletir; Bob düzeltme kapılarını uygulayarak kübiti <strong>birebir</strong> yeniden oluşturur. Ölçüm sonuçları gerçek kuantum rastgeleliğiyle seçilir.',
+ 't9.title':'Bloch Küresi','t9.theta':'θ (zenit)','t9.phi':'φ (azimut)','t9.explain':'Bloch küresi bir kübitin durumunu birim küre üzerinde gösterir. <strong>Kuzey kutup |0⟩</strong>, <strong>güney kutup |1⟩</strong>, ekvator saf süperpozisyonlardır (|+⟩, |−⟩, |+i⟩, |−i⟩). θ/φ kaydırıcıları veya ön ayar butonlarıyla durumu değiştirin; küreyi sürükleyerek görünümü döndürebilirsiniz.',
+ 'stat.proxy':'⚛ ANU (proxy) — gerçek kuantum','stat.anu':'⚛ ANU — gerçek kuantum (vakum dalgalanması)','stat.nist':'◇ NIST Beacon — kriptografik rastgele (kuantum değil)','stat.none':'◌ Dış API yok — simüle (Web Crypto)','stat.init.ok':'⚛ ANU erişilebilir — gerçek kuantum hazır','stat.init.fail':'◌ ANU erişilemedi — NIST/Web Crypto devrede',
+ 'chi.busy':'Veri toplanıyor (1024 bayt)…','chi.ok':'✓ Dağılım rastgeleliğe uyumlu (p>0.05)','chi.fail':'✗ Beklenenden sapma — tekrar dene'
+},
+en:{
+ 'nav.home':'← Home','hero.ey':'Quantro Lab · Interactive Tools · 9 Modules','hero.desc':'Experience quantum mechanics and astrophysics firsthand. Türkiye\'s first interactive quantum toolkit.','hero.badge':'🇹🇷 First in Türkiye — Quantro R&D 2025','hero.scroll':'Explore','intro.h2':'9 Original<br>Tools','intro.count':'First in Türkiye · Quantro R&D · 2025','badge.first':'First in Türkiye',
+ 't1.title':'Quantum Randomness Engine','t1.lbl':'Quantum Superposition Based Random Number','t1.min':'Min','t1.max':'Max','t1.src':'Source','src.q':'⚛ Real Quantum (ANU)','src.s':'◌ Simulated (Web Crypto)','t1.gen':'⚛ Generate','t1.series':'10x Series','t1.chi':'𝝌² Test','t1.clear':'Clear','t1.chi.title':'Randomness Test (Chi-Square)','t1.chi.run':'Run','t1.explain':'Classical computers produce pseudo-random numbers with algorithms. Quantro connects to the Australian National University\'s (ANU) real quantum randomness engine: lasers measure quantum <strong>fluctuations of vacuum</strong> to generate true uncertainty. Falls back to Web Crypto simulation if the API is unreachable. Heisenberg: <strong>Δx · Δp ≥ ℏ/2</strong>',
+ 't2.title':'Quantum Circuit Simulator','t3.title':'Universe Age Calculator','t4.title':'Quantum Cryptography — BB84','t5.title':'Heisenberg Uncertainty Visualizer','t6.title':'Black Hole Physics Simulator','t7.title':'Cosmic Doppler Shift Calculator',
+ 't8.title':'Quantum Teleportation','t8.go':'⚛ Teleport','t8.reset':'Reset','t8.ready':'Ready — press "Teleport".','t8.explain':'Quantum teleportation carries <strong>information</strong>, not matter. Alice shares one half of an entangled Bell pair with Bob, sends the measured qubit state as 2 classical bits; Bob applies correction gates to <strong>exactly</strong> recreate the qubit. Measurement results are chosen with real quantum randomness.',
+ 't9.title':'Bloch Sphere','t9.theta':'θ (zenith)','t9.phi':'φ (azimuth)','t9.explain':'The Bloch sphere represents a qubit\'s state on a unit sphere. The <strong>north pole is |0⟩</strong>, the <strong>south pole is |1⟩</strong>, and the equator holds pure superpositions (|+⟩, |−⟩, |+i⟩, |−i⟩). Change the state with the θ/φ sliders or preset buttons; drag the sphere to rotate the view.',
+ 'stat.proxy':'⚛ ANU (proxy) — real quantum','stat.anu':'⚛ ANU — real quantum (vacuum fluctuation)','stat.nist':'◇ NIST Beacon — cryptographic random (not quantum)','stat.none':'◌ No external API — simulated (Web Crypto)','stat.init.ok':'⚛ ANU reachable — real quantum ready','stat.init.fail':'◌ ANU unreachable — NIST/Web Crypto active',
+ 'chi.busy':'Fetching data (1024 bytes)…','chi.ok':'✓ Distribution fits randomness (p>0.05)','chi.fail':'✗ Deviation from expectation — retry'
+}
+};
+let LANG=(localStorage.getItem('qlang')==='en')?'en':'tr';
+function t(k){return (I18N[LANG]&&I18N[LANG][k])||I18N.tr[k]||k}
+function applyLang(){
+  document.documentElement.lang=LANG;
+  const btn=document.getElementById('langbtn');
+  if(btn)btn.textContent=(LANG==='tr'?'EN':'TR');
+  document.querySelectorAll('[data-i18n]').forEach(el=>{el.innerHTML=t(el.dataset.i18n)});
+  if(lastQStat){const el=document.getElementById('qstat');if(el)el.textContent=t(lastQStat.k)}
+}
+function toggleLang(){LANG=(LANG==='tr'?'en':'tr');localStorage.setItem('qlang',LANG);applyLang()}
+
 /* ══ T1: QRNG ══ */
 let qh=[];
+let lastQStat=null;
 function qRNG(mn,mx){const b=new Uint32Array(4);crypto.getRandomValues(b);let v=0;for(let i=0;i<4;i++)v^=b[i];return mn+Math.abs(v)%(mx-mn+1)}
-function genQ(){
+const ANU_URL='https://qrng.anu.edu.au/API/jsonI.php';
+const NIST_URL='https://beacon.nist.gov/beacon/2.0/pulse/last';
+function qStat(key,cls){
+  lastQStat={k:key,c:cls||'var(--muted)'};
+  const el=document.getElementById('qstat');
+  if(el){el.textContent=t(key);el.style.color=lastQStat.c}
+}
+function qSource(){const s=document.getElementById('qsrc');return s?s.value:'quantum'}
+async function qBytes(n){
+  const srcs=[
+    {label:'stat.proxy',fetch:async()=>{const r=await fetch('/api/anu?length='+n+'&type=uint8');if(!r.ok)throw new Error('http');const j=await r.json();if(!j.success||!j.data||j.data.length<n)throw new Error('bad');return j.data;}},
+    {label:'stat.anu',fetch:async()=>{const r=await fetch(ANU_URL+'?length='+n+'&type=uint8');if(!r.ok)throw new Error('http');const j=await r.json();if(!j.success||!j.data||j.data.length<n)throw new Error('bad');return j.data;}},
+    {label:'stat.nist',fetch:async()=>{const r=await fetch(NIST_URL);if(!r.ok)throw new Error('http');const j=await r.json();const hex=j.pulse&&j.pulse.outputValue;const bytes=String(hex).match(/[0-9a-f]{2}/gi).map(x=>parseInt(x,16));if(!bytes||bytes.length<n)throw new Error('bad');return bytes.slice(0,n);}}
+  ];
+  for(const s of srcs){
+    try{const d=await s.fetch();return {bytes:d,label:s.label};}catch(e){}
+  }
+  const out=new Uint8Array(n);crypto.getRandomValues(out);
+  return {bytes:Array.from(out),label:''};
+}
+async function qQuantum(mn,mx){
+  const span=mx-mn+1;
+  const o=await qBytes(6);
+  if(!o.bytes.length)return {v:null,label:''};
+  let b=0;for(let k=0;k<6;k++)b=b*256+(o.bytes[k]&255);
+  return {v:mn+(b%span),label:o.label};
+}
+async function genQ(){
   const mn=parseInt(document.getElementById('qmin').value)||1;
   const mx=parseInt(document.getElementById('qmax').value)||1000000;
   if(mn>=mx)return;
   const el=document.getElementById('qn');
   let c=0;const iv=setInterval(()=>{el.textContent=qRNG(mn,mx).toLocaleString('tr-TR');if(++c>10)clearInterval(iv)},60);
-  setTimeout(()=>{const f=qRNG(mn,mx);el.textContent=f.toLocaleString('tr-TR');addQH(f)},700);
+  await new Promise(r=>setTimeout(r,720));
+  let f=null;
+  if(qSource()==='quantum'){
+    const o=await qQuantum(mn,mx);
+    if(o.v!==null){f=o.v;qStat(o.label||'stat.none',o.label?'var(--green)':'var(--gold)')}
+    else qStat('stat.none','var(--gold)');
+  }
+  if(f===null)f=qRNG(mn,mx);
+  el.textContent=f.toLocaleString('tr-TR');
+  addQH(f);
 }
-function genQS(){
+async function genQS(){
   const mn=parseInt(document.getElementById('qmin').value)||1;
   const mx=parseInt(document.getElementById('qmax').value)||1000000;
-  for(let i=0;i<10;i++)setTimeout(()=>{const n=qRNG(mn,mx);document.getElementById('qn').textContent=n.toLocaleString('tr-TR');addQH(n)},i*120);
+  if(mn>=mx)return;
+  const quant=qSource()==='quantum';
+  for(let i=0;i<10;i++){
+    let n;
+    if(quant){
+      const o=await qQuantum(mn,mx);
+      if(o.v!==null){n=o.v;qStat(o.label||'stat.none',o.label?'var(--green)':'var(--gold)')}
+      else{n=qRNG(mn,mx);qStat('stat.none','var(--gold)')}
+    }else n=qRNG(mn,mx);
+    document.getElementById('qn').textContent=n.toLocaleString('tr-TR');
+    addQH(n);
+  }
 }
 function addQH(n){qh.unshift(n);if(qh.length>12)qh.pop();document.getElementById('qh').innerHTML=qh.map(x=>`<div class="qhi">${x.toLocaleString('tr-TR')}</div>`).join('')}
 function clearQ(){qh=[];document.getElementById('qh').innerHTML='';document.getElementById('qn').textContent='—'}
+const CHI_CRIT=[null,3.841,5.991,7.815,9.488,11.070,12.592,14.067,15.507,16.919,18.307,19.675,21.026,22.362,23.685,24.996,26.296,27.587,28.869,30.144,31.410,32.671,33.924,35.172,36.415,37.652,38.885,40.113,41.337,42.557,43.773,44.985];
+function chiToggle(){const p=document.getElementById('qstats');p.hidden=!p.hidden;if(!p.hidden&&document.getElementById('qbars').innerHTML==='')chiRun()}
+async function chiRun(){
+  const el=document.getElementById('qstatstext');
+  el.textContent=t('chi.busy');
+  const o=await qBytes(1024);
+  const K=16;
+  const counts=new Array(K).fill(0);
+  o.bytes.slice(0,1024).forEach(b=>counts[(b&255)>>4]++);
+  const N=o.bytes.length,exp=N/K;
+  let chi=0;counts.forEach(c=>chi+=(c-exp)*(c-exp)/exp);
+  const crit=CHI_CRIT[K-1],pass=chi<crit;
+  let h='';
+  for(let i=0;i<K;i++){const r=counts[i]/exp;const hgt=Math.max(3,Math.min(120,Math.round(r*60)));h+=`<div class="qbar"><div class="qbar-f" style="height:${hgt}px"></div><div class="qbar-l">${i*16}–${i*16+15}</div><div class="qbar-v">${counts[i]}</div></div>`}
+  document.getElementById('qbars').innerHTML=h;
+  el.innerHTML=(o.label?`<span style="color:${o.label?'var(--green)':'var(--gold)'}">${t(o.label)}</span><br>`:'')+`N=${N}, kova(K)=${K}, beklenen=${exp}, χ²=${chi.toFixed(2)} (serbestlik=${K-1}, kritik≈${crit})<br><b style="color:${pass?'var(--green)':'var(--red)'}">${pass?t('chi.ok'):t('chi.fail')}</b>`;
+}
+function qInit(){fetch(ANU_URL+'?length=2&type=uint8').then(r=>{qStat(r.ok?'stat.init.ok':'stat.init.fail',r.ok?'var(--green)':'var(--gold)')}).catch(()=>qStat('stat.init.fail','var(--gold)'))}
+
+/* ══ T8: TELEPORTATION ══ */
+function teleReset(){
+  const log=document.getElementById('tele-log');
+  log.innerHTML=`<div class="tele-line" style="color:var(--muted)">${t('t8.ready')}</div>`;
+}
+async function teleRun(){
+  const log=document.getElementById('tele-log');
+  log.innerHTML='';
+  const L=[];
+  L.push(`<b>① Bell çifti</b> |β00⟩ = (|00⟩+|11⟩)/√2 — Alice'in q1'i ve Bob'un q2'si dolaşık`);
+  L.push(`<b>② Alice'in kübiti</b> |ψ⟩ = √0.7·|0⟩ + √0.3·|1⟩`);
+  L.push(`<b>③ Alice</b> CNOT(q0→q1) ve H(q0) uygular → q0 dolaşıklığa dahil`);
+  let bits=null;
+  try{const o=await qBytes(2);bits=[o.bytes[0]&1,o.bytes[1]&1];}catch(e){bits=[qRNG(0,1),qRNG(0,1)]}
+  const m0=bits[0],m1=bits[1];
+  L.push(`<b>④ Bell ölçümü</b> (gerçek rastgele): ${m0}${m1}`);
+  const corr=(m0&&m1)?'ZX':m1?'X':m0?'Z':'I';
+  L.push(`<b>⑤ Bob</b> düzeltme: ${corr==='I'?'gerekmedi (I)':corr}`);
+  const qc=new Quantro.QuantumCircuit(3);
+  qc.ry(2*Math.acos(Math.sqrt(0.7)),0);
+  qc.h(1);qc.cx(1,2);qc.cx(0,1);qc.h(0);
+  qc.cx(1,2);qc.cz(0,2);
+  const counts=Quantro.sampleDistribution(qc,400,Date.now()>>>0);
+  let one=0,tot=0;
+  for(const k in counts){tot+=counts[k];if((parseInt(k,10)&1)===1)one+=counts[k]}
+  const obs=(one/tot).toFixed(3);
+  L.push(`<b>⑥ Bob'un kübiti ölçüldü</b> (400 atış): P(|1⟩) = <b>${obs}</b> — beklenen 0.300`);
+  const ok=parseFloat(obs)>=0.25&&parseFloat(obs)<=0.35;
+  L.push(`<span class="${ok?'ok':''}">${ok?'✓ Işınlanma doğrulandı — |ψ⟩ Bob\'ta birebir oluştu!':'≈ Beklenen aralıkta değil — tekrar dene'}</span>`);
+  let i=0;
+  const iv=setInterval(()=>{
+    if(i>=L.length){clearInterval(iv);return}
+    const d=document.createElement('div');d.className='tele-line';d.innerHTML=L[i++];log.appendChild(d);log.scrollTop=log.scrollHeight;
+  },300);
+}
+
+/* ══ T9: BLOCH SPHERE ══ */
+let bloch=null;
+function thv(){return +document.getElementById('bloch-th').value}
+function phv(){return +document.getElementById('bloch-ph').value}
+function blochSet(th,ph){
+  th=+th;ph=+ph;
+  document.getElementById('bloch-th').value=th;
+  document.getElementById('bloch-ph').value=ph;
+  document.getElementById('bloch-theta').textContent=th+'°';
+  document.getElementById('bloch-phi').textContent=ph+'°';
+  if(bloch){bloch.th=th;bloch.ph=ph;bloch.draw()}
+  blochReadout();
+}
+function blochReadout(){
+  const th=bloch.th*Math.PI/180,ph=bloch.ph*Math.PI/180;
+  const a=Math.cos(th/2),b=Math.sin(th/2);
+  const x=Math.sin(th)*Math.cos(ph),y=Math.sin(th)*Math.sin(ph),z=Math.cos(th);
+  const el=document.getElementById('bloch-readout');
+  el.innerHTML=`|ψ⟩ = ${a.toFixed(3)}·|0⟩ + e<sup>iφ</sup>·${b.toFixed(3)}·|1⟩<br><b>|α|² = P(|0⟩) = ${(a*a).toFixed(4)}</b> &nbsp; <b>|β|² = P(|1⟩) = ${(b*b).toFixed(4)}</b><br>Bloch vektörü: (${x.toFixed(3)}, ${y.toFixed(3)}, ${z.toFixed(3)})`;
+}
+function blochStart(){
+  if(bloch){bloch.draw();return}
+  bloch=new BlochSphere();
+}
+class BlochSphere{
+  constructor(){
+    this.c=document.getElementById('bloch-canvas');
+    this.ctx=this.c.getContext('2d');
+    this.th=thv()||90;this.ph=phv()||0;
+    this.yaw=-0.7;this.pitch=0.42;
+    this.drag=false;this.px=0;this.py=0;
+    const c=this.c;
+    c.addEventListener('mousedown',e=>{this.drag=true;this.px=e.clientX;this.py=e.clientY});
+    c.addEventListener('mousemove',e=>this.onDrag(e.clientX,e.clientY));
+    c.addEventListener('mouseup',()=>this.drag=false);
+    c.addEventListener('mouseleave',()=>this.drag=false);
+    c.addEventListener('touchstart',e=>{e.preventDefault();this.drag=true;this.px=e.touches[0].clientX;this.py=e.touches[0].clientY},{passive:false});
+    c.addEventListener('touchmove',e=>{e.preventDefault();this.onDrag(e.touches[0].clientX,e.touches[0].clientY)},{passive:false});
+    c.addEventListener('touchend',()=>this.drag=false);
+    this.draw();
+  }
+  onDrag(x,y){
+    if(!this.drag)return;
+    this.yaw+=(x-this.px)*0.008;
+    this.pitch+=(y-this.py)*0.008;
+    this.pitch=Math.max(-1.4,Math.min(1.4,this.pitch));
+    this.px=x;this.py=y;
+    this.draw();
+  }
+  vec(th,ph){
+    const t=th*Math.PI/180,p=ph*Math.PI/180;
+    return [Math.sin(t)*Math.cos(p),Math.sin(t)*Math.sin(p),Math.cos(t)];
+  }
+  rot(p){
+    const [x,y,z]=p;
+    const c1=Math.cos(this.yaw),s1=Math.sin(this.yaw);
+    const x1=c1*x+s1*z,z1=-s1*x+c1*z;
+    const c2=Math.cos(this.pitch),s2=Math.sin(this.pitch);
+    const y2=c2*y-s2*z1,z2=s2*y+c2*z1;
+    return [x1,y2,z2];
+  }
+  s2(p){const [x,y]=this.rot(p);return [this.cx+this.R*x,this.cy-this.R*y]}
+  draw(){
+    const c=this.c,ctx=this.ctx;
+    const dpr=Math.min(window.devicePixelRatio||1,2);
+    const cw=c.clientWidth||520,ch=c.clientHeight||320;
+    c.width=cw*dpr;c.height=ch*dpr;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    ctx.clearRect(0,0,cw,ch);
+    const R=Math.min(cw,ch)*0.34,cx=cw/2,cy=ch/2;
+    this.R=R;this.cx=cx;this.cy=cy;
+    const arc=(pts,style,lw)=>{
+      ctx.strokeStyle=style;ctx.lineWidth=lw||1;
+      ctx.beginPath();
+      for(let i=0;i<pts.length;i++){
+        const [x,y]=this.s2(pts[i]);
+        if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+    };
+    ctx.beginPath();ctx.arc(cx,cy,R,0,Math.PI*2);
+    ctx.fillStyle='rgba(2,8,16,.65)';ctx.fill();
+    for(let m=0;m<6;m++){
+      const pts=[];for(let i=0;i<=36;i++)pts.push(this.vec(i*5,m*30));
+      arc(pts,'rgba(0,200,240,.16)');
+    }
+    for(let m=1;m<6;m++){
+      const pts=[];for(let i=0;i<=36;i++)pts.push(this.vec(m*30,i*10));
+      arc(pts,'rgba(0,200,240,.13)');
+    }
+    arc([...Array(37)].map((_,i)=>this.vec(90,i*10)),'rgba(0,200,240,.35)',1.3);
+    this.axis([1,0,0],'X',[0,200,240]);
+    this.axis([0,1,0],'Y',[160,96,255]);
+    this.axis([0,0,1],'|0⟩',[0,240,160]);
+    this.axis([0,0,-1],'|1⟩',[255,68,102]);
+    const [ex,ey,ez]=this.s2(this.vec(this.th,this.ph));
+    const [px,py]=this.s2(this.vec(90,this.ph));
+    ctx.strokeStyle='rgba(0,200,240,.28)';ctx.setLineDash([4,4]);
+    ctx.beginPath();ctx.moveTo(ex,ey);ctx.lineTo(px,py);ctx.stroke();ctx.setLineDash([]);
+    ctx.strokeStyle='#00c8f0';ctx.lineWidth=2;
+    ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(ex,ey);ctx.stroke();
+    const ang=Math.atan2(ey-cy,ex-cx),ah=9;
+    ctx.fillStyle='#00c8f0';
+    ctx.beginPath();
+    ctx.moveTo(ex+ah*Math.cos(ang),ey+ah*Math.sin(ang));
+    ctx.lineTo(ex+ah*.6*Math.cos(ang+2.5),ey+ah*.6*Math.sin(ang+2.5));
+    ctx.lineTo(ex+ah*.6*Math.cos(ang-2.5),ey+ah*.6*Math.sin(ang-2.5));
+    ctx.closePath();ctx.fill();
+    ctx.strokeStyle='rgba(0,200,240,.5)';ctx.lineWidth=4;
+    ctx.beginPath();ctx.arc(ex,ey,6,0,Math.PI*2);ctx.stroke();
+    ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(ex,ey,3,0,Math.PI*2);ctx.fill();
+  }
+  axis(v,label,rgb){
+    const ctx=this.ctx;
+    const [ax,ay]=this.s2(v);
+    ctx.strokeStyle='rgba(232,237,245,.4)';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(this.cx,this.cy);ctx.lineTo(ax,ay);ctx.stroke();
+    ctx.fillStyle='rgba('+rgb[0]+','+rgb[1]+','+rgb[2]+',.9)';
+    ctx.font='600 12px Consolas,monospace';
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    const off=12;
+    ctx.fillText(label,ax+Math.sign(ax-this.cx)*off,ay+Math.sign(ay-this.cy)*off);
+  }
+}
+
+/* ══ PWA ══ */
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(function(){})}
+
+applyLang();setTimeout(qInit,800);
 
 /* ══ T2: CIRCUIT ══ */
 let circ=[[],[]];
@@ -717,16 +1094,22 @@ function rend(){
 function rmG(g,q){const i=circ[q].findIndex(x=>x.g===g);if(i>-1)circ[q].splice(i,1);rend()}
 function rc(){circ=[[],[]];rend()}
 function mc(){
-  let q0=[1,0],q1=[1,0];
-  circ[0].forEach(g=>{if(g.g==='H')q0=[.707,.707];if(g.g==='X')q0=[q0[1],q0[0]];if(g.g==='Z')q0=[q0[0],-q0[1]]});
-  circ[1].forEach(g=>{if(g.g==='H')q1=[.707,.707];if(g.g==='X')q1=[q1[1],q1[0]];if(g.g==='Z')q1=[q1[0],-q1[1]]});
-  const hasCNOT=circ[0].some(g=>g.g==='CNOT');
-  const probs=hasCNOT?[.5,0,0,.5]:[q0[0]*q0[0]*q1[0]*q1[0],q0[0]*q0[0]*q1[1]*q1[1],q0[1]*q0[1]*q1[0]*q1[0],q0[1]*q0[1]*q1[1]*q1[1]];
-  const counts=[0,0,0,0];
-  for(let i=0;i<1024;i++){let r=Math.random(),cum=0;for(let j=0;j<4;j++){cum+=probs[j];if(r<cum){counts[j]++;break}}}
-  const mx=Math.max(...counts);
-  document.getElementById('crb').innerHTML=['|00⟩','|01⟩','|10⟩','|11⟩'].map((l,i)=>`<div class="crb-w"><div class="crb-val">${counts[i]}</div><div class="crb ${counts[i]===mx&&counts[i]>0?'active':''}" style="height:${mx>0?Math.round(counts[i]/mx*60):3}px"></div><div class="crb-lbl">${l}</div></div>`).join('');
+  const qc = new Quantro.QuantumCircuit(2);
+  circ[0].forEach(g=>{if(g.g==='H')qc.h(0);else if(g.g==='X')qc.x(0);else if(g.g==='Z')qc.z(0);else if(g.g==='CNOT')qc.cx(0,1)});
+  circ[1].forEach(g=>{if(g.g==='H')qc.h(1);else if(g.g==='X')qc.x(1);else if(g.g==='Z')qc.z(1)});
+  const counts=Quantro.sampleDistribution(qc,1024,Date.now()>>>0);
+  const slots=[0,0,0,0];
+  for(const k in counts)slots[k]=counts[k];
+  const mx=Math.max(...slots);
+  document.getElementById('crb').innerHTML=['|00⟩','|01⟩','|10⟩','|11⟩'].map((l,i)=>`<div class="crb-w"><div class="crb-val">${slots[i]}</div><div class="crb ${slots[i]===mx&&slots[i]>0?'active':''}" style="height:${mx>0?Math.round(slots[i]/mx*60):3}px"></div><div class="crb-lbl">${l}</div></div>`).join('');
   document.getElementById('cr').style.display='block';
+}
+function bellDemo(){
+  circ=[[],[]];
+  circ[0].push({g:'H'});
+  circ[0].push({g:'CNOT'});
+  rend();
+  mc();
 }
 
 /* ══ T3: UNIVERSE ══ */
