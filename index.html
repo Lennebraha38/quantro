@@ -171,8 +171,9 @@ nav.scrolled{
    HERO  — full-viewport Three.js stage
    ══════════════════════════════════════ */
 #hero{
-  position:relative;width:100%;height:100vh;
-  min-height:640px;overflow:hidden;
+  position:relative;width:100%;
+  min-height:max(100vh,640px);height:auto;
+  overflow:hidden;
 }
 #three-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 
@@ -219,7 +220,7 @@ nav.scrolled{
 }
 .hero-h1{
   font-family:var(--fd);
-  font-size:clamp(54px,9vw,128px);
+  font-size:clamp(44px,6.4vw,128px);
   font-weight:800;line-height:.9;letter-spacing:-3px;
   text-transform:uppercase;color:var(--text);margin-bottom:36px;
 }
@@ -614,6 +615,19 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:4
 .d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
 
 /* ══════════════════════════════════════
+   I18N — UZUN ÇEVİRİLERDE TAŞMA KORUMASI
+   ══════════════════════════════════════ */
+.lc-box{padding:52px}
+.lc-cta{white-space:nowrap;text-align:center;line-height:1.4}
+[data-i18n]{overflow-wrap:break-word}
+.hero-h1 span,.hero-eyebrow span,.sec-h2,.contact-h2,.contact-sub,.contact-email,
+.sec-label span,.d-title,.d-sub,.d-lbl,.mb-lbl,.vs-lbl,.cg-lbl,.cg-val,
+.pi-title,.pi-sub,.step-title,.panel-hd,.m-title,.b-num,.b-lbl,.b-title,
+.founder-name,.founder-role,.hg-badge span,.higgs-note,.fs,.fc{overflow-wrap:break-word}
+.d-grid>*,.cg-grid>*,.vs-grid>*,.domains-hd>*,.mb-item,.about-grid>*,.founder-inner>*,.higgs-inner>*{min-width:0}
+.m-step{grid-template-columns:52px minmax(0,1fr)}
+
+/* ══════════════════════════════════════
    RESPONSIVE
    ══════════════════════════════════════ */
 @media(max-width:900px){
@@ -622,7 +636,7 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:4
   .nav-inner{padding:0 24px}
   .hc-wrap,.contact-inner,.footer-inner{padding:0 24px}
   .container{padding:0 24px}
-  .hero-h1{font-size:clamp(44px,12vw,78px)}
+  .hero-h1{font-size:clamp(30px,8vw,78px)}
   .hero-row{flex-direction:column;align-items:flex-start}
   .mb-inner{grid-template-columns:1fr 1fr;padding:0 24px}
   .mb-item:nth-child(3){border-left:none;padding-left:0}
@@ -640,6 +654,8 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:4
   .btn-p,.btn-g{width:100%;text-align:center}
   .mb-inner{grid-template-columns:1fr 1fr}
   .vs-grid{grid-template-columns:1fr 1fr}
+  .lc-box{padding:32px 24px}
+  .lc-cta{white-space:normal;padding:16px 30px}
 }
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.1ms!important}
@@ -1081,14 +1097,14 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:4
 <!-- ══ LAB CTA ══ -->
 <section style="background:var(--void);padding:80px 0">
   <div class="container">
-    <div style="background:var(--deep);border:1px solid rgba(0,200,240,.12);padding:52px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:32px;position:relative;overflow:hidden">
+    <div class="lc-box" style="background:var(--deep);border:1px solid rgba(0,200,240,.12);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:32px;position:relative;overflow:hidden">
       <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),transparent)"></div>
       <div>
         <div style="font-family:var(--font-mono);font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--cyan);margin-bottom:12px" data-i18n="lc.badge">Türkiye'de İlk · 12 Araç</div>
         <div style="font-family:var(--font-display);font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-1px;text-transform:uppercase;color:var(--text);line-height:1"><span data-i18n="lc.h2a">Quantro Lab'ı</span><br><span data-i18n="lc.h2b">Deneyin</span></div>
         <div style="font-size:14px;font-weight:300;color:rgba(232,237,245,.4);margin-top:12px;line-height:1.7;max-width:420px" data-i18n="lc.desc">Kuantum Rastgelelik Motoru, Devre Simülatörü, Evren Yaşı Hesaplayıcı ve daha fazlası.</div>
       </div>
-      <a href="quantro-lab.html" style="font-family:var(--font-mono);font-size:11px;letter-spacing:3px;text-transform:uppercase;background:var(--cyan);color:var(--void);padding:18px 44px;text-decoration:none;font-weight:700;white-space:nowrap;transition:opacity .2s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'" data-i18n="lc.btn">⚗ Lab'a Git →</a>
+      <a href="quantro-lab.html" class="lc-cta" style="font-family:var(--font-mono);font-size:11px;letter-spacing:3px;text-transform:uppercase;background:var(--cyan);color:var(--void);padding:18px 44px;text-decoration:none;font-weight:700;max-width:100%;transition:opacity .2s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'" data-i18n="lc.btn">⚗ Lab'a Git →</a>
     </div>
   </div>
 </section>

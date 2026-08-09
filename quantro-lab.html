@@ -107,7 +107,9 @@ nav.sc{background:rgba(2,8,16,.92);backdrop-filter:blur(20px);padding:13px 0;bor
 .hero-h1 .o{color:transparent;-webkit-text-stroke:1.5px var(--cyan);display:block}
 .hero-row{display:flex;align-items:flex-end;justify-content:space-between;gap:32px;flex-wrap:wrap}
 .hero-desc{font-size:14px;font-weight:300;color:rgba(232,237,245,.45);line-height:1.85;max-width:400px}
-.hero-badge{font-family:var(--fm);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--green);border:1px solid rgba(0,240,160,.2);padding:8px 18px;white-space:nowrap}
+.hero-badge{font-family:var(--fm);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--green);border:1px solid rgba(0,240,160,.2);padding:8px 18px;white-space:nowrap;max-width:100%}
+[data-i18n]{overflow-wrap:break-word}
+.tool-title,.hero-h1 span,.hero-sub,.step-lbl,.lbl,.opt-lbl,.stat-lbl,.stat-num,.md-lbl,.md-val,.tool-note{overflow-wrap:break-word}
 .scroll-ind{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);z-index:3;display:flex;flex-direction:column;align-items:center;gap:7px}
 .scroll-ind span{font-family:var(--fm);font-size:9px;letter-spacing:3px;color:rgba(232,237,245,.25);text-transform:uppercase}
 .scroll-ln{width:1px;height:36px;background:linear-gradient(to bottom,rgba(0,200,240,.5),transparent);animation:sp 2s ease-in-out infinite}
@@ -334,6 +336,7 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
   .hc{padding:0 20px}
   .tool-header{padding:18px 20px}
   .tool-body{padding:20px}
+  .hero-badge{white-space:normal;text-align:center;line-height:1.4}
   .hero-h1{font-size:clamp(36px,10vw,64px)}
   .hero-row{flex-direction:column;align-items:flex-start}
   .circ-wrap{grid-template-columns:1fr}
