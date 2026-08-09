@@ -22,6 +22,10 @@ function initBH(){
   window.bhInit=true;
   const canvas=document.getElementById('bh-canvas');
   if(!canvas||!window.THREE)return;
+  const S=window.bh||{};
+  if(S.raf){cancelAnimationFrame(S.raf);try{S.r.dispose()}catch(e){}}
+  if(S.cleanup)try{S.cleanup()}catch(e){}
+  window.bhLost=false;
   bhRenderer=new THREE.WebGLRenderer({canvas,antialias:true,powerPreference:'low-power'});
   bhRenderer.setPixelRatio(Math.min(window.devicePixelRatio,1.5));
   bhRenderer.setSize(canvas.clientWidth,320);
@@ -66,15 +70,41 @@ function initBH(){
   bhMeshes.push(ring);
 
   let drag=false,ox=0,oy=0,rY=0;
-  canvas.addEventListener('mousedown',e=>{drag=true;ox=e.clientX});
-  canvas.addEventListener('touchstart',e=>{drag=true;ox=e.touches[0].clientX},{passive:true});
-  window.addEventListener('mouseup',()=>drag=false);
-  window.addEventListener('touchend',()=>drag=false);
-  window.addEventListener('mousemove',e=>{if(drag)rY+=(e.clientX-ox)*.01,ox=e.clientX});
-  window.addEventListener('touchmove',e=>{if(drag)rY+=(e.touches[0].clientX-ox)*.01,ox=e.touches[0].clientX},{passive:true});
+  const h={
+    md:e=>{drag=true;ox=e.clientX},
+    ts:e=>{drag=true;ox=e.touches[0].clientX},
+    mu:()=>{drag=false},
+    tu:()=>{drag=false},
+    mm:e=>{if(drag)rY+=(e.clientX-ox)*.01,ox=e.clientX},
+    tm:e=>{if(drag)rY+=(e.touches[0].clientX-ox)*.01,ox=e.touches[0].clientX},
+  };
+  h.lost=()=>{window.bhLost=true};
+  h.restore=()=>{window.bhLost=false;setTimeout(()=>{try{initBH()}catch(e){}},20)};
+  h.vis=()=>{if(!document.hidden)setTimeout(()=>{if(window.bhLost)try{initBH()}catch(e){}else if(window.bh){try{window.bh.r.render(window.bh.scene,window.bh.cam)}catch(e){}}},30)};
+  h.cleanup=()=>{
+    canvas.removeEventListener('mousedown',h.md);
+    canvas.removeEventListener('touchstart',h.ts);
+    window.removeEventListener('mouseup',h.mu);
+    window.removeEventListener('touchend',h.tu);
+    window.removeEventListener('mousemove',h.mm);
+    window.removeEventListener('touchmove',h.tm);
+    canvas.removeEventListener('webglcontextlost',h.lost);
+    canvas.removeEventListener('webglcontextrestored',h.restore);
+    document.removeEventListener('visibilitychange',h.vis);
+  };
+  canvas.addEventListener('mousedown',h.md);
+  canvas.addEventListener('touchstart',h.ts,{passive:true});
+  window.addEventListener('mouseup',h.mu);
+  window.addEventListener('touchend',h.tu);
+  window.addEventListener('mousemove',h.mm);
+  window.addEventListener('touchmove',h.tm,{passive:true});
+  canvas.addEventListener('webglcontextlost',h.lost,false);
+  canvas.addEventListener('webglcontextrestored',h.restore,false);
+  document.addEventListener('visibilitychange',h.vis,{passive:true});
 
   function anim(){
-    requestAnimationFrame(anim);
+    state.raf=requestAnimationFrame(anim);
+    if(window.bhLost)return;
     if(mq.matches)return;
     bhMeshes[0].rotation.y+=.01;bhMeshes[1].rotation.y+=.008;bhMeshes[2].rotation.y+=.006;
     bhMeshes[3].rotation.y+=.004;
@@ -82,7 +112,10 @@ function initBH(){
     rY*=.95;
     bhRenderer.render(bhScene,bhCamera);
   }
-  anim();
+  const state={r:bhRenderer,scene:bhScene,cam:bhCamera};
+  state.raf=requestAnimationFrame(anim);
+  state.cleanup=h.cleanup;
+  window.bh=state;
   uBH();
 }
 function animateBH(){}

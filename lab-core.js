@@ -55,8 +55,12 @@ async function tog(n){
 
 /* ══ HERO THREE.JS ══ */
 if(window.THREE&&document.getElementById('hero-canvas')){
-(function(){
+let _lh=null,_lhLost=false;
+function initLabHero(){
   const canvas=document.getElementById('hero-canvas');
+  if(!canvas)return;
+  if(_lh){ cancelAnimationFrame(_lh.raf); try{_lh.renderer.dispose()}catch(e){} _lh=null; }
+  _lhLost=false;
   const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false,powerPreference:'low-power'});
   renderer.setPixelRatio(Math.min(window.devicePixelRatio,1.5));
   renderer.setSize(window.innerWidth,window.innerHeight);
@@ -116,7 +120,8 @@ if(window.THREE&&document.getElementById('hero-canvas')){
   }
 
   function animate(ms){
-    requestAnimationFrame(animate);
+    _lh.raf=requestAnimationFrame(animate);
+    if(_lhLost)return;
     if(mq.matches)return;
     const t=ms*.001;
     for(let i=0;i<vN;i++){
@@ -139,13 +144,30 @@ if(window.THREE&&document.getElementById('hero-canvas')){
     camera.lookAt(0,0,0);
     renderer.render(scene,camera);
   }
-  requestAnimationFrame(animate);
+  _lh={renderer,scene,camera,raf:requestAnimationFrame(animate)};
+}
+function labHeroKick(){
+  if(!window.THREE)return;
+  if(_lhLost){try{initLabHero()}catch(e){}}
+  else if(_lh){try{_lh.renderer.render(_lh.scene,_lh.camera)}catch(e){}}
+}
+(function bindLabHeroGuard(){
+  const canvas=document.getElementById('hero-canvas');
+  if(!canvas||canvas.dataset.guard)return;
+  canvas.dataset.guard='1';
+  canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();_lhLost=true},false);
+  canvas.addEventListener('webglcontextrestored',()=>{setTimeout(()=>{try{initLabHero()}catch(e){}},20)},false);
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)setTimeout(labHeroKick,30)},{passive:true});
+  window.addEventListener('pageshow',()=>setTimeout(labHeroKick,30));
+  window.addEventListener('focus',()=>setTimeout(labHeroKick,30));
   window.addEventListener('resize',()=>{
-    camera.aspect=window.innerWidth/window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth,window.innerHeight);
+    if(!_lh)return;
+    _lh.camera.aspect=window.innerWidth/window.innerHeight;
+    _lh.camera.updateProjectionMatrix();
+    _lh.renderer.setSize(window.innerWidth,window.innerHeight);
   },{passive:true});
 })();
+initLabHero();
 }
 
 /* ══ I18N (TR — fallback çekirdek) ══ */
