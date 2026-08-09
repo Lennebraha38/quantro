@@ -4,6 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Quantro Blog — Kuantum Mekaniği ve Astrofizik Araştırma Yazıları">
+<meta property="og:title" content="Quantro Blog — Kuantum ve Astrofizik">
+<meta property="og:description" content="Kuantum mekaniği ve astrofizik üzerine araştırma yazıları. Gerçek kuantum rastgeleliğiyle ölçün, evrenin dokusunu keşfedin.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://quantro-1.vercel.app/blog.html">
+<meta property="og:image" content="https://quantro-1.vercel.app/img/og-quantro.png">
+<meta name="robots" content="index, follow">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Quantro Blog — Kuantum ve Astrofizik">
+<meta name="twitter:description" content="Kuantum mekaniği ve astrofizik üzerine araştırma yazıları.">
+<meta name="twitter:image" content="https://quantro-1.vercel.app/img/og-quantro.png">
+<link rel="canonical" href="https://quantro-1.vercel.app/blog.html">
 <title>Quantro Blog</title>
 <!-- Google Analytics (GA4) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-HR4Z4E0JLK"></script>
@@ -72,6 +83,10 @@ nav.sc{background:rgba(2,8,16,.92);backdrop-filter:blur(20px);padding:13px 0;bor
 
 .blog-list{max-width:1200px;margin:0 auto;padding:0 40px 100px}
 .blog-filter{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:40px}
+.blog-search{margin-bottom:16px}
+.search-input{width:100%;max-width:480px;background:var(--deep);border:1px solid rgba(0,200,240,.15);color:var(--text);font-family:var(--font-mono);font-size:13px;letter-spacing:1px;padding:14px 18px;outline:none;transition:border-color .2s}
+.search-input:focus{border-color:var(--cyan)}
+.search-input::placeholder{color:var(--muted)}
 .ftag{font-family:var(--fm);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);border:1px solid rgba(0,200,240,.12);padding:6px 14px;cursor:pointer;transition:all .2s;background:none}
 .ftag:hover,.ftag.active{color:var(--cyan);border-color:var(--cyan);background:rgba(0,200,240,.06)}
 
@@ -188,6 +203,9 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
     <p class="blog-sub">Kuantum mekaniği, astrofizik ve ileri araştırma yazıları.</p>
   </div>
   <div class="blog-list">
+    <div class="blog-search">
+      <input type="text" id="search-input" class="search-input" placeholder="Yazılarda ara... (başlık, özet, etiket)" oninput="filterPosts(currentTag,activeBtn)">
+    </div>
     <div class="blog-filter" id="filter-bar"></div>
     <div class="posts-grid" id="posts-grid">
       <div class="loading">Yazılar yükleniyor</div>
@@ -274,16 +292,26 @@ function renderFilters(posts){
     tags.map(t=>`<button class="ftag" onclick="filterPosts('${t}',this)">${t}</button>`).join('');
 }
 
+let currentTag='';
+let activeBtn=null;
 function filterPosts(tag,btn){
-  document.querySelectorAll('.ftag').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  renderPosts(tag?allPosts.filter(p=>(p.tags||[]).includes(tag)):allPosts);
+  currentTag=tag;
+  if(btn){activeBtn=btn;document.querySelectorAll('.ftag').forEach(b=>b.classList.remove('active'));btn.classList.add('active')}
+  const q=(document.getElementById('search-input').value||'').toLowerCase().trim();
+  let list=allPosts;
+  if(tag)list=list.filter(p=>(p.tags||[]).includes(tag));
+  if(q)list=list.filter(p=>{
+    const hay=(p.title+' '+(p.summary||'')+' '+(p.tags||[]).join(' ')).toLowerCase();
+    return hay.includes(q);
+  });
+  renderPosts(list);
 }
 
 /* OPEN POST */
 function openPost(slug){
   const p=allPosts.find(x=>x.slug===slug);
   if(!p)return;
+  try{if(window.gtag)gtag('event','blog_open',{post:slug,title:p.title})}catch(e){}
   document.getElementById('pv-emoji').textContent=p.cover_emoji||'⚛';
   document.getElementById('pv-tags').innerHTML=(p.tags||[]).map(t=>`<span class="ptag">${t}</span>`).join('');
   document.getElementById('pv-title').textContent=p.title;

@@ -8,7 +8,12 @@
 <meta property="og:description" content="Türkiye'nin ilk interaktif kuantum araç seti. Kuantumu tarayıcında dene.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://quantro-1.vercel.app/quantro-lab.html">
-<meta property="og:image" content="https://quantro-1.vercel.app/img/icon.svg">
+<meta property="og:image" content="https://quantro-1.vercel.app/img/og-quantro.png">
+<meta name="robots" content="index, follow">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Quantro Lab — Kuantum Araçları">
+<meta name="twitter:description" content="Türkiye'nin ilk interaktif kuantum araç seti. Kuantumu tarayıcında dene.">
+<meta name="twitter:image" content="https://quantro-1.vercel.app/img/og-quantro.png">
 <link rel="canonical" href="https://quantro-1.vercel.app/quantro-lab.html">
 <script type="application/ld+json">
 {
@@ -184,6 +189,25 @@ nav.sc{background:rgba(2,8,16,.92);backdrop-filter:blur(20px);padding:13px 0;bor
 .bloch-readout{background:var(--void);border:1px solid rgba(0,200,240,.1);padding:16px;font-family:var(--fm);font-size:12px;line-height:2;color:var(--muted)}
 .bloch-readout b{color:var(--cyan)}
 
+/* ── T10: SCHRODINGER CAT ── */
+.cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.cat-canvas-wrap{background:var(--void);border:1px solid rgba(0,200,240,.1);padding:8px}
+.cat-canvas{width:100%;height:380px;display:block}
+.cat-readout{background:var(--void);border:1px solid rgba(0,200,240,.1);padding:16px;font-family:var(--fm);font-size:12px;line-height:2;color:var(--muted);margin-top:16px}
+.cat-readout b{color:var(--cyan)}
+.cat-log{background:var(--void);border:1px solid rgba(0,200,240,.08);padding:12px;margin-top:12px;font-family:var(--fm);font-size:10px;color:var(--muted);line-height:1.8}
+.cat-log span{color:var(--cyan)}
+.cat-btns{display:flex;gap:10px;flex-wrap:wrap}
+
+/* ── T11: TUNNELING ── */
+.tun-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.tun-canvas-wrap{background:var(--void);border:1px solid rgba(0,200,240,.1);padding:8px}
+.tun-canvas{width:100%;height:320px;display:block}
+.tun-res{background:var(--void);border:1px solid rgba(0,200,240,.1);padding:20px;text-align:center;margin-top:14px}
+.tun-t{font-family:var(--fd);font-size:34px;font-weight:800;color:var(--cyan)}
+.tun-lbl{font-family:var(--fm);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-top:4px}
+.tun-presets{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+
 /* ── T2: CIRCUIT ── */
 .circ-wrap{display:grid;grid-template-columns:180px 1fr;gap:16px}
 .gate-panel h4{font-family:var(--fm);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
@@ -298,7 +322,7 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
   .hero-h1{font-size:clamp(36px,10vw,64px)}
   .hero-row{flex-direction:column;align-items:flex-start}
   .circ-wrap{grid-template-columns:1fr}
-  .univ-grid,.heis-wrap,.dop-wrap,.bloch-grid{grid-template-columns:1fr}
+  .univ-grid,.heis-wrap,.dop-wrap,.bloch-grid,.cat-grid,.tun-grid{grid-template-columns:1fr}
   .qkd-grid{grid-template-columns:1fr}
   .bh-info{grid-template-columns:1fr 1fr}
   .heis-vals{grid-template-columns:1fr 1fr}
@@ -331,7 +355,7 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
   <div class="hud hud-bl"></div><div class="hud hud-br"></div>
   <div class="hero-content">
     <div class="hc">
-      <div class="hero-ey"><span data-i18n="hero.ey">Quantro Lab · Etkileşimli Araçlar · 9 Modül</span></div>
+      <div class="hero-ey"><span data-i18n="hero.ey">Quantro Lab · Etkileşimli Araçlar · 11 Modül</span></div>
       <h1 class="hero-h1">KUANTUM<br><span class="o">LAB</span></h1>
       <div class="hero-row">
         <p class="hero-desc" data-i18n="hero.desc">Kuantum mekaniğini ve astrofiziki bizzat deneyimleyin. Türkiye'nin ilk interaktif kuantum araç seti.</p>
@@ -346,7 +370,7 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
 <div class="tools">
 <div class="tw">
   <div class="tools-intro">
-    <h2 data-i18n="intro.h2">9 Özgün<br>Araç</h2>
+    <h2 data-i18n="intro.h2">11 Özgün<br>Araç</h2>
     <span class="tools-count" data-i18n="intro.count">Türkiye'de İlk · Quantro ARGE · 2025</span>
   </div>
 
@@ -699,6 +723,78 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
     </div>
   </div>
 
+  <!-- T10: SCHRODINGER CAT -->
+  <div class="tool-card">
+    <div class="tool-header" onclick="tog(10)">
+      <span class="tn">10</span>
+      <span class="tt" data-i18n="t10.title">Schrödinger'in Kedisi</span>
+      <span class="tb-badge new">New · v1.2</span>
+      <span class="tg" id="tg10">+</span>
+    </div>
+    <div class="tool-body" id="tb10">
+      <div class="cat-grid">
+        <div>
+          <div class="cat-canvas-wrap"><canvas id="cat-canvas" class="cat-canvas"></canvas></div>
+          <div class="cat-log" id="cat-log"><span data-i18n="t10.log.ready">Hazır — kutuyu kapatın ve açın.</span></div>
+        </div>
+        <div>
+          <div class="param-item">
+            <div class="param-lbl"><span data-i18n="t10.p">Bozunma Olasılığı p</span><strong id="cat-pv">50%</strong></div>
+            <input class="slider" type="range" id="cat-ps" min="0" max="95" value="50" step="1" oninput="catSetP()">
+          </div>
+          <div class="cat-btns">
+            <button class="btn btn-p" onclick="catOpen()" id="cat-go" data-i18n="t10.open">🐱 Kutuyu Aç</button>
+            <button class="btn btn-g" onclick="catReset()" data-i18n="t10.reset">Sıfırla</button>
+          </div>
+          <div class="cat-readout" id="cat-ro">|ψ⟩ = <b>√(1−p)·|canlı⟩</b> + <b>√p·|ölü⟩</b></div>
+          <div class="cat-log" id="cat-log2" style="margin-top:16px"></div>
+          <div class="explain" style="margin-top:16px"><p data-i18n="t10.explain">Schrödinger'in kedisi, süperpozisyonun saçmalığını göstermek için tasarlanmış bir düşünce deneyidir. Kutu kapalıyken kedi <strong>hem canlı hem ölüdür</strong>: durum, bozunmamış/bozunmuş çekirdeğin karışımıdır. Kutu açıldığında dalga fonksiyonu <strong>çöker</strong> ve kedi tek bir sonuçla görünür. Ölçüm sonucu gerçek kuantum rastgeleliğiyle (ANU) seçilir.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- T11: TUNNELING -->
+  <div class="tool-card">
+    <div class="tool-header" onclick="tog(11)">
+      <span class="tn">11</span>
+      <span class="tt" data-i18n="t11.title">Kuantum Tünelleme</span>
+      <span class="tb-badge new">New · v1.2</span>
+      <span class="tg" id="tg11">+</span>
+    </div>
+    <div class="tool-body" id="tb11">
+      <div class="tun-grid">
+        <div>
+          <div class="tun-canvas-wrap"><canvas id="tun-canvas" class="tun-canvas"></canvas></div>
+          <div class="tun-res">
+            <div class="tun-t" id="tun-tv">—</div>
+            <div class="tun-lbl" data-i18n="t11.t">İletim Olasılığı (T)</div>
+          </div>
+          <div class="tun-presets">
+            <button class="btn btn-g" onclick="tunPreset('alpha')" data-i18n="t11.pres.alpha">α Parçacığı (Füzyon)</button>
+            <button class="btn btn-g" onclick="tunPreset('stm')">STM Elektronu</button>
+            <button class="btn btn-g" onclick="tunPreset('flash')" data-i18n="t11.pres.flash">Flash Bellek Yazma</button>
+          </div>
+        </div>
+        <div>
+          <div class="param-item">
+            <div class="param-lbl"><span data-i18n="t11.energy">Parçacık Enerjisi E</span><strong id="tun-ev">2.0 eV</strong></div>
+            <input class="slider" type="range" id="tun-es" min="0" max="400" value="200" step="1" oninput="tunCalc()">
+          </div>
+          <div class="param-item">
+            <div class="param-lbl"><span data-i18n="t11.barrier">Engel Yüksekliği V₀</span><strong id="tun-bv">4.0 eV</strong></div>
+            <input class="slider" type="range" id="tun-bs" min="1" max="600" value="400" step="1" oninput="tunCalc()">
+          </div>
+          <div class="param-item">
+            <div class="param-lbl"><span data-i18n="t11.width">Engel Kalınlığı a</span><strong id="tun-wv">0.50 nm</strong></div>
+            <input class="slider" type="range" id="tun-ws" min="1" max="100" value="50" step="1" oninput="tunCalc()">
+          </div>
+          <div class="cat-readout" id="tun-ro">κ = <b id="tun-kv">—</b><br>R = <b id="tun-rv">—</b></div>
+          <div class="explain" style="margin-top:16px"><p data-i18n="t11.explain">Kuantum mekaniğinde bir parçacık, enerjisinden büyük bir engelle karşılaştığında <strong>duvarı delebilir</strong> — buna tünelleme denir. Klasik fizik bunu yasaklar; kuantum dünyasında dalga fonksiyonunun kuyruğu engelin içine sızar: <strong>T ≈ exp(−2κa)</strong>. Güneş'in çekirdeğindeki füzyon, flash bellek yazma ve STM mikroskobu hep tünellemeye dayanır.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div><!-- /tw -->
 </div><!-- /tools -->
 
@@ -706,7 +802,7 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
   <div class="fi">
     <a href="index.html" class="fl">Q<em>U</em>ANTRO</a>
     <span class="fc">© 2025 Quantro ARGE · Kayseri, Türkiye</span>
-    <span class="fc" style="color:rgba(0,200,240,.3)">Türkiye'de İlk · 9 Kuantum Aracı</span>
+    <span class="fc" style="color:rgba(0,200,240,.3)">Türkiye'de İlk · 11 Kuantum Aracı</span>
     <span class="fc" style="color:rgba(0,200,240,.5)"><a href="https://github.com/quantro38/quantro/issues/new" target="_blank" rel="noopener" style="color:rgba(0,200,240,.7)">Hata bildir / Fikir öner →</a></span>
   </div>
 </footer>
@@ -726,11 +822,14 @@ function tog(n){
   tg.textContent=open?'×':'+';
   tg.classList.toggle('open',open);
   if(open){
+    try{if(window.gtag)gtag('event','lab_tool_open',{tool:n})}catch(e){}
     if(n===5&&!heis3dInit)initHeis3D();
     if(n===6&&!bhInit)initBH();
     if(n===7)uD();
     if(n===5)uH();
     if(n===9)blochStart();
+    if(n===10)catStart();
+    if(n===11)tunStart();
   }
 }
 
@@ -831,11 +930,11 @@ function tog(n){
 const I18N={
 tr:{
   "nav.home": "← Ana Sayfa",
-  "hero.ey": "Quantro Lab · Etkileşimli Araçlar · 9 Modül",
+  "hero.ey": "Quantro Lab · Etkileşimli Araçlar · 11 Modül",
   "hero.desc": "Kuantum mekaniğini ve astrofiziki bizzat deneyimleyin. Türkiye'nin ilk interaktif kuantum araç seti.",
   "hero.badge": "🇹🇷 Türkiye'de İlk — Quantro ARGE 2025",
   "hero.scroll": "Keşfet",
-  "intro.h2": "9 Özgün<br>Araç",
+  "intro.h2": "11 Özgün<br>Araç",
   "intro.count": "Türkiye'de İlk · Quantro ARGE · 2025",
   "badge.first": "Türkiye'de İlk",
   "badge.new": "Yeni",
@@ -966,6 +1065,20 @@ tr:{
   "t9.phi": "φ (azimut)",
   "t9.explain": "Bloch küresi bir kübitin durumunu birim küre üzerinde gösterir. <strong>Kuzey kutup |0⟩</strong>, <strong>güney kutup |1⟩</strong>, ekvator saf süperpozisyonlardır (|+⟩, |−⟩, |+i⟩, |−i⟩). θ/φ kaydırıcıları veya ön ayar butonlarıyla durumu değiştirin; küreyi sürükleyerek görünümü döndürebilirsiniz.",
   "t9.vector": "Bloch vektörü:",
+  "t10.title": "Schrödinger'in Kedisi",
+  "t10.p": "Bozunma Olasılığı p",
+  "t10.open": "🐱 Kutuyu Aç",
+  "t10.reset": "Sıfırla",
+  "t10.log.ready": "Hazır — kutuyu kapatın ve açın.",
+  "t10.explain": "Schrödinger'in kedisi, süperpozisyonun saçmalığını göstermek için tasarlanmış bir düşünce deneyidir. Kutu kapalıyken kedi <strong>hem canlı hem ölüdür</strong>: durum, bozunmamış/bozunmuş çekirdeğin karışımıdır. Kutu açıldığında dalga fonksiyonu <strong>çöker</strong> ve kedi tek bir sonuçla görünür. Ölçüm sonucu gerçek kuantum rastgeleliğiyle (ANU) seçilir.",
+  "t11.title": "Kuantum Tünelleme",
+  "t11.energy": "Parçacık Enerjisi E",
+  "t11.barrier": "Engel Yüksekliği V₀",
+  "t11.width": "Engel Kalınlığı a",
+  "t11.t": "İletim Olasılığı (T)",
+  "t11.pres.alpha": "α Parçacığı (Füzyon)",
+  "t11.pres.flash": "Flash Bellek Yazma",
+  "t11.explain": "Kuantum mekaniğinde bir parçacık, enerjisinden büyük bir engelle karşılaştığında <strong>duvarı delebilir</strong> — buna tünelleme denir. Klasik fizik bunu yasaklar; kuantum dünyasında dalga fonksiyonunun kuyruğu engelin içine sızar: <strong>T ≈ exp(−2κa)</strong>. Güneş'in çekirdeğindeki füzyon, flash bellek yazma ve STM mikroskobu hep tünellemeye dayanır.",
   "stat.proxy": "⚛ ANU (proxy) — gerçek kuantum",
   "stat.anu": "⚛ ANU — gerçek kuantum (vakum dalgalanması)",
   "stat.nist": "◇ NIST Beacon — kriptografik rastgele (kuantum değil)",
@@ -978,11 +1091,11 @@ tr:{
 },
 en:{
   "nav.home": "← Home",
-  "hero.ey": "Quantro Lab · Interactive Tools · 9 Modules",
+  "hero.ey": "Quantro Lab · Interactive Tools · 11 Modules",
   "hero.desc": "Experience quantum mechanics and astrophysics firsthand. Türkiye's first interactive quantum toolkit.",
   "hero.badge": "🇹🇷 First in Türkiye — Quantro R&D 2025",
   "hero.scroll": "Explore",
-  "intro.h2": "9 Original<br>Tools",
+  "intro.h2": "11 Original<br>Tools",
   "intro.count": "First in Türkiye · Quantro R&D · 2025",
   "badge.first": "First in Türkiye",
   "badge.new": "New",
@@ -1113,6 +1226,20 @@ en:{
   "t9.phi": "φ (azimuth)",
   "t9.explain": "The Bloch sphere represents a qubit's state on a unit sphere. The <strong>north pole is |0⟩</strong>, the <strong>south pole is |1⟩</strong>, and the equator holds pure superpositions (|+⟩, |−⟩, |+i⟩, |−i⟩). Change the state with the θ/φ sliders or preset buttons; drag the sphere to rotate the view.",
   "t9.vector": "Bloch vector:",
+  "t10.title": "Schrödinger's Cat",
+  "t10.p": "Decay Probability p",
+  "t10.open": "🐱 Open the Box",
+  "t10.reset": "Reset",
+  "t10.log.ready": "Ready — close the box and open it.",
+  "t10.explain": "Schrödinger's cat is a thought experiment designed to expose the absurdity of superposition. While the box is closed, the cat is <strong>both alive and dead</strong>: the state is a mixture of an undecayed and a decayed nucleus. When the box is opened the wavefunction <strong>collapses</strong> and the cat appears in a single outcome. The result is chosen with real quantum randomness (ANU).",
+  "t11.title": "Quantum Tunneling",
+  "t11.energy": "Particle Energy E",
+  "t11.barrier": "Barrier Height V₀",
+  "t11.width": "Barrier Width a",
+  "t11.t": "Transmission Probability (T)",
+  "t11.pres.alpha": "α Particle (Fusion)",
+  "t11.pres.flash": "Flash Memory Write",
+  "t11.explain": "In quantum mechanics a particle can <strong>pierce a barrier</strong> even when its energy is below the barrier height — this is tunneling. Classical physics forbids it; in the quantum world the tail of the wavefunction leaks into the barrier: <strong>T ≈ exp(−2κa)</strong>. Fusion in the Sun's core, flash memory writes and STM microscopes all rely on tunneling.",
   "stat.proxy": "⚛ ANU (proxy) — real quantum",
   "stat.anu": "⚛ ANU — real quantum (vacuum fluctuation)",
   "stat.nist": "◇ NIST Beacon — cryptographic random (not quantum)",
@@ -1125,11 +1252,11 @@ en:{
 },
 fr:{
   "nav.home": "← Accueil",
-  "hero.ey": "Quantro Lab · Outils Interactifs · 9 Modules",
+  "hero.ey": "Quantro Lab · Outils Interactifs · 11 Modules",
   "hero.desc": "Expérimentez la mécanique quantique et l'astrophysique de première main. La première boîte à outils quantique interactive de Turquie.",
   "hero.badge": "🇹🇷 Premier en Turquie — R&D Quantro 2025",
   "hero.scroll": "Découvrir",
-  "intro.h2": "9 Outils<br>Originaux",
+  "intro.h2": "11 Outils<br>Originaux",
   "intro.count": "Premier en Turquie · R&D Quantro · 2025",
   "badge.first": "Premier en Turquie",
   "badge.new": "Nouveau",
@@ -1260,6 +1387,20 @@ fr:{
   "t9.phi": "φ (azimut)",
   "t9.explain": "La sphère de Bloch représente l'état d'un qubit sur une sphère unité. Le <strong>pôle nord est |0⟩</strong>, le <strong>pôle sud est |1⟩</strong>, et l'équateur contient les superpositions pures (|+⟩, |−⟩, |+i⟩, |−i⟩). Modifiez l'état avec les curseurs θ/φ ou les boutons prédéfinis ; faites glisser la sphère pour tourner la vue.",
   "t9.vector": "Vecteur de Bloch :",
+  "t10.title": "Le Chat de Schrödinger",
+  "t10.p": "Probabilité de Désintégration p",
+  "t10.open": "🐱 Ouvrir la Boîte",
+  "t10.reset": "Réinitialiser",
+  "t10.log.ready": "Prêt — fermez la boîte puis ouvrez-la.",
+  "t10.explain": "Le chat de Schrödinger est une expérience de pensée conçue pour illustrer l'absurdité de la superposition. Boîte fermée, le chat est <strong>à la fois vivant et mort</strong> : l'état est un mélange de noyau non désintégré et désintégré. À l'ouverture, la fonction d'onde <strong>s'effondre</strong> et le chat apparaît dans un seul résultat. Le résultat est choisi avec une vraie aléatoire quantique (ANU).",
+  "t11.title": "Effet Tunnel Quantique",
+  "t11.energy": "Énergie de la Particule E",
+  "t11.barrier": "Hauteur de la Barrière V₀",
+  "t11.width": "Épaisseur de la Barrière a",
+  "t11.t": "Probabilité de Transmission (T)",
+  "t11.pres.alpha": "Particule α (Fusion)",
+  "t11.pres.flash": "Écriture Mémoire Flash",
+  "t11.explain": "En mécanique quantique, une particule peut <strong>traverser une barrière</strong> même si son énergie est inférieure à la hauteur de celle-ci : c'est l'effet tunnel. La physique classique l'interdit ; dans le monde quantique, la queue de la fonction d'onde pénètre dans la barrière : <strong>T ≈ exp(−2κa)</strong>. La fusion au cœur du Soleil, l'écriture de mémoires flash et les microscopes STM reposent tous sur l'effet tunnel.",
   "stat.proxy": "⚛ ANU (proxy) — quantique réel",
   "stat.anu": "⚛ ANU — quantique réel (fluctuation du vide)",
   "stat.nist": "◇ NIST Beacon — aléatoire cryptographique (pas quantique)",
@@ -1272,11 +1413,11 @@ fr:{
 },
 es:{
   "nav.home": "← Inicio",
-  "hero.ey": "Quantro Lab · Herramientas Interactivas · 9 Módulos",
+  "hero.ey": "Quantro Lab · Herramientas Interactivas · 11 Módulos",
   "hero.desc": "Experimenta la mecánica cuántica y la astrofísica de primera mano. La primera caja de herramientas cuánticas interactivas de Turquía.",
   "hero.badge": "🇹🇷 Primero en Turquía — I+D Quantro 2025",
   "hero.scroll": "Explorar",
-  "intro.h2": "9 Herramientas<br>Originales",
+  "intro.h2": "11 Herramientas<br>Originales",
   "intro.count": "Primero en Turquía · I+D Quantro · 2025",
   "badge.first": "Primero en Turquía",
   "badge.new": "Nuevo",
@@ -1407,6 +1548,20 @@ es:{
   "t9.phi": "φ (acimut)",
   "t9.explain": "La esfera de Bloch representa el estado de un qubit en una esfera unitaria. El <strong>polo norte es |0⟩</strong>, el <strong>polo sur es |1⟩</strong>, y el ecuador contiene superposiciones puras (|+⟩, |−⟩, |+i⟩, |−i⟩). Cambia el estado con los deslizadores θ/φ o los botones predefinidos; arrastra la esfera para rotar la vista.",
   "t9.vector": "Vector de Bloch:",
+  "t10.title": "El Gato de Schrödinger",
+  "t10.p": "Probabilidad de Desintegración p",
+  "t10.open": "🐱 Abrir la Caja",
+  "t10.reset": "Reiniciar",
+  "t10.log.ready": "Listo — cierra la caja y ábrela.",
+  "t10.explain": "El gato de Schrödinger es un experimento mental diseñado para mostrar lo absurdo de la superposición. Con la caja cerrada, el gato está <strong>a la vez vivo y muerto</strong>: el estado es una mezcla de núcleo no desintegrado y desintegrado. Al abrir la caja, la función de onda <strong>colapsa</strong> y el gato aparece en un único resultado. El resultado se elige con aleatoriedad cuántica real (ANU).",
+  "t11.title": "Tunelamiento Cuántico",
+  "t11.energy": "Energía de la Partícula E",
+  "t11.barrier": "Altura de la Barrera V₀",
+  "t11.width": "Grosor de la Barrera a",
+  "t11.t": "Probabilidad de Transmisión (T)",
+  "t11.pres.alpha": "Partícula α (Fusión)",
+  "t11.pres.flash": "Escritura de Memoria Flash",
+  "t11.explain": "En mecánica cuántica una partícula puede <strong>atravesar una barrera</strong> aunque su energía sea menor que la altura de la barrera: es el efecto túnel. La física clásica lo prohíbe; en el mundo cuántico la cola de la función de onda se filtra dentro de la barrera: <strong>T ≈ exp(−2κa)</strong>. La fusión en el núcleo solar, la escritura de memorias flash y los microscopios STM dependen del efecto túnel.",
   "stat.proxy": "⚛ ANU (proxy) — cuántico real",
   "stat.anu": "⚛ ANU — cuántico real (fluctuación del vacío)",
   "stat.nist": "◇ NIST Beacon — aleatorio criptográfico (no cuántico)",
@@ -1419,11 +1574,11 @@ es:{
 },
 it:{
   "nav.home": "← Home",
-  "hero.ey": "Quantro Lab · Strumenti Interattivi · 9 Moduli",
+  "hero.ey": "Quantro Lab · Strumenti Interattivi · 11 Moduli",
   "hero.desc": "Sperimenta la meccanica quantistica e l'astrofisica in prima persona. La prima cassetta degli attrezzi quantistica interattiva della Turchia.",
   "hero.badge": "🇹🇷 Primo in Turchia — R&S Quantro 2025",
   "hero.scroll": "Esplora",
-  "intro.h2": "9 Strumenti<br>Originali",
+  "intro.h2": "11 Strumenti<br>Originali",
   "intro.count": "Primo in Turchia · R&S Quantro · 2025",
   "badge.first": "Primo in Turchia",
   "badge.new": "Nuovo",
@@ -1554,6 +1709,20 @@ it:{
   "t9.phi": "φ (azimut)",
   "t9.explain": "La sfera di Bloch rappresenta lo stato di un qubit su una sfera unitaria. Il <strong>polo nord è |0⟩</strong>, il <strong>polo sud è |1⟩</strong>, e l'equatore contiene superposizioni pure (|+⟩, |−⟩, |+i⟩, |−i⟩). Cambia lo stato con i cursori θ/φ o i pulsanti preimpostati; trascina la sfera per ruotare la vista.",
   "t9.vector": "Vettore di Bloch:",
+  "t10.title": "Il Gatto di Schrödinger",
+  "t10.p": "Probabilità di Decadimento p",
+  "t10.open": "🐱 Apri la Scatola",
+  "t10.reset": "Ripristina",
+  "t10.log.ready": "Pronto — chiudi la scatola e aprilo.",
+  "t10.explain": "Il gatto di Schrödinger è un esperimento mentale pensato per mostrare l'assurdità della sovrapposizione. A scatola chiusa, il gatto è <strong>sia vivo che morto</strong>: lo stato è una miscela di nucleo non decaduto e decaduto. All'apertura la funzione d'onda <strong>collassa</strong> e il gatto appare in un singolo esito. L'esito è scelto con vera casualità quantistica (ANU).",
+  "t11.title": "Effetto Tunnel Quantistico",
+  "t11.energy": "Energia della Particella E",
+  "t11.barrier": "Altezza della Barriera V₀",
+  "t11.width": "Spessore della Barriera a",
+  "t11.t": "Probabilità di Trasmissione (T)",
+  "t11.pres.alpha": "Particella α (Fusione)",
+  "t11.pres.flash": "Scrittura Memoria Flash",
+  "t11.explain": "Nella meccanica quantistica una particella può <strong>attraversare una barriera</strong> anche se la sua energia è inferiore all'altezza della barriera: è l'effetto tunnel. La fisica classica lo vieta; nel mondo quantistico la coda della funzione d'onda penetra nella barriera: <strong>T ≈ exp(−2κa)</strong>. La fusione nel nucleo solare, la scrittura di memorie flash e i microscopi STM si basano sull'effetto tunnel.",
   "stat.proxy": "⚛ ANU (proxy) — quantistico reale",
   "stat.anu": "⚛ ANU — quantistico reale (fluttuazione del vuoto)",
   "stat.nist": "◇ NIST Beacon — casuale crittografico (non quantistico)",
@@ -1566,11 +1735,11 @@ it:{
 },
 ru:{
   "nav.home": "← Главная",
-  "hero.ey": "Quantro Lab · Интерактивные инструменты · 9 модулей",
+  "hero.ey": "Quantro Lab · Интерактивные инструменты · 11 модулей",
   "hero.desc": "Испытайте квантовую механику и астрофизику на собственном опыте. Первый интерактивный квантовый набор инструментов Турции.",
   "hero.badge": "🇹🇷 Первый в Турции — ИР Quantro 2025",
   "hero.scroll": "Исследовать",
-  "intro.h2": "9 оригинальных<br>инструментов",
+  "intro.h2": "11 оригинальных<br>инструментов",
   "intro.count": "Первый в Турции · ИР Quantro · 2025",
   "badge.first": "Первый в Турции",
   "badge.new": "Новый",
@@ -1701,6 +1870,20 @@ ru:{
   "t9.phi": "φ (азимут)",
   "t9.explain": "Сфера Блоха представляет состояние кубита на единичной сфере. <strong>Северный полюс — |0⟩</strong>, <strong>южный полюс — |1⟩</strong>, экватор содержит чистые суперпозиции (|+⟩, |−⟩, |+i⟩, |−i⟩). Изменяйте состояние ползунками θ/φ или кнопками пресетов; перетаскивайте сферу, чтобы вращать вид.",
   "t9.vector": "Вектор Блоха:",
+  "t10.title": "Кот Шрёдингера",
+  "t10.p": "Вероятность Распада p",
+  "t10.open": "🐱 Открыть Коробку",
+  "t10.reset": "Сброс",
+  "t10.log.ready": "Готово — закройте коробку и откройте её.",
+  "t10.explain": "Кот Шрёдингера — мысленный эксперимент, призванный показать абсурдность суперпозиции. Пока коробка закрыта, кот <strong>и жив, и мёртв</strong>: состояние — смесь нераспавшегося и распавшегося ядра. При открытии волновая функция <strong>коллапсирует</strong>, и кот появляется в единственном исходе. Исход выбирается настоящей квантовой случайностью (ANU).",
+  "t11.title": "Квантовое Туннелирование",
+  "t11.energy": "Энергия Частицы E",
+  "t11.barrier": "Высота Барьера V₀",
+  "t11.width": "Толщина Барьера a",
+  "t11.t": "Вероятность Прохождения (T)",
+  "t11.pres.alpha": "α-частица (Синтез)",
+  "t11.pres.flash": "Запись Флеш-памяти",
+  "t11.explain": "В квантовой механике частица может <strong>проникнуть сквозь барьер</strong>, даже если её энергия ниже высоты барьера — это туннелирование. Классическая физика это запрещает; в квантовом мире хвост волновой функции просачивается внутрь барьера: <strong>T ≈ exp(−2κa)</strong>. Синтез в ядре Солнца, запись флеш-памяти и СТМ-микроскопы основаны на туннелировании.",
   "stat.proxy": "⚛ ANU (прокси) — настоящий квант",
   "stat.anu": "⚛ ANU — настоящий квант (флуктуация вакуума)",
   "stat.nist": "◇ NIST Beacon — криптографическая случайность (не квант)",
@@ -1848,6 +2031,20 @@ ko:{
   "t9.phi": "φ (방위각)",
   "t9.explain": "블로흐 구는 큐비트 상태를 단위 구 위에 나타냅니다. <strong>북극은 |0⟩</strong>, <strong>남극은 |1⟩</strong>, 적도는 순수 중첩 상태입니다 (|+⟩, |−⟩, |+i⟩, |−i⟩). θ/φ 슬라이더나 사전 설정 버튼으로 상태를 바꾸세요. 구를 드래그해 시점을 회전할 수 있습니다.",
   "t9.vector": "블로흐 벡터:",
+  "t10.title": "슈뢰딩거의 고양이",
+  "t10.p": "붕괴 확률 p",
+  "t10.open": "🐱 상자 열기",
+  "t10.reset": "초기화",
+  "t10.log.ready": "준비됨 — 상자를 닫고 여세요.",
+  "t10.explain": "슈뢰딩거의 고양이는 중첩의 부조리함을 보여주기 위한 사고 실험입니다. 상자가 닫혀 있는 동안 고양이는 <strong>살아 있으면서 죽어 있습니다</strong>: 상태는 붕괴되지 않은 핵과 붕괴된 핵의 혼합입니다. 상자를 열면 파동 함수가 <strong>붕괴</strong>되어 고양이는 단 하나의 결과로 나타납니다. 측정 결과는 실제 양자 난수(ANU)로 선택됩니다.",
+  "t11.title": "양자 터널링",
+  "t11.energy": "입자 에너지 E",
+  "t11.barrier": "장벽 높이 V₀",
+  "t11.width": "장벽 두께 a",
+  "t11.t": "투과 확률 (T)",
+  "t11.pres.alpha": "α 입자 (핵융합)",
+  "t11.pres.flash": "플래시 메모리 쓰기",
+  "t11.explain": "양자 역학에서 입자는 에너지가 장벽 높이보다 낮아도 장벽을 <strong>뚫을 수 있습니다</strong> — 이것이 터널링입니다. 고전 물리학은 이를 금지합니다. 양자 세계에서는 파동 함수의 꼬리가 장벽 안으로 새어 들어갑니다: <strong>T ≈ exp(−2κa)</strong>. 태양 핵의 핵융합, 플래시 메모리 쓰기, STM 현미경은 모두 터널링에 의존합니다.",
   "stat.proxy": "⚛ ANU (프록시) — 실제 양자",
   "stat.anu": "⚛ ANU — 실제 양자 (진공 요동)",
   "stat.nist": "◇ NIST Beacon — 암호화 난수 (양자 아님)",
@@ -1860,11 +2057,11 @@ ko:{
 },
 ar:{
   "nav.home": "← الرئيسية",
-  "hero.ey": "كوانترو لاب · أدوات تفاعلية · 9 وحدات",
+  "hero.ey": "كوانترو لاب · أدوات تفاعلية · 11 وحدات",
   "hero.desc": "اختبر ميكانيكا الكم والفيزياء الفلكية بنفسك. أول مجموعة أدوات كمومية تفاعلية في تركيا.",
   "hero.badge": "🇹🇷 الأول في تركيا — بحث وتطوير كوانترو 2025",
   "hero.scroll": "استكشف",
-  "intro.h2": "9 أدوات<br>أصلية",
+  "intro.h2": "11 أدوات<br>أصلية",
   "intro.count": "الأول في تركيا · بحث وتطوير كوانترو · 2025",
   "badge.first": "الأول في تركيا",
   "badge.new": "جديد",
@@ -1995,6 +2192,20 @@ ar:{
   "t9.phi": "φ (السمت)",
   "t9.explain": "كرة بلوخ تمثل حالة كيوبت على كرة وحدة. <strong>القطب الشمالي |0⟩</strong>، <strong>القطب الجنوبي |1⟩</strong>، وخط الاستواء تراكبات نقية (|+⟩، |−⟩، |+i⟩، |−i⟩). غيّر الحالة بمنزلقات θ/φ أو أزرار الضبط المسبق؛ اسحب الكرة لتدوير المنظر.",
   "t9.vector": "متجه بلوخ:",
+  "t10.title": "قطة شرودنجر",
+  "t10.p": "احتمال الاضمحلال p",
+  "t10.open": "🐱 افتح الصندوق",
+  "t10.reset": "إعادة تعيين",
+  "t10.log.ready": "جاهز — أغلق الصندوق ثم افتحه.",
+  "t10.explain": "قطة شرودنجر تجربة فكرية صُممت لتُظهر سخافة التراكب. بينما الصندوق مغلق، القطة <strong>حية وميتة معًا</strong>: الحالة خليط من نواة لم تضمحل وأخرى اضمحلت. عند فتح الصندوق <strong>تنهار</strong> دالة الموجة وتظهر القطة بنتيجة واحدة. تُختار النتيجة بعشوائية كمومية حقيقية (ANU).",
+  "t11.title": "النفق الكمومي",
+  "t11.energy": "طاقة الجسيم E",
+  "t11.barrier": "ارتفاع الحاجز V₀",
+  "t11.width": "سماكة الحاجز a",
+  "t11.t": "احتمالية النفاذ (T)",
+  "t11.pres.alpha": "جسيم ألفا (الاندماج)",
+  "t11.pres.flash": "كتابة ذاكرة الفلاش",
+  "t11.explain": "في ميكانيكا الكم يمكن للجسيم أن <strong>يخترق الحاجز</strong> حتى لو كانت طاقته أقل من ارتفاع الحاجز — هذا هو النفق. الفيزياء الكلاسيكية تمنع ذلك؛ في العالم الكمومي يتسرب ذيل دالة الموجة داخل الحاجز: <strong>T ≈ exp(−2κa)</strong>. الاندماج في قلب الشمس وكتابة ذاكرة الفلاش ومجاهر STM كلها تعتمد على النفق.",
   "stat.proxy": "⚛ ANU (وسيط) — كمي حقيقي",
   "stat.anu": "⚛ ANU — كمي حقيقي (تقلب الفراغ)",
   "stat.nist": "◇ NIST Beacon — عشوائية تشفيرية (ليست كمومية)",
@@ -2017,7 +2228,7 @@ function applyLang(){
   document.querySelectorAll('[data-i18n]').forEach(el=>{el.innerHTML=t(el.dataset.i18n)});
   if(lastQStat){const el=document.getElementById('qstat');if(el)el.textContent=t(lastQStat.k)}
 }
-function toggleLang(){LANG=LANGS_ORDER[(LANGS_ORDER.indexOf(LANG)+1)%LANGS_ORDER.length];localStorage.setItem('qlang',LANG);applyLang()}
+function toggleLang(){LANG=LANGS_ORDER[(LANGS_ORDER.indexOf(LANG)+1)%LANGS_ORDER.length];localStorage.setItem('qlang',LANG);applyLang();try{if(window.gtag)gtag('event','lab_lang_change',{lang:LANG})}catch(e){}}
 
 /* ══ T1: QRNG ══ */
 let qh=[];
@@ -2264,6 +2475,238 @@ class BlochSphere{
     ctx.fillText(label,ax+Math.sign(ax-this.cx)*off,ay+Math.sign(ay-this.cy)*off);
   }
 }
+
+/* ══ T10: SCHRODINGER CAT ══ */
+let catP=0.5,catState='super',catRaf=null,catT=0,catLog=[];
+function catSetP(){catP=+document.getElementById('cat-ps').value/100;document.getElementById('cat-pv').textContent=Math.round(catP*100)+'%';catT=0;catDraw()}
+function catStart(){if(!document.getElementById('cat-canvas')._inited){document.getElementById('cat-canvas')._inited=true;catDraw()}}
+function catReset(){
+  catState='super';catT=0;
+  document.getElementById('cat-go').disabled=false;
+  document.getElementById('cat-go').innerHTML=t('t10.open');
+  catDraw();
+}
+function catOpen(){
+  if(catState!=='super'){catReset();return}
+  document.getElementById('cat-go').disabled=true;
+  const go=document.getElementById('cat-go');
+  fetch('/api/anu?length=1').then(r=>r.json()).then(j=>{
+    const rnd=(j&&j.success&&j.data&&j.data[0])!==undefined?(j.data[0]/255):Math.random();
+    settle(rnd);
+  }).catch(()=>settle(Math.random()));
+  function settle(rnd){
+    const decayed=rnd<catP;
+    catState=decayed?'dead':'alive';
+    catLog.unshift({alive:!decayed});
+    if(catLog.length>12)catLog.pop();
+    go.innerHTML=decayed?'💀 '+t('t10.open'):'🐱 '+t('t10.open');
+    go.disabled=false;
+    catDraw();
+    updateCatLog();
+  }
+}
+function updateCatLog(){
+  const alive=catLog.filter(x=>x.alive).length;
+  const el=document.getElementById('cat-log2');
+  el.innerHTML=`<div>${t('t10.log.ready')}</div><div style="margin-top:8px"><span>●</span> Canlı: ${alive} &nbsp; <span>●</span> Ölü: ${catLog.length-alive} &nbsp; <span>●</span> Toplam: ${catLog.length}</div>`;
+}
+function catDraw(){
+  const c=document.getElementById('cat-canvas');
+  if(!c)return;
+  const ctx=c.getContext('2d');
+  const W=c.width=Math.max(280,c.clientWidth)*window.devicePixelRatio,dpr=window.devicePixelRatio||1;
+  const H=c.height=380*dpr;
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  const w=W/dpr,h=380;
+  ctx.clearRect(0,0,w,h);
+  ctx.fillStyle='#040a14';ctx.fillRect(0,0,w,h);
+  catT+=0.03;
+  const t=catT;
+  const bx=w*0.18,by=h*0.12,bw=w*0.64,bh=h*0.62;
+
+  /* radiation icon top-right */
+  ctx.font='16px sans-serif';ctx.textAlign='right';ctx.textBaseline='top';
+  ctx.fillStyle='rgba(0,200,240,.6)';
+  ctx.fillText('☢ ¹³⁷Cs',bx+bw-10,by+10);
+
+  /* box body */
+  ctx.fillStyle='rgba(9,20,38,.9)';
+  ctx.strokeStyle='rgba(0,200,240,.35)';
+  ctx.lineWidth=2;
+  roundRect(ctx,bx,by,bw,bh,8);ctx.fill();ctx.stroke();
+  /* lid */
+  roundRect(ctx,bx,by-6,bw,10,4);ctx.fillStyle='#0d1f35';ctx.fill();ctx.stroke();
+
+  /* inside */
+  const ix=bx+18,iy=by+22,iw=bw-36,ih=bh-42;
+  ctx.strokeStyle='rgba(0,200,240,.15)';
+  roundRect(ctx,ix,iy,iw,ih,4);ctx.stroke();
+
+  /* atom */
+  const ax=ix+40,ay=iy+ih-70;
+  const pul=0.6+0.4*Math.sin(t*3);
+  ctx.globalAlpha=0.25+0.35*pul;
+  ctx.fillStyle='#00c8f0';
+  ctx.beginPath();ctx.arc(ax,ay,26,0,7);ctx.fill();
+  ctx.globalAlpha=1;
+  ctx.fillStyle='#0d1f35';ctx.strokeStyle='#00c8f0';
+  ctx.beginPath();ctx.arc(ax,ay,16,0,7);ctx.fill();ctx.stroke();
+  ctx.font='10px monospace';ctx.textAlign='center';ctx.fillStyle='#00c8f0';
+  ctx.fillText(catState==='super'?'?':'✓',ax,ay+4);
+
+  /* flask */
+  const fx=ix+iw/2, fy=iy+ih-40;
+  ctx.fillStyle='rgba(120,255,160,.15)';
+  ctx.strokeStyle='rgba(120,255,160,.5)';
+  ctx.beginPath();
+  ctx.moveTo(fx-12,fy-58);ctx.lineTo(fx+12,fy-58);
+  ctx.lineTo(fx+14,fy-22);
+  ctx.quadraticCurveTo(fx+22,fy+4,fx,fy+12);
+  ctx.quadraticCurveTo(fx-22,fy+4,fx-14,fy-22);
+  ctx.closePath();
+  ctx.fill();ctx.stroke();
+  ctx.fillStyle=catState==='dead'?'rgba(255,90,90,.6)':'rgba(120,255,160,.5)';
+  ctx.beginPath();ctx.ellipse(fx,fy-8,9,4,0,0,7);ctx.fill();
+
+  /* cat */
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  const cxm=ix+iw-78,cym=iy+ih-44;
+  if(catState==='super'){
+    ctx.save();
+    ctx.filter='blur(2px)';
+    ctx.globalAlpha=.55;
+    ctx.font='64px serif';
+    ctx.fillText('🐱',cxm-8+4*Math.sin(t*2),cym-4);
+    ctx.globalAlpha=.55;
+    ctx.fillText('😿',cxm+8-4*Math.sin(t*2),cym+2);
+    ctx.restore();
+    ctx.globalAlpha=1;
+    ctx.font='bold 30px monospace';ctx.fillStyle='rgba(0,200,240,.8)';
+    ctx.fillText('|ψ⟩ = ?',ix+iw/2,iy+30);
+  }else{
+    ctx.font='68px serif';
+    if(catState==='alive'){ctx.fillText('🐱',cxm,cym)}
+    else{
+      ctx.save();ctx.translate(cxm,cym);ctx.rotate(0.02);ctx.fillText('😿',0,0);ctx.restore();
+    }
+    ctx.font='bold 22px monospace';ctx.fillStyle=catState==='alive'?'#7dffb0':'#ff6b6b';
+    ctx.fillText(catState==='alive'?'|CANLI⟩':'|ÖLÜ⟩',ix+iw/2,iy+30);
+  }
+
+  /* status footer */
+  ctx.font='11px monospace';ctx.textAlign='center';ctx.fillStyle='rgba(232,237,245,.45)';
+  ctx.fillText('detector: '+(catState==='super'?'PAUSED — box closed':'COLLAPSED — box open'),w/2,h-18);
+
+  if(catState==='super'){catRaf=requestAnimationFrame(catDraw)}
+}
+function roundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();
+}
+
+/* ══ T11: TUNNELING ══ */
+let tunRaf=null,tunPkt=null;
+function tunPreset(k){
+  const set=(e,v,w)=>{document.getElementById(e).value=v;};
+  if(k==='alpha'){set('tun-es',150);set('tun-bs',300);set('tun-ws',40)}
+  else if(k==='stm'){set('tun-es',200);set('tun-bs',400);set('tun-ws',30)}
+  else if(k==='flash'){set('tun-es',350);set('tun-bs',400);set('tun-ws',95)}
+  tunCalc();
+}
+function tunCalc(){
+  const E=+document.getElementById('tun-es').value/100;
+  const V=+document.getElementById('tun-bs').value/100;
+  const a=+document.getElementById('tun-ws').value/100;
+  document.getElementById('tun-ev').textContent=E.toFixed(1)+' eV';
+  document.getElementById('tun-bv').textContent=V.toFixed(1)+' eV';
+  document.getElementById('tun-wv').textContent=a.toFixed(2)+' nm';
+  let T,kappa;
+  if(E<V){
+    kappa=5.12*Math.sqrt(V-E);
+    const z=kappa*a;
+    T=1/(1+(V*V*Math.sinh(z)*Math.sinh(z))/(4*E*(V-E)));
+  }else{
+    const k2=5.12*Math.sqrt(E-V);
+    const z=k2*a;
+    T=1/(1+(V*V*Math.sin(z)*Math.sin(z))/(4*E*(E-V)));
+  }
+  T=Math.max(0,Math.min(1,isFinite(T)?T:0));
+  document.getElementById('tun-tv').textContent=T>1e-4?(T*100).toFixed(T>0.1?1:3)+' %':T.toExponential(1);
+  document.getElementById('tun-kv').textContent=kappa!==undefined?kappa.toFixed(2)+' nm⁻¹':'—';
+  document.getElementById('tun-rv').textContent=(100-T*100).toFixed(1)+' %';
+  tunStart(T,E,V,a);
+}
+function tunStart(T,E,V,a){
+  const c=document.getElementById('tun-canvas');
+  if(!c)return;
+  c._p={T,E,V,a};
+  if(tunRaf)cancelAnimationFrame(tunRaf);
+  tunPkt={p:-80,amp:1,ref:null};
+  tunLoop(c);
+}
+function tunLoop(c){
+  const ctx=c.getContext('2d');
+  const dpr=window.devicePixelRatio||1;
+  const w=c.clientWidth,h=320;
+  c.width=w*dpr;c.height=h*dpr;
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  const {T,E,V,a}=c._p;
+  const bl=w*0.42,br=bl+Math.max(18,Math.min(90,a*140));
+  const energyY=h-40-(E/V)*Math.min(150,h*0.45);
+  const k=0.14,sigma=26;
+  const wallV=Math.min(160,h*0.5);
+  const p=tunPkt.p;
+
+  ctx.clearRect(0,0,w,h);
+  /* floor */
+  ctx.strokeStyle='rgba(0,200,240,.25)';ctx.beginPath();ctx.moveTo(0,h-30);ctx.lineTo(w,h-30);ctx.stroke();
+  /* barrier */
+  ctx.fillStyle='rgba(120,90,255,.22)';ctx.fillRect(bl,h-30-wallV,br-bl,wallV);
+  ctx.strokeStyle='rgba(160,130,255,.8)';ctx.lineWidth=1.5;
+  ctx.strokeRect(bl,h-30-wallV,br-bl,wallV);
+  ctx.font='11px monospace';ctx.fillStyle='rgba(160,130,255,.9)';
+  ctx.textAlign='center';
+  ctx.fillText('V₀='+V.toFixed(1)+' eV',(bl+br)/2,h-30-wallV-8);
+  /* energy line */
+  ctx.strokeStyle='rgba(0,200,240,.6)';ctx.setLineDash([5,4]);
+  ctx.beginPath();ctx.moveTo(0,energyY);ctx.lineTo(w,energyY);ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle='rgba(0,200,240,.8)';ctx.textAlign='right';
+  ctx.fillText('E='+E.toFixed(1)+' eV',w-8,energyY-6);
+
+  drawPkt(tunPkt.p,tunPkt.amp,k,sigma,bl,br,'#00c8f0');
+  if(tunPkt.ref)drawPkt(tunPkt.ref.p,tunPkt.ref.amp,k,sigma,bl,br,'rgba(255,150,60,.9)');
+
+  /* motion */
+  const sp=2.6;
+  if(tunPkt.p<br){
+    tunPkt.p+=sp;
+    if(!tunPkt.ref&&tunPkt.p>bl){} 
+  }
+  if(tunPkt.p>=bl&&!tunPkt.ref){
+    tunPkt.ref={p:bl-4,amp:Math.sqrt(1-T)};
+    tunPkt.amp=Math.sqrt(T);
+    tunPkt.p=br+4;
+  }
+  if(tunPkt.ref&&tunPkt.ref.p>-60){tunPkt.ref.p-=sp}
+  if(tunPkt.p>w+80&&tunPkt.ref&&tunPkt.ref.p<-60){tunPkt.p=-80;tunPkt.ref=null}
+  tunRaf=requestAnimationFrame(()=>tunLoop(c));
+
+  function drawPkt(cx,amp,k,sigma,bl,br,color){
+    ctx.beginPath();
+    for(let x=0;x<=w;x+=3){
+      const inBarrier=x>bl&&x<br;
+      const dx=x-cx;
+      const env=amp*Math.exp(-(dx*dx)/(2*sigma*sigma));
+      const wave=env*Math.cos(k*dx);
+      const yy=h-30-wave;
+      if(x===0)ctx.moveTo(x,yy);else ctx.lineTo(x,yy);
+    }
+    ctx.strokeStyle=color;ctx.lineWidth=1.8;ctx.stroke();
+  }
+}
+
 
 /* ══ PWA ══ */
 if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(function(){})}

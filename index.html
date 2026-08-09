@@ -9,12 +9,14 @@
 <meta property="og:description" content="Kuantum sınırında araştırma. Evrenin dokusunu anlama yolculuğu.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://quantro-1.vercel.app/">
-<meta property="og:image" content="https://quantro-1.vercel.app/img/icon.svg">
+<meta name="robots" content="index, follow">
+<meta property="og:image" content="https://quantro-1.vercel.app/img/og-quantro.png">
 <link rel="canonical" href="https://quantro-1.vercel.app/">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://quantro-1.vercel.app/img/og-quantro.png">
 <meta name="twitter:title" content="Quantro · ARGE Merkezi">
 <meta name="twitter:description" content="Kuantum sınırında araştırma. Evrenin dokusunu anlama yolculuğu.">
 <meta name="google-site-verification" content="6kVae3BCWZqzRghV6XfTETawe0JeVPFZ7KcPkiu6sIQ" />
@@ -2578,6 +2580,7 @@ if (cform) {
         status.textContent = t('c.ok');
         status.className = 'cf-status ok';
         cform.reset();
+        try{if(window.gtag)gtag('event','contact_submit')}catch(e){}
       } else {
         status.textContent = t('c.err');
         status.className = 'cf-status err';
