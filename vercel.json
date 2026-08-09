@@ -6,5 +6,17 @@
         { "key": "Content-Disposition", "value": "attachment" }
       ]
     }
+  ],
+  "redirects": [
+    {
+      "source": "/blog%20son%20hali.html",
+      "destination": "/blog.html",
+      "permanent": true
+    },
+    {
+      "source": "/blog son hali.html",
+      "destination": "/blog.html",
+      "permanent": true
+    }
   ]
 }
