@@ -67,7 +67,8 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Syne:wght@700;800&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Syne:wght@700;800&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Syne:wght@700;800&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet"></noscript>
 
 <style>
 /* ═══════════════════════════════════════════════════
@@ -1133,9 +1134,9 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:4
 <!-- ══════════════════════════════════════════
      THREE.JS — gravitational wave / Higgs field
      ══════════════════════════════════════════ -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-(function(){
+function initThreeScene(){
   const canvas = document.getElementById('three-canvas');
   const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:false});
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -1280,7 +1281,13 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:4
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth,window.innerHeight);
   },{passive:true});
-})();
+}
+function runThreeWhenReady(){
+  if(window.THREE){initThreeScene()}
+  else{setTimeout(runThreeWhenReady,50)}
+}
+if(document.readyState==='complete')runThreeWhenReady();
+else window.addEventListener('load',runThreeWhenReady);
 
 /* ══════════════════════════════
    CANVAS WAVE VISUALIZER

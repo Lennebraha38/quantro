@@ -1,7 +1,8 @@
-const CACHE = 'quantro-v1.3.1';
+const CACHE = 'quantro-v1.4.0';
+const SHELL = ['/index.html', '/blog.html', '/quantro-lab.html', '/quantro.js', '/lab-core.js'];
 
 self.addEventListener('install', (e) => {
-  e.waitUntil(caches.open(CACHE).then((c) => c.addAll(['/index.html', '/quantro-lab.html', '/quantro.js', '/lab-core.js'])).then(() => self.skipWaiting()));
+  e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting()));
 });
 
 self.addEventListener('activate', (e) => {
@@ -17,6 +18,28 @@ self.addEventListener('fetch', (e) => {
   if (u.origin !== self.location.origin) return;
   if (u.pathname.startsWith('/api/')) return;
   if (e.request.method !== 'GET') return;
+
+  const norm = u.pathname === '/' ? '/index.html' : u.pathname;
+  const isShell = SHELL.includes(norm);
+
+  if (isShell) {
+    e.respondWith(
+      caches.open(CACHE).then(async (c) => {
+        const cached = await c.match(new Request(norm));
+        fetch(e.request)
+          .then((r) => {
+            if (r.ok) {
+              const clone = r.clone();
+              caches.open(CACHE).then((cc) => cc.put(new Request(norm), clone));
+            }
+          })
+          .catch(() => {});
+        return cached || fetch(e.request).catch(() => cached);
+      })
+    );
+    return;
+  }
+
   e.respondWith(
     fetch(e.request)
       .then((r) => {
