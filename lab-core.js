@@ -11,7 +11,7 @@ window.addEventListener('scroll',()=>document.getElementById('nav').classList.to
 /* ══ CHUNK LOADER ══ */
 const _loaded={};
 const TOOL_FILES={
-  1:['lab/tool-1.js'],8:['lab/tool-8.js'],9:['lab/tool-9.js'],10:['lab/tool-10.js'],11:['lab/tool-11.js'],
+  1:['lab/tool-1.js'],8:['lab/tool-8.js'],9:['lab/tool-9.js'],10:['lab/tool-10.js'],11:['lab/tool-11.js'],12:['lab/tool-12.js'],
   2:['quantro.js','lab/tool-2.js'],3:['lab/tool-3.js'],4:['lab/tool-4.js'],5:['lab/tool-5.js'],6:['lab/tool-6.js'],7:['lab/tool-7.js']
 };
 function loadScripts(urls){
@@ -50,6 +50,7 @@ async function tog(n){
   if(n===9)blochStart();
   if(n===10)catStart();
   if(n===11)tunStart();
+  if(n===12)dsStart();
 }
 
 /* ══ HERO THREE.JS ══ */
@@ -151,11 +152,11 @@ if(window.THREE&&document.getElementById('hero-canvas')){
 window.I18N={
 tr:{
   "nav.home": "← Ana Sayfa",
-  "hero.ey": "Quantro Lab · Etkileşimli Araçlar · 11 Modül",
+  "hero.ey": "Quantro Lab · Etkileşimli Araçlar · 12 Modül",
   "hero.desc": "Kuantum mekaniğini ve astrofiziki bizzat deneyimleyin. Türkiye'nin ilk interaktif kuantum araç seti.",
   "hero.badge": "🇹🇷 Türkiye'de İlk — Quantro ARGE 2025",
   "hero.scroll": "Keşfet",
-  "intro.h2": "11 Özgün<br>Araç",
+  "intro.h2": "12 Özgün<br>Araç",
   "intro.count": "Türkiye'de İlk · Quantro ARGE · 2025",
   "badge.first": "Türkiye'de İlk",
   "badge.new": "Yeni",
@@ -300,6 +301,18 @@ tr:{
   "t11.pres.alpha": "α Parçacığı (Füzyon)",
   "t11.pres.flash": "Flash Bellek Yazma",
   "t11.explain": "Kuantum mekaniğinde bir parçacık, enerjisinden büyük bir engelle karşılaştığında <strong>duvarı delebilir</strong> — buna tünelleme denir. Klasik fizik bunu yasaklar; kuantum dünyasında dalga fonksiyonunun kuyruğu engelin içine sızar: <strong>T ≈ exp(−2κa)</strong>. Güneş'in çekirdeğindeki füzyon, flash bellek yazma ve STM mikroskobu hep tünellemeye dayanır.",
+  "t12.title": "Çift Yarık Deneyi",
+  "t12.particles": "Parçacık Sayısı",
+  "t12.slit": "Yarık Genişliği a",
+  "t12.sep": "Yarık Aralığı d",
+  "t12.wave": "Dalga Boyu λ",
+  "t12.speed": "Fırlatma Hızı",
+  "t12.which": "Hangi yarıktan geçti? (Gözlem)",
+  "t12.fire": "⚛ Fırlat",
+  "t12.reset": "Sıfırla",
+  "t12.stat.coherent": "GİRİŞİM · dalga",
+  "t12.stat.classical": "KLASİK · gözlem",
+  "t12.explain": "Tek tek fırlatılan parçacıklar bile ekranda <strong>girişim saçakları</strong> oluşturur — her parçacık kendi kendisiyle girişir. Gözlemleyince (hangi yarık sorusu) girişim kaybolur, klasik dağılım görünür. Bu, kuantum ölçümünün dalga fonksiyonunu nasıl çökerttiğinin en meşhur kanıtıdır.",
   "stat.proxy": "⚛ ANU (proxy) — gerçek kuantum",
   "stat.anu": "⚛ ANU — gerçek kuantum (vakum dalgalanması)",
   "stat.nist": "◇ NIST Beacon — kriptografik rastgele (kuantum değil)",

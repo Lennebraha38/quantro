@@ -209,6 +209,20 @@ nav.sc{background:rgba(2,8,16,.92);backdrop-filter:blur(20px);padding:13px 0;bor
 .tun-lbl{font-family:var(--fm);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-top:4px}
 .tun-presets{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
 
+/* ── T12: DOUBLE SLIT ── */
+.ds-wrap{display:grid;grid-template-columns:1.5fr 1fr;gap:24px}
+.ds-canvas-wrap{position:relative;background:var(--void);border:1px solid rgba(0,200,240,.1);padding:8px}
+.ds-canvas{width:100%;height:auto;display:block;touch-action:none}
+.ds-stat{position:absolute;top:16px;left:16px;background:rgba(4,13,26,.85);border:1px solid rgba(0,200,240,.2);padding:8px 12px;font-family:var(--fm);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--cyan)}
+.ds-count{position:absolute;top:16px;right:16px;background:rgba(4,13,26,.85);border:1px solid rgba(0,200,240,.2);padding:8px 12px;font-family:var(--fm);font-size:11px;color:var(--muted)}
+.ds-count b{color:var(--cyan)}
+.ds-which{display:flex;align-items:center;gap:8px;margin:14px 0}
+.ds-check{font-family:var(--fm);font-size:11px;color:var(--muted);display:flex;align-items:center;gap:8px;cursor:pointer}
+.ds-check input{accent-color:var(--cyan);width:16px;height:16px;cursor:pointer}
+.ds-btns{display:flex;gap:10px}
+.ds-btns .btn{flex:1;text-align:center}
+.ds-trail{position:absolute;pointer-events:none}
+
 /* ── T2: CIRCUIT ── */
 .circ-wrap{display:grid;grid-template-columns:180px 1fr;gap:16px}
 .gate-panel h4{font-family:var(--fm);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
@@ -356,7 +370,7 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
   <div class="hud hud-bl"></div><div class="hud hud-br"></div>
   <div class="hero-content">
     <div class="hc">
-      <div class="hero-ey"><span data-i18n="hero.ey">Quantro Lab · Etkileşimli Araçlar · 11 Modül</span></div>
+      <div class="hero-ey"><span data-i18n="hero.ey">Quantro Lab · Etkileşimli Araçlar · 12 Modül</span></div>
       <h1 class="hero-h1">KUANTUM<br><span class="o">LAB</span></h1>
       <div class="hero-row">
         <p class="hero-desc" data-i18n="hero.desc">Kuantum mekaniğini ve astrofiziki bizzat deneyimleyin. Türkiye'nin ilk interaktif kuantum araç seti.</p>
@@ -371,7 +385,7 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
 <div class="tools">
 <div class="tw">
   <div class="tools-intro">
-    <h2 data-i18n="intro.h2">11 Özgün<br>Araç</h2>
+    <h2 data-i18n="intro.h2">12 Özgün<br>Araç</h2>
     <span class="tools-count" data-i18n="intro.count">Türkiye'de İlk · Quantro ARGE · 2025</span>
   </div>
 
@@ -796,6 +810,61 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
       </div>
     </div>
   </div>
+
+  <!-- T12: DOUBLE SLIT -->
+  <div class="tool-card">
+    <div class="tool-header" onclick="tog(12)">
+      <span class="tn">12</span>
+      <span class="tt" data-i18n="t12.title">Çift Yarık Deneyi</span>
+      <span class="tb-badge new">New · v1.3</span>
+      <span class="tg" id="tg12">+</span>
+    </div>
+    <div class="tool-body" id="tb12">
+      <div class="ds-wrap">
+        <div class="ds-canvas-wrap">
+          <canvas id="ds-canvas" class="ds-canvas"></canvas>
+          <div class="ds-stat" id="ds-stat"></div>
+          <div class="ds-count" id="ds-count"><b id="ds-cv">0</b> / <b id="ds-nv">200</b></div>
+        </div>
+        <div>
+          <div class="param-item">
+            <div class="param-lbl"><span data-i18n="t12.particles">Parçacık Sayısı</span></div>
+            <select id="ds-n" onchange="dsFire()" style="width:100%;background:var(--deep);color:var(--text);font-family:var(--fm);font-size:12px;border:1px solid rgba(0,200,240,.15);padding:10px;cursor:pointer">
+              <option value="1">1</option>
+              <option value="20">20</option>
+              <option value="200" selected>200</option>
+              <option value="2000">2000</option>
+              <option value="8000">8000</option>
+            </select>
+          </div>
+          <div class="param-item">
+            <div class="param-lbl"><span data-i18n="t12.slit">Yarık Genişliği a</span><strong id="ds-av">—</strong></div>
+            <input class="slider" type="range" id="ds-slit" min="5" max="30" value="10" step="1" oninput="dsSet()">
+          </div>
+          <div class="param-item">
+            <div class="param-lbl"><span data-i18n="t12.sep">Yarık Aralığı d</span><strong id="ds-dv">—</strong></div>
+            <input class="slider" type="range" id="ds-sep" min="20" max="120" value="45" step="1" oninput="dsSet()">
+          </div>
+          <div class="param-item">
+            <div class="param-lbl"><span data-i18n="t12.wave">Dalga Boyu λ</span><strong id="ds-lv">—</strong></div>
+            <input class="slider" type="range" id="ds-wave" min="3" max="12" value="6" step="1" oninput="dsSet()">
+          </div>
+          <div class="param-item">
+            <div class="param-lbl"><span data-i18n="t12.speed">Fırlatma Hızı</span></div>
+            <input class="slider" type="range" id="ds-speed" min="4" max="80" value="16" step="1">
+          </div>
+          <div class="ds-which">
+            <label class="ds-check"><input type="checkbox" id="ds-which" onchange="dsSet()"><span data-i18n="t12.which">Hangi yarıktan geçti? (Gözlem)</span></label>
+          </div>
+          <div class="ds-btns">
+            <button class="btn btn-p" onclick="dsFire()" data-i18n="t12.fire">⚛ Fırlat</button>
+            <button class="btn btn-r" onclick="dsReset()" data-i18n="t12.reset">Sıfırla</button>
+          </div>
+          <div class="explain" style="margin-top:16px"><p data-i18n="t12.explain">Tek tek fırlatılan parçacıklar bile ekranda <strong>girişim saçakları</strong> oluşturur — her parçacık kendi kendisiyle girişir. Gözlemleyince (hangi yarık sorusu) girişim kaybolur, klasik dağılım görünür. Bu, kuantum ölçümünün dalga fonksiyonunu nasıl çökerttiğinin en meşhur kanıtıdır.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div><!-- /tw -->
 </div><!-- /tools -->
 
@@ -803,7 +872,7 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
   <div class="fi">
     <a href="index.html" class="fl">Q<em>U</em>ANTRO</a>
     <span class="fc">© 2025 Quantro ARGE · Kayseri, Türkiye</span>
-    <span class="fc" style="color:rgba(0,200,240,.3)">Türkiye'de İlk · 11 Kuantum Aracı</span>
+    <span class="fc" style="color:rgba(0,200,240,.3)">Türkiye'de İlk · 12 Kuantum Aracı</span>
     <span class="fc" style="color:rgba(0,200,240,.5)"><a href="https://github.com/quantro38/quantro/issues/new" target="_blank" rel="noopener" style="color:rgba(0,200,240,.7)">Hata bildir / Fikir öner →</a></span>
   </div>
 </footer>
