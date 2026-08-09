@@ -298,48 +298,61 @@ textarea.finput{min-height:220px;resize:vertical;font-family:var(--fm);font-size
 </div>
 
 <script>
-const SB='https://mzlludkzkddxbbcrjmfu.supabase.co';
-const KEY='sb_publishable_MsSvoJUyhPO8HJ4d3FFBdg_bnw1D3BD';
-
 /* ── GİRİŞ ── */
-// Şifreyi değiştirmek için aşağıdaki değeri güncelleyin
-const PASS_HASH='quantro2025arge';
-let attempts=0;
+let loginBusy=false;
 
 function tryLogin(){
   const val=document.getElementById('pwd-input').value;
   const err=document.getElementById('login-err');
   const att=document.getElementById('login-attempts');
 
-  if(attempts>=5){
-    err.textContent='Çok fazla hatalı giriş. Sayfayı yenileyin.';
-    return;
-  }
+  if(loginBusy)return;
+  if(!val){err.textContent='Erişim kodu girin.';return}
+  loginBusy=true;
+  err.textContent='';att.textContent='';
+  document.getElementById('pwd-input').disabled=true;
 
-  if(val===PASS_HASH){
-    sessionStorage.setItem('qtr_auth','1');
-    document.getElementById('login-screen').style.display='none';
-    document.getElementById('admin-panel').style.display='block';
-    loadAll();
-  } else {
-    attempts++;
-    err.textContent='Hatalı erişim kodu.';
-    att.textContent=`${5-attempts} deneme hakkı kaldı`;
+  fetch('/api/auth',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({password:val})
+  }).then(async res=>{
+    if(res.ok){
+      const j=await res.json();
+      sessionStorage.setItem('qtr_token',j.token);
+      showPanel();
+    } else if(res.status===429){
+      err.textContent='Çok fazla deneme. 10 dk sonra tekrar deneyin.';
+    } else {
+      err.textContent='Hatalı erişim kodu.';
+      att.textContent='Giriş denemeleri kaydediliyor.';
+    }
+  }).catch(()=>{
+    err.textContent='Sunucuya ulaşılamadı.';
+  }).finally(()=>{
+    loginBusy=false;
+    document.getElementById('pwd-input').disabled=false;
     document.getElementById('pwd-input').value='';
     document.getElementById('pwd-input').focus();
-  }
+  });
 }
 
 function logout(){
-  sessionStorage.removeItem('qtr_auth');
+  sessionStorage.removeItem('qtr_token');
   location.reload();
 }
 
-// Oturum kontrolü
-if(sessionStorage.getItem('qtr_auth')==='1'){
+function showPanel(){
   document.getElementById('login-screen').style.display='none';
   document.getElementById('admin-panel').style.display='block';
-  setTimeout(loadAll,100);
+  loadAll();
+}
+
+// Oturum kontrolü
+if(sessionStorage.getItem('qtr_token')){
+  fetch('/api/blog',{headers:{'Authorization':'Bearer '+sessionStorage.getItem('qtr_token')}})
+    .then(r=>{if(r.ok)showPanel();else sessionStorage.removeItem('qtr_token');})
+    .catch(()=>sessionStorage.removeItem('qtr_token'));
 }
 
 document.getElementById('pwd-input').focus();
@@ -347,14 +360,16 @@ document.addEventListener('keydown',e=>{if(e.key==='Enter'&&document.getElementB
 
 /* ── VERİ ── */
 async function api(path,opts={}){
-  const res=await fetch(SB+path,{
+  const token=sessionStorage.getItem('qtr_token');
+  const res=await fetch(path,{
     ...opts,
     headers:{
-      'apikey':KEY,'Authorization':'Bearer '+KEY,
       'Content-Type':'application/json',
+      'Authorization':'Bearer '+token,
       ...(opts.headers||{})
     }
   });
+  if(res.status===401){logout();return null}
   return res.ok?res.json().catch(()=>({})):null;
 }
 
@@ -363,7 +378,7 @@ async function loadAll(){
 }
 
 async function loadPosts(){
-  const data=await api('/rest/v1/blog_posts?order=created_at.desc')||[];
+  const data=await api('/api/blog')||[];
   const pub=data.filter(p=>p.published).length;
   document.getElementById('stat-total').textContent=data.length;
   document.getElementById('stat-pub').textContent=pub;
@@ -389,7 +404,7 @@ async function loadPosts(){
 }
 
 async function loadMessages(){
-  const data=await api('/rest/v1/contact_messages?order=created_at.desc')||[];
+  const data=await api('/api/messages')||[];
   document.getElementById('stat-msg').textContent=data.length;
   document.getElementById('msg-list').innerHTML=data.length?
     data.map(m=>`
@@ -424,9 +439,9 @@ async function submit(publish){
   if(!title||!content){st.textContent='Başlık ve içerik zorunlu.';st.className='fstatus err';return}
 
   st.textContent='Kaydediliyor...';st.className='fstatus';
-  const res=await fetch(`${SB}/rest/v1/blog_posts`,{
+  const res=await fetch('/api/blog',{
     method:'POST',
-    headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
+    headers:{'Authorization':'Bearer '+sessionStorage.getItem('qtr_token'),'Content-Type':'application/json'},
     body:JSON.stringify({title,slug:slug||autoSlug(title),summary,content,cover_emoji:emoji,tags,published:publish})
   });
 
@@ -440,24 +455,24 @@ async function submit(publish){
 }
 
 async function togglePub(id,current){
-  await api(`/rest/v1/blog_posts?id=eq.${id}`,{method:'PATCH',body:JSON.stringify({published:!current})});
+  await api(`/api/blog?id=${encodeURIComponent(id)}`,{method:'PATCH',body:JSON.stringify({published:!current})});
   loadPosts();
 }
 
 async function delPost(id){
   if(!confirm('Bu yazıyı kalıcı olarak silmek istediğinize emin misiniz?'))return;
-  await api(`/rest/v1/blog_posts?id=eq.${id}`,{method:'DELETE'});
+  await api(`/api/blog?id=${encodeURIComponent(id)}`,{method:'DELETE'});
   loadPosts();
 }
 
 async function markRead(id){
-  await api(`/rest/v1/contact_messages?id=eq.${id}`,{method:'PATCH',body:JSON.stringify({is_read:true})});
+  await api(`/api/messages?id=${encodeURIComponent(id)}`,{method:'PATCH',body:JSON.stringify({is_read:true})});
   loadMessages();
 }
 
 async function delMsg(id){
   if(!confirm('Bu mesajı silmek istediğinize emin misiniz?'))return;
-  await api(`/rest/v1/contact_messages?id=eq.${id}`,{method:'DELETE'});
+  await api(`/api/messages?id=${encodeURIComponent(id)}`,{method:'DELETE'});
   loadMessages();
 }
 

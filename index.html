@@ -1100,6 +1100,10 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:4
         <input type="text" id="cf-name" name="name" placeholder="Adınız" data-i18n-ph="c.name" required>
         <input type="email" id="cf-email" name="email" placeholder="E-posta Adresiniz" data-i18n-ph="c.email" required>
       </div>
+      <div style="position:absolute;left:-9999px;top:-9999px" aria-hidden="true">
+        <label>Website</label>
+        <input type="text" id="cf-website" name="website" tabindex="-1" autocomplete="off">
+      </div>
       <textarea id="cf-message" name="message" placeholder="Mesajınız..." data-i18n-ph="c.msg" required rows="4"></textarea>
       <button type="submit" class="contact-cta" id="cf-submit" data-i18n="c.submit">Mesaj Gönder</button>
       <p id="cf-status" class="cf-status" role="status" aria-live="polite"></p>
@@ -2541,10 +2545,7 @@ function blogMd(md){
 
 loadBlog();
 
-/* ══ SUPABASE — Contact Form ══ */
-const SUPABASE_URL = 'https://mzlludkzkddxbbcrjmfu.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_MsSvoJUyhPO8HJ4d3FFBdg_bnw1D3BD';
-
+/* ══ İletişim Formu — Sunucu Üzerinden (rate-limit + honeypot) ══ */
 const cform = document.getElementById('contact-form');
 if (cform) {
   cform.addEventListener('submit', async (e) => {
@@ -2554,6 +2555,7 @@ if (cform) {
     const name = document.getElementById('cf-name').value.trim();
     const email = document.getElementById('cf-email').value.trim();
     const message = document.getElementById('cf-message').value.trim();
+    const website = (document.getElementById('cf-website') || {}).value || '';
 
     if (!name || !email || !message) {
       status.textContent = t('c.fill');
@@ -2566,15 +2568,10 @@ if (cform) {
     status.textContent = '';
 
     try {
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/contact_messages`, {
+      const res = await fetch('/api/contact', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'apikey': SUPABASE_ANON_KEY,
-          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-          'Prefer': 'return=minimal'
-        },
-        body: JSON.stringify({ name, email, message })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, message, website })
       });
 
       if (res.ok) {
@@ -2582,10 +2579,8 @@ if (cform) {
         status.className = 'cf-status ok';
         cform.reset();
       } else {
-        const err = await res.json().catch(() => ({}));
         status.textContent = t('c.err');
         status.className = 'cf-status err';
-        console.error('Supabase error:', err);
       }
     } catch (err) {
       status.textContent = t('c.net');
