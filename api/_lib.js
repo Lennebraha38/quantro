@@ -83,11 +83,16 @@ function clientIp(req) {
 }
 
 function readJson(req) {
-  try {
-    return JSON.parse(req.body || '{}');
-  } catch (e) {
-    return null;
+  const b = req.body;
+  if (b == null) return null;
+  if (typeof b === 'string') {
+    try { return JSON.parse(b); } catch (e) { return null; }
   }
+  if (Buffer.isBuffer(b)) {
+    try { return JSON.parse(b.toString()); } catch (e) { return null; }
+  }
+  if (typeof b === 'object') return b;
+  return null;
 }
 
 module.exports = {
