@@ -5,89 +5,89 @@
       <stop offset="0.5" stop-color="#07111f"/>
       <stop offset="1" stop-color="#0d1f35"/>
     </linearGradient>
-    <radialGradient id="neb" cx="0.5" cy="0.42" r="0.55">
-      <stop offset="0" stop-color="#00c8f0" stop-opacity="0.22"/>
-      <stop offset="0.45" stop-color="#6020d0" stop-opacity="0.10"/>
+    <pattern id="grid" width="54" height="54" patternUnits="userSpaceOnUse">
+      <path d="M54 0H0V54" fill="none" stroke="#00c8f0" stroke-opacity="0.05"/>
+    </pattern>
+    <radialGradient id="coreGlow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#00c8f0" stop-opacity="0.35"/>
+      <stop offset="0.6" stop-color="#00c8f0" stop-opacity="0.08"/>
       <stop offset="1" stop-color="#00c8f0" stop-opacity="0"/>
     </radialGradient>
     <linearGradient id="cyan" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#00c8f0"/>
       <stop offset="1" stop-color="#7ae6ff"/>
     </linearGradient>
-    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="10" result="b"/>
+    <linearGradient id="scan" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#00c8f0" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#00c8f0" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#00c8f0" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="glowC" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="5" result="b"/>
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
-    <filter id="soft" x="-80%" y="-80%" width="260%" height="260%">
-      <feGaussianBlur stdDeviation="28"/>
+    <filter id="glowW" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="3" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
   </defs>
 
   <rect width="1080" height="1080" fill="url(#bg)"/>
-  <circle cx="540" cy="440" r="560" fill="url(#neb)"/>
-
-  <!-- starfield -->
-  <g fill="#cfe8ff">
-    <circle cx="90" cy="140" r="1.6"/><circle cx="240" cy="90" r="1.2"/><circle cx="420" cy="60" r="1.8"/><circle cx="640" cy="110" r="1.3"/>
-    <circle cx="820" cy="70" r="1.7"/><circle cx="1000" cy="160" r="1.2"/><circle cx="150" cy="300" r="1.4"/><circle cx="40" cy="480" r="1.2"/>
-    <circle cx="1030" cy="360" r="1.5"/><circle cx="960" cy="560" r="1.2"/><circle cx="120" cy="640" r="1.3"/><circle cx="880" cy="760" r="1.6"/>
-    <circle cx="200" cy="850" r="1.2"/><circle cx="1010" cy="820" r="1.4"/><circle cx="60" cy="960" r="1.3"/><circle cx="990" cy="1000" r="1.6"/>
-  </g>
-
-  <!-- scanline -->
-  <g opacity="0.5">
-    <line x1="0" y1="880" x2="1080" y2="880" stroke="#00c8f0" stroke-opacity="0.35" stroke-width="2"/>
-    <line x1="0" y1="884" x2="1080" y2="884" stroke="#00c8f0" stroke-opacity="0.15" stroke-width="4"/>
-  </g>
+  <rect width="1080" height="1080" fill="url(#grid)"/>
+  <circle cx="540" cy="400" r="400" fill="url(#coreGlow)"/>
 
   <!-- HUD corners -->
-  <g stroke="#00c8f0" stroke-opacity="0.7" stroke-width="3" fill="none">
-    <path d="M34,64 V34 H64"/><path d="M1016,64 V34 H986"/>
-    <path d="M34,1016 V1046 H64"/><path d="M1016,1016 V1046 H986"/>
+  <g stroke="#00c8f0" stroke-opacity="0.6" stroke-width="2.5" fill="none">
+    <path d="M40,74 V40 H74"/>
+    <path d="M1006,74 V40 H1040"/>
+    <path d="M40,1006 V1040 H74"/>
+    <path d="M1006,1006 V1040 H1040"/>
   </g>
 
-  <!-- top status strip -->
-  <text x="84" y="44" font-family="'DejaVu Sans Mono',monospace" font-size="17" fill="#00c8f0" letter-spacing="2">◉ QRNG.LIVE ▸ ANU</text>
-  <text x="1080" y="44" text-anchor="end" font-family="'DejaVu Sans Mono',monospace" font-size="17" fill="#7a93a8" letter-spacing="2" dx="-84">SYS.ONLINE ▸ v1.1</text>
+  <!-- top status bar -->
+  <text x="60" y="126" font-family="'JetBrains Mono',monospace" font-weight="700" font-size="24" letter-spacing="3" fill="#00c8f0">QUANTRO_LAB</text>
+  <text x="500" y="126" font-family="'JetBrains Mono',monospace" font-size="20" fill="#4a6070">// 9_MODULE</text>
+  <circle cx="930" cy="118" r="8" fill="#00f0a0" filter="url(#glowW)"/>
+  <text x="950" y="126" font-family="'JetBrains Mono',monospace" font-weight="700" font-size="20" letter-spacing="2" fill="#00f0a0">ONLINE</text>
 
-  <text x="540" y="108" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="700" font-size="30" letter-spacing="10" fill="#e8edf5">QUANTRO</text>
-  <text x="540" y="142" text-anchor="middle" font-family="'DejaVu Sans Mono',monospace" font-size="14" letter-spacing="6" fill="#4a6070">KUANTUM · ASTROFİZİK · ARGE</text>
+  <!-- core hexagon -->
+  <polygon points="540,270 669.8,345 669.8,495 540,570 410.2,495 410.2,345"
+    fill="none" stroke="#00c8f0" stroke-width="2.5" filter="url(#glowC)"/>
+  <polygon points="540,295 651,358 651,482 540,545 429,482 429,358"
+    fill="none" stroke="#00c8f0" stroke-opacity="0.35" stroke-width="1.5"/>
+  <circle cx="540" cy="420" r="70" fill="none" stroke="#00c8f0" stroke-opacity="0.3" stroke-width="1.5" stroke-dasharray="6 8"/>
+  <text x="540" y="440" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-weight="700" font-size="52" fill="url(#cyan)" filter="url(#glowC)">ψ</text>
 
-  <!-- quantum core -->
-  <circle cx="540" cy="440" r="120" fill="none" stroke="#00c8f0" stroke-opacity="0.25" stroke-width="1.5" stroke-dasharray="6 10"/>
-  <circle cx="540" cy="440" r="90" fill="#00c8f0" fill-opacity="0.05" stroke="url(#cyan)" stroke-width="2"/>
-  <circle cx="540" cy="440" r="90" fill="none" stroke="#00c8f0" stroke-opacity="0.6" stroke-width="6" filter="url(#soft)"/>
-  <text x="540" y="466" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="700" font-size="60" fill="url(#cyan)" filter="url(#glow)">|ψ⟩</text>
-
-  <!-- orbits + particles -->
-  <g fill="none" stroke="#00c8f0" stroke-opacity="0.5" stroke-width="1.5">
-    <ellipse cx="540" cy="440" rx="300" ry="105" transform="rotate(-20 540 440)"/>
-    <ellipse cx="540" cy="440" rx="300" ry="105" transform="rotate(20 540 440)"/>
+  <!-- circuit traces -->
+  <g stroke="url(#cyan)" stroke-width="2.5" fill="none" opacity="0.9">
+    <path d="M540,270 L540,158"/><path d="M540,158 H585"/>
+    <path d="M669.8,345 L980,250"/>
+    <path d="M669.8,495 L985,560"/>
+    <path d="M540,570 L540,640"/>
+    <path d="M410.2,495 L95,560"/>
+    <path d="M410.2,345 L100,250"/>
   </g>
-  <circle cx="800" cy="340" r="10" fill="#7ae6ff" filter="url(#glow)"/>
-  <circle cx="292" cy="545" r="8" fill="#00c8f0" filter="url(#glow)"/>
-  <circle cx="704" cy="556" r="6" fill="#a060ff" filter="url(#glow)"/>
+  <g fill="#00c8f0" filter="url(#glowC)">
+    <circle cx="585" cy="158" r="6"/><circle cx="980" cy="250" r="6"/><circle cx="985" cy="560" r="6"/>
+    <circle cx="540" cy="640" r="6"/><circle cx="95" cy="560" r="6"/><circle cx="100" cy="250" r="6"/>
+  </g>
+
+  <!-- floating data chips -->
+  <g font-family="'JetBrains Mono',monospace" font-size="16" fill="#4a6070">
+    <text x="150" y="200">|0⟩</text><text x="880" y="190">|1⟩</text>
+    <text x="900" y="700">Δx·Δp≥ℏ/2</text><text x="130" y="720">H₀=67.4</text>
+  </g>
+
+  <!-- scan line -->
+  <line x1="150" y1="742" x2="930" y2="742" stroke="url(#scan)" stroke-width="3"/>
+  <polygon points="150,742 162,736 162,748" fill="#00c8f0"/>
 
   <!-- title -->
-  <text x="540" y="648" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="300" font-size="54" letter-spacing="3" fill="#e8edf5">Kuantumu</text>
-  <text x="540" y="738" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="800" font-size="90" letter-spacing="4" fill="url(#cyan)" filter="url(#glow)">BİZZAT DENE</text>
-  <text x="540" y="794" text-anchor="middle" font-family="'DejaVu Sans Mono',monospace" font-size="16" letter-spacing="4" fill="#7a93a8">TÜRKİYE'NİN İLK KUANTUM ARAÇ SETİ</text>
+  <text x="540" y="812" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="300" font-size="58" letter-spacing="6" fill="#e8edf5">KUANTUM</text>
+  <text x="540" y="918" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="800" font-size="100" letter-spacing="10" fill="none" stroke="url(#cyan)" stroke-width="2.5" filter="url(#glowC)">LAB</text>
 
-  <!-- 9 tool hexes -->
-  <g font-family="'Space Grotesk',sans-serif" font-weight="700" font-size="17" fill="#020810" text-anchor="middle">
-    <g transform="translate(268,908)"><path d="M0,-24 L20,-12 V12 L0,24 L-20,12 V-12 Z" fill="#00c8f0"/><text y="7">1</text></g>
-    <g transform="translate(342,908)"><path d="M0,-24 L20,-12 V12 L0,24 L-20,12 V-12 Z" fill="#00c8f0"/><text y="7">2</text></g>
-    <g transform="translate(416,908)"><path d="M0,-24 L20,-12 V12 L0,24 L-20,12 V-12 Z" fill="#00c8f0"/><text y="7">3</text></g>
-    <g transform="translate(490,908)"><path d="M0,-24 L20,-12 V12 L0,24 L-20,12 V-12 Z" fill="#00c8f0"/><text y="7">4</text></g>
-    <g transform="translate(540,908)"><path d="M0,-28 L24,-14 V14 L0,28 L-24,14 V-14 Z" fill="url(#cyan)" filter="url(#glow)"/><text y="8" font-size="19">9</text></g>
-    <g transform="translate(590,908)"><path d="M0,-24 L20,-12 V12 L0,24 L-20,12 V-12 Z" fill="#00c8f0"/><text y="7">5</text></g>
-    <g transform="translate(664,908)"><path d="M0,-24 L20,-12 V12 L0,24 L-20,12 V-12 Z" fill="#00c8f0"/><text y="7">6</text></g>
-    <g transform="translate(738,908)"><path d="M0,-24 L20,-12 V12 L0,24 L-20,12 V-12 Z" fill="#00c8f0"/><text y="7">7</text></g>
-    <g transform="translate(812,908)"><path d="M0,-24 L20,-12 V12 L0,24 L-20,12 V-12 Z" fill="#00c8f0"/><text y="7">8</text></g>
-  </g>
-  <text x="540" y="966" text-anchor="middle" font-family="'DejaVu Sans Mono',monospace" font-size="15" letter-spacing="4" fill="#7a93a8">9 ÖZGÜN MODÜL · ÜCRETSİZ · İNTERAKTİF</text>
-
-  <!-- CTA -->
-  <rect x="330" y="992" width="420" height="58" rx="29" fill="url(#cyan)"/>
-  <text x="540" y="1027" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="700" font-size="24" letter-spacing="5" fill="#020810">LAB'A GİR ▸</text>
+  <!-- subtitle + badge -->
+  <text x="540" y="972" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-weight="700" font-size="22" letter-spacing="4" fill="#7a93a8">9 ÖZGÜN İNTERAKTİF ARAÇ</text>
+  <rect x="398" y="998" width="284" height="46" rx="23" fill="#00c8f0" fill-opacity="0.14" stroke="#00f0a0" stroke-opacity="0.5" stroke-width="1.5"/>
+  <text x="540" y="1028" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-weight="700" font-size="17" letter-spacing="3" fill="#00f0a0">▼ TÜRKİYE'DE İLK</text>
 </svg>

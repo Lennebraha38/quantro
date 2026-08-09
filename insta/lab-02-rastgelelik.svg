@@ -1,73 +1,82 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#020810"/>
       <stop offset="0.5" stop-color="#07111f"/>
       <stop offset="1" stop-color="#0d1f35"/>
     </linearGradient>
-    <radialGradient id="neb" cx="0.5" cy="0.35" r="0.55">
-      <stop offset="0" stop-color="#00c8f0" stop-opacity="0.18"/>
-      <stop offset="0.5" stop-color="#6020d0" stop-opacity="0.08"/>
-      <stop offset="1" stop-color="#00c8f0" stop-opacity="0"/>
-    </radialGradient>
+    <pattern id="grid" width="54" height="54" patternUnits="userSpaceOnUse">
+      <path d="M54 0H0V54" fill="none" stroke="#00c8f0" stroke-opacity="0.05"/>
+    </pattern>
     <linearGradient id="cyan" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#00c8f0"/>
       <stop offset="1" stop-color="#7ae6ff"/>
     </linearGradient>
-    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="8" result="b"/>
+    <linearGradient id="wav" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7ae6ff" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#00c8f0" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#7ae6ff" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="glowC" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="5" result="b"/>
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
-    <filter id="soft" x="-80%" y="-80%" width="260%" height="260%">
-      <feGaussianBlur stdDeviation="26"/>
+    <filter id="glowG" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
   </defs>
 
   <rect width="1080" height="1080" fill="url(#bg)"/>
-  <circle cx="540" cy="380" r="560" fill="url(#neb)"/>
+  <rect width="1080" height="1080" fill="url(#grid)"/>
 
-  <!-- HUD corners -->
-  <g stroke="#00c8f0" stroke-opacity="0.7" stroke-width="3" fill="none">
-    <path d="M34,64 V34 H64"/><path d="M1016,64 V34 H986"/>
-    <path d="M34,1016 V1046 H64"/><path d="M1016,1016 V1046 H986"/>
+  <g stroke="#00c8f0" stroke-opacity="0.6" stroke-width="2.5" fill="none">
+    <path d="M40,74 V40 H74"/><path d="M1006,74 V40 H1040"/>
+    <path d="M40,1006 V1040 H74"/><path d="M1006,1006 V1040 H1040"/>
   </g>
-  <text x="84" y="44" font-family="'DejaVu Sans Mono',monospace" font-size="16" fill="#00c8f0" letter-spacing="2">MOD.01 ▸ QRNG</text>
-  <text x="996" y="44" text-anchor="end" font-family="'DejaVu Sans Mono',monospace" font-size="16" fill="#7a93a8" letter-spacing="2">01 / 05</text>
 
-  <text x="540" y="196" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="800" font-size="72" letter-spacing="3" fill="url(#cyan)" filter="url(#glow)">RASTGELELİK</text>
-  <text x="540" y="250" text-anchor="middle" font-family="'DejaVu Sans Mono',monospace" font-size="16" letter-spacing="4" fill="#7a93a8">01 :: KUANTUM RASTGELELİK MOTORU</text>
+  <text x="60" y="126" font-family="'JetBrains Mono',monospace" font-weight="700" font-size="24" letter-spacing="3" fill="#00c8f0">QUANTRO_LAB</text>
+  <circle cx="930" cy="118" r="8" fill="#00f0a0" filter="url(#glowG)"/>
+  <text x="950" y="126" font-family="'JetBrains Mono',monospace" font-weight="700" font-size="20" letter-spacing="2" fill="#00f0a0">RUNNING</text>
+  <text x="720" y="126" font-family="'JetBrains Mono',monospace" font-size="20" fill="#4a6070">MOD 01/05</text>
 
-  <!-- status pill -->
-  <rect x="380" y="278" width="320" height="40" rx="20" fill="rgba(0,240,160,0.08)" stroke="rgba(0,240,160,0.4)" stroke-width="1.5"/>
-  <circle cx="410" cy="298" r="6" fill="#00f0a0" filter="url(#glow)"/>
-  <text x="430" y="304" font-family="'DejaVu Sans Mono',monospace" font-size="15" letter-spacing="2" fill="#00f0a0">QRNG ▸ ANU CANLI BAĞLANTI</text>
+  <!-- title -->
+  <text x="540" y="236" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="800" font-size="72" letter-spacing="4" fill="url(#cyan)" filter="url(#glowC)">RASTGELELİK</text>
+  <text x="540" y="288" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-weight="700" font-size="20" letter-spacing="3" fill="#7a93a8">// 01_QUANTUM_RNG_ENGINE</text>
+  <line x1="380" y1="322" x2="700" y2="322" stroke="#00c8f0" stroke-opacity="0.35" stroke-width="2"/>
 
-  <!-- random digit stream -->
-  <rect x="120" y="346" width="840" height="120" rx="14" fill="#060d18" stroke="#00c8f0" stroke-opacity="0.3" stroke-width="1.5"/>
-  <text x="154" y="382" font-family="'DejaVu Sans Mono',monospace" font-size="13" letter-spacing="2" fill="#4a6070">$ quantro.qrng --generate --real</text>
-  <text x="154" y="420" font-family="'DejaVu Sans Mono',monospace" font-size="34" letter-spacing="8" fill="#00c8f0" filter="url(#glow)">8 3 5 1 9 4 2 7 6 0</text>
-  <text x="154" y="452" font-family="'DejaVu Sans Mono',monospace" font-size="13" letter-spacing="2" fill="#7a93a8">> 3841095276 · kaynak: vakum dalgalanması ✓</text>
+  <!-- terminal window -->
+  <rect x="110" y="360" width="860" height="360" rx="16" fill="#020810" stroke="#00c8f0" stroke-opacity="0.35" stroke-width="2"/>
+  <rect x="110" y="360" width="860" height="46" rx="16" fill="#0d1f35"/>
+  <circle cx="150" cy="383" r="8" fill="#ff4466"/>
+  <circle cx="180" cy="383" r="8" fill="#f0c040"/>
+  <circle cx="210" cy="383" r="8" fill="#00f0a0"/>
+  <text x="540" y="392" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-weight="700" font-size="18" letter-spacing="2" fill="#7a93a8">qrng.engine — gerçek kuantum kaynağı</text>
+
+  <!-- live number readout -->
+  <text x="540" y="540" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-weight="700" font-size="72" letter-spacing="1" fill="url(#cyan)" filter="url(#glowC)">0 4 2 8 6 1 9 3</text>
+  <text x="540" y="588" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-weight="700" font-size="17" letter-spacing="4" fill="#7a93a8">SÜPERPOZİSYON TABANLI CANLI ÜRETİM</text>
 
   <!-- waveform -->
-  <g stroke="url(#cyan)" stroke-width="3.5" fill="none">
-    <path d="M120,560 Q200,470 280,560 T440,560 T600,560 T760,560 T920,560 T960,560"/>
+  <g>
+    <rect x="140" y="610" width="800" height="80" rx="8" fill="#0d1f35" fill-opacity="0.6"/>
+    <path d="M150,650 Q200,618 250,650 T350,650 T450,650 T550,650 T650,650 T750,650 T850,650 T930,650"
+      fill="none" stroke="url(#wav)" stroke-width="3" filter="url(#glowC)"/>
   </g>
-  <circle cx="240" cy="515" r="7" fill="#7ae6ff" filter="url(#glow)"/>
-  <circle cx="440" cy="605" r="7" fill="#7ae6ff" filter="url(#glow)"/>
-  <circle cx="640" cy="515" r="7" fill="#7ae6ff" filter="url(#glow)"/>
-  <circle cx="840" cy="605" r="7" fill="#a060ff" filter="url(#glow)"/>
-  <text x="540" y="650" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="500" font-size="26" letter-spacing="1" fill="#e8edf5">Süperpozisyon tabanlı gerçek belirsizlik</text>
 
-  <!-- explain box -->
-  <rect x="120" y="692" width="840" height="196" rx="14" fill="#0d1f35" stroke="#00c8f0" stroke-opacity="0.25" stroke-width="1.5"/>
-  <text x="154" y="742" font-family="'DejaVu Sans Mono',monospace" font-size="14" letter-spacing="2" fill="#00c8f0">▸ KLASİK</text>
-  <text x="300" y="742" font-family="'Space Grotesk',sans-serif" font-weight="400" font-size="21" fill="#7a93a8">algoritma → sahte rastgelelik</text>
-  <text x="154" y="786" font-family="'DejaVu Sans Mono',monospace" font-size="14" letter-spacing="2" fill="#00c8f0">▸ QUANTRO</text>
-  <text x="300" y="786" font-family="'Space Grotesk',sans-serif" font-weight="400" font-size="21" fill="#e8edf5">ANU motoru → <tspan fill="#00c8f0">gerçek kuantum</tspan> belirsizlik</text>
-  <text x="154" y="830" font-family="'DejaVu Sans Mono',monospace" font-size="14" letter-spacing="2" fill="#a060ff">▸ Δx·Δp ≥ ℏ/2</text>
-  <text x="300" y="830" font-family="'Space Grotesk',sans-serif" font-weight="400" font-size="21" fill="#e8edf5">Heisenberg — doğanın kendisi</text>
-  <text x="154" y="866" font-family="'DejaVu Sans Mono',monospace" font-size="14" letter-spacing="2" fill="#00f0a0">▸ CHI²</text>
-  <text x="300" y="866" font-family="'Space Grotesk',sans-serif" font-weight="400" font-size="21" fill="#7a93a8">istediğin sayıyı üret, <tspan fill="#00f0a0">𝝌² testi</tspan> ile doğrula</text>
+  <!-- info row -->
+  <rect x="110" y="764" width="420" height="200" rx="16" fill="#0d1f35" stroke="#00c8f0" stroke-opacity="0.25" stroke-width="1.5"/>
+  <text x="140" y="812" font-family="'JetBrains Mono',monospace" font-weight="700" font-size="18" letter-spacing="2" fill="#00c8f0">NEDEN GERÇEK?</text>
+  <text x="140" y="852" font-family="'JetBrains Mono',monospace" font-size="20" fill="#e8edf5">Klasikler <tspan fill="#7a93a8">sahte</tspan> rastgelelik üretir —</text>
+  <text x="140" y="888" font-family="'JetBrains Mono',monospace" font-size="20" fill="#e8edf5">algoritma + tohum. Quantro, ANU'nun</text>
+  <text x="140" y="924" font-family="'JetBrains Mono',monospace" font-size="20" fill="#e8edf5">vakum dalgalanması ölçen kuantum</text>
+  <text x="140" y="960" font-family="'JetBrains Mono',monospace" font-size="20" fill="#e8edf5">motoruna bağlanır → <tspan fill="#00c8f0">gerçek belirsizlik</tspan></text>
 
-  <text x="540" y="958" text-anchor="middle" font-family="'DejaVu Sans Mono',monospace" font-size="16" letter-spacing="4" fill="#4a6070">quantro-1.vercel.app</text>
+  <rect x="550" y="764" width="420" height="200" rx="16" fill="#0d1f35" stroke="#00f0a0" stroke-opacity="0.25" stroke-width="1.5"/>
+  <text x="580" y="812" font-family="'JetBrains Mono',monospace" font-weight="700" font-size="18" letter-spacing="2" fill="#00f0a0">HEISENBERG</text>
+  <text x="580" y="866" font-family="'JetBrains Mono',monospace" font-weight="700" font-size="42" fill="#00f0a0" filter="url(#glowG)">Δx · Δp ≥ ℏ/2</text>
+  <text x="580" y="916" font-family="'JetBrains Mono',monospace" font-size="18" fill="#7a93a8">Ölçüm hatası değil —</text>
+  <text x="580" y="944" font-family="'JetBrains Mono',monospace" font-size="18" fill="#7a93a8">doğanın kendisi.</text>
+
+  <text x="540" y="1020" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-weight="700" font-size="20" letter-spacing="3" fill="#00c8f0">quantro-1.vercel.app ▍</text>
 </svg>

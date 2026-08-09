@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#020810"/>
+      <stop offset="0.5" stop-color="#07111f"/>
+      <stop offset="1" stop-color="#0d1f35"/>
+    </linearGradient>
+    <pattern id="grid" width="54" height="54" patternUnits="userSpaceOnUse">
+      <path d="M54 0H0V54" fill="none" stroke="#00c8f0" stroke-opacity="0.05"/>
+    </pattern>
+    <linearGradient id="cyan" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#00c8f0"/>
+      <stop offset="1" stop-color="#7ae6ff"/>
+    </linearGradient>
+    <filter id="glowC" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glowG" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glowW" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="3" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="1080" height="1080" fill="url(#bg)"/>
+  <rect width="1080" height="1080" fill="url(#grid)"/>
+  <circle cx="540" cy="420" r="360" fill="none" stroke="#00c8f0" stroke-opacity="0.06" stroke-width="1.5"/>
+
+  <g stroke="#00c8f0" stroke-opacity="0.6" stroke-width="2.5" fill="none">
+    <path d="M40,74 V40 H74"/><path d="M1006,74 V40 H1040"/>
+    <path d="M40,1006 V1040 H74"/><path d="M1006,1006 V1040 H1040"/>
+  </g>
+
+  <text x="60" y="126" font-family="'JetBrains Mono',monospace" font-weight="700" font-size="24" letter-spacing="3" fill="#00c8f0">QUANTRO_LAB</text>
+  <circle cx="930" cy="118" r="8" fill="#00f0a0" filter="url(#glowG)"/>
+  <text x="950" y="126" font-family="'JetBrains Mono',monospace" font-weight="700" font-size="20" letter-spacing="2" fill="#00f0a0">ONLINE</text>
+  <text x="720" y="126" font-family="'JetBrains Mono',monospace" font-size="20" fill="#4a6070">MOD 04/05</text>
+
+  <text x="540" y="236" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="800" font-size="72" letter-spacing="4" fill="url(#cyan)" filter="url(#glowC)">KOZMOS</text>
+  <text x="540" y="288" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-weight="700" font-size="20" letter-spacing="3" fill="#7a93a8">// 03_06_07_ASTRO_MODULES</text>
+  <line x1="380" y1="322" x2="700" y2="322" stroke="#00c8f0" stroke-opacity="0.35" stroke-width="2"/>
+
+  <!-- card 1: universe age -->
+  <rect x="110" y="356" width="260" height="300" rx="16" fill="#0d1f35" stroke="#00c8f0" stroke-opacity="0.35" stroke-width="2"/>
+  <text x="140" y="404" font-family="'JetBrains Mono',monospace" font-weight="700" font-size="16" letter-spacing="2" fill="#7a93a8">EVREN YAŞI</text>
+  <text x="140" y="480" font-family="'Space Grotesk',sans-serif" font-weight="800" font-size="62" fill="url(#cyan)" filter="url(#glowC)">13.8</text>
+  <text x="140" y="522" font-family="'JetBrains Mono',monospace" font-weight="700" font-size="24" fill="#e8edf5">Gyr</text>
+  <line x1="140" y1="552" x2="340" y2="552" stroke="#00c8f0" stroke-opacity="0.2" stroke-width="1.5"/>
+  <text x="140" y="590" font-family="'JetBrains Mono',monospace" font-size="16" fill="#7a93a8">Hubble H₀ = 67.4</text>
+  <text x="140" y="620" font-family="'JetBrains Mono',monospace" font-size="16" fill="#7a93a8">Friedmann integrali</text>
+
+  <!-- card 2: black hole -->
+  <rect x="410" y="356" width="260" height="300" rx="16" fill="#0d1f35" stroke="#a060ff" stroke-opacity="0.4" stroke-width="2"/>
+  <text x="440" y="404" font-family="'JetBrains Mono',monospace" font-weight="700" font-size="16" letter-spacing="2" fill="#7a93a8">KARA DELİK</text>
+  <text x="440" y="470" font-family="'JetBrains Mono',monospace" font-weight="700" font-size="30" fill="#a060ff" filter="url(#glowC)">r_s=2GM/c²</text>
+  <text x="440" y="520" font-family="'JetBrains Mono',monospace" font-size="16" fill="#7a93a8">Hawking sıcaklığı</text>
+  <text x="440" y="546" font-family="'JetBrains Mono',monospace" font-size="16" fill="#7a93a8">Bekenstein entropisi</text>
+  <line x1="440" y1="576" x2="640" y2="576" stroke="#a060ff" stroke-opacity="0.2" stroke-width="1.5"/>
+  <text x="440" y="610" font-family="'JetBrains Mono',monospace" font-weight="700" font-size="16" fill="#a060ff">Sgr A* ▸ 4M☉</text>
+
+  <!-- card 3: doppler -->
+  <rect x="710" y="356" width="260" height="300" rx="16" fill="#0d1f35" stroke="#00f0a0" stroke-opacity="0.35" stroke-width="2"/>
+  <text x="740" y="404" font-family="'JetBrains Mono',monospace" font-weight="700" font-size="16" letter-spacing="2" fill="#7a93a8">KIRMIZIYA KAYMA</text>
+  <text x="740" y="480" font-family="'Space Grotesk',sans-serif" font-weight="800" font-size="62" fill="#00f0a0" filter="url(#glowG)">z=0.1</text>
+  <text x="740" y="530" font-family="'JetBrains Mono',monospace" font-weight="700" font-size="18" fill="#e8edf5">v = H₀ · d</text>
+  <line x1="740" y1="560" x2="940" y2="560" stroke="#00f0a0" stroke-opacity="0.2" stroke-width="1.5"/>
+  <text x="740" y="598" font-family="'JetBrains Mono',monospace" font-size="16" fill="#7a93a8">M31 ▸ z=0.008</text>
+  <text x="740" y="624" font-family="'JetBrains Mono',monospace" font-size="16" fill="#7a93a8">Reiyonizasyon ▸ z=10</text>
+
+  <!-- CTA -->
+  <rect x="110" y="700" width="860" height="190" rx="20" fill="#0d1f35" stroke="#00c8f0" stroke-opacity="0.3" stroke-width="2"/>
+  <text x="540" y="760" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-weight="700" font-size="22" letter-spacing="2" fill="#e8edf5">9 ARAÇ — HEPSİ ÜCRETSİZ, TARAYICIDA ÇALIŞIR</text>
+  <text x="540" y="794" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="17" fill="#7a93a8">gerçek kuantum kaynağı ▸ kriptografi ▸ kozmoloji</text>
+  <rect x="360" y="826" width="360" height="72" rx="36" fill="#00c8f0" filter="url(#glowC)"/>
+  <text x="540" y="872" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-weight="700" font-size="28" letter-spacing="4" fill="#020810">LAB'A GİR ▸</text>
+
+  <text x="540" y="1020" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-weight="700" font-size="20" letter-spacing="3" fill="#00c8f0">quantro-1.vercel.app ▍</text>
+</svg>

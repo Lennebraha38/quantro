@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#020810"/>
+      <stop offset="0.5" stop-color="#07111f"/>
+      <stop offset="1" stop-color="#0d1f35"/>
+    </linearGradient>
+    <pattern id="grid" width="54" height="54" patternUnits="userSpaceOnUse">
+      <path d="M54 0H0V54" fill="none" stroke="#00c8f0" stroke-opacity="0.05"/>
+    </pattern>
+    <linearGradient id="cyan" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#00c8f0"/>
+      <stop offset="1" stop-color="#7ae6ff"/>
+    </linearGradient>
+    <filter id="glowC" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glowG" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glowP" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="1080" height="1080" fill="url(#bg)"/>
+  <rect width="1080" height="1080" fill="url(#grid)"/>
+
+  <g stroke="#00c8f0" stroke-opacity="0.6" stroke-width="2.5" fill="none">
+    <path d="M40,74 V40 H74"/><path d="M1006,74 V40 H1040"/>
+    <path d="M40,1006 V1040 H74"/><path d="M1006,1006 V1040 H1040"/>
+  </g>
+
+  <text x="60" y="126" font-family="'JetBrains Mono',monospace" font-weight="700" font-size="24" letter-spacing="3" fill="#00c8f0">QUANTRO_LAB</text>
+  <circle cx="930" cy="118" r="8" fill="#00f0a0" filter="url(#glowG)"/>
+  <text x="950" y="126" font-family="'JetBrains Mono',monospace" font-weight="700" font-size="20" letter-spacing="2" fill="#00f0a0">SECURE</text>
+  <text x="720" y="126" font-family="'JetBrains Mono',monospace" font-size="20" fill="#4a6070">MOD 03/05</text>
+
+  <text x="540" y="236" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-weight="800" font-size="72" letter-spacing="4" fill="url(#cyan)" filter="url(#glowC)">ŞİFRELEME</text>
+  <text x="540" y="288" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-weight="700" font-size="20" letter-spacing="3" fill="#7a93a8">// 04_QUANTUM_CRYPTO_BB84</text>
+  <line x1="380" y1="322" x2="700" y2="322" stroke="#00c8f0" stroke-opacity="0.35" stroke-width="2"/>
+
+  <!-- Alice -->
+  <rect x="110" y="356" width="290" height="200" rx="16" fill="#0d1f35" stroke="#00c8f0" stroke-opacity="0.4" stroke-width="2"/>
+  <text x="140" y="400" font-family="'JetBrains Mono',monospace" font-weight="700" font-size="20" letter-spacing="2" fill="#00c8f0">ALICE ▸ GÖNDERİCİ</text>
+  <text x="140" y="446" font-family="'JetBrains Mono',monospace" font-size="17" fill="#7a93a8">kubitler</text>
+  <text x="140" y="480" font-family="'JetBrains Mono',monospace" font-weight="700" font-size="24" fill="#e8edf5">1 0 1 1 0 0 1</text>
+  <text x="140" y="526" font-family="'JetBrains Mono',monospace" font-size="17" fill="#7a93a8">bazlar</text>
+  <g font-family="'JetBrains Mono',monospace" font-weight="700" font-size="22" fill="#a060ff">
+    <text x="140" y="560">+</text><text x="190" y="560">×</text><text x="240" y="560">+</text><text x="290" y="560">×</text><text x="340" y="560">+</text>
+  </g>
+
+  <!-- channel -->
+  <line x1="400" y1="456" x2="680" y2="456" stroke="#00c8f0" stroke-opacity="0.6" stroke-width="2.5"/>
+  <polygon points="680,456 666,448 666,464" fill="#00c8f0"/>
+  <circle cx="440" cy="456" r="9" fill="#00c8f0" filter="url(#glowC)"/>
+  <circle cx="495" cy="456" r="9" fill="#a060ff" filter="url(#glowP)"/>
+  <circle cx="550" cy="456" r="9" fill="#00c8f0" filter="url(#glowC)"/>
+  <circle cx="605" cy="456" r="9" fill="#a060ff" filter="url(#glowP)"/>
+  <text x="540" y="430" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="16" fill="#7a93a8">kuantum kanalı</text>
+
+  <!-- Bob -->
+  <rect x="680" y="356" width="290" height="200" rx="16" fill="#0d1f35" stroke="#00f0a0" stroke-opacity="0.4" stroke-width="2"/>
+  <text x="710" y="400" font-family="'JetBrains Mono',monospace" font-weight="700" font-size="20" letter-spacing="2" fill="#00f0a0">BOB ▸ ALICI</text>
+  <text x="710" y="446" font-family="'JetBrains Mono',monospace" font-size="17" fill="#7a93a8">ölçüm</text>
+  <text x="710" y="480" font-family="'JetBrains Mono',monospace" font-weight="700" font-size="24" fill="#e8edf5">1 0 1 1 0 0 1</text>
+  <text x="710" y="526" font-family="'JetBrains Mono',monospace" font-size="17" fill="#7a93a8">ortak anahtar ✓</text>
+  <text x="710" y="560" font-family="'JetBrains Mono',monospace" font-weight="700" font-size="22" fill="#00f0a0" filter="url(#glowG)">1011001</text>
+
+  <!-- Eve -->
+  <rect x="340" y="590" width="400" height="96" rx="14" fill="#12082a" stroke="#a060ff" stroke-opacity="0.5" stroke-width="2"/>
+  <text x="370" y="634" font-family="'JetBrains Mono',monospace" font-weight="700" font-size="20" letter-spacing="2" fill="#a060ff" filter="url(#glowP)">EVE DİNLERSE →</text>
+  <text x="370" y="666" font-family="'JetBrains Mono',monospace" font-size="18" fill="#e8edf5">Ölçmek durumu bozar → <tspan fill="#ff4466">anahtar çöker</tspan></text>
+
+  <!-- key + security -->
+  <rect x="110" y="718" width="860" height="170" rx="16" fill="#0d1f35" stroke="#00f0a0" stroke-opacity="0.3" stroke-width="1.5"/>
+  <text x="150" y="766" font-family="'JetBrains Mono',monospace" font-weight="700" font-size="18" letter-spacing="2" fill="#00f0a0">GİZLİ ANAHTAR</text>
+  <text x="150" y="820" font-family="'JetBrains Mono',monospace" font-weight="700" font-size="38" letter-spacing="4" fill="#00f0a0" filter="url(#glowG)">1011001 0110010</text>
+  <rect x="150" y="846" width="780" height="12" rx="6" fill="#020810"/>
+  <rect x="150" y="846" width="760" height="12" rx="6" fill="#00f0a0" filter="url(#glowG)"/>
+  <text x="930" y="856" text-anchor="end" font-family="'JetBrains Mono',monospace" font-weight="700" font-size="16" fill="#00f0a0">%100</text>
+
+  <text x="540" y="1016" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-weight="700" font-size="20" letter-spacing="3" fill="#00c8f0">quantro-1.vercel.app ▍</text>
+</svg>
