@@ -137,6 +137,16 @@ nav.sc{background:rgba(2,8,16,.92);backdrop-filter:blur(20px);padding:13px 0;bor
 .cm-name{font-family:var(--fd);font-size:13px;font-weight:700;text-transform:uppercase;color:var(--cyan)}
 .cm-date{font-family:var(--fm);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);flex-shrink:0}
 .cm-body{font-size:14px;line-height:1.8;color:rgba(232,237,245,.7)}
+.cm-foot{display:flex;align-items:center;gap:8px;margin-top:12px;flex-wrap:wrap}
+.cm-foot .like-btn{padding:5px 11px;font-size:10px}
+.cm-reply-btn{font-family:var(--fm);font-size:10px;letter-spacing:1px;text-transform:uppercase;background:none;border:none;color:var(--muted);cursor:pointer;padding:4px 6px;transition:color .2s}
+.cm-reply-btn:hover{color:var(--cyan)}
+.cm-item.cm-reply{margin-left:30px;margin-bottom:6px;border-left:2px solid rgba(0,200,240,.28);background:rgba(9,14,24,.6)}
+.cm-reply-form{margin-top:12px;padding:16px 18px;background:var(--void);border:1px solid rgba(0,200,240,.12)}
+.cm-reply-form .cm-input{margin-bottom:8px;padding:9px 12px;font-size:13px}
+.cm-reply-form .cm-text{min-height:64px}
+.cm-reply-form .cm-btn{padding:10px 18px;font-size:10px}
+.cm-reply-form .cm-status{margin-top:8px;font-size:9px}
 .cm-form{background:var(--deep);border:1px solid rgba(0,200,240,.1);padding:28px;position:relative}
 .cm-form::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),transparent)}
 .cm-form-head{font-family:var(--fd);font-size:16px;font-weight:800;text-transform:uppercase;margin-bottom:20px}
@@ -358,20 +368,36 @@ async function likePost(slug,btn,ev){
   if(ev)ev.stopPropagation();
   if(!btn||likeLock[slug])return;
   const ck='qlk_'+slug.replace(/[^a-z0-9_\-]/gi,'_');
-  if(document.cookie.match(new RegExp('(^|;)\\s*'+ck+'=')))return;
+  const liked=!!document.cookie.match(new RegExp('(^|;)\\s*'+ck+'='));
   likeLock[slug]=true;
-  btn.classList.add('liked');
-  const ic=btn.querySelector('.lb-ic');if(ic)ic.textContent='♥';
-  stats.likes[slug]=(stats.likes[slug]||0)+1;
-  const n=btn.querySelector('.lb-n');if(n)n.textContent=stats.likes[slug];
-  document.cookie=ck+'=1;max-age=31536000;path=/';
+  const ic=btn.querySelector('.lb-ic'),n=btn.querySelector('.lb-n');
+  const old=stats.likes[slug]||0;
+  if(liked){
+    btn.classList.remove('liked');if(ic)ic.textContent='♡';
+    stats.likes[slug]=Math.max(0,old-1);
+    document.cookie=ck+'=;max-age=0;path=/';
+  }else{
+    btn.classList.add('liked');if(ic)ic.textContent='♥';
+    stats.likes[slug]=old+1;
+    document.cookie=ck+'=1;max-age=31536000;path=/';
+  }
+  if(n)n.textContent=stats.likes[slug];
+  if(slug===currentSlug)applyCounts();
   try{
-    const res=await fetch('/api/likes',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({post_slug:slug})});
-    const d=await res.json();
+    const res=await fetch('/api/likes',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({post_slug:slug,action:liked?'unlike':'like'})});
+    const d=await res.json().catch(()=>({}));
     if(res.ok&&d.likes!==undefined){
       stats.likes[slug]=d.likes;
-      const n2=btn.querySelector('.lb-n');if(n2)n2.textContent=d.likes;
+      if(n)n.textContent=d.likes;
+      if(d.liked!==undefined){
+        if(d.liked){btn.classList.add('liked');if(ic)ic.textContent='♥';document.cookie=ck+'=1;max-age=31536000;path=/';}
+        else{btn.classList.remove('liked');if(ic)ic.textContent='♡';document.cookie=ck+'=;max-age=0;path=/';}
+      }
       if(slug===currentSlug)applyCounts();
+    }else{
+      stats.likes[slug]=old;if(n)n.textContent=old;
+      if(liked){btn.classList.add('liked');if(ic)ic.textContent='♥';document.cookie=ck+'=1;max-age=31536000;path=/';}
+      else{btn.classList.remove('liked');if(ic)ic.textContent='♡';document.cookie=ck+'=;max-age=0;path=/';}
     }
   }catch(e){}
   finally{likeLock[slug]=false}
@@ -394,15 +420,7 @@ async function loadCardComments(slug){
     const res=await fetch(`${SB_URL}/rest/v1/blog_comments?post_slug=eq.${encodeURIComponent(slug)}&is_approved=eq.true&order=created_at.asc`,{headers:SBH});
     const data=await res.json();
     const arr=Array.isArray(data)?data:[];
-    list.innerHTML=arr.length?arr.map(c=>`
-      <div class="cm-item">
-        <div class="cm-head">
-          <span class="cm-name">${escHtml(c.name)}</span>
-          <span class="cm-date">${new Date(c.created_at).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'})}</span>
-        </div>
-        <div class="cm-body">${escHtml(c.content).replace(/\n/g,'<br>')}</div>
-      </div>
-    `).join(''):'<div class="cm-empty">Henüz yorum yok. İlk yorumu sen yap!</div>';
+    list.innerHTML=renderCommentTree(arr,slug);
     const n=document.getElementById('cms-'+slug)&&document.getElementById('cms-'+slug).querySelector('.cm-n');
     if(n)n.textContent=arr.length;
     stats.comments[slug]=arr.length;
@@ -544,6 +562,115 @@ function openPost(slug){
 /* COMMENTS */
 function escHtml(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 
+function commentLiked(id){return !!document.cookie.match(new RegExp('(^|;)\\s*qcl_'+id.replace(/[^a-z0-9_\-]/gi,'_')+'='))}
+
+function commentLikeBtn(c){
+  const liked=commentLiked(c.id);
+  return `<button class="like-btn cmlike" onclick="commentLike('${c.id}',this,event)" title="Beğen"><span class="lb-ic">${liked?'♥':'♡'}</span> <b class="lb-n">${c.likes||0}</b></button>`;
+}
+
+function commentItemHTML(c,slug,isReply){
+  const cls=isReply?'cm-item cm-reply':'cm-item';
+  return `
+  <div class="${cls}" id="cm-${c.id}">
+    <div class="cm-head">
+      <span class="cm-name">${escHtml(c.name)}</span>
+      <span class="cm-date">${new Date(c.created_at).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'})}</span>
+    </div>
+    <div class="cm-body">${escHtml(c.content).replace(/\n/g,'<br>')}</div>
+    <div class="cm-foot">
+      ${commentLikeBtn(c)}
+      <button class="cm-reply-btn" onclick="toggleReply('${c.id}',event)">↩ Yanıtla</button>
+    </div>
+    <div class="cm-reply-form" id="crf-${c.id}" style="display:none">
+      <div class="cm-row">
+        <input class="cm-input" id="crn-${c.id}" placeholder="Adınız *" maxlength="80" autocomplete="name">
+        <input class="cm-input" id="cre-${c.id}" placeholder="E-posta (isteğe bağlı)" maxlength="254" autocomplete="email">
+      </div>
+      <input class="cm-input hp" id="crw-${c.id}" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <textarea class="cm-input cm-text" id="crt-${c.id}" placeholder="Yanıtınız… *" maxlength="1200"></textarea>
+      <button class="cm-btn" onclick="submitReply('${c.id}','${slug}',event)">Gönder</button>
+      <div class="cm-status" id="crs-${c.id}"></div>
+    </div>
+  </div>`;
+}
+
+function renderCommentTree(arr,slug){
+  if(!Array.isArray(arr)||!arr.length)return '<div class="cm-empty">Henüz yorum yok. İlk yorumu sen yap!</div>';
+  const byParent={};
+  arr.forEach(c=>{const k=c.parent_id||'root';(byParent[k]=byParent[k]||[]).push(c)});
+  const roots=byParent['root']||[];
+  if(!roots.length)return '<div class="cm-empty">Henüz yorum yok. İlk yorumu sen yap!</div>';
+  return roots.map(c=>commentItemHTML(c,slug,false)+((byParent[c.id]||[]).map(r=>commentItemHTML(r,slug,true)).join(''))).join('');
+}
+
+let commentLikeLock={};
+async function commentLike(id,btn,ev){
+  if(ev)ev.stopPropagation();
+  if(!btn||commentLikeLock[id])return;
+  const ck='qcl_'+id.replace(/[^a-z0-9_\-]/gi,'_');
+  const liked=!!document.cookie.match(new RegExp('(^|;)\\s*'+ck+'='));
+  commentLikeLock[id]=true;
+  const ic=btn.querySelector('.lb-ic'),n=btn.querySelector('.lb-n');
+  const old=parseInt((n&&n.textContent)||'0',10)||0;
+  if(liked){btn.classList.remove('liked');if(ic)ic.textContent='♡';document.cookie=ck+'=;max-age=0;path=/';}
+  else{btn.classList.add('liked');if(ic)ic.textContent='♥';document.cookie=ck+'=1;max-age=31536000;path=/';}
+  if(n)n.textContent=liked?Math.max(0,old-1):old+1;
+  try{
+    const res=await fetch('/api/comment-likes',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({comment_id:id,action:liked?'unlike':'like'})});
+    const d=await res.json().catch(()=>({}));
+    if(res.ok&&d.likes!==undefined){
+      if(n)n.textContent=d.likes;
+      if(d.liked!==undefined){
+        if(d.liked){btn.classList.add('liked');if(ic)ic.textContent='♥';document.cookie=ck+'=1;max-age=31536000;path=/';}
+        else{btn.classList.remove('liked');if(ic)ic.textContent='♡';document.cookie=ck+'=;max-age=0;path=/';}
+      }
+    }else{
+      if(n)n.textContent=old;
+      if(liked){btn.classList.add('liked');if(ic)ic.textContent='♥';document.cookie=ck+'=1;max-age=31536000;path=/';}
+      else{btn.classList.remove('liked');if(ic)ic.textContent='♡';document.cookie=ck+'=;max-age=0;path=/';}
+    }
+  }catch(e){}
+  finally{commentLikeLock[id]=false}
+}
+
+function toggleReply(id,ev){
+  if(ev)ev.stopPropagation();
+  const f=document.getElementById('crf-'+id);
+  if(f)f.style.display=f.style.display==='none'?'block':'none';
+}
+
+async function submitReply(parentId,slug,ev){
+  if(ev)ev.stopPropagation();
+  const g=id=>document.getElementById(id);
+  const name=g('crn-'+parentId).value.trim();
+  const email=g('cre-'+parentId).value.trim();
+  const content=g('crt-'+parentId).value.trim();
+  const website=g('crw-'+parentId).value;
+  const status=g('crs-'+parentId);
+  if(!name||content.length<3){status.textContent='Adınızı ve en az 3 karakterlik bir yanıt girin.';status.className='cm-status err';return}
+  status.textContent='Gönderiliyor…';status.className='cm-status';
+  try{
+    const res=await fetch('/api/comments',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({post_slug:slug,parent_id:parentId,name,email,content,website})
+    });
+    if(res.ok){
+      g('crt-'+parentId).value='';
+      g('cre-'+parentId).value='';
+      status.textContent='✓ Yanıtınız alındı, onay sonrası yayınlanacak.';status.className='cm-status ok';
+      const f=g('crf-'+parentId);if(f)f.style.display='none';
+    }else if(res.status===429){
+      status.textContent='Çok fazla yorum gönderdiniz. 15 dakika sonra tekrar deneyin.';status.className='cm-status err';
+    }else{
+      status.textContent='Yanıt gönderilemedi. Lütfen tekrar deneyin.';status.className='cm-status err';
+    }
+  }catch(e){
+    status.textContent='Sunucuya ulaşılamadı.';status.className='cm-status err';
+  }
+}
+
 async function loadComments(slug){
   const list=document.getElementById('cm-list');
   const count=document.getElementById('cm-count');
@@ -558,15 +685,7 @@ async function loadComments(slug){
     const pvN=document.getElementById('pv-cm-n');
     if(pvN&&slug===currentSlug)pvN.textContent=arr.length;
     applyCounts();
-    list.innerHTML=arr.length?arr.map(c=>`
-      <div class="cm-item">
-        <div class="cm-head">
-          <span class="cm-name">${escHtml(c.name)}</span>
-          <span class="cm-date">${new Date(c.created_at).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'})}</span>
-        </div>
-        <div class="cm-body">${escHtml(c.content).replace(/\n/g,'<br>')}</div>
-      </div>
-    `).join(''):'<div class="cm-empty">Henüz yorum yok. İlk yorumu sen yap!</div>';
+    list.innerHTML=renderCommentTree(arr,slug);
   }catch(e){
     count.textContent='';
     list.innerHTML='<div class="cm-empty">Yorumlar yüklenemedi</div>';

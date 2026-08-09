@@ -31,6 +31,8 @@ module.exports = async function handler(req, res) {
     const name = String(b.name || '').trim().slice(0, 80);
     const email = String(b.email || '').trim().slice(0, 254);
     const content = String(b.content || '').trim().slice(0, 1200);
+    let parent_id = String(b.parent_id || '').trim() || null;
+    if (parent_id && !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(parent_id)) parent_id = null;
 
     if (!post_slug || !name || content.length < 3 || content.length > 1200) {
       return res.status(400).json({ error: 'validation' });
@@ -39,7 +41,7 @@ module.exports = async function handler(req, res) {
     const r = await supabaseFetch('/rest/v1/blog_comments', {
       method: 'POST',
       headers: { Prefer: 'return=minimal' },
-      body: JSON.stringify({ post_slug, name, email: email || null, content })
+      body: JSON.stringify({ post_slug, name, email: email || null, content, parent_id })
     });
     return res.status(r.ok ? 201 : 502).json({ ok: r.ok });
   }

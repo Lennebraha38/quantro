@@ -1469,6 +1469,7 @@ tr:{
   "b.errC": "Yorum gönderilemedi. Lütfen tekrar deneyin.",
   "b.rateC": "Çok hızlı! 15 dakika sonra tekrar deneyin.",
   "b.errName": "Adınızı ve en az 3 karakterlik bir yorum girin.",
+  "b.reply": "Yanıtla",
   "lc.badge": "Türkiye'de İlk · 12 Araç",
   "lc.h2a": "Quantro Lab'ı",
   "lc.h2b": "Deneyin",
@@ -1622,6 +1623,7 @@ en:{
   "b.errC": "Could not send your comment. Please try again.",
   "b.rateC": "Too fast! Try again in 15 minutes.",
   "b.errName": "Please enter your name and a comment of at least 3 characters.",
+  "b.reply": "Reply",
   "lc.badge": "First in Türkiye · 12 Tools",
   "lc.h2a": "Try the",
   "lc.h2b": "Quantro Lab",
@@ -1775,6 +1777,7 @@ fr:{
   "b.errC": "Impossible d'envoyer. Réessayez.",
   "b.rateC": "Trop rapide ! Réessayez dans 15 minutes.",
   "b.errName": "Entrez votre nom et un commentaire d'au moins 3 caractères.",
+  "b.reply": "Répondre",
   "lc.badge": "Premier en Turquie · 12 Outils",
   "lc.h2a": "Essayez le",
   "lc.h2b": "Quantro Lab",
@@ -1928,6 +1931,7 @@ es:{
   "b.errC": "No se pudo enviar. Inténtalo de nuevo.",
   "b.rateC": "¡Muy rápido! Inténtalo en 15 minutos.",
   "b.errName": "Ingresa tu nombre y un comentario de al menos 3 caracteres.",
+  "b.reply": "Responder",
   "lc.badge": "Primero en Turquía · 12 Herramientas",
   "lc.h2a": "Prueba el",
   "lc.h2b": "Quantro Lab",
@@ -2081,6 +2085,7 @@ it:{
   "b.errC": "Invio non riuscito. Riprova.",
   "b.rateC": "Troppo veloce! Riprova tra 15 minuti.",
   "b.errName": "Inserisci nome e un commento di almeno 3 caratteri.",
+  "b.reply": "Rispondi",
   "lc.badge": "Primo in Turchia · 12 Strumenti",
   "lc.h2a": "Prova il",
   "lc.h2b": "Quantro Lab",
@@ -2234,6 +2239,7 @@ ru:{
   "b.errC": "Не удалось отправить. Попробуйте ещё раз.",
   "b.rateC": "Слишком быстро! Попробуйте через 15 минут.",
   "b.errName": "Введите имя и комментарий минимум из 3 символов.",
+  "b.reply": "Ответить",
   "lc.badge": "Первый в Турции · 12 инструментов",
   "lc.h2a": "Попробуйте",
   "lc.h2b": "Quantro Lab",
@@ -2387,6 +2393,7 @@ ko:{
   "b.errC": "전송하지 못했습니다. 다시 시도하세요.",
   "b.rateC": "너무 빠릅니다! 15분 후 다시 시도하세요.",
   "b.errName": "이름과 최소 3자 이상의 댓글을 입력하세요.",
+  "b.reply": "답글",
   "lc.badge": "터키 최초 · 12개 도구",
   "lc.h2a": "양자랩을",
   "lc.h2b": "체험하세요",
@@ -2540,6 +2547,7 @@ ar:{
   "b.errC": "تعذر الإرسال. حاول مرة أخرى.",
   "b.rateC": "سريع جدًا! حاول بعد 15 دقيقة.",
   "b.errName": "أدخل اسمك وتعليقًا من 3 أحرف على الأقل.",
+  "b.reply": "رد",
   "lc.badge": "الأول في تركيا · 12 أدوات",
   "lc.h2a": "جرّب",
   "lc.h2b": "مختبر Quantro",
@@ -2664,20 +2672,34 @@ function renderBlog(){
 const blogLikeLock={};
 async function blogLike(btn,slug){
   if(!btn||blogLikeLock[slug])return;
-  if(blogLiked(slug))return;
+  const liked=blogLiked(slug);
   blogLikeLock[slug]=true;
-  btn.classList.add('liked');
-  const ic=btn.querySelector('.lb-ic');if(ic)ic.textContent='♥';
-  blogStats.likes[slug]=(blogStats.likes[slug]||0)+1;
-  const n=btn.querySelector('.lb-n');if(n)n.textContent=blogStats.likes[slug]||0;
-  document.cookie=blogCookieKey(slug)+'=1;max-age=31536000;path=/';
-  try{if(window.gtag)gtag('event','blog_like')}catch(e){}
+  const ic=btn.querySelector('.lb-ic'),n=btn.querySelector('.lb-n');
+  const old=blogStats.likes[slug]||0;
+  if(liked){
+    btn.classList.remove('liked');if(ic)ic.textContent='♡';
+    blogStats.likes[slug]=Math.max(0,old-1);
+    document.cookie=blogCookieKey(slug)+'=;max-age=0;path=/';
+  }else{
+    btn.classList.add('liked');if(ic)ic.textContent='♥';
+    blogStats.likes[slug]=old+1;
+    document.cookie=blogCookieKey(slug)+'=1;max-age=31536000;path=/';
+  }
+  if(n)n.textContent=blogStats.likes[slug]||0;
   try{
-    const res=await fetch('/api/likes',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({post_slug:slug})});
+    const res=await fetch('/api/likes',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({post_slug:slug,action:liked?'unlike':'like'})});
     if(res.ok){
       const d=await res.json().catch(()=>({}));
       if(d.likes!=null)blogStats.likes[slug]=d.likes;
-      const n2=btn.querySelector('.lb-n');if(n2)n2.textContent=blogStats.likes[slug]||0;
+      if(n)n.textContent=blogStats.likes[slug]||0;
+      if(d.liked!==undefined){
+        if(d.liked){btn.classList.add('liked');if(ic)ic.textContent='♥';document.cookie=blogCookieKey(slug)+'=1;max-age=31536000;path=/';}
+        else{btn.classList.remove('liked');if(ic)ic.textContent='♡';document.cookie=blogCookieKey(slug)+'=;max-age=0;path=/';}
+      }
+    }else{
+      blogStats.likes[slug]=old;if(n)n.textContent=old||0;
+      if(liked){btn.classList.add('liked');if(ic)ic.textContent='♥';document.cookie=blogCookieKey(slug)+'=1;max-age=31536000;path=/';}
+      else{btn.classList.remove('liked');if(ic)ic.textContent='♡';document.cookie=blogCookieKey(slug)+'=;max-age=0;path=/';}
     }
   }catch(e){}
   finally{blogLikeLock[slug]=false}
@@ -2720,23 +2742,116 @@ async function loadBlogComments(slug){
   }
 }
 
+function blogCommentLiked(id){return !!document.cookie.match(new RegExp('(^|;)\\s*qcl_'+id.replace(/[^a-z0-9_\-]/gi,'_')+'='))}
+
+function blogCommentLikeBtn(c){
+  const liked=blogCommentLiked(c.id);
+  return `<button class="like-btn cmlike" onclick="blogCommentLike('${c.id}',this,event)" title="${t('b.like')}" style="display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);background:rgba(0,200,240,.06);border:1px solid rgba(0,200,240,.14);padding:5px 11px;cursor:pointer;transition:color .2s,border-color .2s" onmouseover="this.style.color='var(--cyan)';this.style.borderColor='var(--cyan)'" onmouseout="this.style.color=this.classList.contains('liked')?'var(--cyan)':'var(--muted)';this.style.borderColor=this.classList.contains('liked')?'var(--cyan)':'rgba(0,200,240,.14)'"><span class="lb-ic">${liked?'♥':'♡'}</span> <span class="lb-n">${c.likes||0}</span></button>`;
+}
+
+function blogCommentItem(c,slug,isReply){
+  const date=new Date(c.created_at).toLocaleDateString(LOCALE_MAP[LANG]||'tr-TR',{day:'numeric',month:'short',year:'numeric'});
+  return `
+  <div style="background:${isReply?'rgba(9,14,24,.6)':'var(--void)'};border:1px solid rgba(0,200,240,.08);border-left:2px solid ${isReply?'rgba(0,200,240,.3)':'var(--cyan)'};padding:16px 20px;${isReply?'margin-left:30px;':''}">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px">
+      <strong style="font-family:var(--font-mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--cyan)">${blogEsc(c.name)}</strong>
+      <span style="font-family:var(--font-mono);font-size:9px;letter-spacing:1px;color:var(--muted)">${date}</span>
+    </div>
+    <div style="font-size:13px;line-height:1.75;color:rgba(232,237,245,.72);white-space:pre-wrap">${blogEsc(c.content)}</div>
+    <div style="display:flex;align-items:center;gap:8px;margin-top:12px;flex-wrap:wrap">
+      ${blogCommentLikeBtn(c)}
+      <button onclick="blogToggleReply('${c.id}',event)" style="font-family:var(--font-mono);font-size:10px;letter-spacing:1px;text-transform:uppercase;background:none;border:none;color:var(--muted);cursor:pointer;padding:4px 6px;transition:color .2s" onmouseover="this.style.color='var(--cyan)'" onmouseout="this.style.color='var(--muted)'">↩ ${t('b.reply')}</button>
+    </div>
+    <div id="crf-${c.id}" style="display:none;margin-top:12px;padding:14px 16px;background:var(--void);border:1px solid rgba(0,200,240,.12)">
+      <input id="crn-${c.id}" placeholder="${t('b.name')}" maxlength="60" style="width:100%;box-sizing:border-box;font-family:var(--font-mono);font-size:11px;letter-spacing:1px;color:var(--text);background:var(--void);border:1px solid rgba(0,200,240,.14);padding:9px 12px;margin-bottom:8px;outline:none">
+      <input id="cre-${c.id}" placeholder="${t('b.email')}" maxlength="120" style="width:100%;box-sizing:border-box;font-family:var(--font-mono);font-size:11px;letter-spacing:1px;color:var(--text);background:var(--void);border:1px solid rgba(0,200,240,.14);padding:9px 12px;margin-bottom:8px;outline:none">
+      <textarea id="crt-${c.id}" rows="2" placeholder="${t('b.commentPh')}" style="width:100%;box-sizing:border-box;resize:vertical;font-family:var(--font-mono);font-size:11px;letter-spacing:1px;line-height:1.6;color:var(--text);background:var(--void);border:1px solid rgba(0,200,240,.14);padding:9px 12px;margin-bottom:8px;outline:none"></textarea>
+      <div id="crs-${c.id}" style="font-family:var(--font-mono);font-size:10px;letter-spacing:1px;color:var(--cyan);margin-bottom:8px"></div>
+      <button onclick="blogSubmitReply('${c.id}','${slug}',event)" style="font-family:var(--font-mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--void);background:var(--cyan);border:none;padding:9px 18px;cursor:pointer;transition:opacity .2s" onmouseover="this.style.opacity=.8" onmouseout="this.style.opacity=1">${t('b.send')}</button>
+    </div>
+  </div>`;
+}
+
+function blogCommentTreeHTML(list,slug){
+  if(!Array.isArray(list)||!list.length)return '<div style="font-family:var(--font-mono);font-size:10px;letter-spacing:2px;color:var(--muted);padding:8px 0">'+t('b.noComments')+'</div>';
+  const byParent={};
+  list.forEach(c=>{const k=c.parent_id||'root';(byParent[k]=byParent[k]||[]).push(c)});
+  const roots=byParent['root']||[];
+  if(!roots.length)return '<div style="font-family:var(--font-mono);font-size:10px;letter-spacing:2px;color:var(--muted);padding:8px 0">'+t('b.noComments')+'</div>';
+  return roots.map(c=>blogCommentItem(c,slug,false)+((byParent[c.id]||[]).map(r=>blogCommentItem(r,slug,true)).join(''))).join('');
+}
+
+let blogCommentLikeLock={};
+async function blogCommentLike(id,btn,ev){
+  if(ev)ev.stopPropagation();
+  if(!btn||blogCommentLikeLock[id])return;
+  const ck='qcl_'+id.replace(/[^a-z0-9_\-]/gi,'_');
+  const liked=!!document.cookie.match(new RegExp('(^|;)\\s*'+ck+'='));
+  blogCommentLikeLock[id]=true;
+  const ic=btn.querySelector('.lb-ic'),n=btn.querySelector('.lb-n');
+  const old=parseInt((n&&n.textContent)||'0',10)||0;
+  if(liked){btn.classList.remove('liked');if(ic)ic.textContent='♡';document.cookie=ck+'=;max-age=0;path=/';}
+  else{btn.classList.add('liked');if(ic)ic.textContent='♥';document.cookie=ck+'=1;max-age=31536000;path=/';}
+  if(n)n.textContent=liked?Math.max(0,old-1):old+1;
+  try{
+    const res=await fetch('/api/comment-likes',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({comment_id:id,action:liked?'unlike':'like'})});
+    const d=await res.json().catch(()=>({}));
+    if(res.ok&&d.likes!==undefined){
+      if(n)n.textContent=d.likes;
+      if(d.liked!==undefined){
+        if(d.liked){btn.classList.add('liked');if(ic)ic.textContent='♥';document.cookie=ck+'=1;max-age=31536000;path=/';}
+        else{btn.classList.remove('liked');if(ic)ic.textContent='♡';document.cookie=ck+'=;max-age=0;path=/';}
+      }
+    }else{
+      if(n)n.textContent=old;
+      if(liked){btn.classList.add('liked');if(ic)ic.textContent='♥';document.cookie=ck+'=1;max-age=31536000;path=/';}
+      else{btn.classList.remove('liked');if(ic)ic.textContent='♡';document.cookie=ck+'=;max-age=0;path=/';}
+    }
+  }catch(e){}
+  finally{blogCommentLikeLock[id]=false}
+}
+
+function blogToggleReply(id,ev){
+  if(ev)ev.stopPropagation();
+  const f=document.getElementById('crf-'+id);
+  if(f)f.style.display=f.style.display==='none'?'block':'none';
+}
+
+async function blogSubmitReply(parentId,slug,ev){
+  if(ev)ev.stopPropagation();
+  const g=id=>document.getElementById(id);
+  const name=((g('crn-'+parentId)||{}).value||'').trim();
+  const email=((g('cre-'+parentId)||{}).value||'').trim();
+  const content=((g('crt-'+parentId)||{}).value||'').trim();
+  const status=g('crs-'+parentId);
+  if(!status)return;
+  if(!name||content.length<3){status.textContent=t('b.errName');status.style.color='#ff5c5c';return}
+  if(blogRate[slug]&&Date.now()<blogRate[slug]){status.textContent=t('b.rateC');status.style.color='#ffb454';return}
+  status.textContent='';status.style.color='var(--cyan)';
+  try{
+    const res=await fetch('/api/comments',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({post_slug:slug,parent_id:parentId,name,email,content})});
+    if(res.ok){
+      status.textContent=t('b.okC');status.style.color='var(--cyan)';
+      blogRate[slug]=Date.now()+15*60*1000;
+      const tn=g('crt-'+parentId);if(tn)tn.value='';
+      const en=g('cre-'+parentId);if(en)en.value='';
+    }else{
+      status.textContent=t('b.errC');status.style.color='#ff5c5c';
+    }
+  }catch(e){
+    status.textContent=t('b.errC');status.style.color='#ff5c5c';
+  }
+}
+
 function renderBlogComments(slug,list){
   const wrap=document.getElementById('bp-comments');
   if(!wrap)return;
-  const items=list.length?list.map(c=>`
-    <div style="background:var(--void);border:1px solid rgba(0,200,240,.08);border-left:2px solid var(--cyan);padding:16px 20px">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px">
-        <strong style="font-family:var(--font-mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--cyan)">${blogEsc(c.author_name)}</strong>
-        <span style="font-family:var(--font-mono);font-size:9px;letter-spacing:1px;color:var(--muted)">${new Date(c.created_at).toLocaleDateString(LOCALE_MAP[LANG]||'tr-TR',{day:'numeric',month:'short',year:'numeric'})}</span>
-      </div>
-      <div style="font-size:13px;line-height:1.75;color:rgba(232,237,245,.72);white-space:pre-wrap">${blogEsc(c.content)}</div>
-    </div>`).join(''):'<div style="font-family:var(--font-mono);font-size:10px;letter-spacing:2px;color:var(--muted);padding:8px 0">'+t('b.noComments')+'</div>';
   wrap.innerHTML=`
     <div style="display:flex;align-items:center;gap:10px;margin:40px 0 18px;padding-top:24px;border-top:1px solid rgba(0,200,240,.1)">
       <span style="font-family:var(--font-display);font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text)">${t('b.comments')}</span>
       <span style="font-family:var(--font-mono);font-size:10px;color:var(--cyan);background:rgba(0,200,240,.08);padding:2px 8px">${blogStats.comments[slug]||0}</span>
     </div>
-    <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:28px">${items}</div>
+    <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:28px">${blogCommentTreeHTML(list,slug)}</div>
     <div style="background:var(--deep);border:1px solid rgba(0,200,240,.1);padding:20px">
       <div style="font-family:var(--font-display);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text);margin-bottom:14px">${t('b.commentForm')}</div>
       <input id="bc-name" placeholder="${t('b.name')}" maxlength="60" style="width:100%;box-sizing:border-box;font-family:var(--font-mono);font-size:11px;letter-spacing:1px;color:var(--text);background:var(--void);border:1px solid rgba(0,200,240,.14);padding:10px 14px;margin-bottom:10px;outline:none">
@@ -2763,7 +2878,7 @@ async function blogSubmitComment(slug){
   if(btn){btn.disabled=true;btn.style.opacity=.5}
   status.textContent='';status.style.color='var(--cyan)';
   try{
-    const res=await fetch('/api/comments',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({post_slug:slug,author_name:name,author_email:email,content:content})});
+    const res=await fetch('/api/comments',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({post_slug:slug,name:name,email:email,content:content})});
     if(res.ok){
       status.textContent=t('b.okC');
       blogRate[slug]=Date.now()+15*60*1000;

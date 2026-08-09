@@ -496,7 +496,7 @@ async function loadComments(){
       <div class="msg-item ${!c.is_approved?'unread':''}">
         <div class="msg-header">
           <div>
-            <div class="msg-from">${c.name} <span class="msg-email">· ${c.post_slug}</span></div>
+            <div class="msg-from">${c.name} <span class="msg-email">· ${c.post_slug}</span>${c.parent_id?'<span class="msg-email"> · ↪ Yanıt</span>':''}</div>
           </div>
           <div class="msg-date">${new Date(c.created_at).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'})}</div>
         </div>
