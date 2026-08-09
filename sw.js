@@ -1,7 +1,7 @@
-const CACHE = 'quantro-v1.2.0';
+const CACHE = 'quantro-v1.3.0';
 
 self.addEventListener('install', (e) => {
-  e.waitUntil(caches.open(CACHE).then((c) => c.addAll(['/index.html', '/quantro-lab.html', '/quantro.js'])).then(() => self.skipWaiting()));
+  e.waitUntil(caches.open(CACHE).then((c) => c.addAll(['/index.html', '/quantro-lab.html', '/quantro.js', '/lab-core.js'])).then(() => self.skipWaiting()));
 });
 
 self.addEventListener('activate', (e) => {
