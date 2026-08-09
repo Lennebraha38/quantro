@@ -353,22 +353,28 @@ function setLiked(btn,slug){
   if(has){btn.classList.add('liked');const ic=btn.querySelector('.lb-ic');if(ic)ic.textContent='♥'}
 }
 
+let likeLock={};
 async function likePost(slug,btn,ev){
   if(ev)ev.stopPropagation();
-  if(!btn)return;
+  if(!btn||likeLock[slug])return;
+  const ck='qlk_'+slug.replace(/[^a-z0-9_\-]/gi,'_');
+  if(document.cookie.match(new RegExp('(^|;)\\s*'+ck+'=')))return;
+  likeLock[slug]=true;
+  btn.classList.add('liked');
+  const ic=btn.querySelector('.lb-ic');if(ic)ic.textContent='♥';
+  stats.likes[slug]=(stats.likes[slug]||0)+1;
+  const n=btn.querySelector('.lb-n');if(n)n.textContent=stats.likes[slug];
+  document.cookie=ck+'=1;max-age=31536000;path=/';
   try{
     const res=await fetch('/api/likes',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({post_slug:slug})});
     const d=await res.json();
     if(res.ok&&d.likes!==undefined){
       stats.likes[slug]=d.likes;
-      const n=btn.querySelector('.lb-n');
-      if(n)n.textContent=d.likes;
-      btn.classList.add('liked');
-      const ic=btn.querySelector('.lb-ic');
-      if(ic)ic.textContent=d.liked?'♥':'♡';
+      const n2=btn.querySelector('.lb-n');if(n2)n2.textContent=d.likes;
       if(slug===currentSlug)applyCounts();
     }
   }catch(e){}
+  finally{likeLock[slug]=false}
 }
 
 function toggleCardComments(slug,ev){

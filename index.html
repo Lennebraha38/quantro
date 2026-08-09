@@ -2661,21 +2661,26 @@ function renderBlog(){
   `).join('');
 }
 
+const blogLikeLock={};
 async function blogLike(btn,slug){
-  if(!btn)return;
+  if(!btn||blogLikeLock[slug])return;
+  if(blogLiked(slug))return;
+  blogLikeLock[slug]=true;
+  btn.classList.add('liked');
+  const ic=btn.querySelector('.lb-ic');if(ic)ic.textContent='♥';
+  blogStats.likes[slug]=(blogStats.likes[slug]||0)+1;
+  const n=btn.querySelector('.lb-n');if(n)n.textContent=blogStats.likes[slug]||0;
+  document.cookie=blogCookieKey(slug)+'=1;max-age=31536000;path=/';
+  try{if(window.gtag)gtag('event','blog_like')}catch(e){}
   try{
     const res=await fetch('/api/likes',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({post_slug:slug})});
-    if(!res.ok)return;
-    const d=await res.json().catch(()=>({}));
-    blogStats.likes[slug]=d.likes!=null?d.likes:((blogStats.likes[slug]||0)+1);
-    if(!blogLiked(slug)){
-      document.cookie=blogCookieKey(slug)+'=1;max-age=31536000;path=/';
-      btn.classList.add('liked');
-      const ic=btn.querySelector('.lb-ic');if(ic)ic.textContent='♥';
-      try{if(window.gtag)gtag('event','blog_like')}catch(e){}
+    if(res.ok){
+      const d=await res.json().catch(()=>({}));
+      if(d.likes!=null)blogStats.likes[slug]=d.likes;
+      const n2=btn.querySelector('.lb-n');if(n2)n2.textContent=blogStats.likes[slug]||0;
     }
-    const n=btn.querySelector('.lb-n');if(n)n.textContent=blogStats.likes[slug]||0;
   }catch(e){}
+  finally{blogLikeLock[slug]=false}
 }
 
 function renderBpLike(slug){
