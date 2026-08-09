@@ -2615,7 +2615,8 @@ const blogRate={};
 function blogEsc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 
 function blogCookieKey(slug){return 'qlk_'+slug.replace(/[^a-z0-9_\-]/gi,'_')}
-function blogLiked(slug){return !!document.cookie.match(new RegExp('(^|;)\\s*'+blogCookieKey(slug)+'='))}
+function blogLiked(slug){const k=blogCookieKey(slug);return !!(document.cookie.match(new RegExp('(^|;)\\s*'+k+'='))||(function(){try{return localStorage.getItem(k)==='1'}catch(e){return false}})())}
+function blogSetLiked(slug,on){const k=blogCookieKey(slug);try{if(on)localStorage.setItem(k,'1');else localStorage.removeItem(k)}catch(e){}document.cookie=k+(on?'=1;max-age=31536000;path=/':'=;max-age=0;path=/')}
 
 function blogLikeBtn(slug){
   const liked=blogLiked(slug);
@@ -2707,13 +2708,13 @@ async function blogLike(btn,slug){
       if(d.likes!=null)blogStats.likes[slug]=d.likes;
       if(n)n.textContent=blogStats.likes[slug]||0;
       if(d.liked!==undefined){
-        if(d.liked){btn.classList.add('liked');if(ic)ic.textContent='♥';document.cookie=blogCookieKey(slug)+'=1;max-age=31536000;path=/';}
-        else{btn.classList.remove('liked');if(ic)ic.textContent='♡';document.cookie=blogCookieKey(slug)+'=;max-age=0;path=/';}
+        if(d.liked){btn.classList.add('liked');if(ic)ic.textContent='♥';blogSetLiked(slug,true)}
+        else{btn.classList.remove('liked');if(ic)ic.textContent='♡';blogSetLiked(slug,false)}
       }
     }else{
       blogStats.likes[slug]=old;if(n)n.textContent=old||0;
-      if(liked){btn.classList.add('liked');if(ic)ic.textContent='♥';document.cookie=blogCookieKey(slug)+'=1;max-age=31536000;path=/';}
-      else{btn.classList.remove('liked');if(ic)ic.textContent='♡';document.cookie=blogCookieKey(slug)+'=;max-age=0;path=/';}
+      if(liked){btn.classList.add('liked');if(ic)ic.textContent='♥';blogSetLiked(slug,true)}
+      else{btn.classList.remove('liked');if(ic)ic.textContent='♡';blogSetLiked(slug,false)}
     }
   }catch(e){}
   finally{blogLikeLock[slug]=false}

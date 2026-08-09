@@ -361,16 +361,20 @@ function applyCounts(){
 
 function setLiked(btn,slug){
   if(!btn)return;
-  const has=document.cookie.match(new RegExp('(^|;)\\s*qlk_'+slug.replace(/[^a-z0-9_\-]/gi,'_')+'='));
+  const has=likeStored(likeKey(slug));
   if(has){btn.classList.add('liked');const ic=btn.querySelector('.lb-ic');if(ic)ic.textContent='♥'}
 }
+
+function likeKey(s){return 'qlk_'+s.replace(/[^a-z0-9_\-]/gi,'_')}
+function likeStored(k){return !!(document.cookie.match(new RegExp('(^|;)\\s*'+k+'='))||(function(){try{return localStorage.getItem(k)==='1'}catch(e){return false}})())}
+function setLikeStored(k,on){try{if(on)localStorage.setItem(k,'1');else localStorage.removeItem(k)}catch(e){}document.cookie=k+(on?'=1;max-age=31536000;path=/':'=;max-age=0;path=/')}
 
 let likeLock={};
 async function likePost(slug,btn,ev){
   if(ev)ev.stopPropagation();
   if(!btn||likeLock[slug])return;
-  const ck='qlk_'+slug.replace(/[^a-z0-9_\-]/gi,'_');
-  const liked=!!document.cookie.match(new RegExp('(^|;)\\s*'+ck+'='));
+  const ck=likeKey(slug);
+  const liked=likeStored(ck);
   likeLock[slug]=true;
   const ic=btn.querySelector('.lb-ic'),n=btn.querySelector('.lb-n');
   const old=stats.likes[slug]||0;
@@ -390,14 +394,14 @@ async function likePost(slug,btn,ev){
       stats.likes[slug]=d.likes;
       if(n)n.textContent=d.likes;
       if(d.liked!==undefined){
-        if(d.liked){btn.classList.add('liked');if(ic)ic.textContent='♥';document.cookie=ck+'=1;max-age=31536000;path=/';}
-        else{btn.classList.remove('liked');if(ic)ic.textContent='♡';document.cookie=ck+'=;max-age=0;path=/';}
+        if(d.liked){btn.classList.add('liked');if(ic)ic.textContent='♥';setLikeStored(ck,true)}
+        else{btn.classList.remove('liked');if(ic)ic.textContent='♡';setLikeStored(ck,false)}
       }
       if(slug===currentSlug)applyCounts();
     }else{
       stats.likes[slug]=old;if(n)n.textContent=old;
-      if(liked){btn.classList.add('liked');if(ic)ic.textContent='♥';document.cookie=ck+'=1;max-age=31536000;path=/';}
-      else{btn.classList.remove('liked');if(ic)ic.textContent='♡';document.cookie=ck+'=;max-age=0;path=/';}
+      if(liked){btn.classList.add('liked');if(ic)ic.textContent='♥';setLikeStored(ck,true)}
+      else{btn.classList.remove('liked');if(ic)ic.textContent='♡';setLikeStored(ck,false)}
     }
   }catch(e){}
   finally{likeLock[slug]=false}
@@ -562,7 +566,7 @@ function openPost(slug){
 /* COMMENTS */
 function escHtml(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 
-function commentLiked(id){return !!document.cookie.match(new RegExp('(^|;)\\s*qcl_'+id.replace(/[^a-z0-9_\-]/gi,'_')+'='))}
+function commentLiked(id){return likeStored('qcl_'+id.replace(/[^a-z0-9_\-]/gi,'_'))}
 
 function commentLikeBtn(c){
   const liked=commentLiked(c.id);
@@ -609,7 +613,7 @@ async function commentLike(id,btn,ev){
   if(ev)ev.stopPropagation();
   if(!btn||commentLikeLock[id])return;
   const ck='qcl_'+id.replace(/[^a-z0-9_\-]/gi,'_');
-  const liked=!!document.cookie.match(new RegExp('(^|;)\\s*'+ck+'='));
+  const liked=likeStored(ck);
   commentLikeLock[id]=true;
   const ic=btn.querySelector('.lb-ic'),n=btn.querySelector('.lb-n');
   const old=parseInt((n&&n.textContent)||'0',10)||0;
@@ -622,13 +626,13 @@ async function commentLike(id,btn,ev){
     if(res.ok&&d.likes!==undefined){
       if(n)n.textContent=d.likes;
       if(d.liked!==undefined){
-        if(d.liked){btn.classList.add('liked');if(ic)ic.textContent='♥';document.cookie=ck+'=1;max-age=31536000;path=/';}
-        else{btn.classList.remove('liked');if(ic)ic.textContent='♡';document.cookie=ck+'=;max-age=0;path=/';}
+        if(d.liked){btn.classList.add('liked');if(ic)ic.textContent='♥';setLikeStored(ck,true)}
+        else{btn.classList.remove('liked');if(ic)ic.textContent='♡';setLikeStored(ck,false)}
       }
     }else{
       if(n)n.textContent=old;
-      if(liked){btn.classList.add('liked');if(ic)ic.textContent='♥';document.cookie=ck+'=1;max-age=31536000;path=/';}
-      else{btn.classList.remove('liked');if(ic)ic.textContent='♡';document.cookie=ck+'=;max-age=0;path=/';}
+      if(liked){btn.classList.add('liked');if(ic)ic.textContent='♥';setLikeStored(ck,true)}
+      else{btn.classList.remove('liked');if(ic)ic.textContent='♡';setLikeStored(ck,false)}
     }
   }catch(e){}
   finally{commentLikeLock[id]=false}

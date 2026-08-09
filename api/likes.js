@@ -30,13 +30,11 @@ module.exports = async function handler(req, res) {
 
     let likes = 0;
     if (action === 'unlike') {
-      if (already) {
-        await supabaseFetch('/rest/v1/rpc/decrement_post_like', {
-          method: 'POST',
-          body: JSON.stringify({ p_slug: slug })
-        });
-        res.setHeader('Set-Cookie', `${ck}=; Path=/; Max-Age=0; SameSite=Lax`);
-      }
+      await supabaseFetch('/rest/v1/rpc/decrement_post_like', {
+        method: 'POST',
+        body: JSON.stringify({ p_slug: slug })
+      });
+      res.setHeader('Set-Cookie', `${ck}=; Path=/; Max-Age=0; SameSite=Lax`);
     } else {
       if (!already) {
         const r = await supabaseFetch('/rest/v1/rpc/increment_post_like', {
