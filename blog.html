@@ -126,6 +126,31 @@ nav.sc{background:rgba(2,8,16,.92);backdrop-filter:blur(20px);padding:13px 0;bor
 .pv-content strong{color:var(--cyan)}
 .pv-content code,.pv-content .eq{font-family:var(--fm);font-size:16px;color:var(--cyan);background:rgba(0,200,240,.07);padding:12px 20px;display:block;margin:20px 0;border-left:2px solid var(--cyan)}
 
+/* ── COMMENTS ── */
+.pv-comments{margin-top:56px;padding-top:40px;border-top:1px solid rgba(0,200,240,.1)}
+.cm-title{font-family:var(--fd);font-size:22px;font-weight:800;text-transform:uppercase;margin-bottom:24px}
+.cm-title span{color:var(--cyan)}
+.cm-list{margin-bottom:40px}
+.cm-empty{font-family:var(--fm);font-size:10px;letter-spacing:2px;color:var(--muted);padding:16px 0}
+.cm-item{padding:20px 24px;background:var(--deep);border:1px solid rgba(0,200,240,.07);margin-bottom:10px;border-left:2px solid var(--cyanM)}
+.cm-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:10px}
+.cm-name{font-family:var(--fd);font-size:13px;font-weight:700;text-transform:uppercase;color:var(--cyan)}
+.cm-date{font-family:var(--fm);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);flex-shrink:0}
+.cm-body{font-size:14px;line-height:1.8;color:rgba(232,237,245,.7)}
+.cm-form{background:var(--deep);border:1px solid rgba(0,200,240,.1);padding:28px;position:relative}
+.cm-form::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),transparent)}
+.cm-form-head{font-family:var(--fd);font-size:16px;font-weight:800;text-transform:uppercase;margin-bottom:20px}
+.cm-input{width:100%;background:var(--void);border:1px solid rgba(0,200,240,.15);color:var(--text);font-family:var(--fb);font-size:14px;padding:12px 16px;margin-bottom:12px;transition:border-color .2s}
+.cm-input:focus{outline:none;border-color:var(--cyan)}
+.cm-text{min-height:110px;resize:vertical}
+.cm-input.hp{position:absolute;left:-9999px;opacity:0;height:0;padding:0;border:0;margin:0}
+.cm-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.cm-btn{font-family:var(--fm);font-size:11px;letter-spacing:3px;text-transform:uppercase;background:var(--cyan);color:var(--void);border:none;padding:14px 28px;cursor:pointer;font-weight:700;transition:opacity .2s}
+.cm-btn:hover{opacity:.85}
+.cm-status{font-family:var(--fm);font-size:10px;letter-spacing:1px;margin-top:12px;min-height:16px;color:var(--muted)}
+.cm-status.ok{color:var(--green)}
+.cm-status.err{color:var(--red)}
+
 /* ── ADMIN VIEW ── */
 .admin-wrap{max-width:900px;margin:0 auto;padding:120px 40px 100px}
 .admin-title{font-family:var(--fd);font-size:36px;font-weight:800;text-transform:uppercase;margin-bottom:8px}
@@ -226,6 +251,23 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
       <span id="pv-readtime"></span>
     </div>
     <div class="pv-content" id="pv-content"></div>
+
+    <!-- COMMENTS -->
+    <div class="pv-comments">
+      <div class="cm-title">Yorumlar <span id="cm-count"></span></div>
+      <div class="cm-list" id="cm-list"><div class="cm-empty">Yorumlar yükleniyor…</div></div>
+      <div class="cm-form">
+        <div class="cm-form-head">Yorum Yap</div>
+        <div class="cm-row">
+          <input class="cm-input" id="cm-name" placeholder="Adınız *" maxlength="80" autocomplete="name">
+          <input class="cm-input" id="cm-email" placeholder="E-posta (isteğe bağlı)" maxlength="254" autocomplete="email">
+        </div>
+        <input class="cm-input hp" id="cm-website" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <textarea class="cm-input cm-text" id="cm-content" placeholder="Yorumunuz… *" maxlength="1200"></textarea>
+        <button class="cm-btn" id="cm-submit" onclick="submitComment()">Gönder</button>
+        <div class="cm-status" id="cm-status"></div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -308,6 +350,7 @@ function filterPosts(tag,btn){
 }
 
 /* OPEN POST */
+let currentSlug='';
 function openPost(slug){
   const p=allPosts.find(x=>x.slug===slug);
   if(!p)return;
@@ -319,7 +362,71 @@ function openPost(slug){
   document.getElementById('pv-date').textContent=new Date(p.created_at).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'});
   document.getElementById('pv-readtime').textContent=Math.ceil(p.content.split(' ').length/200)+' dakika okuma';
   document.getElementById('pv-content').innerHTML=mdToHtml(p.content);
+  document.getElementById('cm-status').textContent='';
+  currentSlug=slug;
   showView('post');
+  loadComments(slug);
+}
+
+/* COMMENTS */
+function escHtml(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+
+async function loadComments(slug){
+  const list=document.getElementById('cm-list');
+  const count=document.getElementById('cm-count');
+  try{
+    const res=await fetch(`${SB_URL}/rest/v1/blog_comments?post_slug=eq.${encodeURIComponent(slug)}&is_approved=eq.true&order=created_at.asc`,{
+      headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}
+    });
+    const data=await res.json();
+    const arr=Array.isArray(data)?data:[];
+    count.textContent=`(${arr.length})`;
+    list.innerHTML=arr.length?arr.map(c=>`
+      <div class="cm-item">
+        <div class="cm-head">
+          <span class="cm-name">${escHtml(c.name)}</span>
+          <span class="cm-date">${new Date(c.created_at).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'})}</span>
+        </div>
+        <div class="cm-body">${escHtml(c.content).replace(/\n/g,'<br>')}</div>
+      </div>
+    `).join(''):'<div class="cm-empty">Henüz yorum yok. İlk yorumu sen yap!</div>';
+  }catch(e){
+    count.textContent='';
+    list.innerHTML='<div class="cm-empty">Yorumlar yüklenemedi</div>';
+  }
+}
+
+async function submitComment(){
+  const name=document.getElementById('cm-name').value.trim();
+  const email=document.getElementById('cm-email').value.trim();
+  const content=document.getElementById('cm-content').value.trim();
+  const website=document.getElementById('cm-website').value;
+  const status=document.getElementById('cm-status');
+  const btn=document.getElementById('cm-submit');
+  if(!name||content.length<3){status.textContent='Adınızı ve en az 3 karakterlik bir yorum girin.';status.className='cm-status err';return}
+  status.textContent='Gönderiliyor…';status.className='cm-status';
+  btn.disabled=true;
+  try{
+    const res=await fetch('/api/comments',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({post_slug:currentSlug,name,email,content,website})
+    });
+    if(res.ok){
+      document.getElementById('cm-content').value='';
+      document.getElementById('cm-email').value='';
+      status.textContent='✓ Yorumunuz alındı, onay sonrası yayınlanacak.';status.className='cm-status ok';
+      try{if(window.gtag)gtag('event','blog_comment_submit',{post:currentSlug})}catch(e){}
+    }else if(res.status===429){
+      status.textContent='Çok fazla yorum gönderdiniz. 15 dakika sonra tekrar deneyin.';status.className='cm-status err';
+    }else{
+      status.textContent='Yorum gönderilemedi. Lütfen tekrar deneyin.';status.className='cm-status err';
+    }
+  }catch(e){
+    status.textContent='Sunucuya ulaşılamadı.';status.className='cm-status err';
+  }finally{
+    btn.disabled=false;
+  }
 }
 
 /* SIMPLE MARKDOWN PARSER */

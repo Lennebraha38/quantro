@@ -93,7 +93,7 @@ body{background:var(--void);color:var(--text);font-family:var(--fb);min-height:1
 .logout-btn:hover{color:var(--red);border-color:rgba(255,68,102,.3)}
 
 /* stats */
-.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-bottom:32px}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:3px;margin-bottom:32px}
 .stat-card{background:var(--deep);padding:22px 24px;border-bottom:2px solid transparent;transition:border-color .3s}
 .stat-card:hover{border-color:var(--cyan)}
 .stat-val{font-family:var(--fd);font-size:32px;font-weight:800;color:var(--text);line-height:1;margin-bottom:6px}
@@ -232,6 +232,10 @@ textarea.finput{min-height:220px;resize:vertical;font-family:var(--fm);font-size
         <div class="stat-val" id="stat-msg">—</div>
         <div class="stat-lbl">Mesaj</div>
       </div>
+      <div class="stat-card">
+        <div class="stat-val" id="stat-com">—</div>
+        <div class="stat-lbl">Bekleyen Yorum</div>
+      </div>
     </div>
 
     <!-- Posts -->
@@ -291,6 +295,12 @@ textarea.finput{min-height:220px;resize:vertical;font-family:var(--fm);font-size
     <!-- Messages -->
     <div class="section-title" style="margin-top:48px">İletişim Mesajları</div>
     <div class="msg-list" id="msg-list">
+      <div style="font-family:var(--fm);font-size:10px;letter-spacing:2px;color:var(--muted);padding:16px 0">Yükleniyor...</div>
+    </div>
+
+    <!-- Comments -->
+    <div class="section-title" style="margin-top:48px">Blog Yorumları</div>
+    <div class="msg-list" id="com-list">
       <div style="font-family:var(--fm);font-size:10px;letter-spacing:2px;color:var(--muted);padding:16px 0">Yükleniyor...</div>
     </div>
 
@@ -374,7 +384,7 @@ async function api(path,opts={}){
 }
 
 async function loadAll(){
-  await Promise.all([loadPosts(),loadMessages()]);
+  await Promise.all([loadPosts(),loadMessages(),loadComments()]);
 }
 
 async function loadPosts(){
@@ -474,6 +484,42 @@ async function delMsg(id){
   if(!confirm('Bu mesajı silmek istediğinize emin misiniz?'))return;
   await api(`/api/messages?id=${encodeURIComponent(id)}`,{method:'DELETE'});
   loadMessages();
+}
+
+/* ── YORUM İŞLEMLERİ ── */
+async function loadComments(){
+  const data=await api('/api/comments')||[];
+  const pending=data.filter(c=>!c.is_approved).length;
+  document.getElementById('stat-com').textContent=pending;
+  document.getElementById('com-list').innerHTML=data.length?
+    data.map(c=>`
+      <div class="msg-item ${!c.is_approved?'unread':''}">
+        <div class="msg-header">
+          <div>
+            <div class="msg-from">${c.name} <span class="msg-email">· ${c.post_slug}</span></div>
+          </div>
+          <div class="msg-date">${new Date(c.created_at).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'})}</div>
+        </div>
+        <div class="msg-body">${c.content}</div>
+        <div class="msg-actions">
+          <span class="pi-status ${c.is_approved?'pub':'draft'}" style="align-self:center">${c.is_approved?'Onaylı':'Bekliyor'}</span>
+          ${c.is_approved?'':`<button class="act-btn toggle-pub" onclick="approveCom('${c.id}')">Onayla</button>`}
+          <button class="act-btn del" onclick="delCom('${c.id}')">Sil</button>
+        </div>
+      </div>
+    `).join('')
+    :'<div style="font-family:var(--fm);font-size:10px;letter-spacing:2px;color:var(--muted);padding:16px 0">Henüz yorum yok.</div>';
+}
+
+async function approveCom(id){
+  await api(`/api/comments?id=${encodeURIComponent(id)}`,{method:'PATCH',body:JSON.stringify({is_approved:true})});
+  loadComments();
+}
+
+async function delCom(id){
+  if(!confirm('Bu yorumu silmek istediğinize emin misiniz?'))return;
+  await api(`/api/comments?id=${encodeURIComponent(id)}`,{method:'DELETE'});
+  loadComments();
 }
 
 /* ── FORM YARDIMCI ── */
