@@ -28,6 +28,7 @@ module.exports = async function handler(req, res) {
     const cookie = String(req.headers.cookie || '');
     const already = new RegExp('(^|;)\\s*' + ck.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '=').test(cookie);
 
+    let likes = 0;
     if (action === 'unlike') {
       if (already) {
         await supabaseFetch('/rest/v1/rpc/decrement_post_like', {
@@ -44,11 +45,16 @@ module.exports = async function handler(req, res) {
         });
         if (!r.ok) return res.status(502).json({ error: 'supabase', status: r.status });
         res.setHeader('Set-Cookie', `${ck}=1; Path=/; Max-Age=${365 * 24 * 3600}; SameSite=Lax`);
+        try {
+          const data = await r.json();
+          likes = Array.isArray(data) ? (data[0] || 0) : (Number(data) || 0);
+        } catch (e) { likes = 0; }
       }
     }
-    const rr = await supabaseFetch(`/rest/v1/post_likes?post_slug=eq.${encodeURIComponent(slug)}&select=likes`);
-    let likes = 0;
-    try { const arr = await rr.json(); likes = (arr && arr[0] && arr[0].likes) || 0; } catch (e) {}
+    if (likes <= 0) {
+      const rr = await supabaseFetch(`/rest/v1/post_likes?post_slug=eq.${encodeURIComponent(slug)}&select=likes`);
+      try { const arr = await rr.json(); likes = (arr && arr[0] && arr[0].likes) || 0; } catch (e) { likes = 0; }
+    }
     return res.json({ slug, likes, liked: action !== 'unlike' });
   }
 

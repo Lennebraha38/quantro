@@ -2620,7 +2620,7 @@ function blogLiked(slug){return !!document.cookie.match(new RegExp('(^|;)\\s*'+b
 function blogLikeBtn(slug){
   const liked=blogLiked(slug);
   const n=blogStats.likes[slug]||0;
-  return `<button class="like-btn${liked?' liked':''}" onclick="event.stopPropagation();blogLike(this,'${slug}')" title="${t('b.like')}" style="display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);background:rgba(0,200,240,.06);border:1px solid rgba(0,200,240,.14);padding:8px 14px;cursor:pointer;transition:color .2s,border-color .2s" onmouseover="this.style.color='var(--cyan)';this.style.borderColor='var(--cyan)'" onmouseout="this.style.color=this.classList.contains('liked')?'var(--cyan)':'var(--muted)';this.style.borderColor=this.classList.contains('liked')?'var(--cyan)':'rgba(0,200,240,.14)'"><span class="lb-ic">${liked?'♥':'♡'}</span> <span class="lb-n">${n}</span></button>`;
+  return `<button class="like-btn${liked?' liked':''}" data-slug="${slug}" onclick="event.stopPropagation();blogLike(this,'${slug}')" title="${t('b.like')}" style="display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);background:rgba(0,200,240,.06);border:1px solid rgba(0,200,240,.14);padding:8px 14px;cursor:pointer;transition:color .2s,border-color .2s" onmouseover="this.style.color='var(--cyan)';this.style.borderColor='var(--cyan)'" onmouseout="this.style.color=this.classList.contains('liked')?'var(--cyan)':'var(--muted)';this.style.borderColor=this.classList.contains('liked')?'var(--cyan)':'rgba(0,200,240,.14)'"><span class="lb-ic">${liked?'♥':'♡'}</span> <span class="lb-n">${n}</span></button>`;
 }
 
 async function loadBlog(){
@@ -2642,17 +2642,33 @@ async function fetchBlogCounts(){
     ]);
     (Array.isArray(c)?c:[]).forEach(x=>blogStats.comments[x.post_slug]=(blogStats.comments[x.post_slug]||0)+1);
     (Array.isArray(l)?l:[]).forEach(x=>blogStats.likes[x.post_slug]=x.likes);
-    renderBlog();
+    applyBlogCounts();
     const bp=document.getElementById('bp-like');
     if(bp&&bp.dataset.slug)renderBpLike(bp.dataset.slug);
   }catch(e){}
 }
 
+function applyBlogCounts(){
+  document.querySelectorAll('#blog-list [data-slug]').forEach(card=>{
+    const key=card.dataset.slug;
+    const lb=card.querySelector('.lb-n');
+    if(lb)lb.textContent=blogStats.likes[key]||0;
+    const cn=card.querySelector('.cm-n');
+    if(cn)cn.textContent=blogStats.comments[key]||0;
+    const btn=card.querySelector('.like-btn');
+    if(btn&&blogLiked(key)&&!btn.classList.contains('liked')){
+      btn.classList.add('liked');
+      const ic=btn.querySelector('.lb-ic');
+      if(ic)ic.textContent='♥';
+    }
+  });
+}
+
 function renderBlog(){
   const grid=document.getElementById('blog-list');
   if(!blogPosts.length){grid.innerHTML='<div style="font-family:var(--font-mono);font-size:10px;letter-spacing:3px;color:var(--muted);padding:20px 0">'+t('b.none')+'</div>';return}
-  grid.innerHTML=blogPosts.map(p=>`
-    <div onclick="openBlogPost('${p.slug}')" style="background:var(--void);padding:36px;border-top:2px solid transparent;cursor:pointer;transition:border-color .3s,background .3s,transform .3s" onmouseover="this.style.borderColor='var(--cyan)';this.style.background='var(--surface)';this.style.transform='translateY(-3px)'" onmouseout="this.style.borderColor='transparent';this.style.background='var(--void)';this.style.transform='translateY(0)'">
+    grid.innerHTML=blogPosts.map(p=>`
+    <div data-slug="${p.slug}" onclick="openBlogPost('${p.slug}')" style="background:var(--void);padding:36px;border-top:2px solid transparent;cursor:pointer;transition:border-color .3s,background .3s,transform .3s" onmouseover="this.style.borderColor='var(--cyan)';this.style.background='var(--surface)';this.style.transform='translateY(-3px)'" onmouseout="this.style.borderColor='transparent';this.style.background='var(--void)';this.style.transform='translateY(0)'">
       <span style="font-size:32px;display:block;margin-bottom:18px">${p.cover_emoji||'⚛'}</span>
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">${(p.tags||[]).map(t=>`<span style="font-family:var(--font-mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(0,200,240,.55);border:1px solid rgba(0,200,240,.12);padding:3px 8px">${t}</span>`).join('')}</div>
       <div style="font-family:var(--font-display);font-size:18px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--text);margin-bottom:10px;line-height:1.15">${p.title}</div>
