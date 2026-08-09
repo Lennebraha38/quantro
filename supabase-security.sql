@@ -59,6 +59,43 @@ create policy "anon_msg_insert"
   to anon
   with check (true);
 
+-- ── BLOG BEĞENİLERİ ──
+create table if not exists public.post_likes (
+  post_slug text primary key,
+  likes integer not null default 0,
+  updated_at timestamptz not null default now()
+);
+
+alter table public.post_likes enable row level security;
+
+drop policy if exists "anon_like_read" on public.post_likes;
+create policy "anon_like_read"
+  on public.post_likes
+  for select
+  to anon
+  using (true);
+
+-- Beğeni sayacı: /api/likes (service_role) çağırır; RLS'yi atlar.
+-- Çakışma (race) güvenli artırma; ikinci çağrıda yeni satır değil +1 yapar.
+create or replace function public.increment_post_like(p_slug text)
+returns integer
+language sql
+security definer
+set search_path = public
+as $$
+  insert into public.post_likes(post_slug, likes, updated_at)
+  values (p_slug, 1, now())
+  on conflict (post_slug)
+  do update set likes = public.post_likes.likes + 1, updated_at = now()
+  returning likes
+$$;
+
+-- RPC'yi yalnızca sunucu (service_role) çağırabilir; anon doğrudan
+-- beğeni artıramaz (browser bu fonksiyonu göremez/çalıştıramaz).
+revoke execute on function public.increment_post_like(text) from public;
+revoke execute on function public.increment_post_like(text) from anon, authenticated;
+grant execute on function public.increment_post_like(text) to service_role;
+
 -- ── DOĞRULAMA ──
 -- Aşağıdaki sorgular 0 satır döndürmeli (anon yazamıyor/okuyamıyor olmalı):
 --

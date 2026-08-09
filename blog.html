@@ -151,6 +151,21 @@ nav.sc{background:rgba(2,8,16,.92);backdrop-filter:blur(20px);padding:13px 0;bor
 .cm-status.ok{color:var(--green)}
 .cm-status.err{color:var(--red)}
 
+/* ── CARD STATS & INLINE COMMENTS ── */
+.post-stats{display:flex;gap:10px;margin-top:14px;padding-top:14px;border-top:1px solid rgba(0,200,240,.08)}
+.like-btn,.cm-toggle{font-family:var(--fm);font-size:11px;letter-spacing:1px;background:rgba(0,200,240,.06);border:1px solid rgba(0,200,240,.2);color:var(--muted);padding:8px 14px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all .2s}
+.like-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.like-btn.liked{background:rgba(0,200,240,.14);border-color:var(--cyan);color:var(--cyan)}
+.like-btn.liked .lb-ic{color:var(--red)}
+.lb-ic{color:var(--muted)}
+.lb-n{color:var(--cyan);font-style:normal}
+.cm-toggle:hover{border-color:var(--cyan);color:var(--cyan)}
+.cm-toggle b{color:var(--cyan)}
+.card-comments{margin-top:16px;padding-top:16px;border-top:1px dashed rgba(0,200,240,.15)}
+.card-comments .cm-list{margin-bottom:16px}
+.pv-stats{display:flex;gap:10px;margin:18px 0}
+.pv-stats .like-btn,.pv-stats .cm-toggle{padding:10px 18px}
+
 /* ── ADMIN VIEW ── */
 .admin-wrap{max-width:900px;margin:0 auto;padding:120px 40px 100px}
 .admin-title{font-family:var(--fd);font-size:36px;font-weight:800;text-transform:uppercase;margin-bottom:8px}
@@ -250,6 +265,10 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
       <span id="pv-date"></span>
       <span id="pv-readtime"></span>
     </div>
+    <div class="pv-stats">
+      <button class="like-btn" id="pv-like" onclick="likePost(currentSlug,this,event)"><span class="lb-ic">♡</span> <b class="lb-n">0</b></button>
+      <span class="cm-toggle" style="cursor:default"><span>💬</span> <b id="pv-cm-n">0</b> <span>Yorum</span></span>
+    </div>
     <div class="pv-content" id="pv-content"></div>
 
     <!-- COMMENTS -->
@@ -296,15 +315,137 @@ function showView(id){
 function showList(){showView('list')}
 
 /* FETCH POSTS */
+const SBH={'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY};
+let stats={comments:{},likes:{}};
+
+async function fetchCounts(){
+  try{
+    const [c,l]=await Promise.all([
+      fetch(`${SB_URL}/rest/v1/blog_comments?is_approved=eq.true&select=post_slug`,{headers:SBH}).then(r=>r.json()),
+      fetch(`${SB_URL}/rest/v1/post_likes?select=post_slug,likes`,{headers:SBH}).then(r=>r.json())
+    ]);
+    stats.comments={};
+    (Array.isArray(c)?c:[]).forEach(x=>stats.comments[x.post_slug]=(stats.comments[x.post_slug]||0)+1);
+    stats.likes={};
+    (Array.isArray(l)?l:[]).forEach(x=>stats.likes[x.post_slug]=x.likes);
+    applyCounts();
+    const pv=document.getElementById('pv-cm-n');
+    if(pv&&currentSlug)pv.textContent=stats.comments[currentSlug]||0;
+  }catch(e){}
+}
+
+function applyCounts(){
+  document.querySelectorAll('.post-card').forEach(card=>{
+    const lbBtn=card.querySelector('.like-btn');
+    const key=lbBtn&&lbBtn.getAttribute('data-slug');
+    if(!key)return;
+    const lb=card.querySelector('.like-btn .lb-n');
+    if(lb)lb.textContent=stats.likes[key]||0;
+    const cn=card.querySelector('.cm-n');
+    if(cn)cn.textContent=stats.comments[key]||0;
+    setLiked(lbBtn,key);
+  });
+}
+
+function setLiked(btn,slug){
+  if(!btn)return;
+  const has=document.cookie.match(new RegExp('(^|;)\\s*qlk_'+slug.replace(/[^a-z0-9_\-]/gi,'_')+'='));
+  if(has){btn.classList.add('liked');const ic=btn.querySelector('.lb-ic');if(ic)ic.textContent='♥'}
+}
+
+async function likePost(slug,btn,ev){
+  if(ev)ev.stopPropagation();
+  if(!btn)return;
+  try{
+    const res=await fetch('/api/likes',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({post_slug:slug})});
+    const d=await res.json();
+    if(res.ok&&d.likes!==undefined){
+      stats.likes[slug]=d.likes;
+      const n=btn.querySelector('.lb-n');
+      if(n)n.textContent=d.likes;
+      btn.classList.add('liked');
+      const ic=btn.querySelector('.lb-ic');
+      if(ic)ic.textContent=d.liked?'♥':'♡';
+      if(slug===currentSlug)applyCounts();
+    }
+  }catch(e){}
+}
+
+function toggleCardComments(slug,ev){
+  if(ev)ev.stopPropagation();
+  const box=document.getElementById('cms-'+slug);
+  if(!box)return;
+  const open=box.style.display!=='none';
+  box.style.display=open?'none':'block';
+  if(!open)loadCardComments(slug);
+}
+
+async function loadCardComments(slug){
+  const list=document.getElementById('cml-'+slug);
+  if(!list||list.getAttribute('data-loaded'))return;
+  list.setAttribute('data-loaded','1');
+  try{
+    const res=await fetch(`${SB_URL}/rest/v1/blog_comments?post_slug=eq.${encodeURIComponent(slug)}&is_approved=eq.true&order=created_at.asc`,{headers:SBH});
+    const data=await res.json();
+    const arr=Array.isArray(data)?data:[];
+    list.innerHTML=arr.length?arr.map(c=>`
+      <div class="cm-item">
+        <div class="cm-head">
+          <span class="cm-name">${escHtml(c.name)}</span>
+          <span class="cm-date">${new Date(c.created_at).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'})}</span>
+        </div>
+        <div class="cm-body">${escHtml(c.content).replace(/\n/g,'<br>')}</div>
+      </div>
+    `).join(''):'<div class="cm-empty">Henüz yorum yok. İlk yorumu sen yap!</div>';
+    const n=document.getElementById('cms-'+slug)&&document.getElementById('cms-'+slug).querySelector('.cm-n');
+    if(n)n.textContent=arr.length;
+    stats.comments[slug]=arr.length;
+  }catch(e){
+    list.innerHTML='<div class="cm-empty">Yorumlar yüklenemedi</div>';
+  }
+}
+
+async function submitCardComment(slug){
+  const g=id=>document.getElementById(id);
+  const name=g('cn-'+slug).value.trim();
+  const email=g('ce-'+slug).value.trim();
+  const content=g('ct-'+slug).value.trim();
+  const website=g('cw-'+slug).value;
+  const status=g('cs-'+slug);
+  const btn=g('cb-'+slug);
+  if(!name||content.length<3){status.textContent='Adınızı ve en az 3 karakterlik bir yorum girin.';status.className='cm-status err';return}
+  status.textContent='Gönderiliyor…';status.className='cm-status';
+  try{
+    const res=await fetch('/api/comments',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({post_slug:slug,name,email,content,website})
+    });
+    if(res.ok){
+      g('ct-'+slug).value='';
+      g('ce-'+slug).value='';
+      status.textContent='✓ Yorumunuz alındı, onay sonrası yayınlanacak.';status.className='cm-status ok';
+      try{if(window.gtag)gtag('event','blog_comment_submit',{post:slug})}catch(e){}
+    }else if(res.status===429){
+      status.textContent='Çok fazla yorum gönderdiniz. 15 dakika sonra tekrar deneyin.';status.className='cm-status err';
+    }else{
+      status.textContent='Yorum gönderilemedi. Lütfen tekrar deneyin.';status.className='cm-status err';
+    }
+  }catch(e){
+    status.textContent='Sunucuya ulaşılamadı.';status.className='cm-status err';
+  }
+}
+
 async function fetchPosts(){
   try{
     const res=await fetch(`${SB_URL}/rest/v1/blog_posts?published=eq.true&order=created_at.desc`,{
-      headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}
+      headers:SBH
     });
     const data=await res.json();
     allPosts=data||[];
     renderPosts(allPosts);
     renderFilters(allPosts);
+    fetchCounts();
   }catch(e){
     document.getElementById('posts-grid').innerHTML='<div class="loading">Yazılar yüklenemedi</div>';
   }
@@ -313,8 +454,10 @@ async function fetchPosts(){
 function renderPosts(posts){
   const grid=document.getElementById('posts-grid');
   if(!posts.length){grid.innerHTML='<div class="loading">Henüz yazı yok</div>';return}
-  grid.innerHTML=posts.map(p=>`
-    <div class="post-card" onclick="openPost('${p.slug}')">
+  grid.innerHTML=posts.map(p=>{
+    const s=p.slug;
+    return `
+    <div class="post-card" onclick="openPost('${s}')">
       <span class="post-emoji">${p.cover_emoji||'⚛'}</span>
       <div class="post-tags">${(p.tags||[]).map(t=>`<span class="ptag">${t}</span>`).join('')}</div>
       <div class="post-title">${p.title}</div>
@@ -323,8 +466,27 @@ function renderPosts(posts){
         <span class="post-date">${new Date(p.created_at).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'})}</span>
         <span class="post-read">${Math.ceil(p.content.split(' ').length/200)} dk okuma →</span>
       </div>
-    </div>
-  `).join('');
+      <div class="post-stats">
+        <button class="like-btn" data-slug="${s}" onclick="likePost('${s}',this,event)"><span class="lb-ic">♡</span> <b class="lb-n">0</b></button>
+        <button class="cm-toggle" data-slug="${s}" onclick="toggleCardComments('${s}',event)"><span>💬</span> <b class="cm-n">0</b> <span class="cm-lbl">Yorum</span></button>
+      </div>
+      <div class="card-comments" id="cms-${s}" style="display:none" onclick="event.stopPropagation()">
+        <div class="cm-list" id="cml-${s}"><div class="cm-empty">Yorumlar yükleniyor…</div></div>
+        <div class="cm-form">
+          <div class="cm-form-head">Yorum Yap</div>
+          <div class="cm-row">
+            <input class="cm-input" id="cn-${s}" placeholder="Adınız *" maxlength="80" autocomplete="name">
+            <input class="cm-input" id="ce-${s}" placeholder="E-posta (isteğe bağlı)" maxlength="254" autocomplete="email">
+          </div>
+          <input class="cm-input hp" id="cw-${s}" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <textarea class="cm-input cm-text" id="ct-${s}" placeholder="Yorumunuz… *" maxlength="1200"></textarea>
+          <button class="cm-btn" onclick="submitCardComment('${s}')">Gönder</button>
+          <div class="cm-status" id="cs-${s}"></div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  applyCounts();
 }
 
 function renderFilters(posts){
@@ -363,6 +525,11 @@ function openPost(slug){
   document.getElementById('pv-readtime').textContent=Math.ceil(p.content.split(' ').length/200)+' dakika okuma';
   document.getElementById('pv-content').innerHTML=mdToHtml(p.content);
   document.getElementById('cm-status').textContent='';
+  const pvN=document.getElementById('pv-cm-n');
+  if(pvN)pvN.textContent=stats.comments[slug]||0;
+  setLiked(document.getElementById('pv-like'),slug);
+  const pvLb=document.getElementById('pv-like')&&document.getElementById('pv-like').querySelector('.lb-n');
+  if(pvLb)pvLb.textContent=stats.likes[slug]||0;
   currentSlug=slug;
   showView('post');
   loadComments(slug);
@@ -381,6 +548,10 @@ async function loadComments(slug){
     const data=await res.json();
     const arr=Array.isArray(data)?data:[];
     count.textContent=`(${arr.length})`;
+    stats.comments[slug]=arr.length;
+    const pvN=document.getElementById('pv-cm-n');
+    if(pvN&&slug===currentSlug)pvN.textContent=arr.length;
+    applyCounts();
     list.innerHTML=arr.length?arr.map(c=>`
       <div class="cm-item">
         <div class="cm-head">
