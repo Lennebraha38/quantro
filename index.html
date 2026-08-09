@@ -2679,11 +2679,9 @@ async function blogLike(btn,slug){
   if(liked){
     btn.classList.remove('liked');if(ic)ic.textContent='♡';
     blogStats.likes[slug]=Math.max(0,old-1);
-    document.cookie=blogCookieKey(slug)+'=;max-age=0;path=/';
   }else{
     btn.classList.add('liked');if(ic)ic.textContent='♥';
     blogStats.likes[slug]=old+1;
-    document.cookie=blogCookieKey(slug)+'=1;max-age=31536000;path=/';
   }
   if(n)n.textContent=blogStats.likes[slug]||0;
   try{
@@ -2790,8 +2788,8 @@ async function blogCommentLike(id,btn,ev){
   blogCommentLikeLock[id]=true;
   const ic=btn.querySelector('.lb-ic'),n=btn.querySelector('.lb-n');
   const old=parseInt((n&&n.textContent)||'0',10)||0;
-  if(liked){btn.classList.remove('liked');if(ic)ic.textContent='♡';document.cookie=ck+'=;max-age=0;path=/';}
-  else{btn.classList.add('liked');if(ic)ic.textContent='♥';document.cookie=ck+'=1;max-age=31536000;path=/';}
+  if(liked){btn.classList.remove('liked');if(ic)ic.textContent='♡';}
+  else{btn.classList.add('liked');if(ic)ic.textContent='♥';}
   if(n)n.textContent=liked?Math.max(0,old-1):old+1;
   try{
     const res=await fetch('/api/comment-likes',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({comment_id:id,action:liked?'unlike':'like'})});
