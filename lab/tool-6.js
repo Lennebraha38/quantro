@@ -18,7 +18,7 @@ function uBH(){
   document.getElementById('bh-ent').textContent=S.toExponential(2)+' J/K';
   if(window.bhInit)animateBH();
 }
-function initBH(){
+function initBHInner(){
   window.bhInit=true;
   const canvas=document.getElementById('bh-canvas');
   if(!canvas||!window.THREE)return;
@@ -110,12 +110,54 @@ function initBH(){
     bhMeshes[3].rotation.y+=.004;
     bhScene.rotation.y+=.003+rY*.05;
     rY*=.95;
-    bhRenderer.render(bhScene,bhCamera);
+    try{bhRenderer.render(bhScene,bhCamera)}catch(e){window.bhLost=true}
   }
   const state={r:bhRenderer,scene:bhScene,cam:bhCamera};
   state.raf=requestAnimationFrame(anim);
   state.cleanup=h.cleanup;
   window.bh=state;
+  if(mq.matches)try{bhRenderer.render(bhScene,bhCamera)}catch(e){}
   uBH();
 }
+function initBH(){
+  try{initBHInner()}catch(e){window.bhLost=true}
+}
+function bhFail(on){
+  const c=document.getElementById('bh-canvas');
+  if(!c)return;
+  if(on)c.style.background='radial-gradient(100% 100% at 50% 30%,#0a1a3a 0%,#04101f 60%,#01060c 100%)';
+  else c.style.background='';
+}
+function bhWatch(){
+  const canvas=document.getElementById('bh-canvas');
+  if(!canvas)return;
+  if(!window.THREE){window.bhFails=(window.bhFails||0)+1;if(window.bhFails>2)bhFail(true);return}
+  const S=window.bh;
+  if(!S){
+    if(window.bhInit&&!window.bhBusy){
+      window.bhBusy=true;
+      initBH();
+      if(!window.bh){window.bhFails=(window.bhFails||0)+1;if(window.bhFails>2)bhFail(true)}else{window.bhFails=0;bhFail(false)}
+      window.bhBusy=false;
+    }
+    return;
+  }
+  let gl=null;
+  try{gl=S.r&&S.r.getContext?S.r.getContext():null}catch(e){}
+  const lost=!!(gl&&typeof gl.isContextLost==='function'&&gl.isContextLost());
+  if(lost){
+    if(!window.bhBusy){
+      window.bhBusy=true;
+      window.bhLost=true;
+      initBH();
+      if(!window.bh){window.bhFails=(window.bhFails||0)+1;if(window.bhFails>2)bhFail(true)}else{window.bhFails=0;bhFail(false)}
+      setTimeout(()=>{window.bhBusy=false},2000);
+    }
+  }else{
+    window.bhBusy=false;
+    if(window.bhFails){window.bhFails=0;bhFail(false)}
+    if(window.bhLost)window.bhLost=false;
+  }
+}
+if(!window.bhWatch){window.bhWatch=setInterval(bhWatch,2500);}
 function animateBH(){}

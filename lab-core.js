@@ -56,7 +56,7 @@ async function tog(n){
 /* ══ HERO THREE.JS ══ */
 if(window.THREE&&document.getElementById('hero-canvas')){
 let _lh=null,_lhLost=false;
-function initLabHero(){
+function initLabHeroInner(){
   const canvas=document.getElementById('hero-canvas');
   if(!canvas)return;
   if(_lh){ cancelAnimationFrame(_lh.raf); try{_lh.renderer.dispose()}catch(e){} _lh=null; }
@@ -142,9 +142,13 @@ function initLabHero(){
     camera.position.y=16+Math.sin(t*.06)*2-trx*3;
     camera.position.z=40+Math.sin(t*.08)*2;
     camera.lookAt(0,0,0);
-    renderer.render(scene,camera);
+    try{renderer.render(scene,camera)}catch(e){_lhLost=true}
   }
   _lh={renderer,scene,camera,raf:requestAnimationFrame(animate)};
+  if(mq.matches)try{renderer.render(scene,camera)}catch(e){}
+}
+function initLabHero(){
+  try{initLabHeroInner()}catch(e){_lh=null;_lhLost=true}
 }
 function labHeroKick(){
   if(!window.THREE)return;
@@ -168,6 +172,49 @@ function labHeroKick(){
   },{passive:true});
 })();
 initLabHero();
+let _lhWatch=null,_lhBusy=false,_lhFails=0;
+function labHeroFail(on){
+  const c=document.getElementById('hero-canvas');
+  if(!c)return;
+  if(on)c.style.background='radial-gradient(120% 90% at 50% 38%,#0a1a3a 0%,#04101f 55%,#01060c 100%)';
+  else c.style.background='';
+}
+function labHeroWatch(){
+  const canvas=document.getElementById('hero-canvas');
+  if(!canvas||_lhBusy)return;
+  if(!window.THREE){if(++_lhFails>2)labHeroFail(true);return}
+  if(!_lh){
+    _lhBusy=true;
+    if(typeof initLabHero==='function')initLabHero();
+    if(!_lh){if(++_lhFails>2)labHeroFail(true)}else{_lhFails=0;labHeroFail(false)}
+    _lhBusy=false;
+    return;
+  }
+  let gl=null;
+  try{gl=_lh.renderer&&_lh.renderer.getContext? _lh.renderer.getContext():null}catch(e){}
+  const lost=!!(gl&&typeof gl.isContextLost==='function'&&gl.isContextLost());
+  if(lost){
+    _lhLost=true;
+    _lhBusy=true;
+    if(typeof initLabHero==='function')initLabHero();
+    if(!_lh){if(++_lhFails>2)labHeroFail(true)}else{_lhFails=0;labHeroFail(false)}
+    _lhBusy=false;
+  }else{
+    if(_lhFails){_lhFails=0;labHeroFail(false)}
+    if(_lhLost)_lhLost=false;
+  }
+}
+function startLabHeroWatch(){
+  if(_lhWatch)return;
+  _lhWatch=setInterval(labHeroWatch,2500);
+}
+startLabHeroWatch();
+}
+else if(!window.THREE){
+  setTimeout(()=>{
+    const c=document.getElementById('hero-canvas');
+    if(c)c.style.background='radial-gradient(120% 90% at 50% 38%,#0a1a3a 0%,#04101f 55%,#01060c 100%)';
+  },5000);
 }
 
 /* ══ I18N (TR — fallback çekirdek) ══ */

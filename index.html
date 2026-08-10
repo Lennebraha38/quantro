@@ -173,7 +173,8 @@ nav.scrolled{
 #hero{
   position:relative;width:100%;
   min-height:max(100vh,640px);height:auto;
-  overflow:hidden;
+  overflow:hidden;padding:0;
+  display:flex;flex-direction:column;justify-content:flex-end;
 }
 #three-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 
@@ -204,9 +205,9 @@ nav.scrolled{
 
 /* hero content overlay */
 .hero-content{
-  position:absolute;inset:0;z-index:3;
+  position:relative;z-index:3;width:100%;
   display:flex;flex-direction:column;justify-content:flex-end;
-  padding-bottom:88px;
+  padding-bottom:120px;
 }
 .hc-wrap{max-width:1200px;margin:0 auto;padding:0 48px;width:100%}
 
@@ -722,7 +723,7 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:4
       </div>
       <h1 class="hero-h1">
         <span data-i18n="hero.h1a">Evrenin</span><br>
-        <span class="outline" data-i18n="hero.h1b">Dokusu</span><br>
+        <span class="outline" data-i18n="hero.h1b">Dokusu</span>
         <span data-i18n="hero.h1c">Titreşiyor</span>
       </h1>
       <div class="hero-row">
@@ -1153,7 +1154,7 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:4
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 let _th=null,_thLost=false;
-function initThreeScene(){
+function initThreeSceneInner(){
   const canvas = document.getElementById('three-canvas');
   if(!canvas)return;
   if(_th){ cancelAnimationFrame(_th.raf); try{_th.renderer.dispose()}catch(e){} _th=null; }
@@ -1293,13 +1294,53 @@ function initThreeScene(){
     camera.lookAt(0,0,0);
 
     updateHUD(t);
-    renderer.render(scene,camera);
+    try{renderer.render(scene,camera)}catch(e){_thLost=true}
   }
   _th={renderer,scene,camera,raf:requestAnimationFrame(animate)};
 }
-function runThreeWhenReady(){
-  if(window.THREE){initThreeScene();bindThreeGuard()}
-  else{setTimeout(runThreeWhenReady,50)}
+function initThreeScene(){
+  try{initThreeSceneInner()}catch(e){_th=null;_thLost=true}
+}
+function runThreeWhenReady(n){
+  startThreeWatch();
+  if(window.THREE){initThreeScene();bindThreeGuard();threeFail(false)}
+  else if((n||0)<200){setTimeout(()=>runThreeWhenReady((n||0)+1),50)}
+}
+let _thWatch=null,_thBusy=false,_thFails=0;
+function threeFail(on){
+  const c=document.getElementById('three-canvas');
+  if(!c)return;
+  if(on)c.style.background='radial-gradient(120% 90% at 50% 38%,#0a1a3a 0%,#04101f 55%,#01060c 100%)';
+  else c.style.background='';
+}
+function threeWatch(){
+  const canvas=document.getElementById('three-canvas');
+  if(!canvas||_thBusy)return;
+  if(!window.THREE){if(++_thFails>2)threeFail(true);return}
+  if(!_th){
+    _thBusy=true;
+    initThreeScene();
+    if(!_th){if(++_thFails>2)threeFail(true)}else{_thFails=0;threeFail(false)}
+    _thBusy=false;
+    return;
+  }
+  let gl=null;
+  try{gl=_th.renderer&&_th.renderer.getContext? _th.renderer.getContext():null}catch(e){}
+  const lost=!!(gl&&typeof gl.isContextLost==='function'&&gl.isContextLost());
+  if(lost){
+    _thLost=true;
+    _thBusy=true;
+    initThreeScene();
+    if(!_th){if(++_thFails>2)threeFail(true)}else{_thFails=0;threeFail(false)}
+    _thBusy=false;
+  }else{
+    if(_thFails){_thFails=0;threeFail(false)}
+    if(_thLost)_thLost=false;
+  }
+}
+function startThreeWatch(){
+  if(_thWatch)return;
+  _thWatch=setInterval(threeWatch,2500);
 }
 function bindThreeGuard(){
   const canvas=document.getElementById('three-canvas');

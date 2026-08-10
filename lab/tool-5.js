@@ -45,7 +45,7 @@ function drawHeis(dx,dp){
   ctx.fillStyle='rgba(160,96,255,.6)';ctx.fillText(t('t5.canvas.mom'),8,H/2+24);
 }
 
-function initHeis3D(){
+function initHeis3DInner(){
   window.heis3dInit=true;
   const canvas=document.getElementById('heis3d');
   if(!canvas||!window.THREE)return;
@@ -114,9 +114,51 @@ function initHeis3D(){
     if(mq.matches)return;
     scene.rotation.y+=0.005+rotY*.05;
     scene.rotation.x=rotX*.3;
-    r.render(scene,cam);
+    try{r.render(scene,cam)}catch(e){window.heis3dLost=true}
   }
   state.raf=requestAnimationFrame(anim);
   state.cleanup=h.cleanup;
   window.heis3d=state;
+  if(mq.matches)try{r.render(scene,cam)}catch(e){}
 }
+function initHeis3D(){
+  try{initHeis3DInner()}catch(e){window.heis3dLost=true}
+}
+function heisFail(on){
+  const c=document.getElementById('heis3d');
+  if(!c)return;
+  if(on)c.style.background='radial-gradient(100% 100% at 50% 30%,#0a1a3a 0%,#04101f 60%,#01060c 100%)';
+  else c.style.background='';
+}
+function heisWatch(){
+  const canvas=document.getElementById('heis3d');
+  if(!canvas)return;
+  if(!window.THREE){window.heisFails=(window.heisFails||0)+1;if(window.heisFails>2)heisFail(true);return}
+  const S=window.heis3d;
+  if(!S){
+    if(window.heis3dInit&&!window.heis3dBusy){
+      window.heis3dBusy=true;
+      initHeis3D();
+      if(!window.heis3d){window.heisFails=(window.heisFails||0)+1;if(window.heisFails>2)heisFail(true)}else{window.heisFails=0;heisFail(false)}
+      window.heis3dBusy=false;
+    }
+    return;
+  }
+  let gl=null;
+  try{gl=S.r&&S.r.getContext?S.r.getContext():null}catch(e){}
+  const lost=!!(gl&&typeof gl.isContextLost==='function'&&gl.isContextLost());
+  if(lost){
+    if(!window.heis3dBusy){
+      window.heis3dBusy=true;
+      window.heis3dLost=true;
+      initHeis3D();
+      if(!window.heis3d){window.heisFails=(window.heisFails||0)+1;if(window.heisFails>2)heisFail(true)}else{window.heisFails=0;heisFail(false)}
+      setTimeout(()=>{window.heis3dBusy=false},2000);
+    }
+  }else{
+    window.heis3dBusy=false;
+    if(window.heisFails){window.heisFails=0;heisFail(false)}
+    if(window.heis3dLost)window.heis3dLost=false;
+  }
+}
+if(!window.heis3dWatch){window.heis3dWatch=setInterval(heisWatch,2500);}
