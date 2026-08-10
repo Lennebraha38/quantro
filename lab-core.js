@@ -11,7 +11,7 @@ window.addEventListener('scroll',()=>document.getElementById('nav').classList.to
 /* ══ CHUNK LOADER ══ */
 const _loaded={};
 const TOOL_FILES={
-  1:['lab/tool-1.js'],8:['lab/tool-8.js'],9:['lab/tool-9.js'],10:['lab/tool-10.js'],11:['lab/tool-11.js'],12:['lab/tool-12.js'],
+  1:['lab/tool-1.js'],8:['lab/tool-8.js'],9:['lab/tool-9.js'],10:['lab/tool-10.js'],11:['lab/tool-11.js'],12:['lab/tool-12.js'],13:['lab/tool-13.js'],
   2:['quantro.js','lab/tool-2.js'],3:['lab/tool-3.js'],4:['lab/tool-4.js'],5:['lab/tool-5.js'],6:['lab/tool-6.js'],7:['lab/tool-7.js']
 };
 function loadScripts(urls){
@@ -51,8 +51,8 @@ async function tog(n){
   if(n===10)catStart();
   if(n===11)tunStart();
   if(n===12)dsStart();
+  if(n===13)qwStart();
 }
-
 /* ══ HERO THREE.JS ══ */
 if(window.THREE&&document.getElementById('hero-canvas')){
 let _lh=null,_lhLost=false;
@@ -221,11 +221,11 @@ else if(!window.THREE){
 window.I18N={
 tr:{
   "nav.home": "← Ana Sayfa",
-  "hero.ey": "Quantro Lab · Etkileşimli Araçlar · 12 Modül",
+  "hero.ey": "Quantro Lab · Etkileşimli Araçlar · 13 Modül",
   "hero.desc": "Kuantum mekaniğini ve astrofiziki bizzat deneyimleyin. Türkiye'nin ilk interaktif kuantum araç seti.",
   "hero.badge": "🇹🇷 Türkiye'de İlk — Quantro ARGE 2025",
   "hero.scroll": "Keşfet",
-  "intro.h2": "12 Özgün<br>Araç",
+  "intro.h2": "13 Özgün<br>Araç",
   "intro.count": "Türkiye'de İlk · Quantro ARGE · 2025",
   "badge.first": "Türkiye'de İlk",
   "badge.new": "Yeni",
@@ -382,6 +382,13 @@ tr:{
   "t12.stat.coherent": "GİRİŞİM · dalga",
   "t12.stat.classical": "KLASİK · gözlem",
   "t12.explain": "Tek tek fırlatılan parçacıklar bile ekranda <strong>girişim saçakları</strong> oluşturur — her parçacık kendi kendisiyle girişir. Gözlemleyince (hangi yarık sorusu) girişim kaybolur, klasik dağılım görünür. Bu, kuantum ölçümünün dalga fonksiyonunu nasıl çökerttiğinin en meşhur kanıtıdır.",
+  "t13.title": "Kuantum Yürüyüşü",
+  "t13.steps": "Adım Sayısı N",
+  "t13.bias": "Yazı Olasılığı p",
+  "t13.observe": "Her adımda gözlemle (çökert)",
+  "t13.run": "⚛ Yürüt",
+  "t13.reset": "Sıfırla",
+  "t13.explain": "Kuantum yürüyüşünde parçacığın \"yazı-tura\" parası <strong>süperpozisyondadır</strong> — aynı anda hem yazı hem turadır. İki yol girişir, dağılım √N yerine ≈ N hızında yayılır (kuadratik hızlanma). Her adımda ölçersen süperpozisyon çöker, parçacık klasikleşir ve √N'ye geri döner. Grover gibi kuantum algoritmaları bu yayılmayı kullanır.",
   "stat.proxy": "⚛ ANU (proxy) — gerçek kuantum",
   "stat.anu": "⚛ ANU — gerçek kuantum (vakum dalgalanması)",
   "stat.nist": "◇ NIST Beacon — kriptografik rastgele (kuantum değil)",

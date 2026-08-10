@@ -207,6 +207,11 @@ nav.sc{background:rgba(2,8,16,.92);backdrop-filter:blur(20px);padding:13px 0;bor
 .tun-canvas-wrap{background:var(--void);border:1px solid rgba(0,200,240,.1);padding:8px}
 .tun-canvas{width:100%;height:320px;display:block}
 .tun-res{background:var(--void);border:1px solid rgba(0,200,240,.1);padding:20px;text-align:center;margin-top:14px}
+
+/* ── T13: QUANTUM WALK ── */
+.qw-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.qw-canvas-wrap{background:var(--void);border:1px solid rgba(0,200,240,.1);padding:8px}
+.qw-canvas{width:100%;height:320px;display:block;touch-action:none}
 .tun-t{font-family:var(--fd);font-size:34px;font-weight:800;color:var(--cyan)}
 .tun-lbl{font-family:var(--fm);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-top:4px}
 .tun-presets{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
@@ -373,7 +378,7 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
   <div class="hud hud-bl"></div><div class="hud hud-br"></div>
   <div class="hero-content">
     <div class="hc">
-      <div class="hero-ey"><span data-i18n="hero.ey">Quantro Lab · Etkileşimli Araçlar · 12 Modül</span></div>
+      <div class="hero-ey"><span data-i18n="hero.ey">Quantro Lab · Etkileşimli Araçlar · 13 Modül</span></div>
       <h1 class="hero-h1">KUANTUM<br><span class="o">LAB</span></h1>
       <div class="hero-row">
         <p class="hero-desc" data-i18n="hero.desc">Kuantum mekaniğini ve astrofiziki bizzat deneyimleyin. Türkiye'nin ilk interaktif kuantum araç seti.</p>
@@ -388,7 +393,7 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
 <div class="tools">
 <div class="tw">
   <div class="tools-intro">
-    <h2 data-i18n="intro.h2">12 Özgün<br>Araç</h2>
+    <h2 data-i18n="intro.h2">13 Özgün<br>Araç</h2>
     <span class="tools-count" data-i18n="intro.count">Türkiye'de İlk · Quantro ARGE · 2025</span>
   </div>
 
@@ -868,6 +873,41 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
       </div>
     </div>
   </div>
+
+  <!-- T13: QUANTUM WALK -->
+  <div class="tool-card">
+    <div class="tool-header" onclick="tog(13)">
+      <span class="tn">13</span>
+      <span class="tt" data-i18n="t13.title">Kuantum Yürüyüşü</span>
+      <span class="tb-badge new">New · v1.0</span>
+      <span class="tg" id="tg13">+</span>
+    </div>
+    <div class="tool-body" id="tb13">
+      <div class="qw-grid">
+        <div class="qw-canvas-wrap">
+          <canvas id="qw-canvas" class="qw-canvas"></canvas>
+        </div>
+        <div>
+          <div class="param-item">
+            <div class="param-lbl"><span data-i18n="t13.steps">Adım Sayısı N</span><strong id="qw-sv">60</strong></div>
+            <input class="slider" type="range" id="qw-steps" min="5" max="160" value="60" step="1" oninput="qwSet()">
+          </div>
+          <div class="param-item">
+            <div class="param-lbl"><span data-i18n="t13.bias">Yazı Olasılığı p</span><strong id="qw-bv">0.50</strong></div>
+            <input class="slider" type="range" id="qw-bias" min="10" max="90" value="50" step="1" oninput="qwSet()">
+          </div>
+          <div class="param-item">
+            <label class="ds-check"><input type="checkbox" id="qw-observe" onchange="qwSet()"><span data-i18n="t13.observe">Her adımda gözlemle (çökert)</span></label>
+          </div>
+          <div class="ds-btns">
+            <button class="btn btn-p" onclick="qwRun()" data-i18n="t13.run">⚛ Yürüt</button>
+            <button class="btn btn-r" onclick="qwReset()" data-i18n="t13.reset">Sıfırla</button>
+          </div>
+          <div class="explain" style="margin-top:16px"><p data-i18n="t13.explain">Kuantum yürüyüşünde parçacığın "yazı-tura" parası <strong>süperpozisyondadır</strong> — aynı anda hem yazı hem turadır. İki yol girişir, dağılım √N yerine ≈ N hızında yayılır (kuadratik hızlanma). Her adımda ölçersen süperpozisyon çöker, parçacık klasikleşir ve √N'ye geri döner. Grover gibi kuantum algoritmaları bu yayılmayı kullanır.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div><!-- /tw -->
 </div><!-- /tools -->
 
@@ -875,7 +915,7 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
   <div class="fi">
     <a href="index.html" class="fl">Q<em>U</em>ANTRO</a>
     <span class="fc">© 2025 Quantro ARGE · Kayseri, Türkiye</span>
-    <span class="fc" style="color:rgba(0,200,240,.3)">Türkiye'de İlk · 12 Kuantum Aracı</span>
+    <span class="fc" style="color:rgba(0,200,240,.3)">Türkiye'de İlk · 13 Kuantum Aracı</span>
     <span class="fc" style="color:rgba(0,200,240,.5)"><a href="https://github.com/quantro38/quantro/issues/new" target="_blank" rel="noopener" style="color:rgba(0,200,240,.7)">Hata bildir / Fikir öner →</a></span>
   </div>
 </footer>
