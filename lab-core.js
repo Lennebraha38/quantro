@@ -398,6 +398,10 @@ tr:{
   "chi.busy": "Veri toplanıyor (1024 bayt)…",
   "chi.ok": "✓ Dağılım rastgeleliğe uyumlu (p>0.05)",
   "chi.fail": "✗ Beklenenden sapma — tekrar dene",
+  "qc.title": "Çerez Tercihleri",
+  "qc.body": "Gizliliğinize saygı duyuyoruz. Ziyaret istatistikleri için Google Analytics çerezleri (izleme amaçlı) kullanılabilir; bunlar için onayınızı istiyoruz. Onay verdiğinizde yalnızca izleme çerezleri yüklenir.",
+  "qc.accept": "Kabul Et",
+  "qc.reject": "Reddet",
 }};
 
 window.lastQStat=null;
@@ -420,6 +424,12 @@ function applyLang(){
   btn.title='Dil / Language / Langue / Idioma / Lingua / Язык';
   document.querySelectorAll('[data-i18n]').forEach(el=>{el.innerHTML=t(el.dataset.i18n)});
   if(window.lastQStat){const el=document.getElementById('qstat');if(el)el.textContent=t(window.lastQStat.k)}
+  const qc=document.getElementById('qc-banner');
+  if(qc){
+    const s=qc.querySelector('.qc-text');if(s)s.innerHTML='<strong>'+t('qc.title')+'</strong> — '+t('qc.body');
+    const acc=qc.querySelector('.qc-accept');if(acc)acc.textContent=t('qc.accept');
+    const rej=qc.querySelector('.qc-reject');if(rej)rej.textContent=t('qc.reject');
+  }
 }
 function toggleLang(){
   const ns=LANGS_ORDER[(LANGS_ORDER.indexOf(LANG)+1)%LANGS_ORDER.length];

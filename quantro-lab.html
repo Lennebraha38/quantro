@@ -34,13 +34,23 @@
 <link rel="icon" type="image/png" sizes="48x48" href="img/favicon-48.png">
 <link rel="apple-touch-icon" sizes="180x180" href="img/icon-180.png">
 <title>Quantro Lab — Kuantum Araçları</title>
-<!-- Google Analytics (GA4) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-HR4Z4E0JLK"></script>
+<!-- Google Analytics (GA4) — yalnızca kullanıcı onayı sonrası yüklenir (KVKK) -->
 <script>
+window.__qc={};
+(function(){
+  try{window.__qc.c=JSON.parse(localStorage.getItem('qc_consent')||'null')||{}}catch(e){window.__qc.c={}}
+  if(window.__qc.c.a===true){
+    var s=document.createElement('script');s.async=true;
+    s.src='https://www.googletagmanager.com/gtag/js?id=G-HR4Z4E0JLK';
+    document.head.appendChild(s);
+  }
+})();
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-HR4Z4E0JLK');
+  if(window.__qc.c.a===true){
+    gtag('js', new Date());
+    gtag('config', 'G-HR4Z4E0JLK');
+  }
 </script>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@300;400;500&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
 <style>
@@ -355,6 +365,17 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
   .tools-intro{flex-direction:column;align-items:flex-start}
 }
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.1ms!important}}
+/* ══ Cookie Consent (KVKK) ══ */
+.qc-cookie{position:fixed;left:0;right:0;bottom:0;z-index:9999;background:rgba(4,10,20,.97);border-top:1px solid rgba(0,200,240,.25);padding:18px 24px;display:none}
+.qc-cookie.show{display:block}
+.qc-inner{max-width:1100px;margin:0 auto;display:flex;gap:24px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.qc-text{flex:1 1 480px;font-family:var(--fb);font-size:13px;line-height:1.6;color:var(--muted)}
+.qc-text strong{color:var(--text);font-family:var(--fd)}
+.qc-btns{display:flex;gap:12px;flex-wrap:wrap}
+.qc-btn{border:none;cursor:pointer;font-family:var(--fm);font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:12px 22px;transition:opacity .2s}
+.qc-btn:hover{opacity:.8}
+.qc-accept{background:var(--cyan);color:#020810;font-weight:700}
+.qc-reject{background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,.18)}
 </style>
 </head>
 <body>
@@ -925,5 +946,29 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
 <!-- THREE.JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="lab-core.js"></script>
+<script>
+/* ══ Çerez Onayı (KVKK 6698) ══ */
+(function(){
+  var d=window.__qc||{};
+  if(d.c&&d.c.a!==undefined)return;
+  var b=document.createElement('div');
+  b.className='qc-cookie';b.id='qc-banner';
+  b.innerHTML='<div class="qc-inner"><div class="qc-text"><strong>'+t('qc.title')+'</strong> — '+t('qc.body')+'</div><div class="qc-btns"><button class="qc-btn qc-accept">'+t('qc.accept')+'</button><button class="qc-btn qc-reject">'+t('qc.reject')+'</button></div></div>';
+  document.body.appendChild(b);
+  requestAnimationFrame(function(){b.classList.add('show')});
+  function set(a){
+    try{localStorage.setItem('qc_consent',JSON.stringify({a:a,d:Date.now()}))}catch(e){}
+    d.c={a:a};
+    if(a){
+      if(!document.getElementById('qgtag')){var s=document.createElement('script');s.id='qgtag';s.async=true;s.src='https://www.googletagmanager.com/gtag/js?id=G-HR4Z4E0JLK';document.head.appendChild(s);}
+      gtag('js',new Date());gtag('config','G-HR4Z4E0JLK');
+    }
+    b.classList.remove('show');
+    setTimeout(function(){b.remove()},300);
+  }
+  b.querySelector('.qc-accept').onclick=function(){set(true)};
+  b.querySelector('.qc-reject').onclick=function(){set(false)};
+})();
+</script>
 </body>
 </html>

@@ -59,13 +59,23 @@
   }
 }
 </script>
-<!-- Google Analytics (GA4) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-HR4Z4E0JLK"></script>
+<!-- Google Analytics (GA4) — yalnızca kullanıcı onayı sonrası yüklenir (KVKK) -->
 <script>
+window.__qc={};
+(function(){
+  try{window.__qc.c=JSON.parse(localStorage.getItem('qc_consent')||'null')||{}}catch(e){window.__qc.c={}}
+  if(window.__qc.c.a===true){
+    var s=document.createElement('script');s.async=true;
+    s.src='https://www.googletagmanager.com/gtag/js?id=G-HR4Z4E0JLK';
+    document.head.appendChild(s);
+  }
+})();
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-HR4Z4E0JLK');
+  if(window.__qc.c.a===true){
+    gtag('js', new Date());
+    gtag('config', 'G-HR4Z4E0JLK');
+  }
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -596,6 +606,18 @@ section{padding:120px 0}
   margin-top:16px;font-family:var(--fm);font-size:11px;
   letter-spacing:1px;text-align:center;min-height:16px;
 }
+/* ══ Cookie Consent (KVKK) ══ */
+.qc-cookie{position:fixed;left:0;right:0;bottom:0;z-index:9999;background:rgba(4,10,20,.97);border-top:1px solid rgba(0,200,240,.25);padding:18px 24px;display:none}
+.qc-cookie.show{display:block}
+.qc-inner{max-width:1100px;margin:0 auto;display:flex;gap:24px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.qc-text{flex:1 1 480px;font-family:var(--fb);font-size:13px;line-height:1.6;color:var(--muted)}
+.qc-text strong{color:var(--text);font-family:var(--fd)}
+.qc-btns{display:flex;gap:12px;flex-wrap:wrap}
+.qc-btn{border:none;cursor:pointer;font-family:var(--fm);font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:12px 22px;transition:opacity .2s}
+.qc-btn:hover{opacity:.8}
+.qc-accept{background:var(--cyan);color:#020810;font-weight:700}
+.qc-reject{background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,.18)}
+.qc-link{color:var(--cyan);text-decoration:underline;margin-left:6px}
 .cf-status.ok{color:var(--cyan)}
 .cf-status.err{color:#ff6b6b}
 @media(max-width:540px){.cf-row{grid-template-columns:1fr}}
@@ -1435,7 +1457,12 @@ window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>60)
 
 const LANGS_ORDER=["tr","en","fr","es","it","ru","ko","ar"];
 const I18N={
-tr:{
+ tr:{
+  "qc.title": "Çerez Tercihleri",
+  "qc.body": "Gizliliğinize saygı duyuyoruz. Ziyaret istatistikleri için Google Analytics çerezleri (izleme amaçlı) kullanılabilir; bunlar için onayınızı istiyoruz. Onay verdiğinizde yalnızca izleme çerezleri yüklenir.",
+  "qc.accept": "Kabul Et",
+  "qc.reject": "Reddet",
+  "qc.info": "Ayrıntılar",
   "skip": "İçeriğe Geç",
   "nav.about": "Hakkımızda",
   "nav.research": "Araştırma",
@@ -1589,7 +1616,12 @@ tr:{
   "ft.copy": "© 2025 Quantro ARGE Merkezi",
   "ft.bug": "Hata bildir / Fikir öner →"
 },
-en:{
+ en:{
+  "qc.title": "Cookie Preferences",
+  "qc.body": "We respect your privacy. Google Analytics cookies (tracking) may be used for visit statistics; we ask for your consent. When you consent, only tracking cookies are loaded.",
+  "qc.accept": "Accept",
+  "qc.reject": "Reject",
+  "qc.info": "Details",
   "skip": "Skip to Content",
   "nav.about": "About Us",
   "nav.research": "Research",
@@ -1717,7 +1749,7 @@ en:{
   "b.rateC": "Too fast! Try again in 15 minutes.",
   "b.errName": "Please enter your name and a comment of at least 3 characters.",
   "b.reply": "Reply",
-  "lc.badge": "First in Türkiye · 12 Tools",
+  "lc.badge": "First in Türkiye · 13 Tools",
   "lc.h2a": "Try the",
   "lc.h2b": "Quantro Lab",
   "lc.desc": "Quantum Randomness Engine, Circuit Simulator, Universe Age Calculator and more.",
@@ -1743,7 +1775,12 @@ en:{
   "ft.copy": "© 2025 Quantro R&amp;D Center",
   "ft.bug": "Report an issue / Suggest an idea →"
 },
-fr:{
+ fr:{
+  "qc.title": "Préférences de cookies",
+  "qc.body": "Nous respectons votre vie privée. Des cookies Google Analytics (suivi) peuvent être utilisés pour les statistiques de visite ; votre consentement est requis. Si vous consentez, seuls les cookies de suivi sont chargés.",
+  "qc.accept": "Accepter",
+  "qc.reject": "Refuser",
+  "qc.info": "Détails",
   "skip": "Aller au contenu",
   "nav.about": "À propos",
   "nav.research": "Recherche",
@@ -1897,7 +1934,12 @@ fr:{
   "ft.copy": "© 2025 Centre de R&amp;D Quantro",
   "ft.bug": "Signaler un problème / Suggérer une idée →"
 },
-es:{
+ es:{
+  "qc.title": "Preferencias de cookies",
+  "qc.body": "Respetamos su privacidad. Pueden usarse cookies de Google Analytics (seguimiento) para estadísticas de visita; solicitamos su consentimiento. Si acepta, solo se cargan las cookies de seguimiento.",
+  "qc.accept": "Aceptar",
+  "qc.reject": "Rechazar",
+  "qc.info": "Detalles",
   "skip": "Ir al Contenido",
   "nav.about": "Nosotros",
   "nav.research": "Investigación",
@@ -2051,7 +2093,12 @@ es:{
   "ft.copy": "© 2025 Centro de I+D Quantro",
   "ft.bug": "Reportar un problema / Sugerir una idea →"
 },
-it:{
+ it:{
+  "qc.title": "Preferenze sui cookie",
+  "qc.body": "Rispettiamo la tua privacy. I cookie di Google Analytics (tracciamento) possono essere utilizzati per le statistiche delle visite; richiediamo il tuo consenso. Se acconsenti, vengono caricati solo i cookie di tracciamento.",
+  "qc.accept": "Accetta",
+  "qc.reject": "Rifiuta",
+  "qc.info": "Dettagli",
   "skip": "Vai al Contenuto",
   "nav.about": "Chi Siamo",
   "nav.research": "Ricerca",
@@ -2205,7 +2252,12 @@ it:{
   "ft.copy": "© 2025 Centro R&amp;S Quantro",
   "ft.bug": "Segnala un problema / Suggerisci un'idea →"
 },
-ru:{
+ ru:{
+  "qc.title": "Настройка файлов cookie",
+  "qc.body": "Мы уважаем вашу конфиденциальность. Файлы cookie Google Analytics (для отслеживания) могут использоваться для статистики посещений; требуется ваше согласие. При согласии загружаются только файлы cookie отслеживания.",
+  "qc.accept": "Принять",
+  "qc.reject": "Отклонить",
+  "qc.info": "Подробнее",
   "skip": "Перейти к содержанию",
   "nav.about": "О нас",
   "nav.research": "Исследования",
@@ -2333,7 +2385,7 @@ ru:{
   "b.rateC": "Слишком быстро! Попробуйте через 15 минут.",
   "b.errName": "Введите имя и комментарий минимум из 3 символов.",
   "b.reply": "Ответить",
-  "lc.badge": "Первый в Турции · 12 инструментов",
+  "lc.badge": "Первый в Турции · 13 инструментов",
   "lc.h2a": "Попробуйте",
   "lc.h2b": "Quantro Lab",
   "lc.desc": "Генератор квантовой случайности, симулятор схем, калькулятор возраста Вселенной и многое другое.",
@@ -2359,7 +2411,12 @@ ru:{
   "ft.copy": "© 2025 Центр НИР Quantro",
   "ft.bug": "Сообщить о проблеме / Предложить идею →"
 },
-ko:{
+ ko:{
+  "qc.title": "쿠키 기본 설정",
+  "qc.body": "저희는 귀하의 개인정보를 존중합니다. 방문 통계를 위해 Google Analytics 쿠키(추적)가 사용될 수 있으며 이에 대한 동의가 필요합니다. 동의하시면 추적 쿠키만 로드됩니다.",
+  "qc.accept": "동의",
+  "qc.reject": "거부",
+  "qc.info": "자세히",
   "skip": "본문으로 건너뛰기",
   "nav.about": "소개",
   "nav.research": "연구",
@@ -2513,7 +2570,12 @@ ko:{
   "ft.copy": "© 2025 Quantro 연구개발 센터",
   "ft.bug": "문제 신고 / 아이디어 제안 →"
 },
-ar:{
+ ar:{
+  "qc.title": "تفضيلات ملفات تعريف الارتباط",
+  "qc.body": "نحن نحترم خصوصيتك. قد تُستخدم ملفات تعريف ارتباط Google Analytics (التتبع) لإحصاءات الزيارة؛ ونطلب موافقتك. عند الموافقة، تُحمَّل ملفات التتبع فقط.",
+  "qc.accept": "موافق",
+  "qc.reject": "رفض",
+  "qc.info": "التفاصيل",
   "skip": "تخطى إلى المحتوى",
   "nav.about": "من نحن",
   "nav.research": "البحوث",
@@ -2641,7 +2703,7 @@ ar:{
   "b.rateC": "سريع جدًا! حاول بعد 15 دقيقة.",
   "b.errName": "أدخل اسمك وتعليقًا من 3 أحرف على الأقل.",
   "b.reply": "رد",
-  "lc.badge": "الأول في تركيا · 12 أدوات",
+  "lc.badge": "الأول في تركيا · 13 أدوات",
   "lc.h2a": "جرّب",
   "lc.h2b": "مختبر Quantro",
   "lc.desc": "مولّد العشوائية الكمومية، محاكي الدوائر، حاسبة عمر الكون والمزيد.",
@@ -2677,6 +2739,12 @@ function applyLang(){
   if(btn)btn.textContent=(LANG==='tr'?'TR':LANG.toUpperCase());
   document.querySelectorAll('[data-i18n]').forEach(el=>{el.innerHTML=t(el.dataset.i18n)});
   document.querySelectorAll('[data-i18n-ph]').forEach(el=>{el.placeholder=t(el.dataset.i18nPh)});
+  const qc=document.getElementById('qc-banner');
+  if(qc){
+    const s=qc.querySelector('.qc-text');if(s)s.innerHTML='<strong>'+t('qc.title')+'</strong> — '+t('qc.body');
+    const acc=qc.querySelector('.qc-accept');if(acc)acc.textContent=t('qc.accept');
+    const rej=qc.querySelector('.qc-reject');if(rej)rej.textContent=t('qc.reject');
+  }
 }
 function toggleLang(){LANG=LANGS_ORDER[(LANGS_ORDER.indexOf(LANG)+1)%LANGS_ORDER.length];localStorage.setItem('qlang',LANG);applyLang()}
 applyLang();
@@ -3069,6 +3137,30 @@ if (cform) {
   });
 }
 if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(function(){})}
+
+/* ══ Çerez Onayı (KVKK 6698) ══ */
+(function(){
+  var d=window.__qc||{};
+  if(d.c&&d.c.a!==undefined)return;
+  var b=document.createElement('div');
+  b.className='qc-cookie';b.id='qc-banner';
+  b.innerHTML='<div class="qc-inner"><div class="qc-text"><strong>'+t('qc.title')+'</strong> — '+t('qc.body')+'</div><div class="qc-btns"><button class="qc-btn qc-accept">'+t('qc.accept')+'</button><button class="qc-btn qc-reject">'+t('qc.reject')+'</button></div></div>';
+  document.body.appendChild(b);
+  requestAnimationFrame(function(){b.classList.add('show')});
+  function set(a){
+    try{localStorage.setItem('qc_consent',JSON.stringify({a:a,d:Date.now()}))}catch(e){}
+    d.c={a:a};
+    if(a){
+      if(!document.getElementById('qgtag')){var s=document.createElement('script');s.id='qgtag';s.async=true;s.src='https://www.googletagmanager.com/gtag/js?id=G-HR4Z4E0JLK';document.head.appendChild(s);}
+      gtag('js',new Date());gtag('config','G-HR4Z4E0JLK');
+    }
+    b.classList.remove('show');
+    setTimeout(function(){b.remove()},300);
+  }
+  b.querySelector('.qc-accept').onclick=function(){set(true)};
+  b.querySelector('.qc-reject').onclick=function(){set(false)};
+  window.__qcInfo=function(){};
+})();
 </script>
 </body>
 </html>

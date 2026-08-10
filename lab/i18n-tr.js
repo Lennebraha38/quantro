@@ -178,4 +178,8 @@ I18N['tr']={
   "chi.busy": "Veri toplanıyor (1024 bayt)…",
   "chi.ok": "✓ Dağılım rastgeleliğe uyumlu (p>0.05)",
   "chi.fail": "✗ Beklenenden sapma — tekrar dene",
+  "qc.title": "Çerez Tercihleri",
+  "qc.body": "Gizliliğinize saygı duyuyoruz. Ziyaret istatistikleri için Google Analytics çerezleri (izleme amaçlı) kullanılabilir; bunlar için onayınızı istiyoruz. Onay verdiğinizde yalnızca izleme çerezleri yüklenir.",
+  "qc.accept": "Kabul Et",
+  "qc.reject": "Reddet",
 };

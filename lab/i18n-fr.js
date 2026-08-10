@@ -178,4 +178,8 @@ I18N['fr']={
   "chi.busy": "Collecte des données (1024 octets)…",
   "chi.ok": "✓ La distribution correspond au hasard (p>0.05)",
   "chi.fail": "✗ Écart par rapport à l'attendu — réessayez",
+  "qc.title": "Préférences de cookies",
+  "qc.body": "Nous respectons votre vie privée. Des cookies Google Analytics (suivi) peuvent être utilisés pour les statistiques de visite ; votre consentement est requis. Si vous consentez, seuls les cookies de suivi sont chargés.",
+  "qc.accept": "Accepter",
+  "qc.reject": "Refuser",
 };

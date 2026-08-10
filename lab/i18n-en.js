@@ -178,4 +178,8 @@ I18N['en']={
   "chi.busy": "Fetching data (1024 bytes)…",
   "chi.ok": "✓ Distribution fits randomness (p>0.05)",
   "chi.fail": "✗ Deviation from expectation — retry",
+  "qc.title": "Cookie Preferences",
+  "qc.body": "We respect your privacy. Google Analytics cookies (tracking) may be used for visit statistics; we ask for your consent. When you consent, only tracking cookies are loaded.",
+  "qc.accept": "Accept",
+  "qc.reject": "Reject",
 };
