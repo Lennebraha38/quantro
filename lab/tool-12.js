@@ -51,7 +51,10 @@ function dsCDF(whichOnly){
 }
 function dsSample(cdf){
   const n=ds.NB,lo=ds.y0,hi=ds.y1;
-  let r=Math.random();
+  let r;
+  if(ds.pool&&ds.pi<ds.pool.length){
+    r=((ds.pool[ds.pi++]<<8)|(ds.pi<ds.pool.length?ds.pool[ds.pi++]:0))/65536;
+  }else r=Math.random();
   if(r>=cdf[n])r=cdf[n]-1e-9;
   let loI=0,hiI=n;
   while(loI<hiI){
@@ -60,11 +63,13 @@ function dsSample(cdf){
   }
   return lo+(hi-lo)*(loI+0.5)/n;
 }
-function dsFire(){
+async function dsFire(){
   if(!ds.cv)dsStart();
   if(!ds.cv)return;
   dsRead();
   ds.shots=0;
+  ds.pi=0;
+  try{ds.pool=await Qrng.bytes(Math.min(ds.total*4,512))}catch(e){ds.pool=null}
   dsDraw();
   dsLaunch();
 }
@@ -89,7 +94,7 @@ function dsLaunchNext(){
   const cdf=dsCDF(ds.which);
   const ty=dsSample(cdf);
   if(ds.which){
-    ds.spawnSlit=Math.random()<0.5?-1:1;
+    ds.spawnSlit=(ds.pool&&ds.pi<ds.pool.length?(ds.pool[ds.pi++]&1):Math.random())<0.5?-1:1;
     ds.fx=ds.barX;
     ds.fy=ds.H/2+ds.spawnSlit*ds.sep*150/2;
   }else{

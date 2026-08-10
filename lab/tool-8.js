@@ -13,14 +13,14 @@ async function teleRun(){
   let bits=null;
   try{const o=await qBytes(2);bits=[o.bytes[0]&1,o.bytes[1]&1];}catch(e){bits=[qRNG(0,1),qRNG(0,1)]}
   const m0=bits[0],m1=bits[1];
-  L.push(`<b>④ Bell ölçümü</b> (gerçek rastgele): ${m0}${m1}`);
+  L.push(`<b>④ Bell ölçümü</b> (gerçek kuantum rastgele): ${m0}${m1}`);
   const corr=(m0&&m1)?'ZX':m1?'X':m0?'Z':'I';
   L.push(`<b>⑤ Bob</b> düzeltme: ${corr==='I'?'gerekmedi (I)':corr}`);
   const qc=new Quantro.QuantumCircuit(3);
   qc.ry(2*Math.acos(Math.sqrt(0.7)),0);
   qc.h(1);qc.cx(1,2);qc.cx(0,1);qc.h(0);
   qc.cx(1,2);qc.cz(0,2);
-  const counts=Quantro.sampleDistribution(qc,400,Date.now()>>>0);
+  const counts=await Quantro.sampleDistributionQ(qc,400);
   let one=0,tot=0;
   for(const k in counts){tot+=counts[k];if((parseInt(k,10)&1)===1)one+=counts[k]}
   const obs=(one/tot).toFixed(3);

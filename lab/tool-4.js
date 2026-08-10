@@ -1,12 +1,16 @@
 /* ══ T4: BB84 ══ */
 function qlog(m,t=''){const l=document.getElementById('ql');const p=document.createElement('p');p.className=t;p.textContent=m;l.prepend(p)}
 function rstBB84(){['ab','aba','bb','br'].forEach(id=>document.getElementById(id).innerHTML='');['ak','bk'].forEach(id=>document.getElementById(id).textContent='—');document.getElementById('ql').innerHTML='';document.getElementById('sf').style.width='0%';document.getElementById('sp').textContent='0%'}
-function rBB84(){
+async function rBB84(){
   rstBB84();const N=16;const eve=document.getElementById('eve').checked;
-  const aB=Array.from({length:N},()=>Math.round(Math.random()));
-  const aBas=Array.from({length:N},()=>Math.random()>.5?'+':'×');
-  const evBas=eve?Array.from({length:N},()=>Math.random()>.5?'+':'×'):null;
-  const bBas=Array.from({length:N},()=>Math.random()>.5?'+':'×');
+  let qbits=null;
+  try{qbits=await Qrng.bytes(16);}catch(e){qbits=null}
+  const qb=i=>qbits?(qbits[i]&1):Math.round(Math.random());
+  const qbase=i=>qbits?((qbits[i]>>1)&1):(Math.random()>.5?1:0);
+  const aB=Array.from({length:N},(_,i)=>qb(i));
+  const aBas=Array.from({length:N},(_,i)=>qbase(i));
+  const evBas=eve?Array.from({length:N},(_,i)=>qbase(N+i)):null;
+  const bBas=Array.from({length:N},(_,i)=>qbase((2*N+i)%16));
   const bRes=aB.map((b,i)=>eve&&evBas[i]!==aBas[i]?Math.round(Math.random()):bBas[i]===aBas[i]?b:Math.round(Math.random()));
   const mi=aBas.map((b,i)=>b===bBas[i]?i:-1).filter(i=>i>=0);
   const ak=mi.map(i=>aB[i]).join('');const bk=mi.map(i=>bRes[i]).join('');

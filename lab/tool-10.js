@@ -8,23 +8,29 @@ function catReset(){
   document.getElementById('cat-go').innerHTML=t('t10.open');
   catDraw();
 }
-function catOpen(){
+async function catOpen(){
   if(catState!=='super'){catReset();return}
   document.getElementById('cat-go').disabled=true;
   const go=document.getElementById('cat-go');
-  fetch('/api/anu?length=1').then(r=>r.json()).then(j=>{
-    const rnd=(j&&j.success&&j.data&&j.data[0])!==undefined?(j.data[0]/255):Math.random();
-    settle(rnd);
-  }).catch(()=>settle(Math.random()));
-  function settle(rnd){
+  const settle=(rnd,label)=>{
     const decayed=rnd<catP;
     catState=decayed?'dead':'alive';
     catLog.unshift({alive:!decayed});
     if(catLog.length>12)catLog.pop();
     go.innerHTML=decayed?'💀 '+t('t10.open'):'🐱 '+t('t10.open');
     go.disabled=false;
+    const el=document.getElementById('cat-src');
+    if(el)el.textContent=label;
     catDraw();
     updateCatLog();
+  };
+  try{
+    const rnd=await Qrng.prob();
+    settle(rnd,t(Qrng.label()));
+  }catch(e){
+    const j=await fetch('/api/anu?length=1').then(r=>r.json()).catch(()=>null);
+    if(j&&j.success&&j.data&&j.data[0]!==undefined)settle(j.data[0]/255,t('stat.proxy'));
+    else settle(Math.random(),t('stat.none'));
   }
 }
 function updateCatLog(){

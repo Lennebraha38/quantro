@@ -27,22 +27,36 @@ function qwInit(){
   qw.cl =new Array(2*N+1).fill(0);
   qw.aUp[N]=1;
   qw.cl[N]=1;
+  qw.pos=N;
+  qw.pi=0;
+  qw.pool=null;
   qw.step=0;
   qw.run=false;
+}
+function qwCoin(){
+  if(qw.pool&&qw.pi+1<qw.pool.length){
+    const r=((qw.pool[qw.pi++]<<8)|qw.pool[qw.pi++])/65536;
+    return r<qw.p?1:-1;
+  }
+  return Math.random()<qw.p?1:-1;
 }
 function qwStep(){
   const N=qw.steps;
   const up=Math.sqrt(qw.p),dn=Math.sqrt(1-qw.p);
-  const ncl=new Array(2*N+1).fill(0);
-  for(let i=0;i<=2*N;i++){
-    if(qw.cl[i]<=0)continue;
-    ncl[i+1]+=qw.cl[i]*qw.p;
-    ncl[i-1]+=qw.cl[i]*(1-qw.p);
-  }
-  qw.cl=ncl;
   if(qw.observe){
-    for(let i=0;i<=2*N;i++){qw.aUp[i]=Math.sqrt(qw.cl[i]);qw.aDn[i]=0;}
+    const d=qwCoin();
+    qw.pos+=d;
+    if(qw.pos<0)qw.pos=0;
+    if(qw.pos>2*N)qw.pos=2*N;
+    qw.cl[qw.pos]++;
   }else{
+    const ncl=new Array(2*N+1).fill(0);
+    for(let i=0;i<=2*N;i++){
+      if(qw.cl[i]<=0)continue;
+      ncl[i+1]+=qw.cl[i]*qw.p;
+      ncl[i-1]+=qw.cl[i]*(1-qw.p);
+    }
+    qw.cl=ncl;
     const nu=new Array(2*N+1).fill(0),nd=new Array(2*N+1).fill(0);
     for(let i=0;i<=2*N;i++){
       const u=qw.aUp[i],d=qw.aDn[i];
@@ -113,10 +127,11 @@ function qwTick(ms){
   }
   qw.raf=requestAnimationFrame(qwTick);
 }
-function qwRun(){
+async function qwRun(){
   qwRead();
   if(qw.run)return;
   if(qw.step>=qw.steps){qwInit();}
+  try{qw.pool=await Qrng.bytes(Math.min(qw.steps*2,256))}catch(e){qw.pool=null}
   qw.run=true;
   qw.t0=performance.now();
   qw.raf=requestAnimationFrame(qwTick);

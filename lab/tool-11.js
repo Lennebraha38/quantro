@@ -30,12 +30,14 @@ function tunCalc(){
   document.getElementById('tun-rv').textContent=(100-T*100).toFixed(1)+' %';
   tunStart(T,E,V,a);
 }
-function tunStart(T,E,V,a){
+async function tunStart(T,E,V,a){
   const c=document.getElementById('tun-canvas');
   if(!c)return;
-  c._p={T,E,V,a};
+  let pass;
+  try{pass=await Qrng.prob()<T}catch(e){pass=Math.random()<T}
+  c._p={T,E,V,a,pass};
   if(tunRaf)cancelAnimationFrame(tunRaf);
-  tunPkt={p:-80,amp:1,ref:null};
+  tunPkt={p:-80,amp:1,ref:null,decided:false};
   tunLoop(c);
 }
 function tunLoop(c){
@@ -44,7 +46,7 @@ function tunLoop(c){
   const w=c.clientWidth,h=320;
   c.width=w*dpr;c.height=h*dpr;
   ctx.setTransform(dpr,0,0,dpr,0,0);
-  const {T,E,V,a}=c._p;
+  const {T,E,V,a,pass}=c._p;
   const bl=w*0.42,br=bl+Math.max(18,Math.min(90,a*140));
   const energyY=h-40-(E/V)*Math.min(150,h*0.45);
   const k=0.14,sigma=26;
@@ -71,19 +73,32 @@ function tunLoop(c){
   drawPkt(tunPkt.p,tunPkt.amp,k,sigma,bl,br,'#00c8f0');
   if(tunPkt.ref)drawPkt(tunPkt.ref.p,tunPkt.ref.amp,k,sigma,bl,br,'rgba(255,150,60,.9)');
 
-  /* motion */
-  const sp=2.6;
-  if(tunPkt.p<br){
-    tunPkt.p+=sp;
-    if(!tunPkt.ref&&tunPkt.p>bl){} 
+  /* kuantum karar etiketi */
+  ctx.font='11px monospace';ctx.textAlign='left';
+  if(tunPkt.decided){
+    if(pass){ctx.fillStyle='rgba(0,200,240,.9)';ctx.fillText('⚛ GEÇTİ — gerçek kuantum kararı',10,16);}
+    else{ctx.fillStyle='rgba(255,150,60,.9)';ctx.fillText('⚛ YANSIDI — gerçek kuantum kararı',10,16);}
+  }else{
+    ctx.fillStyle='rgba(255,255,255,.35)';ctx.fillText('⚛ süperpozisyon… (T='+(T*100).toFixed(1)+'%)',10,16);
   }
-  if(tunPkt.p>=bl&&!tunPkt.ref){
-    tunPkt.ref={p:bl-4,amp:Math.sqrt(1-T)};
-    tunPkt.amp=Math.sqrt(T);
-    tunPkt.p=br+4;
+
+  /* motion — geçiş/yansıma kararı gerçek kuantum RNG'den (T olasılığıyla) */
+  const sp=2.6;
+  if(tunPkt.p<br&&!tunPkt.decided){
+    tunPkt.p+=sp;
+  }
+  if(tunPkt.p>=bl&&!tunPkt.decided){
+    tunPkt.decided=true;
+    if(pass){
+      tunPkt.p=br+4;
+    }else{
+      tunPkt.ref={p:bl-4,amp:1};
+      tunPkt.amp=0;
+      tunPkt.p=bl+2;
+    }
   }
   if(tunPkt.ref&&tunPkt.ref.p>-60){tunPkt.ref.p-=sp}
-  if(tunPkt.p>w+80&&tunPkt.ref&&tunPkt.ref.p<-60){tunPkt.p=-80;tunPkt.ref=null}
+  if(tunPkt.p>w+80&&(!tunPkt.ref||tunPkt.ref.p<-60)){tunPkt.p=-80;tunPkt.ref=null;tunPkt.decided=false}
   tunRaf=requestAnimationFrame(()=>tunLoop(c));
 
   function drawPkt(cx,amp,k,sigma,bl,br,color){

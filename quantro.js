@@ -193,6 +193,46 @@
     return counts;
   }
 
+  /* ── Gerçek kuantum örneklemesi ──────────────────────────────────
+     Qrng (lab-core) varsa kuantum ölçümü ile örnekler; yoksa seeded
+     PRNG'ye döner. Async çalışır çünkü ağ isteği gerekebilir. */
+  function sampleDistributionQ(circuit, shots) {
+    shots = shots || 1024;
+    var probs = circuit.probabilities();
+    function sample(rngFn, rngReady) {
+      var counts = {};
+      function next() {
+        rngReady().then(function (r) {
+          var acc = 0;
+          for (var i = 0; i < probs.length; i++) {
+            acc += probs[i];
+            if (r < acc) break;
+          }
+          var key = i >= probs.length ? probs.length - 1 : i;
+          counts[key] = (counts[key] || 0) + 1;
+          if (--shots > 0) next();
+          else rngFn(counts);
+        });
+      }
+      next();
+      return counts;
+    }
+    if (typeof Qrng !== 'undefined') {
+      var p = new Promise(function (res) {
+        var n = shots;
+        sample(res, function () { return Qrng.prob(); });
+      });
+      return p;
+    }
+    var rng = mulberry32((Date.now() >>> 0));
+    var counts = {};
+    for (var s = 0; s < shots; s++) {
+      var key = circuit.measureAll(rng);
+      counts[key] = (counts[key] || 0) + 1;
+    }
+    return Promise.resolve(counts);
+  }
+
   var Quantro = {
     c: c,
     H: H, X: X, Y: Y, Z: Z, I2: I2,
@@ -201,7 +241,8 @@
     bellState: bellState,
     ghzState: ghzState,
     mulberry32: mulberry32,
-    sampleDistribution: sampleDistribution
+    sampleDistribution: sampleDistribution,
+    sampleDistributionQ: sampleDistributionQ
   };
 
   if (typeof module !== "undefined" && module.exports) module.exports = Quantro;

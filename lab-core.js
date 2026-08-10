@@ -435,6 +435,74 @@ function roundRect(ctx,x,y,w,h,r){
   ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();
 }
 
+/* ══ SHARED QUANTUM RNG ══
+   Tüm araçların kullandığı tek kuantum rastgelelik katmanı.
+   Zincir: /api/anu (proxy) → ANU doğrudan → NIST Beacon → Web Crypto.
+   `Qrng` global olarak tanımlıdır; araçlar Qrng.bytes(n) çağırır. */
+const Qrng=(()=>{
+  const ANU_URL='https://qrng.anu.edu.au/API/jsonI.php';
+  const NIST_URL='https://beacon.nist.gov/beacon/2.0/pulse/last';
+  let lastLabel='';
+  const cryptoOK=typeof crypto!=='undefined'&&typeof crypto.getRandomValues==='function';
+  function bytesFromHex(hex,n){
+    const m=String(hex).match(/[0-9a-f]{2}/gi);
+    if(!m)return null;
+    return m.map(x=>parseInt(x,16)).slice(0,n);
+  }
+  function libBytes(n){const a=new Uint8Array(n);if(cryptoOK)crypto.getRandomValues(a);else for(let i=0;i<n;i++)a[i]=(Math.random()*256)|0;return Array.from(a)}
+  async function fetchBytes(n){
+    const srcs=[
+      {label:'stat.proxy',url:'/api/anu?length='+n+'&type=uint8'},
+      {label:'stat.anu',url:ANU_URL+'?length='+n+'&type=uint8'},
+      {label:'stat.nist',url:NIST_URL,mode:'nist'}
+    ];
+    for(const s of srcs){
+      try{
+        const r=await fetch(s.url,{mode:'cors'});
+        if(!r.ok)throw new Error('http'+r.status);
+        const j=await r.json();
+        let d=null;
+        if(s.mode==='nist')d=bytesFromHex(j.pulse&&j.pulse.outputValue,n);
+        else if(j.success&&Array.isArray(j.data))d=j.data.slice(0,n);
+        if(!d||d.length<n)throw new Error('bad');
+        lastLabel=s.label;
+        return d;
+      }catch(e){}
+    }
+    lastLabel='stat.none';
+    return libBytes(n);
+  }
+  let cache=null,cacheAt=0,cacheOff=0;
+  async function bytes(n){
+    const now=Date.now();
+    if(!cache||now-cacheAt>40000){
+      cache=await fetchBytes(1024);
+      cacheAt=now;cacheOff=0;
+    }
+    if(cacheOff+n>cache.length)cacheOff=0;
+    const out=cache.slice(cacheOff,cacheOff+n);
+    cacheOff=(cacheOff+n)%cache.length;
+    return out;
+  }
+  return {
+    bytes,
+    label:()=>lastLabel,
+    async byte(){const b=await bytes(1);return b[0]},
+    async bit(){const b=await bytes(1);return b[0]&1},
+    async int(mn,mx){
+      const span=mx-mn+1;
+      const b=await bytes(6);
+      let v=0;for(let k=0;k<6;k++)v=v*256+(b[k]&255);
+      return mn+(v%span);
+    },
+    async prob(){
+      const b=await bytes(2);
+      return (b[0]*256+b[1])/65536;
+    }
+  };
+})();
+window.Qrng=Qrng;
+
 /* ══ PWA ══ */
 if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(function(){})}
 

@@ -1,26 +1,13 @@
 /* ══ T1: QRNG ══ */
 let qh=[];
 function qRNG(mn,mx){const b=new Uint32Array(4);crypto.getRandomValues(b);let v=0;for(let i=0;i<4;i++)v^=b[i];return mn+Math.abs(v)%(mx-mn+1)}
-const ANU_URL='https://qrng.anu.edu.au/API/jsonI.php';
-const NIST_URL='https://beacon.nist.gov/beacon/2.0/pulse/last';
 function qStat(key,cls){
   window.lastQStat={k:key,c:cls||'var(--muted)'};
   const el=document.getElementById('qstat');
   if(el){el.textContent=t(key);el.style.color=window.lastQStat.c}
 }
 function qSource(){const s=document.getElementById('qsrc');return s?s.value:'quantum'}
-async function qBytes(n){
-  const srcs=[
-    {label:'stat.proxy',fetch:async()=>{const r=await fetch('/api/anu?length='+n+'&type=uint8');if(!r.ok)throw new Error('http');const j=await r.json();if(!j.success||!j.data||j.data.length<n)throw new Error('bad');return j.data;}},
-    {label:'stat.anu',fetch:async()=>{const r=await fetch(ANU_URL+'?length='+n+'&type=uint8');if(!r.ok)throw new Error('http');const j=await r.json();if(!j.success||!j.data||j.data.length<n)throw new Error('bad');return j.data;}},
-    {label:'stat.nist',fetch:async()=>{const r=await fetch(NIST_URL);if(!r.ok)throw new Error('http');const j=await r.json();const hex=j.pulse&&j.pulse.outputValue;const bytes=String(hex).match(/[0-9a-f]{2}/gi).map(x=>parseInt(x,16));if(!bytes||bytes.length<n)throw new Error('bad');return bytes.slice(0,n);}}
-  ];
-  for(const s of srcs){
-    try{const d=await s.fetch();return {bytes:d,label:s.label};}catch(e){}
-  }
-  const out=new Uint8Array(n);crypto.getRandomValues(out);
-  return {bytes:Array.from(out),label:''};
-}
+async function qBytes(n){return {bytes:await Qrng.bytes(n),label:Qrng.label()}}
 async function qQuantum(mn,mx){
   const span=mx-mn+1;
   const o=await qBytes(6);
@@ -80,4 +67,9 @@ async function chiRun(){
   document.getElementById('qbars').innerHTML=h;
   el.innerHTML=(o.label?`<span style="color:${o.label?'var(--green)':'var(--gold)'}">${t(o.label)}</span><br>`:'')+`N=${N}, kova(K)=${K}, beklenen=${exp}, χ²=${chi.toFixed(2)} (serbestlik=${K-1}, kritik≈${crit})<br><b style="color:${pass?'var(--green)':'var(--red)'}">${pass?t('chi.ok'):t('chi.fail')}</b>`;
 }
-function qInit(){fetch(ANU_URL+'?length=2&type=uint8').then(r=>{qStat(r.ok?'stat.init.ok':'stat.init.fail',r.ok?'var(--green)':'var(--gold)')}).catch(()=>qStat('stat.init.fail','var(--gold)'))}
+function qInit(){
+  Qrng.bytes(2).then(o=>{
+    const lbl=Qrng.label();
+    qStat(lbl&&lbl!=='stat.none'?'stat.init.ok':'stat.init.fail',lbl&&lbl!=='stat.none'?'var(--green)':'var(--gold)');
+  }).catch(()=>qStat('stat.init.fail','var(--gold)'));
+}

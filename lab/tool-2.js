@@ -10,11 +10,14 @@ function rend(){
 }
 function rmG(g,q){const i=circ[q].findIndex(x=>x.g===g);if(i>-1)circ[q].splice(i,1);rend()}
 function rc(){circ=[[],[]];rend()}
-function mc(){
+async function mc(){
   const qc = new Quantro.QuantumCircuit(2);
   circ[0].forEach(g=>{if(g.g==='H')qc.h(0);else if(g.g==='X')qc.x(0);else if(g.g==='Z')qc.z(0);else if(g.g==='CNOT')qc.cx(0,1)});
   circ[1].forEach(g=>{if(g.g==='H')qc.h(1);else if(g.g==='X')qc.x(1);else if(g.g==='Z')qc.z(1)});
-  const counts=Quantro.sampleDistribution(qc,1024,Date.now()>>>0);
+  const btn=document.getElementById('tb2');
+  if(btn)btn.setAttribute('data-busy','');
+  const counts=await Quantro.sampleDistributionQ(qc,1024);
+  if(btn)btn.removeAttribute('data-busy');
   const slots=[0,0,0,0];
   for(const k in counts)slots[k]=counts[k];
   const mx=Math.max(...slots);
