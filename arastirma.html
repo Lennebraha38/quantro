@@ -1,0 +1,287 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="48x48" href="img/favicon-48.png">
+<link rel="apple-touch-icon" sizes="180x180" href="img/icon-180.png">
+<meta name="theme-color" content="#020810">
+<meta name="robots" content="index, follow">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<!-- Google Analytics (GA4) — yalnızca kullanıcı onayı sonrası yüklenir (KVKK) -->
+<script>
+window.__qc={};
+(function(){
+  try{window.__qc.c=JSON.parse(localStorage.getItem('qc_consent')||'null')||{}}catch(e){window.__qc.c={}}
+  if(window.__qc.c.a===true){
+    var s=document.createElement('script');s.async=true;
+    s.src='https://www.googletagmanager.com/gtag/js?id=G-HR4Z4E0JLK';
+    document.head.appendChild(s);
+  }
+})();
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  if(window.__qc.c.a===true){
+    gtag('js', new Date());
+    gtag('config', 'G-HR4Z4E0JLK');
+  }
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Syne:wght@700;800&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Syne:wght@700;800&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="style.css">
+<title>Quantro · Araştırma</title>
+<meta name="description" content="Quantro ARGE Merkezi araştırma alanları: kuantum mekaniği, genel görelilik, Higgs alanı, kozmoloji, karanlık madde ve kuantum termodinamik.">
+<meta property="og:title" content="Quantro · Araştırma">
+<meta property="og:description" content="Altı temel disiplin, araştırma metodolojisi ve Higgs fiziği.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="tr_TR">
+<meta property="og:site_name" content="Quantro ARGE Merkezi">
+<meta property="og:url" content="https://quantro-1.vercel.app/arastirma.html">
+<meta property="og:image" content="https://quantro-1.vercel.app/img/og-quantro.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Quantro · Araştırma">
+<meta name="twitter:image" content="https://quantro-1.vercel.app/img/og-quantro.png">
+<link rel="canonical" href="https://quantro-1.vercel.app/arastirma.html">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Quantro Araştırma",
+  "url": "https://quantro-1.vercel.app/arastirma.html",
+  "description": "Kuantum mekaniği, genel görelilik, Higgs alanı, kozmoloji, karanlık madde ve kuantum termodinamik üzerine araştırmalar."
+}
+</script>
+</head>
+<body>
+<a href="#main-content" class="skip-link" data-i18n="skip">İçeriğe Geç</a>
+
+<!-- ══ NAV ══ -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Q<span>U</span>ANTRO</a>
+    <ul class="nav-links">
+      <li><a href="hakkimizda.html" data-i18n="nav.about">Hakkımızda</a></li>
+      <li><a href="arastirma.html" data-i18n="nav.research">Araştırma</a></li>
+      <li><a href="simulasyon.html" data-i18n="nav.sim">Simülasyon</a></li>
+      <li><a href="blog.html" data-i18n="nav.blog">Blog</a></li>
+      <li><a href="quantro-lab.html" data-i18n="nav.lab">Lab ⚗</a></li>
+    </ul>
+    <button class="nb" id="langbtn" onclick="toggleLang()" style="background:none;cursor:pointer;font-family:var(--fm);font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--cyan);border:1px solid var(--cyanM);padding:10px 16px;transition:background .2s,color .2s" onmouseover="this.style.background='var(--cyan)';this.style.color='var(--void)'" onmouseout="this.style.background='none';this.style.color='var(--cyan)'">EN</button>
+    <a href="index.html#contact" class="nav-cta" data-i18n="nav.contact">İletişim</a>
+    <button class="nav-burger" id="burger" aria-label="Menü" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="mob-nav" id="mobnav">
+  <a href="hakkimizda.html" class="ml" data-i18n="nav.about">Hakkımızda</a>
+  <a href="arastirma.html" class="ml" data-i18n="nav.research">Araştırma</a>
+  <a href="simulasyon.html" class="ml" data-i18n="nav.sim">Simülasyon</a>
+  <a href="blog.html" class="ml" data-i18n="nav.blog">Blog</a>
+  <a href="quantro-lab.html" class="ml" data-i18n="nav.lab">Lab ⚗</a>
+  <a href="index.html#contact" class="ml" data-i18n="nav.contact">İletişim</a>
+  <button class="ml" onclick="toggleLang()" style="background:none;border:none;cursor:pointer;text-align:left;font-family:var(--fm);font-size:12px;letter-spacing:2.5px;text-transform:uppercase;color:var(--cyan);padding:14px 22px">EN</button>
+</div>
+<main id="main-content">
+<section class="page-head"><div class="container"><div class="ph-eyebrow" data-i18n="d.label">Araştırma Alanları</div><h1 data-i18n="d.h2a">Altı Temel</h1><p class="ph-sub" data-i18n="d.sub">Kuantumdan kozmosa uzanan altı araştırma alanında özgün teorik çalışmalar ve modelleme.</p></div></section>
+<section class="domains" id="domains">
+  <div class="container">
+    <div class="domains-hd">
+      <div>
+        <div class="sec-label reveal"><span data-i18n="d.label">Araştırma Alanları</span></div>
+        <h2 class="sec-h2 reveal"><span data-i18n="d.h2a">Altı Temel</span><br><span data-i18n="d.h2b">Disiplin</span></h2>
+      </div>
+      <p class="sec-sub reveal" data-i18n="d.sub">Kuantumdan kozmosa uzanan altı araştırma alanında özgün teorik çalışmalar ve modelleme.</p>
+    </div>
+    <div class="d-grid">
+      <article class="d-card reveal">
+        <span class="d-glyph">⟨ψ|Ĥ|ψ⟩</span>
+        <h3 class="d-title" data-i18n="d.qm.t">Kuantum Mekaniği</h3>
+        <p class="d-desc" data-i18n="d.qm.d">Dalga-parçacık dualitesi, tünel etkisi ve kuantum ölçüm teorisi.</p>
+        <div class="d-tags"><span class="dtag" data-i18n="d.t.sup">Süperpozisyon</span><span class="dtag" data-i18n="d.t.ent">Dolanıklık</span><span class="dtag">Decoherence</span></div>
+      </article>
+      <article class="d-card reveal d1">
+        <span class="d-glyph">G_μν+Λg_μν</span>
+        <h3 class="d-title" data-i18n="d.gr.t">Genel Görelilik</h3>
+        <p class="d-desc" data-i18n="d.gr.d">Uzay-zaman eğriliği, kara delik fiziği ve gravitasyonel dalgalar.</p>
+        <div class="d-tags"><span class="dtag" data-i18n="d.t.st">Uzay-Zaman</span><span class="dtag" data-i18n="d.t.gw">GW Fiziği</span><span class="dtag" data-i18n="d.t.bh">Kara Delikler</span></div>
+      </article>
+      <article class="d-card reveal d2">
+        <span class="d-glyph">φ → v + H(x)</span>
+        <h3 class="d-title" data-i18n="d.higgs.t">Higgs Alanı</h3>
+        <p class="d-desc" data-i18n="d.higgs.d">Simetri kırılması, kütle kazanım mekanizması ve skaler alan dinamikleri.</p>
+        <div class="d-tags"><span class="dtag" data-i18n="d.t.sb">Simetri Kırılması</span><span class="dtag" data-i18n="d.t.vac">Vakum</span><span class="dtag" data-i18n="d.t.sc">Skaler Alan</span></div>
+      </article>
+      <article class="d-card reveal">
+        <span class="d-glyph">ρ_Λ = Λc²/8πG</span>
+        <h3 class="d-title" data-i18n="d.cosmo.t">Kozmoloji</h3>
+        <p class="d-desc" data-i18n="d.cosmo.d">Büyük patlama, CMB ve evrenin büyük ölçekli yapısının modellenmesi.</p>
+        <div class="d-tags"><span class="dtag">CMB</span><span class="dtag" data-i18n="d.t.inf">Enflasyon</span><span class="dtag" data-i18n="d.t.de">Karanlık Enerji</span></div>
+      </article>
+      <article class="d-card reveal d1">
+        <span class="d-glyph">ρ_DM ≈ 0.27ρ_c</span>
+        <h3 class="d-title" data-i18n="d.dm.t">Karanlık Madde</h3>
+        <p class="d-desc" data-i18n="d.dm.d">Galaktik rotasyon eğrileri, WIMP adayları ve halo modelleri.</p>
+        <div class="d-tags"><span class="dtag">WIMP</span><span class="dtag" data-i18n="d.t.ax">Aksiyon</span><span class="dtag">Halo</span></div>
+      </article>
+      <article class="d-card reveal d2">
+        <span class="d-glyph">S = −k_B Σ p·ln p</span>
+        <h3 class="d-title" data-i18n="d.qtd.t">Kuantum Termodinamik</h3>
+        <p class="d-desc" data-i18n="d.qtd.d">Von Neumann entropisi, bilgi teorisi ve kuantum sınırındaki ısıl süreçler.</p>
+        <div class="d-tags"><span class="dtag" data-i18n="d.t.entr">Entropi</span><span class="dtag" data-i18n="d.t.inf2">Bilgi</span><span class="dtag">Decoherence</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+<section class="method" id="method">
+  <div class="container">
+    <div class="sec-label reveal"><span data-i18n="m.label">Metodoloji</span></div>
+    <h2 class="sec-h2 reveal"><span data-i18n="m.h2a">Araştırma</span><br><span data-i18n="m.h2b">Süreci</span></h2>
+    <div class="method-grid">
+      <div class="method-steps">
+        <div class="m-step reveal">
+          <div class="step-num">01</div>
+          <div><div class="step-title" data-i18n="m1.t">Problemin Tanımlanması</div><div class="step-desc" data-i18n="m1.d">Her araştırma döngüsü, fiziksel bir gözlem anomalisi veya teorik tutarsızlığın kesin biçimde formüle edilmesiyle başlar.</div></div>
+        </div>
+        <div class="m-step reveal d1">
+          <div class="step-num">02</div>
+          <div><div class="step-title" data-i18n="m2.t">Matematiksel Çerçeveleme</div><div class="step-desc" data-i18n="m2.d">Problem, diferansiyel denklemler, topoloji veya operatör cebiri içinde yeniden ifade edilir.</div></div>
+        </div>
+        <div class="m-step reveal d2">
+          <div class="step-num">03</div>
+          <div><div class="step-title" data-i18n="m3.t">Analitik &amp; Nümerik Analiz</div><div class="step-desc" data-i18n="m3.d">Kapalı form çözümler aranır; analitik yaklaşım yetersiz kaldığında nümerik simülasyon devreye girer.</div></div>
+        </div>
+        <div class="m-step reveal d3">
+          <div class="step-num">04</div>
+          <div><div class="step-title" data-i18n="m4.t">Sonuçların Sentezi</div><div class="step-desc" data-i18n="m4.d">Bulgular mevcut literatürle karşılaştırılır, tutarsızlıklar irdelenir ve özgün katkı netleştirilir.</div></div>
+        </div>
+      </div>
+      <div class="method-panel reveal">
+        <div class="panel-hd" data-i18n="m.panel">// Temel Denklemler</div>
+        <div class="p-eq">
+          <span class="eb">Ĥ|ψ⟩ = iℏ ∂|ψ⟩/∂t</span><br>
+          <span class="ed" data-i18n="m.eq.sch">— Schrödinger Denklemi</span><br><br>
+          <span class="eb">G_μν + Λg_μν = 8πG/c⁴·T_μν</span><br>
+          <span class="ed" data-i18n="m.eq.ein">— Einstein Alan Denklemi</span><br><br>
+          <span class="eb">Δx · Δp ≥ ℏ/2</span><br>
+          <span class="ed" data-i18n="m.eq.heis">— Heisenberg Belirsizlik</span><br><br>
+          <span class="eb">V(φ) = −μ²φ² + λφ⁴</span><br>
+          <span class="ed" data-i18n="m.eq.higgs">— Higgs Potansiyeli (Meksika Şapkası)</span><br><br>
+          <span class="eb">S = −k_B Σ pᵢ ln pᵢ</span><br>
+          <span class="ed" data-i18n="m.eq.vn">— Von Neumann Entropisi</span>
+        </div>
+        <div class="panel-note" data-i18n="m.note">
+          "Tanrı zar atmaz" — ancak kuantum mekaniği aksini göstermektedir. Belirsizlik, fiziksel gerçekliğin özündedir.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="higgs" id="higgs">
+  <div class="container">
+    <div class="higgs-inner">
+      <div class="higgs-svg-wrap" aria-hidden="true">
+        <!-- animated SVG Mexican hat potential -->
+        <svg viewBox="-120 -80 240 180" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="hg" cx="50%" cy="50%" r="50%">
+              <stop offset="0%"   stop-color="#00c8f0" stop-opacity="0.9"/>
+              <stop offset="100%" stop-color="#0d1f35" stop-opacity="0"/>
+            </radialGradient>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="2.5" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+
+          <!-- grid lines -->
+          <g stroke="rgba(0,200,240,0.06)" stroke-width="0.5">
+            <line x1="-110" y1="0" x2="110" y2="0"/>
+            <line x1="0" y1="-70" x2="0" y2="100"/>
+            <line x1="-80" y1="-70" x2="-80" y2="100" stroke-dasharray="3,6"/>
+            <line x1="80" y1="-70" x2="80" y2="100" stroke-dasharray="3,6"/>
+          </g>
+
+          <!-- Mexican hat — right side profile -->
+          <path d="M-110,80 C-90,80 -70,60 -55,20 C-45,-5 -35,-30 -25,-55
+                   C-18,-72 -8,-75 0,-60
+                   C8,-45 12,-18 20,8
+                   C32,40 50,65 70,75 C85,82 100,82 110,80"
+                fill="none" stroke="rgba(0,200,240,0.7)" stroke-width="1.5"
+                filter="url(#glow)">
+            <animate attributeName="stroke-opacity" values="0.5;0.9;0.5" dur="3s" repeatCount="indefinite"/>
+          </path>
+
+          <!-- symmetric left side -->
+          <path d="M110,80 C90,80 70,60 55,20 C45,-5 35,-30 25,-55
+                   C18,-72 8,-75 0,-60"
+                fill="none" stroke="rgba(0,200,240,0.45)" stroke-width="1"
+                stroke-dasharray="4,4">
+            <animate attributeName="stroke-opacity" values="0.3;0.7;0.3" dur="3s" repeatCount="indefinite"/>
+          </path>
+
+          <!-- vacuum state dots (minima) -->
+          <circle cx="-46" cy="5" r="4" fill="#00c8f0" opacity="0.9" filter="url(#glow)">
+            <animate attributeName="r" values="3;5;3" dur="2.5s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="46" cy="5" r="4" fill="#00c8f0" opacity="0.9" filter="url(#glow)">
+            <animate attributeName="r" values="3;5;3" dur="2.5s" begin="1.25s" repeatCount="indefinite"/>
+          </circle>
+
+          <!-- false vacuum (top) -->
+          <circle cx="0" cy="-60" r="3" fill="rgba(255,100,80,0.8)" filter="url(#glow)">
+            <animate attributeName="opacity" values="0.4;1;0.4" dur="2s" repeatCount="indefinite"/>
+          </circle>
+
+          <!-- labels -->
+          <text x="-46" y="22" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(0,200,240,0.6)">v₋</text>
+          <text x="46"  y="22" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(0,200,240,0.6)">v₊</text>
+          <text x="8"   y="-64" font-family="JetBrains Mono,monospace" font-size="6" fill="rgba(255,100,80,0.7)">φ=0</text>
+          <text x="72"  y="-60" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(0,200,240,0.4)">V(φ)</text>
+          <text x="95"  y="4"   font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(0,200,240,0.4)">φ</text>
+
+          <!-- V(φ) = -μ²φ² + λφ⁴ label -->
+          <text x="0" y="105" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="rgba(0,200,240,0.5)">V(φ) = −μ²φ² + λφ⁴</text>
+
+          <!-- animated particle rolling down to vacuum -->
+          <circle r="3.5" fill="rgba(255,200,0,0.9)" filter="url(#glow)">
+            <animateMotion dur="4s" repeatCount="indefinite" calcMode="spline"
+              keyTimes="0;0.45;1"
+              keySplines="0.4 0 0.2 1;0.4 0 0.2 1"
+              path="M0,-60 C5,-40 12,-15 22,2 C30,15 38,8 46,5"/>
+          </circle>
+        </svg>
+      </div>
+
+      <div class="higgs-text">
+        <div class="sec-label reveal"><span data-i18n="hg.label">Higgs Fiziği</span></div>
+        <h2 class="sec-h2 reveal"><span data-i18n="hg.h2a">Meksika Şapkası</span><br><span data-i18n="hg.h2b">Potansiyeli</span></h2>
+        <p class="sec-sub reveal" data-i18n="hg.desc">
+          Higgs alanının V(φ) = −μ²φ² + λφ⁴ potansiyeli, evrenin simetri kırılmasının matematiksel kalbidir. Gerçek vakum, φ = 0 noktası değil, ±v noktalarında yatar — bu kırılma tüm kütlelere kaynak olur.
+        </p>
+        <div class="higgs-quote reveal">
+          <p data-i18n="hg.q1">"İbni Rüşd'ün dediği gibi: Bilgi, gözlemle başlar ve akılla olgunlaşır."</p>
+          <cite data-i18n="hg.qc">— Quantro Araştırma Felsefesi</cite>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="footer-inner">
+    <a href="index.html" class="footer-logo">Q<span>U</span>ANTRO</a>
+    <span class="footer-copy" data-i18n="ft.copy">© <span id="fyear">2025</span> Quantro ARGE Merkezi</span>
+    <span class="footer-sys">SYS :: QTR-Ω-ACTIVE</span>
+    <span class="footer-sys"><a href="https://github.com/quantro38/quantro/issues/new" target="_blank" rel="noopener" style="color:rgba(0,200,240,.7)" data-i18n="ft.bug">Hata bildir / Fikir öner →</a></span>
+  </div>
+</footer>
+
+<button class="btt" id="btt" aria-label="Başa dön" title="Başa dön">↑</button>
+
+<script src="app.js"></script>
+</body>
+</html>
