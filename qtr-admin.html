@@ -100,6 +100,7 @@ body{background:var(--void);color:var(--text);font-family:var(--fb);min-height:1
 .stat-lbl{font-family:var(--fm);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted)}
 
 /* section titles */
+.post-search{max-width:360px;margin-bottom:14px;font-size:13px}
 .section-title{
   font-family:var(--fm);font-size:10px;letter-spacing:4px;
   text-transform:uppercase;color:var(--cyan);
@@ -240,6 +241,7 @@ textarea.finput{min-height:220px;resize:vertical;font-family:var(--fm);font-size
 
     <!-- Posts -->
     <div class="section-title">Blog Yazıları</div>
+    <input class="finput post-search" id="post-search" placeholder="🔍 Ara: başlık, slug, etiket" oninput="applyPostFilter()">
     <div class="post-list" id="post-list">
       <div style="font-family:var(--fm);font-size:10px;letter-spacing:2px;color:var(--muted);padding:16px 0">Yükleniyor...</div>
     </div>
@@ -368,13 +370,16 @@ if(sessionStorage.getItem('qtr_token')){
 document.getElementById('pwd-input').focus();
 document.addEventListener('keydown',e=>{if(e.key==='Enter'&&document.getElementById('login-screen').style.display!=='none')tryLogin()});
 
-/* ── VERİ ── */
+/* ── DURUM / API ── */
+const state={posts:[],msgs:[],comments:[],filter:''};
+
 async function api(path,opts={}){
   const token=sessionStorage.getItem('qtr_token');
+  const isGet=!opts.method||opts.method==='GET';
   const res=await fetch(path,{
     ...opts,
     headers:{
-      'Content-Type':'application/json',
+      ...(isGet?{}:{'Content-Type':'application/json'}),
       'Authorization':'Bearer '+token,
       ...(opts.headers||{})
     }
@@ -387,57 +392,124 @@ async function loadAll(){
   await Promise.all([loadPosts(),loadMessages(),loadComments()]);
 }
 
+/* ── YÜKLE / RENDER ── */
+function lockList(id){
+  const el=document.getElementById(id);
+  if(el){el.style.pointerEvents='none';el.style.opacity='.55'}
+}
+function unlockList(id){
+  const el=document.getElementById(id);
+  if(el){el.style.pointerEvents='';el.style.opacity=''}
+}
+
 async function loadPosts(){
   const data=await api('/api/blog')||[];
-  const pub=data.filter(p=>p.published).length;
-  document.getElementById('stat-total').textContent=data.length;
-  document.getElementById('stat-pub').textContent=pub;
-
-  document.getElementById('post-list').innerHTML=data.length?
-    data.map(p=>`
-      <div class="pi">
-        <span class="pi-emoji">${p.cover_emoji||'⚛'}</span>
-        <div class="pi-info">
-          <div class="pi-title">${p.title}</div>
-          <div class="pi-date">${new Date(p.created_at).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'})}</div>
-        </div>
-        <span class="pi-status ${p.published?'pub':'draft'}">${p.published?'Yayında':'Taslak'}</span>
-        <div class="pi-actions">
-          <button class="act-btn" onclick="editPost('${p.id}')">Düzenle</button>
-          <button class="act-btn ${p.published?'toggle-draft':'toggle-pub'}" onclick="togglePub('${p.id}',${p.published})">
-            ${p.published?'Gizle':'Yayınla'}
-          </button>
-          <button class="act-btn del" onclick="delPost('${p.id}')">Sil</button>
-        </div>
-      </div>
-    `).join('')
-    :'<div style="font-family:var(--fm);font-size:10px;letter-spacing:2px;color:var(--muted);padding:16px 0">Henüz yazı yok.</div>';
+  state.posts=data;
+  renderPosts();
 }
 
 async function loadMessages(){
   const data=await api('/api/messages')||[];
-  document.getElementById('stat-msg').textContent=data.length;
-  document.getElementById('msg-list').innerHTML=data.length?
-    data.map(m=>`
-      <div class="msg-item ${!m.is_read?'unread':''}">
-        <div class="msg-header">
-          <div>
-            <div class="msg-from">${m.name}</div>
-            <div class="msg-email">${m.email}</div>
-          </div>
-          <div class="msg-date">${new Date(m.created_at).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'})}</div>
-        </div>
-        <div class="msg-body">${m.message}</div>
-        <div class="msg-actions">
-          <button class="act-btn toggle-pub" onclick="markRead('${m.id}')">Okundu İşaretle</button>
-          <button class="act-btn del" onclick="delMsg('${m.id}')">Sil</button>
-        </div>
-      </div>
-    `).join('')
-    :'<div style="font-family:var(--fm);font-size:10px;letter-spacing:2px;color:var(--muted);padding:16px 0">Henüz mesaj yok.</div>';
+  state.msgs=data;
+  renderMessages();
 }
 
-/* ── BLOG İŞLEMLERİ ── */
+async function loadComments(){
+  const data=await api('/api/comments')||[];
+  state.comments=data;
+  renderComments();
+}
+
+function updateStats(){
+  document.getElementById('stat-total').textContent=state.posts.length;
+  document.getElementById('stat-pub').textContent=state.posts.filter(p=>p.published).length;
+  document.getElementById('stat-msg').textContent=state.msgs.length;
+  document.getElementById('stat-com').textContent=state.comments.filter(c=>!c.is_approved).length;
+}
+
+function rowPost(p){
+  return `
+    <div class="pi">
+      <span class="pi-emoji">${p.cover_emoji||'⚛'}</span>
+      <div class="pi-info">
+        <div class="pi-title">${p.title}</div>
+        <div class="pi-date">${new Date(p.created_at).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'})}</div>
+      </div>
+      <span class="pi-status ${p.published?'pub':'draft'}">${p.published?'Yayında':'Taslak'}</span>
+      <div class="pi-actions">
+        <button class="act-btn" onclick="editPost('${p.id}')">Düzenle</button>
+        <button class="act-btn ${p.published?'toggle-draft':'toggle-pub'}" onclick="togglePub('${p.id}',${p.published})">
+          ${p.published?'Gizle':'Yayınla'}
+        </button>
+        <button class="act-btn del" onclick="delPost('${p.id}')">Sil</button>
+      </div>
+    </div>`;
+}
+
+function renderPosts(){
+  const q=state.filter;
+  const list=q?state.posts.filter(p=>
+    p.title.toLowerCase().includes(q)||
+    (p.slug||'').toLowerCase().includes(q)||
+    (p.tags||[]).join(' ').toLowerCase().includes(q)
+  ):state.posts;
+  document.getElementById('post-list').innerHTML=list.length?
+    list.map(rowPost).join('')
+    :'<div style="font-family:var(--fm);font-size:10px;letter-spacing:2px;color:var(--muted);padding:16px 0">'+(state.posts.length?'Sonuç bulunamadı.':'Henüz yazı yok.')+'</div>';
+  updateStats();
+}
+
+function rowMsg(m){
+  return `
+    <div class="msg-item ${!m.is_read?'unread':''}">
+      <div class="msg-header">
+        <div>
+          <div class="msg-from">${m.name}</div>
+          <div class="msg-email">${m.email}</div>
+        </div>
+        <div class="msg-date">${new Date(m.created_at).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'})}</div>
+      </div>
+      <div class="msg-body">${m.message}</div>
+      <div class="msg-actions">
+        <button class="act-btn toggle-pub" onclick="markRead('${m.id}')">Okundu İşaretle</button>
+        <button class="act-btn del" onclick="delMsg('${m.id}')">Sil</button>
+      </div>
+    </div>`;
+}
+
+function renderMessages(){
+  document.getElementById('msg-list').innerHTML=state.msgs.length?
+    state.msgs.map(rowMsg).join('')
+    :'<div style="font-family:var(--fm);font-size:10px;letter-spacing:2px;color:var(--muted);padding:16px 0">Henüz mesaj yok.</div>';
+  updateStats();
+}
+
+function rowCom(c){
+  return `
+    <div class="msg-item ${!c.is_approved?'unread':''}">
+      <div class="msg-header">
+        <div>
+          <div class="msg-from">${c.name} <span class="msg-email">· ${c.post_slug}</span>${c.parent_id?'<span class="msg-email"> · ↪ Yanıt</span>':''}</div>
+        </div>
+        <div class="msg-date">${new Date(c.created_at).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'})}</div>
+      </div>
+      <div class="msg-body">${c.content}</div>
+      <div class="msg-actions">
+        <span class="pi-status ${c.is_approved?'pub':'draft'}" style="align-self:center">${c.is_approved?'Onaylı':'Bekliyor'}</span>
+        ${c.is_approved?'':`<button class="act-btn toggle-pub" onclick="approveCom('${c.id}')">Onayla</button>`}
+        <button class="act-btn del" onclick="delCom('${c.id}')">Sil</button>
+      </div>
+    </div>`;
+}
+
+function renderComments(){
+  document.getElementById('com-list').innerHTML=state.comments.length?
+    state.comments.map(rowCom).join('')
+    :'<div style="font-family:var(--fm);font-size:10px;letter-spacing:2px;color:var(--muted);padding:16px 0">Henüz yorum yok.</div>';
+  updateStats();
+}
+
+/* ── BLOG İŞLEMLERİ (optimistik) ── */
 let editingId=null;
 
 async function submit(publish){
@@ -460,90 +532,117 @@ async function submit(publish){
   });
 
   if(res.ok){
+    if(editingId){
+      const p=state.posts.find(x=>x.id===editingId);
+      if(p)Object.assign(p,body);
+      editingId=null;
+      document.getElementById('form-title').textContent='Yeni Yazı';
+    } else {
+      const created=await res.json().catch(()=>null);
+      if(created&&created.id)state.posts.unshift(created);
+      else await loadPosts();
+    }
     st.textContent=publish?'✓ Yazı yayınlandı!':'✓ Taslak kaydedildi.';
     st.className='fstatus ok';
-    if(editingId){editingId=null;document.getElementById('form-title').textContent='Yeni Yazı';}
-    clearForm();loadPosts();
+    clearForm();renderPosts();
   } else {
     st.textContent='Hata oluştu. Slug çakışıyor olabilir.';st.className='fstatus err';
   }
 }
 
 function editPost(id){
-  fetch('/api/blog').then(r=>r.json()).then(data=>{
-    const p=data.find(x=>x.id===id);
-    if(!p)return;
-    editingId=id;
-    document.getElementById('form-title').textContent='Yazıyı Düzenle';
-    document.getElementById('f-title').value=p.title||'';
-    document.getElementById('f-slug').value=p.slug||'';
-    document.getElementById('f-emoji').value=p.cover_emoji||'';
-    document.getElementById('f-tags').value=(p.tags||[]).join(', ');
-    document.getElementById('f-summary').value=p.summary||'';
-    document.getElementById('f-content').value=p.content||'';
-    document.getElementById('fstatus').textContent='Düzenleme modu — kaydettiğinde güncellenecek.';
-    document.getElementById('fstatus').className='fstatus';
-    document.getElementById('f-title').focus();
-    document.getElementById('f-title').scrollIntoView({behavior:'smooth',block:'center'});
-  });
+  const p=state.posts.find(x=>x.id===id);
+  if(!p)return;
+  editingId=id;
+  document.getElementById('form-title').textContent='Yazıyı Düzenle';
+  document.getElementById('f-title').value=p.title||'';
+  document.getElementById('f-slug').value=p.slug||'';
+  document.getElementById('f-emoji').value=p.cover_emoji||'';
+  document.getElementById('f-tags').value=(p.tags||[]).join(', ');
+  document.getElementById('f-summary').value=p.summary||'';
+  document.getElementById('f-content').value=p.content||'';
+  document.getElementById('fstatus').textContent='Düzenleme modu — kaydettiğinde güncellenecek.';
+  document.getElementById('fstatus').className='fstatus';
+  document.getElementById('f-title').focus();
+  document.getElementById('f-title').scrollIntoView({behavior:'smooth',block:'center'});
 }
 
 async function togglePub(id,current){
-  await api(`/api/blog?id=${encodeURIComponent(id)}`,{method:'PATCH',body:JSON.stringify({published:!current})});
-  loadPosts();
+  const p=state.posts.find(x=>x.id===id);
+  const prev=p?p.published:current;
+  lockList('post-list');
+  if(p)p.published=!current;
+  renderPosts();
+  const ok=await api(`/api/blog?id=${encodeURIComponent(id)}`,{method:'PATCH',body:JSON.stringify({published:!current})});
+  if(!ok){if(p)p.published=prev;renderPosts();}
+  unlockList('post-list');
 }
 
 async function delPost(id){
   if(!confirm('Bu yazıyı kalıcı olarak silmek istediğinize emin misiniz?'))return;
-  await api(`/api/blog?id=${encodeURIComponent(id)}`,{method:'DELETE'});
-  loadPosts();
+  const prev=state.posts.find(x=>x.id===id);
+  lockList('post-list');
+  state.posts=state.posts.filter(x=>x.id!==id);
+  renderPosts();
+  const ok=await api(`/api/blog?id=${encodeURIComponent(id)}`,{method:'DELETE'});
+  if(!ok){
+    state.posts.push(prev);
+    state.posts.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
+    renderPosts();
+  }
+  unlockList('post-list');
 }
 
 async function markRead(id){
-  await api(`/api/messages?id=${encodeURIComponent(id)}`,{method:'PATCH',body:JSON.stringify({is_read:true})});
-  loadMessages();
+  const m=state.msgs.find(x=>x.id===id);
+  const prev=m?m.is_read:false;
+  lockList('msg-list');
+  if(m)m.is_read=true;
+  renderMessages();
+  const ok=await api(`/api/messages?id=${encodeURIComponent(id)}`,{method:'PATCH',body:JSON.stringify({is_read:true})});
+  if(!ok){if(m)m.is_read=prev;renderMessages();}
+  unlockList('msg-list');
 }
 
 async function delMsg(id){
   if(!confirm('Bu mesajı silmek istediğinize emin misiniz?'))return;
-  await api(`/api/messages?id=${encodeURIComponent(id)}`,{method:'DELETE'});
-  loadMessages();
-}
-
-/* ── YORUM İŞLEMLERİ ── */
-async function loadComments(){
-  const data=await api('/api/comments')||[];
-  const pending=data.filter(c=>!c.is_approved).length;
-  document.getElementById('stat-com').textContent=pending;
-  document.getElementById('com-list').innerHTML=data.length?
-    data.map(c=>`
-      <div class="msg-item ${!c.is_approved?'unread':''}">
-        <div class="msg-header">
-          <div>
-            <div class="msg-from">${c.name} <span class="msg-email">· ${c.post_slug}</span>${c.parent_id?'<span class="msg-email"> · ↪ Yanıt</span>':''}</div>
-          </div>
-          <div class="msg-date">${new Date(c.created_at).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'})}</div>
-        </div>
-        <div class="msg-body">${c.content}</div>
-        <div class="msg-actions">
-          <span class="pi-status ${c.is_approved?'pub':'draft'}" style="align-self:center">${c.is_approved?'Onaylı':'Bekliyor'}</span>
-          ${c.is_approved?'':`<button class="act-btn toggle-pub" onclick="approveCom('${c.id}')">Onayla</button>`}
-          <button class="act-btn del" onclick="delCom('${c.id}')">Sil</button>
-        </div>
-      </div>
-    `).join('')
-    :'<div style="font-family:var(--fm);font-size:10px;letter-spacing:2px;color:var(--muted);padding:16px 0">Henüz yorum yok.</div>';
+  const prev=state.msgs.find(x=>x.id===id);
+  lockList('msg-list');
+  state.msgs=state.msgs.filter(x=>x.id!==id);
+  renderMessages();
+  const ok=await api(`/api/messages?id=${encodeURIComponent(id)}`,{method:'DELETE'});
+  if(!ok){
+    state.msgs.push(prev);
+    state.msgs.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
+    renderMessages();
+  }
+  unlockList('msg-list');
 }
 
 async function approveCom(id){
-  await api(`/api/comments?id=${encodeURIComponent(id)}`,{method:'PATCH',body:JSON.stringify({is_approved:true})});
-  loadComments();
+  const c=state.comments.find(x=>x.id===id);
+  const prev=c?c.is_approved:false;
+  lockList('com-list');
+  if(c)c.is_approved=true;
+  renderComments();
+  const ok=await api(`/api/comments?id=${encodeURIComponent(id)}`,{method:'PATCH',body:JSON.stringify({is_approved:true})});
+  if(!ok){if(c)c.is_approved=prev;renderComments();}
+  unlockList('com-list');
 }
 
 async function delCom(id){
   if(!confirm('Bu yorumu silmek istediğinize emin misiniz?'))return;
-  await api(`/api/comments?id=${encodeURIComponent(id)}`,{method:'DELETE'});
-  loadComments();
+  const prev=state.comments.find(x=>x.id===id);
+  lockList('com-list');
+  state.comments=state.comments.filter(x=>x.id!==id);
+  renderComments();
+  const ok=await api(`/api/comments?id=${encodeURIComponent(id)}`,{method:'DELETE'});
+  if(!ok){
+    state.comments.push(prev);
+    state.comments.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
+    renderComments();
+  }
+  unlockList('com-list');
 }
 
 /* ── FORM YARDIMCI ── */
@@ -556,6 +655,11 @@ function autoSlug(t){
 document.getElementById('f-title').addEventListener('input',function(){
   document.getElementById('f-slug').value=autoSlug(this.value);
 });
+
+function applyPostFilter(){
+  state.filter=document.getElementById('post-search').value.trim().toLowerCase();
+  renderPosts();
+}
 
 function ins(before,after=''){
   const ta=document.getElementById('f-content');
