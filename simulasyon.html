@@ -1,0 +1,183 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="48x48" href="img/favicon-48.png">
+<link rel="apple-touch-icon" sizes="180x180" href="img/icon-180.png">
+<meta name="theme-color" content="#020810">
+<meta name="robots" content="index, follow">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<!-- Google Analytics (GA4) — yalnızca kullanıcı onayı sonrası yüklenir (KVKK) -->
+<script>
+window.__qc={};
+(function(){
+  try{window.__qc.c=JSON.parse(localStorage.getItem('qc_consent')||'null')||{}}catch(e){window.__qc.c={}}
+  if(window.__qc.c.a===true){
+    var s=document.createElement('script');s.async=true;
+    s.src='https://www.googletagmanager.com/gtag/js?id=G-HR4Z4E0JLK';
+    document.head.appendChild(s);
+  }
+})();
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  if(window.__qc.c.a===true){
+    gtag('js', new Date());
+    gtag('config', 'G-HR4Z4E0JLK');
+  }
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Syne:wght@700;800&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Syne:wght@700;800&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="style.css">
+<title>Quantro · Simülasyon</title>
+<meta name="description" content="Kuantum dalga fonksiyonu görselleştirici — ψ(x,t), olasılık yoğunluğu ve faz faktörünü canlı izleyin.">
+<meta property="og:title" content="Quantro · Dalga Fonksiyonu Görselleştirici">
+<meta property="og:description" content="Canlı kuantum dalga fonksiyonu simülasyonu.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="tr_TR">
+<meta property="og:site_name" content="Quantro ARGE Merkezi">
+<meta property="og:url" content="https://quantro-1.vercel.app/simulasyon.html">
+<meta property="og:image" content="https://quantro-1.vercel.app/img/og-quantro.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Quantro · Dalga Fonksiyonu Görselleştirici">
+<meta name="twitter:image" content="https://quantro-1.vercel.app/img/og-quantro.png">
+<link rel="canonical" href="https://quantro-1.vercel.app/simulasyon.html">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Quantro Dalga Fonksiyonu Görselleştirici",
+  "url": "https://quantro-1.vercel.app/simulasyon.html",
+  "description": "Kuantum dalga fonksiyonunu canlı görselleştiren interaktif simülasyon."
+}
+</script>
+</head>
+<body>
+<a href="#main-content" class="skip-link" data-i18n="skip">İçeriğe Geç</a>
+
+<!-- ══ NAV ══ -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Q<span>U</span>ANTRO</a>
+    <ul class="nav-links">
+      <li><a href="hakkimizda.html" data-i18n="nav.about">Hakkımızda</a></li>
+      <li><a href="arastirma.html" data-i18n="nav.research">Araştırma</a></li>
+      <li><a href="simulasyon.html" data-i18n="nav.sim">Simülasyon</a></li>
+      <li><a href="blog.html" data-i18n="nav.blog">Blog</a></li>
+      <li><a href="quantro-lab.html" data-i18n="nav.lab">Lab ⚗</a></li>
+    </ul>
+    <button class="nb" id="langbtn" onclick="toggleLang()" style="background:none;cursor:pointer;font-family:var(--fm);font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--cyan);border:1px solid var(--cyanM);padding:10px 16px;transition:background .2s,color .2s" onmouseover="this.style.background='var(--cyan)';this.style.color='var(--void)'" onmouseout="this.style.background='none';this.style.color='var(--cyan)'">EN</button>
+    <a href="index.html#contact" class="nav-cta" data-i18n="nav.contact">İletişim</a>
+    <button class="nav-burger" id="burger" aria-label="Menü" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="mob-nav" id="mobnav">
+  <a href="hakkimizda.html" class="ml" data-i18n="nav.about">Hakkımızda</a>
+  <a href="arastirma.html" class="ml" data-i18n="nav.research">Araştırma</a>
+  <a href="simulasyon.html" class="ml" data-i18n="nav.sim">Simülasyon</a>
+  <a href="blog.html" class="ml" data-i18n="nav.blog">Blog</a>
+  <a href="quantro-lab.html" class="ml" data-i18n="nav.lab">Lab ⚗</a>
+  <a href="index.html#contact" class="ml" data-i18n="nav.contact">İletişim</a>
+  <button class="ml" onclick="toggleLang()" style="background:none;border:none;cursor:pointer;text-align:left;font-family:var(--fm);font-size:12px;letter-spacing:2.5px;text-transform:uppercase;color:var(--cyan);padding:14px 22px">EN</button>
+</div>
+<main id="main-content">
+<section class="page-head"><div class="container"><div class="ph-eyebrow" data-i18n="v.label">Canlı Simülasyon</div><h1 data-i18n="v.h2a">Dalga Fonksiyonu</h1><p class="ph-sub" data-i18n="v.wf">Kuantum dalga fonksiyonunun zaman içindeki evrimini, olasılık yoğunluğunu ve faz faktörünü gerçek zamanlı izleyin.</p></div></section>
+<section class="visualizer" id="visualizer">
+  <div class="vis-top">
+    <div class="container">
+      <div class="sec-label reveal"><span data-i18n="v.label">Canlı Simülasyon</span></div>
+      <h2 class="sec-h2 reveal"><span data-i18n="v.h2a">Dalga Fonksiyonu</span><br><span data-i18n="v.h2b">Görselleştirici</span></h2>
+    </div>
+  </div>
+  <div class="vis-stage" role="img" aria-label="Kuantum dalga fonksiyonu animasyonu">
+    <canvas id="waveCanvas"></canvas>
+    <div class="vis-veil" aria-hidden="true"></div>
+  </div>
+  <div class="vis-bottom">
+    <div class="container">
+      <div class="vs-grid">
+        <div class="vs-item reveal">   <div class="vs-val">ψ(x,t)</div><div class="vs-lbl" data-i18n="v.wf">Dalga Fonksiyonu</div></div>
+        <div class="vs-item reveal d1"><div class="vs-val">|ψ|²</div>  <div class="vs-lbl" data-i18n="v.prob">Olasılık Yoğunluğu</div></div>
+        <div class="vs-item reveal d2"><div class="vs-val">ℏω</div>    <div class="vs-lbl" data-i18n="v.energy">Kuantum Enerjisi</div></div>
+        <div class="vs-item reveal d3"><div class="vs-val">e^iφ</div>  <div class="vs-lbl" data-i18n="v.phase">Faz Faktörü</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="footer-inner">
+    <a href="index.html" class="footer-logo">Q<span>U</span>ANTRO</a>
+    <span class="footer-copy" data-i18n="ft.copy">© <span id="fyear">2025</span> Quantro ARGE Merkezi</span>
+    <span class="footer-sys">SYS :: QTR-Ω-ACTIVE</span>
+    <span class="footer-sys"><a href="https://github.com/quantro38/quantro/issues/new" target="_blank" rel="noopener" style="color:rgba(0,200,240,.7)" data-i18n="ft.bug">Hata bildir / Fikir öner →</a></span>
+  </div>
+</footer>
+
+<button class="btt" id="btt" aria-label="Başa dön" title="Başa dön">↑</button>
+
+<script src="app.js"></script>
+<script>
+(function(){
+  const canvas=document.getElementById('waveCanvas');
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  let W,H,t=0;
+  const mq=window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  function resize(){
+    const r=canvas.parentElement.getBoundingClientRect();
+    W=canvas.width=r.width; H=canvas.height=r.height;
+    canvas.style.width=r.width+'px'; canvas.style.height=r.height+'px';
+  }
+
+  let _wRun=false;
+  function draw(){
+    if(_wRun||mq.matches)return;
+    _wRun=true;
+    const frame=()=>{
+      if(mq.matches){_wRun=false;return}
+      ctx.clearRect(0,0,W,H);
+      const waves=[
+        {amp:65,freq:.008,speed:.016,phase:0,   color:'rgba(0,200,240,0.75)',lw:1.5},
+        {amp:42,freq:.014,speed:.022,phase:1.5, color:'rgba(120,80,255,0.55)',lw:1.0},
+        {amp:28,freq:.022,speed:.011,phase:3.0, color:'rgba(0,200,240,0.3)', lw:0.8},
+        {amp:85,freq:.005,speed:.009,phase:0.8, color:'rgba(0,200,240,0.12)',lw:2.0},
+      ];
+      waves.forEach(w=>{
+        ctx.beginPath();
+        ctx.strokeStyle=w.color; ctx.lineWidth=w.lw;
+        for(let x=0;x<=W;x+=2){
+          const env=Math.exp(-Math.pow((x/W-.5)*2.5,2)*.3);
+          const y=H/2+w.amp*env*Math.sin(x*w.freq+t*w.speed+w.phase);
+          x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+        }
+        ctx.stroke();
+      });
+      const g=ctx.createLinearGradient(0,H/2-85,0,H/2+85);
+      g.addColorStop(0,'rgba(0,200,240,0)');
+      g.addColorStop(.5,'rgba(0,200,240,0.04)');
+      g.addColorStop(1,'rgba(0,200,240,0)');
+      ctx.beginPath(); ctx.fillStyle=g;
+      ctx.moveTo(0,H/2);
+      for(let x=0;x<=W;x+=2){
+        const env=Math.exp(-Math.pow((x/W-.5)*2.5,2)*.3);
+        ctx.lineTo(x,H/2+65*env*Math.sin(x*.008+t*.016));
+      }
+      ctx.lineTo(W,H/2); ctx.fill();
+      t++; requestAnimationFrame(frame);
+    };
+    frame();
+  }
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)draw()},{passive:true});
+  window.addEventListener('resize',resize,{passive:true});
+  resize(); draw();
+})();
+</script>
+</body>
+</html>
