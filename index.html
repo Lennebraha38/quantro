@@ -1249,13 +1249,16 @@ function initThreeSceneInner(){
   /* ── Wave function: 3 GW sources + Higgs well ── */
   function wY(x,z,t){
     const r1=Math.sqrt(x*x+z*z);
-    const w1=Math.sin(r1*.38-t*2.2)*Math.exp(-r1*.044)*3.9;
+    const dome=Math.exp(-r1*r1*.028)*(1.15+.85*Math.sin(t*1.25+.4));
+    const w1=Math.sin(r1*.38-t*2.2)*Math.exp(-r1*r1*.006)*1.8;
     const dx2=x-9,dz2=z-5,r2=Math.sqrt(dx2*dx2+dz2*dz2);
-    const w2=Math.sin(r2*.32-t*1.85+1.2)*Math.exp(-r2*.054)*2.3;
+    const w2=Math.sin(r2*.32-t*1.85+1.2)*Math.exp(-r2*.054)*1.9;
     const dx3=x+11,dz3=z-7,r3=Math.sqrt(dx3*dx3+dz3*dz3);
-    const w3=Math.sin(r3*.28-t*2.6+2.5)*Math.exp(-r3*.047)*1.7;
-    const higgs=r1<7?(-1.6+.068*r1*r1)*Math.exp(-r1*.11):0;
-    return w1+w2+w3+higgs;
+    const w3=Math.sin(r3*.28-t*2.6+2.5)*Math.exp(-r3*.047)*1.5;
+    const s=r1<5.5?1:r1>7.5?0:(7.5-r1)/2;
+    const ss=s*s*(3-2*s);
+    const higgs=(-1.6+.068*r1*r1)*Math.exp(-r1*.11)*ss;
+    return dome+w1+w2+w3+higgs;
   }
 
   /* ── Mouse parallax ── */
