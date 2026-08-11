@@ -1,5 +1,5 @@
-const CACHE = 'quantro-v1.8.0';
-const SHELL = ['/index.html', '/hakkimizda.html', '/arastirma.html', '/simulasyon.html', '/blog.html', '/quantro-lab.html', '/quantro.js', '/lab-core.js', '/style.css', '/app.js'];
+const CACHE = 'quantro-v1.7.0';
+const SHELL = ['/index.html', '/blog.html', '/quantro-lab.html', '/quantro.js', '/lab-core.js'];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting()));

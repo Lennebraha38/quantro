@@ -14,6 +14,9 @@
 <meta name="robots" content="index, follow">
 <meta property="og:image" content="https://quantro-1.vercel.app/img/og-quantro.png">
 <link rel="canonical" href="https://quantro-1.vercel.app/">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="48x48" href="img/favicon-48.png">
+<link rel="apple-touch-icon" sizes="180x180" href="img/icon-180.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="twitter:card" content="summary_large_image">
@@ -81,27 +84,646 @@ window.__qc={};
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Syne:wght@700;800&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Syne:wght@700;800&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet"></noscript>
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" type="image/png" sizes="48x48" href="img/favicon-48.png">
-<link rel="apple-touch-icon" sizes="180x180" href="img/icon-180.png">
-<link rel="stylesheet" href="style.css">
+
+<style>
+/* ═══════════════════════════════════════════════════
+   DESIGN TOKENS
+   Void #020810 · Deep #07111f · Surface #0d1f35
+   Cyan #00c8f0 · Text #e8edf5 · Muted #4a6070
+   ═══════════════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --void:    #020810;
+  --deep:    #07111f;
+  --surface: #0d1f35;
+  --subtle:  #1e3248;
+  --cyan:    #00c8f0;
+  --cyanM:   rgba(0,200,240,0.35);
+  --cyanD:   rgba(0,200,240,0.12);
+  --text:    #e8edf5;
+  --muted:   #7a93a8;
+  --fd: 'Syne',sans-serif;
+  --fb: 'Space Grotesk',sans-serif;
+  --fm: 'JetBrains Mono',monospace;
+}
+
+html{scroll-behavior:smooth}
+body{
+  background:var(--void);color:var(--text);
+  font-family:var(--fb);font-weight:400;line-height:1.6;
+  overflow-x:hidden;-webkit-font-smoothing:antialiased;
+}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:var(--void)}
+::-webkit-scrollbar-thumb{background:var(--cyanM)}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+
+.skip-link{
+  position:absolute;top:-100px;left:16px;z-index:200;
+  background:var(--cyan);color:var(--void);
+  font-family:var(--fm);font-size:11px;letter-spacing:2px;text-transform:uppercase;
+  padding:12px 22px;text-decoration:none;font-weight:700;
+  transition:top .2s;
+}
+.skip-link:focus{top:16px}
+
+/* ══════════════════════════════════════
+   NAVIGATION
+   ══════════════════════════════════════ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:28px 0;transition:background .4s,padding .4s;
+}
+nav.scrolled{
+  background:rgba(2,8,16,0.88);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  padding:16px 0;border-bottom:1px solid rgba(0,200,240,0.07);
+}
+.nav-inner{
+  display:flex;justify-content:space-between;align-items:center;
+  max-width:1200px;margin:0 auto;padding:0 48px;
+}
+.nav-logo{
+  font-family:var(--fd);font-size:19px;font-weight:800;
+  letter-spacing:5px;text-transform:uppercase;
+  color:var(--text);text-decoration:none;white-space:nowrap;
+}
+.nav-logo span{color:var(--cyan)}
+.nav-links{display:flex;gap:36px;list-style:none}
+.nav-links a{
+  font-family:var(--fm);font-size:10px;letter-spacing:3px;
+  text-transform:uppercase;color:var(--muted);text-decoration:none;
+  transition:color .2s;
+}
+.nav-links a:hover{color:var(--cyan)}
+.nav-cta{
+  font-family:var(--fm);font-size:10px;letter-spacing:2.5px;
+  text-transform:uppercase;color:var(--cyan);
+  border:1px solid var(--cyanM);padding:10px 22px;
+  text-decoration:none;transition:background .2s,color .2s;
+}
+.nav-cta:hover{background:var(--cyan);color:var(--void)}
+.nav-burger{
+  display:none;flex-direction:column;gap:5px;
+  background:none;border:none;cursor:pointer;padding:4px;
+}
+.nav-burger span{display:block;width:22px;height:1.5px;background:var(--text);transition:transform .3s,opacity .3s}
+.mob-nav{
+  display:none;position:fixed;inset:0;z-index:99;
+  background:rgba(2,8,16,0.97);backdrop-filter:blur(20px);
+  flex-direction:column;justify-content:center;align-items:center;gap:32px;
+}
+.mob-nav.open{display:flex}
+.mob-nav a{
+  font-family:var(--fd);font-size:30px;font-weight:800;
+  text-transform:uppercase;color:var(--text);
+  text-decoration:none;letter-spacing:2px;transition:color .2s;
+}
+.mob-nav a:hover{color:var(--cyan)}
+
+/* ══════════════════════════════════════
+   HERO  — full-viewport Three.js stage
+   ══════════════════════════════════════ */
+#hero{
+  position:relative;width:100%;
+  min-height:max(100vh,640px);height:auto;
+  overflow:hidden;padding:0;
+  display:flex;flex-direction:column;justify-content:flex-end;
+}
+#three-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+
+/* cinematic vignette */
+#hero::after{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 50%, transparent 30%, rgba(2,8,16,0.5) 100%),
+    linear-gradient(to bottom, rgba(2,8,16,0.2) 0%, transparent 18%, transparent 72%, rgba(2,8,16,1) 100%);
+  pointer-events:none;z-index:2;
+}
+
+/* HUD corners */
+.hud{position:absolute;z-index:3;width:34px;height:34px}
+.hud-tl{top:22px;left:22px;border-top:1.5px solid rgba(0,200,240,.4);border-left:1.5px solid rgba(0,200,240,.4)}
+.hud-tr{top:22px;right:22px;border-top:1.5px solid rgba(0,200,240,.4);border-right:1.5px solid rgba(0,200,240,.4)}
+.hud-bl{bottom:22px;left:22px;border-bottom:1.5px solid rgba(0,200,240,.4);border-left:1.5px solid rgba(0,200,240,.4)}
+.hud-br{bottom:22px;right:22px;border-bottom:1.5px solid rgba(0,200,240,.4);border-right:1.5px solid rgba(0,200,240,.4)}
+
+/* live telemetry badges */
+.badge{
+  position:absolute;z-index:3;
+  font-family:var(--fm);font-size:9px;letter-spacing:2px;
+  color:rgba(0,200,240,.5);text-transform:uppercase;line-height:1.7;
+}
+.badge-tl{top:70px;left:52px}
+.badge-tr{top:70px;right:52px;text-align:right}
+
+/* hero content overlay */
+.hero-content{
+  position:relative;z-index:3;width:100%;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  padding-bottom:120px;
+}
+.hc-wrap{max-width:1200px;margin:0 auto;padding:0 48px;width:100%}
+
+.hero-eyebrow{
+  display:flex;align-items:center;gap:14px;margin-bottom:24px;
+}
+.hero-eyebrow::before{content:'';display:block;width:38px;height:1px;background:var(--cyan)}
+.hero-eyebrow span{
+  font-family:var(--fm);font-size:10px;letter-spacing:4px;
+  text-transform:uppercase;color:var(--cyan);
+}
+.hero-h1{
+  font-family:var(--fd);
+  font-size:clamp(44px,6.4vw,128px);
+  font-weight:800;line-height:.9;letter-spacing:-3px;
+  text-transform:uppercase;color:var(--text);margin-bottom:36px;
+}
+.hero-h1 .outline{
+  color:transparent;
+  -webkit-text-stroke:1.5px var(--cyan);
+  display:block;
+}
+.hero-row{
+  display:flex;align-items:flex-end;
+  justify-content:space-between;gap:40px;flex-wrap:wrap;
+}
+.hero-desc{
+  font-size:15px;font-weight:300;
+  color:rgba(232,237,245,0.48);line-height:1.85;max-width:420px;
+}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;margin-top:8px}
+.btn-p{
+  font-family:var(--fm);font-size:10px;letter-spacing:3px;text-transform:uppercase;
+  background:var(--cyan);color:var(--void);padding:15px 34px;
+  text-decoration:none;font-weight:700;display:inline-block;
+  transition:opacity .2s,transform .2s;
+}
+.btn-p:hover{opacity:.85;transform:translateY(-2px)}
+.btn-g{
+  font-family:var(--fm);font-size:10px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--text);border:1px solid rgba(255,255,255,0.12);padding:15px 34px;
+  text-decoration:none;display:inline-block;transition:border-color .2s,color .2s;
+}
+.btn-g:hover{border-color:var(--cyanM);color:var(--cyan)}
+
+/* scroll indicator */
+.scroll-ind{
+  position:absolute;bottom:36px;left:50%;transform:translateX(-50%);
+  z-index:3;display:flex;flex-direction:column;align-items:center;gap:8px;
+}
+.scroll-ind span{
+  font-family:var(--fm);font-size:9px;letter-spacing:3px;
+  color:rgba(232,237,245,0.28);text-transform:uppercase;white-space:nowrap;
+}
+.scroll-ln{
+  width:1px;height:44px;
+  background:linear-gradient(to bottom,rgba(0,200,240,.5),transparent);
+  animation:scrlP 2s ease-in-out infinite;
+}
+@keyframes scrlP{0%,100%{opacity:.3;transform:scaleY(1)}50%{opacity:1;transform:scaleY(1.1)}}
+
+/* ══════════════════════════════════════
+   METRICS BAR
+   ══════════════════════════════════════ */
+.metrics-bar{
+  border-top:1px solid rgba(0,200,240,.06);
+  border-bottom:1px solid rgba(0,200,240,.06);
+}
+.mb-inner{
+  max-width:1200px;margin:0 auto;padding:0 48px;
+  display:grid;grid-template-columns:repeat(4,1fr);
+}
+.mb-item{
+  padding:44px 36px;
+  border-left:1px solid rgba(0,200,240,.07);
+  transition:background .3s;
+}
+.mb-item:hover{background:rgba(0,200,240,.025)}
+.mb-item:first-child{border-left:none;padding-left:0}
+.mb-num{
+  font-family:var(--fd);font-size:32px;font-weight:800;
+  color:var(--text);line-height:1;margin-bottom:7px;
+}
+.mb-num sup{font-size:16px;color:var(--cyan)}
+.mb-lbl{
+  font-family:var(--fm);font-size:9px;letter-spacing:3px;
+  text-transform:uppercase;color:var(--muted);
+}
+
+/* ══════════════════════════════════════
+   SHARED LAYOUT
+   ══════════════════════════════════════ */
+.container{max-width:1200px;margin:0 auto;padding:0 48px}
+section{padding:120px 0}
+
+.sec-label{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.sec-label::before{content:'';width:28px;height:1px;background:var(--cyan);flex-shrink:0}
+.sec-label span{
+  font-family:var(--fm);font-size:10px;letter-spacing:4px;
+  text-transform:uppercase;color:var(--cyan);
+}
+.sec-h2{
+  font-family:var(--fd);
+  font-size:clamp(28px,3.4vw,44px);
+  font-weight:800;line-height:1.05;letter-spacing:-1px;
+  text-transform:uppercase;color:var(--text);margin-bottom:24px;
+}
+.sec-h2 span{display:block;overflow-wrap:normal}
+.sec-sub{
+  font-size:15px;font-weight:300;
+  color:rgba(232,237,245,.42);line-height:1.85;max-width:520px;
+}
+
+/* ══════════════════════════════════════
+   ABOUT
+   ══════════════════════════════════════ */
+.about{background:var(--deep)}
+.about-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:100px;align-items:center;
+}
+
+/* 3D atom visual */
+.about-visual{position:relative;height:460px}
+.atom-stage{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+}
+.atom-core{position:relative;width:340px;height:340px}
+.a-nucleus{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:22px;height:22px;
+  background:radial-gradient(circle,#fff 0%,var(--cyan) 60%);
+  border-radius:50%;
+  box-shadow:0 0 30px var(--cyan),0 0 60px rgba(0,200,240,.4);
+  animation:nucP 2.5s ease-in-out infinite alternate;z-index:2;
+}
+@keyframes nucP{
+  from{box-shadow:0 0 20px var(--cyan),0 0 40px rgba(0,200,240,.3)}
+  to  {box-shadow:0 0 45px var(--cyan),0 0 90px rgba(0,200,240,.55)}
+}
+.a-ring{
+  position:absolute;top:50%;left:50%;
+  border-radius:50%;border:1px solid rgba(0,200,240,.3);
+}
+.a-r1{width:110px;height:110px;margin:-55px 0 0 -55px;animation:sA 4s linear infinite}
+.a-r2{width:195px;height:195px;margin:-97.5px 0 0 -97.5px;animation:sB 7s linear infinite reverse;border-color:rgba(120,70,255,.3);transform:rotateX(65deg)}
+.a-r3{width:300px;height:300px;margin:-150px 0 0 -150px;animation:sC 11s linear infinite;border-color:rgba(0,200,240,.15);transform:rotateX(65deg) rotateZ(50deg)}
+@keyframes sA{to{transform:rotateZ(360deg)}}
+@keyframes sB{to{transform:rotateX(65deg) rotateZ(360deg)}}
+@keyframes sC{to{transform:rotateX(65deg) rotateZ(410deg)}}
+.a-dot{
+  position:absolute;width:7px;height:7px;
+  background:var(--cyan);border-radius:50%;
+  box-shadow:0 0 10px var(--cyan);
+  top:50%;left:50%;margin:-3.5px 0 0 -3.5px;
+}
+.a-r1 .a-dot{transform:translateX(52px)}
+.a-r2 .a-dot{transform:translateX(94px);background:rgba(160,100,255,.9);box-shadow:0 0 8px rgba(160,100,255,.8)}
+.a-r3 .a-dot{transform:translateX(147px)}
+
+/* floating equations */
+.eq-f{
+  position:absolute;font-family:var(--fm);font-size:12px;
+  color:rgba(0,200,240,.4);letter-spacing:1px;pointer-events:none;
+}
+.ef-a{top:10%;left:0%;animation:efD 6s ease-in-out infinite alternate}
+.ef-b{bottom:15%;right:2%;animation:efD 8s ease-in-out infinite alternate-reverse}
+.ef-c{top:52%;left:-2%;animation:efD 7s ease-in-out infinite alternate}
+.ef-d{top:25%;right:0%;animation:efD 9s ease-in-out infinite alternate-reverse;color:rgba(120,80,255,.4)}
+@keyframes efD{from{opacity:.25;transform:translateY(0)}to{opacity:.65;transform:translateY(-9px)}}
+
+.about-text .sec-sub{max-width:100%;margin-bottom:40px}
+.pillars{display:flex;flex-direction:column;gap:20px;margin-top:40px}
+.pillar{
+  display:flex;gap:20px;align-items:flex-start;
+  padding:22px;border:1px solid rgba(0,200,240,.08);
+  background:rgba(0,200,240,.02);transition:border-color .3s,background .3s;
+}
+.pillar:hover{border-color:rgba(0,200,240,.22);background:rgba(0,200,240,.05)}
+.pi-icon{
+  font-family:var(--fm);font-size:18px;color:var(--cyan);
+  flex-shrink:0;padding-top:2px;opacity:.8;
+}
+.pi-title{
+  font-family:var(--fd);font-size:13px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;color:var(--text);margin-bottom:5px;
+}
+.pi-desc{font-size:13px;color:rgba(232,237,245,.42);line-height:1.65}
+
+/* ══════════════════════════════════════
+   DOMAINS
+   ══════════════════════════════════════ */
+.domains{background:var(--void)}
+.domains-hd{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:80px;align-items:end;margin-bottom:72px;
+}
+.d-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.d-card{
+  background:var(--deep);padding:44px 36px;
+  border-top:2px solid transparent;position:relative;overflow:hidden;
+  transition:border-color .3s,background .3s,transform .3s;
+}
+.d-card::after{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 110%,rgba(0,200,240,.07) 0%,transparent 60%);
+  opacity:0;transition:opacity .4s;
+}
+.d-card:hover{border-color:var(--cyan);background:var(--surface);transform:translateY(-4px)}
+.d-card:hover::after{opacity:1}
+.d-glyph{font-family:var(--fm);font-size:22px;color:var(--cyan);opacity:.65;display:block;margin-bottom:26px}
+.d-title{font-family:var(--fd);font-size:16px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--text);margin-bottom:11px}
+.d-desc{font-size:13px;color:rgba(232,237,245,.38);line-height:1.75;margin-bottom:22px}
+.d-tags{display:flex;flex-wrap:wrap;gap:7px}
+.dtag{font-family:var(--fm);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(0,200,240,.55);border:1px solid rgba(0,200,240,.12);padding:4px 10px}
+
+/* ══════════════════════════════════════
+   WAVE VISUALIZER  (canvas)
+   ══════════════════════════════════════ */
+.visualizer{background:var(--deep);padding:0;overflow:hidden}
+.vis-top{padding:100px 0 60px}
+.vis-stage{
+  width:100%;height:340px;position:relative;overflow:hidden;
+  border-top:1px solid rgba(0,200,240,.07);
+  border-bottom:1px solid rgba(0,200,240,.07);
+}
+#waveCanvas{display:block;width:100%;height:100%}
+.vis-veil{
+  position:absolute;inset:0;
+  background:linear-gradient(to right,var(--deep) 0%,transparent 7%,transparent 93%,var(--deep) 100%);
+  pointer-events:none;
+}
+.vis-bottom{padding:60px 0 100px}
+.vs-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:2px;margin-top:48px;
+}
+.vs-item{
+  background:var(--surface);padding:26px 22px;
+  border-bottom:2px solid transparent;transition:border-color .3s;
+}
+.vs-item:hover{border-color:var(--cyan)}
+.vs-val{font-family:var(--fm);font-size:20px;color:var(--cyan);letter-spacing:1px;margin-bottom:5px}
+.vs-lbl{font-size:11px;color:var(--muted);letter-spacing:1px}
+
+/* ══════════════════════════════════════
+   METHODOLOGY
+   ══════════════════════════════════════ */
+.method{background:var(--void)}
+.method-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:80px;align-items:start;margin-top:72px;
+}
+.method-steps{display:flex;flex-direction:column}
+.m-step{
+  display:grid;grid-template-columns:52px 1fr;
+  gap:22px;padding:30px 0;
+  border-bottom:1px solid rgba(0,200,240,.07);
+  transition:padding-left .3s;
+}
+.m-step:hover{padding-left:8px}
+.step-num{font-family:var(--fm);font-size:10px;letter-spacing:2px;color:var(--cyan);padding-top:4px}
+.step-title{font-family:var(--fd);font-size:15px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text);margin-bottom:7px}
+.step-desc{font-size:13px;color:rgba(232,237,245,.38);line-height:1.7}
+.method-panel{
+  background:var(--surface);padding:48px;
+  border:1px solid rgba(0,200,240,.08);
+  position:sticky;top:120px;
+}
+.panel-hd{
+  font-family:var(--fm);font-size:10px;letter-spacing:4px;text-transform:uppercase;
+  color:var(--cyan);margin-bottom:28px;padding-bottom:16px;
+  border-bottom:1px solid rgba(0,200,240,.1);
+}
+.p-eq{font-family:var(--fm);font-size:13px;color:rgba(232,237,245,.65);line-height:2.3}
+.p-eq .eb{color:var(--cyan)}
+.p-eq .ed{color:var(--muted)}
+.panel-note{
+  margin-top:28px;padding-top:22px;
+  border-top:1px solid rgba(0,200,240,.07);
+  font-size:12px;color:var(--muted);line-height:1.75;font-style:italic;
+}
+
+/* ══════════════════════════════════════
+   HIGGS POTENTIAL WELL (SVG visual)
+   ══════════════════════════════════════ */
+.higgs{background:var(--deep);overflow:hidden;position:relative}
+.higgs-inner{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:100px;align-items:center;
+}
+.higgs-svg-wrap{
+  position:relative;height:420px;
+  display:flex;align-items:center;justify-content:center;
+}
+.higgs-svg-wrap svg{width:100%;max-width:480px;height:auto;overflow:visible}
+.higgs-text .sec-sub{max-width:100%;margin-bottom:36px}
+.higgs-quote{
+  border-left:2px solid var(--cyan);padding:22px 26px;
+  background:rgba(0,200,240,.03);margin-top:36px;
+}
+.higgs-quote p{font-family:var(--fd);font-size:18px;font-weight:700;color:var(--text);line-height:1.45;margin-bottom:10px}
+.higgs-quote cite{font-family:var(--fm);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);font-style:normal}
+
+/* ══════════════════════════════════════
+   FOUNDER
+   ══════════════════════════════════════ */
+.founder{background:var(--void)}
+.founder-inner{
+  display:grid;grid-template-columns:1fr 1.4fr;
+  gap:100px;align-items:center;
+}
+.founder-card{
+  background:var(--surface);border:1px solid rgba(0,200,240,.1);
+  padding:52px 44px;position:relative;overflow:hidden;
+}
+.founder-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--cyan),transparent);
+}
+.f-avatar{
+  width:80px;height:80px;border-radius:50%;
+  background:linear-gradient(135deg,var(--surface),var(--subtle));
+  border:1.5px solid rgba(0,200,240,.3);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:28px;font-family:var(--fd);font-size:28px;font-weight:800;color:var(--cyan);
+}
+.f-name{font-family:var(--fd);font-size:26px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--text);margin-bottom:6px}
+.f-role{font-family:var(--fm);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--cyan);margin-bottom:26px}
+.f-bio{font-size:13px;color:rgba(232,237,245,.42);line-height:1.8;margin-bottom:28px}
+.f-domains{display:flex;flex-direction:column;gap:8px}
+.fdi{display:flex;align-items:center;gap:12px;font-family:var(--fm);font-size:11px;letter-spacing:1.5px;color:rgba(232,237,245,.45)}
+.fdi::before{content:'';display:block;width:20px;height:1px;background:var(--cyanM);flex-shrink:0}
+.founder-text .sec-sub{max-width:100%;margin-bottom:34px}
+.founder-quote{border-left:2px solid var(--cyan);padding:22px 26px;background:rgba(0,200,240,.03);margin-top:36px}
+.founder-quote p{font-family:var(--fd);font-size:19px;font-weight:700;color:var(--text);line-height:1.45;margin-bottom:10px}
+.founder-quote cite{font-family:var(--fm);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);font-style:normal}
+
+/* ══════════════════════════════════════
+   CONTACT
+   ══════════════════════════════════════ */
+.contact{
+  padding:160px 0;background:var(--deep);
+  text-align:center;position:relative;overflow:hidden;
+}
+.contact::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 50%,rgba(0,80,180,.1) 0%,transparent 70%);
+  pointer-events:none;
+}
+.contact-inner{max-width:680px;margin:0 auto;padding:0 48px;position:relative}
+.contact-inner .sec-label{justify-content:center}
+.contact-h2{font-family:var(--fd);font-size:clamp(30px,4vw,52px);font-weight:800;line-height:1;letter-spacing:-1.5px;text-transform:uppercase;color:var(--text);margin-bottom:22px}
+.contact-h2 span{display:block;overflow-wrap:normal}
+.contact-sub{font-size:15px;font-weight:300;color:rgba(232,237,245,.38);line-height:1.85;margin-bottom:52px}
+.contact-email{font-family:var(--fd);font-size:20px;font-weight:800;letter-spacing:1.5px;color:var(--cyan);text-decoration:none;display:block;margin-bottom:48px;transition:opacity .2s}
+.contact-email:hover{opacity:.65}
+.contact-cta{font-family:var(--fm);font-size:10px;letter-spacing:3px;text-transform:uppercase;background:var(--cyan);color:var(--void);padding:17px 46px;text-decoration:none;font-weight:700;display:inline-block;transition:opacity .2s,transform .2s}
+.contact-cta:hover{opacity:.85;transform:translateY(-2px)}
+.cg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:80px;text-align:left}
+.cg-item{background:var(--void);padding:30px 26px;border-bottom:1px solid transparent;transition:border-color .3s}
+.cg-item:hover{border-color:var(--cyan)}
+.cg-lbl{font-family:var(--fm);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.cg-val{font-family:var(--fd);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text)}
+
+/* ── CONTACT FORM ── */
+.contact-form{max-width:520px;margin:0 auto 0;text-align:left}
+.cf-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.contact-form input,.contact-form textarea{
+  width:100%;background:var(--void);border:1px solid rgba(0,200,240,.15);
+  color:var(--text);font-family:var(--fb);font-size:14px;
+  padding:14px 16px;transition:border-color .2s;resize:vertical;
+}
+.contact-form input::placeholder,.contact-form textarea::placeholder{color:var(--muted)}
+.contact-form input:focus,.contact-form textarea:focus{
+  outline:none;border-color:var(--cyan);
+}
+.contact-form textarea{margin-bottom:20px;min-height:110px}
+.contact-form button{
+  width:100%;border:none;cursor:pointer;
+}
+.contact-form button:disabled{opacity:.5;cursor:not-allowed}
+.cf-status{
+  margin-top:16px;font-family:var(--fm);font-size:11px;
+  letter-spacing:1px;text-align:center;min-height:16px;
+}
+/* ══ Cookie Consent (KVKK) ══ */
+.qc-cookie{position:fixed;left:0;right:0;bottom:0;z-index:9999;background:rgba(4,10,20,.97);border-top:1px solid rgba(0,200,240,.25);padding:18px 24px;display:none}.qc-cookie.show{display:block}
+.qc-inner{max-width:1100px;margin:0 auto;display:flex;gap:24px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.qc-text{flex:1 1 480px;font-family:var(--fb);font-size:13px;line-height:1.6;color:var(--muted)}
+.qc-text strong{color:var(--text);font-family:var(--fd)}
+.qc-btns{display:flex;gap:12px;flex-wrap:wrap}
+.qc-btn{border:none;cursor:pointer;font-family:var(--fm);font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:12px 22px;transition:opacity .2s}
+.qc-btn:hover{opacity:.8}
+.qc-accept{background:var(--cyan);color:#020810;font-weight:700}
+.qc-reject{background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,.18)}
+.qc-link{color:var(--cyan);text-decoration:underline;margin-left:6px}
+.cf-status.ok{color:var(--cyan)}
+.cf-status.err{color:#ff6b6b}
+@media(max-width:540px){.cf-row{grid-template-columns:1fr}}
+
+/* ══ Back to top ══ */
+.btt{position:fixed;right:22px;bottom:24px;z-index:90;width:46px;height:46px;border-radius:50%;border:1px solid var(--cyanM);background:rgba(4,10,20,.85);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:var(--cyan);font-size:18px;cursor:pointer;opacity:0;transform:translateY(12px);pointer-events:none;transition:opacity .3s,transform .3s,background .2s,color .2s}
+.btt.show{opacity:1;transform:translateY(0);pointer-events:auto}
+.btt:hover{background:var(--cyan);color:var(--void)}
+@media(max-width:540px){.btt{right:16px;bottom:16px;width:42px;height:42px}}
+
+/* ══════════════════════════════════════
+   FOOTER
+   ══════════════════════════════════════ */
+footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:44px 0}
+.footer-inner{max-width:1200px;margin:0 auto;padding:0 48px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.footer-logo{font-family:var(--fd);font-size:15px;font-weight:800;letter-spacing:4px;text-transform:uppercase;color:var(--muted);text-decoration:none;white-space:nowrap}
+.footer-logo span{color:var(--cyan)}
+.footer-copy{font-family:var(--fm);font-size:10px;letter-spacing:2px;color:var(--muted)}
+.footer-sys{font-family:var(--fm);font-size:10px;letter-spacing:2px;color:rgba(0,200,240,.25)}
+
+/* ══════════════════════════════════════
+   SCROLL REVEAL
+   ══════════════════════════════════════ */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .75s ease,transform .75s ease}
+.reveal.vis{opacity:1;transform:translateY(0)}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
+
+/* ══════════════════════════════════════
+   I18N — UZUN ÇEVİRİLERDE TAŞMA KORUMASI
+   ══════════════════════════════════════ */
+.lc-box{padding:52px}
+.lc-cta{white-space:nowrap;text-align:center;line-height:1.4}
+[data-i18n]{overflow-wrap:break-word}
+.hero-h1 span,.hero-eyebrow span,.sec-h2,.contact-h2,.contact-sub,.contact-email,
+.sec-label span,.d-title,.d-sub,.d-lbl,.mb-lbl,.vs-lbl,.cg-lbl,.cg-val,
+.pi-title,.pi-sub,.step-title,.panel-hd,.m-title,.b-num,.b-lbl,.b-title,
+.founder-name,.founder-role,.hg-badge span,.higgs-note,.fs,.fc{overflow-wrap:break-word}
+.d-grid>*,.cg-grid>*,.vs-grid>*,.domains-hd>*,.mb-item,.about-grid>*,.founder-inner>*,.higgs-inner>*{min-width:0}
+.m-step{grid-template-columns:52px minmax(0,1fr)}
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════ */
+@media(max-width:900px){
+  .nav-links,.nav-cta{display:none}
+  .nav-burger{display:flex}
+  .nav-inner{padding:0 24px}
+  .hc-wrap,.contact-inner,.footer-inner{padding:0 24px}
+  .container{padding:0 24px}
+  .hero-h1{font-size:clamp(30px,8vw,78px)}
+  .hero-row{flex-direction:column;align-items:flex-start}
+  .mb-inner{grid-template-columns:1fr 1fr;padding:0 24px}
+  .mb-item:nth-child(3){border-left:none;padding-left:0}
+  .about-grid,.founder-inner,.higgs-inner{grid-template-columns:1fr;gap:52px}
+  .about-visual,.higgs-svg-wrap{height:300px;overflow:hidden}
+  .eq-f{font-size:10px;max-width:calc(100% - 8px)}
+  .domains-hd{grid-template-columns:1fr;gap:16px;margin-bottom:48px}
+  .d-grid,.cg-grid{grid-template-columns:1fr}
+  .vs-grid{grid-template-columns:repeat(2,1fr)}
+  .method-grid{grid-template-columns:1fr;gap:44px}
+  .method-panel{position:static}
+  .badge-tl,.badge-tr{display:none}
+  #blog-list{grid-template-columns:1fr 1fr!important}
+}
+@media(max-width:540px){
+  .hero-btns{flex-direction:column}
+  .btn-p,.btn-g{width:100%;text-align:center}
+  .mb-inner{grid-template-columns:1fr 1fr}
+  .vs-grid{grid-template-columns:1fr 1fr}
+  .mb-item{padding:36px 20px}
+  .mb-num{font-size:clamp(20px,5vw,26px)}
+  .lc-box{padding:32px 24px}
+  .lc-cta{white-space:normal;padding:16px 30px}
+  .sec-h2{font-size:clamp(20px,5.6vw,36px);line-height:1.05}
+  .contact-h2{font-size:clamp(24px,7vw,40px)}
+  .contact-email{font-size:clamp(14px,4.2vw,20px)}
+  .contact-inner{padding:0 24px}
+  #blog-list{grid-template-columns:1fr!important}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.1ms!important}
+}
+</style>
 </head>
 <body>
+
 <a href="#main-content" class="skip-link" data-i18n="skip">İçeriğe Geç</a>
 
 <!-- ══ NAV ══ -->
 <nav id="nav">
   <div class="nav-inner">
-    <a href="index.html" class="nav-logo">Q<span>U</span>ANTRO</a>
+    <a href="#" class="nav-logo">Q<span>U</span>ANTRO</a>
     <ul class="nav-links">
-      <li><a href="hakkimizda.html" data-i18n="nav.about">Hakkımızda</a></li>
-      <li><a href="arastirma.html" data-i18n="nav.research">Araştırma</a></li>
-      <li><a href="simulasyon.html" data-i18n="nav.sim">Simülasyon</a></li>
-      <li><a href="blog.html" data-i18n="nav.blog">Blog</a></li>
+      <li><a href="#about" data-i18n="nav.about">Hakkımızda</a></li>
+      <li><a href="#domains" data-i18n="nav.research">Araştırma</a></li>
+      <li><a href="#method" data-i18n="nav.method">Metodoloji</a></li>
+      <li><a href="#blog" data-i18n="nav.blog">Blog</a></li>
+      <li><a href="#founder" data-i18n="nav.vision">Vizyon</a></li>
       <li><a href="quantro-lab.html" data-i18n="nav.lab">Lab ⚗</a></li>
     </ul>
     <button class="nb" id="langbtn" onclick="toggleLang()" style="background:none;cursor:pointer;font-family:var(--fm);font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--cyan);border:1px solid var(--cyanM);padding:10px 16px;transition:background .2s,color .2s" onmouseover="this.style.background='var(--cyan)';this.style.color='var(--void)'" onmouseout="this.style.background='none';this.style.color='var(--cyan)'">EN</button>
-    <a href="index.html#contact" class="nav-cta" data-i18n="nav.contact">İletişim</a>
+    <a href="#contact" class="nav-cta" data-i18n="nav.contact">İletişim</a>
     <button class="nav-burger" id="burger" aria-label="Menü" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
@@ -109,16 +731,19 @@ window.__qc={};
 </nav>
 
 <div class="mob-nav" id="mobnav">
-  <a href="hakkimizda.html" class="ml" data-i18n="nav.about">Hakkımızda</a>
-  <a href="arastirma.html" class="ml" data-i18n="nav.research">Araştırma</a>
-  <a href="simulasyon.html" class="ml" data-i18n="nav.sim">Simülasyon</a>
-  <a href="blog.html" class="ml" data-i18n="nav.blog">Blog</a>
+  <a href="#about"   class="ml" data-i18n="nav.about">Hakkımızda</a>
+  <a href="#domains" class="ml" data-i18n="nav.research">Araştırma</a>
+  <a href="#method"  class="ml" data-i18n="nav.method">Metodoloji</a>
+  <a href="#blog"    class="ml" data-i18n="nav.blog">Blog</a>
+  <a href="#founder" class="ml" data-i18n="nav.vision">Vizyon</a>
   <a href="quantro-lab.html" class="ml" data-i18n="nav.lab">Lab ⚗</a>
-  <a href="index.html#contact" class="ml" data-i18n="nav.contact">İletişim</a>
+  <a href="#contact" class="ml" data-i18n="nav.contact">İletişim</a>
   <button class="ml" onclick="toggleLang()" style="background:none;border:none;cursor:pointer;text-align:left;font-family:var(--fm);font-size:12px;letter-spacing:2.5px;text-transform:uppercase;color:var(--cyan);padding:14px 22px">EN</button>
 </div>
-<main id="main-content">
+
+<!-- ══ HERO — Three.js gravitational wave ══ -->
 <section id="hero" role="banner" tabindex="-1">
+  <a id="main-content"></a>
   <canvas id="three-canvas" aria-hidden="true"></canvas>
 
   <div class="hud hud-tl" aria-hidden="true"></div>
@@ -150,8 +775,8 @@ window.__qc={};
           Kuantum alanlarının simetri kırılmasından galaktik ölçek yapılarına kadar — evrenin en derin katmanlarını araştırıyoruz.
         </p>
         <div class="hero-btns">
-          <a href="arastirma.html#domains" class="btn-p" data-i18n="hero.b1">Araştırma Alanları</a>
-          <a href="arastirma.html#method" class="btn-g" data-i18n="hero.b2">Metodoloji</a>
+          <a href="#domains" class="btn-p" data-i18n="hero.b1">Araştırma Alanları</a>
+          <a href="#method"  class="btn-g" data-i18n="hero.b2">Metodoloji</a>
         </div>
       </div>
     </div>
@@ -162,6 +787,7 @@ window.__qc={};
     <div class="scroll-ln"></div>
   </div>
 </section>
+
 <!-- ══ METRICS ══ -->
 <div class="metrics-bar">
   <div class="mb-inner">
@@ -184,33 +810,307 @@ window.__qc={};
   </div>
 </div>
 
-<section class="explore" style="background:var(--void)">
+<!-- ══ ABOUT ══ -->
+<section class="about" id="about">
   <div class="container">
-    <div class="sec-label reveal"><span data-i18n="e.label">Keşfet</span></div>
-    <h2 class="sec-h2 reveal"><span data-i18n="e.h2a">Nereden</span><br><span data-i18n="e.h2b">Başlamalı?</span></h2>
-    <div class="ex-grid">
-      <a href="arastirma.html" class="ex-card reveal">
-        <span class="ex-glyph">⟨ψ|Ĥ|ψ⟩</span>
-        <h3 data-i18n="e.r.t">Araştırma Alanları</h3>
-        <p data-i18n="e.r.d">Altı temel disiplin: kuantum mekaniği, genel görelilik, Higgs alanı, kozmoloji, karanlık madde ve kuantum termodinamik.</p>
-        <span class="ex-arrow" data-i18n="e.go">Keşfet →</span>
-      </a>
-      <a href="simulasyon.html" class="ex-card reveal d1">
-        <span class="ex-glyph">ψ(x,t)</span>
-        <h3 data-i18n="e.s.t">Canlı Simülasyon</h3>
-        <p data-i18n="e.s.d">Dalga fonksiyonunun titreşimini, olasılık yoğunluğunu ve faz faktörünü gerçek zamanlı izleyin.</p>
-        <span class="ex-arrow" data-i18n="e.go">Keşfet →</span>
-      </a>
-      <a href="hakkimizda.html" class="ex-card reveal d2">
-        <span class="ex-glyph">Q</span>
-        <h3 data-i18n="e.h.t">Hakkımızda</h3>
-        <p data-i18n="e.h.d">Bağımsız bir ARGE merkezinin misyonu, vizyonu ve kurucu felsefesi.</p>
-        <span class="ex-arrow" data-i18n="e.go">Keşfet →</span>
-      </a>
+    <div class="about-grid">
+
+      <!-- animated atom -->
+      <div class="about-visual" aria-hidden="true">
+        <div class="atom-stage">
+          <div class="atom-core">
+            <div class="a-nucleus"></div>
+            <div class="a-ring a-r1"><div class="a-dot"></div></div>
+            <div class="a-ring a-r2"><div class="a-dot"></div></div>
+            <div class="a-ring a-r3"><div class="a-dot"></div></div>
+          </div>
+          <div class="eq-f ef-a">Ĥ|ψ⟩ = iℏ ∂|ψ⟩/∂t</div>
+          <div class="eq-f ef-b">∇²Φ = 4πGρ</div>
+          <div class="eq-f ef-c">|ψ⟩ = α|0⟩ + β|1⟩</div>
+          <div class="eq-f ef-d">Δx·Δp ≥ ℏ/2</div>
+        </div>
+      </div>
+
+      <div class="about-text">
+        <div class="sec-label reveal"><span data-i18n="a.label">Hakkımızda</span></div>
+        <h2 class="sec-h2 reveal"><span data-i18n="a.h2a">Bağımsız</span><br><span data-i18n="a.h2b">Bilim Üssü</span></h2>
+        <p class="sec-sub reveal" data-i18n="a.desc">
+          Quantro; kuantum mekaniği ve astrofizik alanlarında bağımsız, derinlemesine araştırma yürüten bir ARGE merkezidir. Planck ölçeğinden kozmolojik ufka uzanan geniş bir spektrumda çalışmalar yürütülür.
+        </p>
+        <div class="pillars">
+          <div class="pillar reveal">
+            <div class="pi-icon">ψ</div>
+            <div>
+              <div class="pi-title" data-i18n="a.p1t">Kuantum Araştırması</div>
+              <div class="pi-desc" data-i18n="a.p1d">Dalga fonksiyonları, kuantum dolanıklığı ve ölçüm problemleri üzerine teorik çalışmalar.</div>
+            </div>
+          </div>
+          <div class="pillar reveal d1">
+            <div class="pi-icon">★</div>
+            <div>
+              <div class="pi-title" data-i18n="a.p2t">Astrofizik Modelleme</div>
+              <div class="pi-desc" data-i18n="a.p2d">Kozmik yapıların oluşumu, karanlık madde ve büyük ölçekli evren modelleri.</div>
+            </div>
+          </div>
+          <div class="pillar reveal d2">
+            <div class="pi-icon">∇</div>
+            <div>
+              <div class="pi-title" data-i18n="a.p3t">Teori &amp; Analiz</div>
+              <div class="pi-desc" data-i18n="a.p3d">Matematiksel fizik temelli yaklaşımlarla özgün teorik çerçeveler geliştirme.</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
+<!-- ══ DOMAINS ══ -->
+<section class="domains" id="domains">
+  <div class="container">
+    <div class="domains-hd">
+      <div>
+        <div class="sec-label reveal"><span data-i18n="d.label">Araştırma Alanları</span></div>
+        <h2 class="sec-h2 reveal"><span data-i18n="d.h2a">Altı Temel</span><br><span data-i18n="d.h2b">Disiplin</span></h2>
+      </div>
+      <p class="sec-sub reveal" data-i18n="d.sub">Kuantumdan kozmosa uzanan altı araştırma alanında özgün teorik çalışmalar ve modelleme.</p>
+    </div>
+    <div class="d-grid">
+      <article class="d-card reveal">
+        <span class="d-glyph">⟨ψ|Ĥ|ψ⟩</span>
+        <h3 class="d-title" data-i18n="d.qm.t">Kuantum Mekaniği</h3>
+        <p class="d-desc" data-i18n="d.qm.d">Dalga-parçacık dualitesi, tünel etkisi ve kuantum ölçüm teorisi.</p>
+        <div class="d-tags"><span class="dtag" data-i18n="d.t.sup">Süperpozisyon</span><span class="dtag" data-i18n="d.t.ent">Dolanıklık</span><span class="dtag">Decoherence</span></div>
+      </article>
+      <article class="d-card reveal d1">
+        <span class="d-glyph">G_μν+Λg_μν</span>
+        <h3 class="d-title" data-i18n="d.gr.t">Genel Görelilik</h3>
+        <p class="d-desc" data-i18n="d.gr.d">Uzay-zaman eğriliği, kara delik fiziği ve gravitasyonel dalgalar.</p>
+        <div class="d-tags"><span class="dtag" data-i18n="d.t.st">Uzay-Zaman</span><span class="dtag" data-i18n="d.t.gw">GW Fiziği</span><span class="dtag" data-i18n="d.t.bh">Kara Delikler</span></div>
+      </article>
+      <article class="d-card reveal d2">
+        <span class="d-glyph">φ → v + H(x)</span>
+        <h3 class="d-title" data-i18n="d.higgs.t">Higgs Alanı</h3>
+        <p class="d-desc" data-i18n="d.higgs.d">Simetri kırılması, kütle kazanım mekanizması ve skaler alan dinamikleri.</p>
+        <div class="d-tags"><span class="dtag" data-i18n="d.t.sb">Simetri Kırılması</span><span class="dtag" data-i18n="d.t.vac">Vakum</span><span class="dtag" data-i18n="d.t.sc">Skaler Alan</span></div>
+      </article>
+      <article class="d-card reveal">
+        <span class="d-glyph">ρ_Λ = Λc²/8πG</span>
+        <h3 class="d-title" data-i18n="d.cosmo.t">Kozmoloji</h3>
+        <p class="d-desc" data-i18n="d.cosmo.d">Büyük patlama, CMB ve evrenin büyük ölçekli yapısının modellenmesi.</p>
+        <div class="d-tags"><span class="dtag">CMB</span><span class="dtag" data-i18n="d.t.inf">Enflasyon</span><span class="dtag" data-i18n="d.t.de">Karanlık Enerji</span></div>
+      </article>
+      <article class="d-card reveal d1">
+        <span class="d-glyph">ρ_DM ≈ 0.27ρ_c</span>
+        <h3 class="d-title" data-i18n="d.dm.t">Karanlık Madde</h3>
+        <p class="d-desc" data-i18n="d.dm.d">Galaktik rotasyon eğrileri, WIMP adayları ve halo modelleri.</p>
+        <div class="d-tags"><span class="dtag">WIMP</span><span class="dtag" data-i18n="d.t.ax">Aksiyon</span><span class="dtag">Halo</span></div>
+      </article>
+      <article class="d-card reveal d2">
+        <span class="d-glyph">S = −k_B Σ p·ln p</span>
+        <h3 class="d-title" data-i18n="d.qtd.t">Kuantum Termodinamik</h3>
+        <p class="d-desc" data-i18n="d.qtd.d">Von Neumann entropisi, bilgi teorisi ve kuantum sınırındaki ısıl süreçler.</p>
+        <div class="d-tags"><span class="dtag" data-i18n="d.t.entr">Entropi</span><span class="dtag" data-i18n="d.t.inf2">Bilgi</span><span class="dtag">Decoherence</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ══ WAVE VISUALIZER ══ -->
+<section class="visualizer" id="visualizer">
+  <div class="vis-top">
+    <div class="container">
+      <div class="sec-label reveal"><span data-i18n="v.label">Canlı Simülasyon</span></div>
+      <h2 class="sec-h2 reveal"><span data-i18n="v.h2a">Dalga Fonksiyonu</span><br><span data-i18n="v.h2b">Görselleştirici</span></h2>
+    </div>
+  </div>
+  <div class="vis-stage" role="img" aria-label="Kuantum dalga fonksiyonu animasyonu">
+    <canvas id="waveCanvas"></canvas>
+    <div class="vis-veil" aria-hidden="true"></div>
+  </div>
+  <div class="vis-bottom">
+    <div class="container">
+      <div class="vs-grid">
+        <div class="vs-item reveal">   <div class="vs-val">ψ(x,t)</div><div class="vs-lbl" data-i18n="v.wf">Dalga Fonksiyonu</div></div>
+        <div class="vs-item reveal d1"><div class="vs-val">|ψ|²</div>  <div class="vs-lbl" data-i18n="v.prob">Olasılık Yoğunluğu</div></div>
+        <div class="vs-item reveal d2"><div class="vs-val">ℏω</div>    <div class="vs-lbl" data-i18n="v.energy">Kuantum Enerjisi</div></div>
+        <div class="vs-item reveal d3"><div class="vs-val">e^iφ</div>  <div class="vs-lbl" data-i18n="v.phase">Faz Faktörü</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ METHODOLOGY ══ -->
+<section class="method" id="method">
+  <div class="container">
+    <div class="sec-label reveal"><span data-i18n="m.label">Metodoloji</span></div>
+    <h2 class="sec-h2 reveal"><span data-i18n="m.h2a">Araştırma</span><br><span data-i18n="m.h2b">Süreci</span></h2>
+    <div class="method-grid">
+      <div class="method-steps">
+        <div class="m-step reveal">
+          <div class="step-num">01</div>
+          <div><div class="step-title" data-i18n="m1.t">Problemin Tanımlanması</div><div class="step-desc" data-i18n="m1.d">Her araştırma döngüsü, fiziksel bir gözlem anomalisi veya teorik tutarsızlığın kesin biçimde formüle edilmesiyle başlar.</div></div>
+        </div>
+        <div class="m-step reveal d1">
+          <div class="step-num">02</div>
+          <div><div class="step-title" data-i18n="m2.t">Matematiksel Çerçeveleme</div><div class="step-desc" data-i18n="m2.d">Problem, diferansiyel denklemler, topoloji veya operatör cebiri içinde yeniden ifade edilir.</div></div>
+        </div>
+        <div class="m-step reveal d2">
+          <div class="step-num">03</div>
+          <div><div class="step-title" data-i18n="m3.t">Analitik &amp; Nümerik Analiz</div><div class="step-desc" data-i18n="m3.d">Kapalı form çözümler aranır; analitik yaklaşım yetersiz kaldığında nümerik simülasyon devreye girer.</div></div>
+        </div>
+        <div class="m-step reveal d3">
+          <div class="step-num">04</div>
+          <div><div class="step-title" data-i18n="m4.t">Sonuçların Sentezi</div><div class="step-desc" data-i18n="m4.d">Bulgular mevcut literatürle karşılaştırılır, tutarsızlıklar irdelenir ve özgün katkı netleştirilir.</div></div>
+        </div>
+      </div>
+      <div class="method-panel reveal">
+        <div class="panel-hd" data-i18n="m.panel">// Temel Denklemler</div>
+        <div class="p-eq">
+          <span class="eb">Ĥ|ψ⟩ = iℏ ∂|ψ⟩/∂t</span><br>
+          <span class="ed" data-i18n="m.eq.sch">— Schrödinger Denklemi</span><br><br>
+          <span class="eb">G_μν + Λg_μν = 8πG/c⁴·T_μν</span><br>
+          <span class="ed" data-i18n="m.eq.ein">— Einstein Alan Denklemi</span><br><br>
+          <span class="eb">Δx · Δp ≥ ℏ/2</span><br>
+          <span class="ed" data-i18n="m.eq.heis">— Heisenberg Belirsizlik</span><br><br>
+          <span class="eb">V(φ) = −μ²φ² + λφ⁴</span><br>
+          <span class="ed" data-i18n="m.eq.higgs">— Higgs Potansiyeli (Meksika Şapkası)</span><br><br>
+          <span class="eb">S = −k_B Σ pᵢ ln pᵢ</span><br>
+          <span class="ed" data-i18n="m.eq.vn">— Von Neumann Entropisi</span>
+        </div>
+        <div class="panel-note" data-i18n="m.note">
+          "Tanrı zar atmaz" — ancak kuantum mekaniği aksini göstermektedir. Belirsizlik, fiziksel gerçekliğin özündedir.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ HIGGS POTENTIAL WELL ══ -->
+<section class="higgs" id="higgs">
+  <div class="container">
+    <div class="higgs-inner">
+      <div class="higgs-svg-wrap" aria-hidden="true">
+        <!-- animated SVG Mexican hat potential -->
+        <svg viewBox="-120 -80 240 180" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="hg" cx="50%" cy="50%" r="50%">
+              <stop offset="0%"   stop-color="#00c8f0" stop-opacity="0.9"/>
+              <stop offset="100%" stop-color="#0d1f35" stop-opacity="0"/>
+            </radialGradient>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="2.5" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+
+          <!-- grid lines -->
+          <g stroke="rgba(0,200,240,0.06)" stroke-width="0.5">
+            <line x1="-110" y1="0" x2="110" y2="0"/>
+            <line x1="0" y1="-70" x2="0" y2="100"/>
+            <line x1="-80" y1="-70" x2="-80" y2="100" stroke-dasharray="3,6"/>
+            <line x1="80" y1="-70" x2="80" y2="100" stroke-dasharray="3,6"/>
+          </g>
+
+          <!-- Mexican hat — right side profile -->
+          <path d="M-110,80 C-90,80 -70,60 -55,20 C-45,-5 -35,-30 -25,-55
+                   C-18,-72 -8,-75 0,-60
+                   C8,-45 12,-18 20,8
+                   C32,40 50,65 70,75 C85,82 100,82 110,80"
+                fill="none" stroke="rgba(0,200,240,0.7)" stroke-width="1.5"
+                filter="url(#glow)">
+            <animate attributeName="stroke-opacity" values="0.5;0.9;0.5" dur="3s" repeatCount="indefinite"/>
+          </path>
+
+          <!-- symmetric left side -->
+          <path d="M110,80 C90,80 70,60 55,20 C45,-5 35,-30 25,-55
+                   C18,-72 8,-75 0,-60"
+                fill="none" stroke="rgba(0,200,240,0.45)" stroke-width="1"
+                stroke-dasharray="4,4">
+            <animate attributeName="stroke-opacity" values="0.3;0.7;0.3" dur="3s" repeatCount="indefinite"/>
+          </path>
+
+          <!-- vacuum state dots (minima) -->
+          <circle cx="-46" cy="5" r="4" fill="#00c8f0" opacity="0.9" filter="url(#glow)">
+            <animate attributeName="r" values="3;5;3" dur="2.5s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="46" cy="5" r="4" fill="#00c8f0" opacity="0.9" filter="url(#glow)">
+            <animate attributeName="r" values="3;5;3" dur="2.5s" begin="1.25s" repeatCount="indefinite"/>
+          </circle>
+
+          <!-- false vacuum (top) -->
+          <circle cx="0" cy="-60" r="3" fill="rgba(255,100,80,0.8)" filter="url(#glow)">
+            <animate attributeName="opacity" values="0.4;1;0.4" dur="2s" repeatCount="indefinite"/>
+          </circle>
+
+          <!-- labels -->
+          <text x="-46" y="22" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(0,200,240,0.6)">v₋</text>
+          <text x="46"  y="22" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(0,200,240,0.6)">v₊</text>
+          <text x="8"   y="-64" font-family="JetBrains Mono,monospace" font-size="6" fill="rgba(255,100,80,0.7)">φ=0</text>
+          <text x="72"  y="-60" font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(0,200,240,0.4)">V(φ)</text>
+          <text x="95"  y="4"   font-family="JetBrains Mono,monospace" font-size="7" fill="rgba(0,200,240,0.4)">φ</text>
+
+          <!-- V(φ) = -μ²φ² + λφ⁴ label -->
+          <text x="0" y="105" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="rgba(0,200,240,0.5)">V(φ) = −μ²φ² + λφ⁴</text>
+
+          <!-- animated particle rolling down to vacuum -->
+          <circle r="3.5" fill="rgba(255,200,0,0.9)" filter="url(#glow)">
+            <animateMotion dur="4s" repeatCount="indefinite" calcMode="spline"
+              keyTimes="0;0.45;1"
+              keySplines="0.4 0 0.2 1;0.4 0 0.2 1"
+              path="M0,-60 C5,-40 12,-15 22,2 C30,15 38,8 46,5"/>
+          </circle>
+        </svg>
+      </div>
+
+      <div class="higgs-text">
+        <div class="sec-label reveal"><span data-i18n="hg.label">Higgs Fiziği</span></div>
+        <h2 class="sec-h2 reveal"><span data-i18n="hg.h2a">Meksika Şapkası</span><br><span data-i18n="hg.h2b">Potansiyeli</span></h2>
+        <p class="sec-sub reveal" data-i18n="hg.desc">
+          Higgs alanının V(φ) = −μ²φ² + λφ⁴ potansiyeli, evrenin simetri kırılmasının matematiksel kalbidir. Gerçek vakum, φ = 0 noktası değil, ±v noktalarında yatar — bu kırılma tüm kütlelere kaynak olur.
+        </p>
+        <div class="higgs-quote reveal">
+          <p data-i18n="hg.q1">"İbni Rüşd'ün dediği gibi: Bilgi, gözlemle başlar ve akılla olgunlaşır."</p>
+          <cite data-i18n="hg.qc">— Quantro Araştırma Felsefesi</cite>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOUNDER ══ -->
+<section class="founder" id="founder">
+  <div class="container">
+    <div class="founder-inner">
+      <div class="founder-card reveal">
+        <div class="f-avatar" aria-hidden="true">Q</div>
+        <div class="f-name">Quantro</div>
+        <div class="f-role" data-i18n="f.role">Kurucu · Baş Araştırmacı</div>
+        <p class="f-bio" data-i18n="f.bio">Kuantum mekaniği ve astrofizik kesişiminde özgün teorik araştırmalar yürüten bağımsız bir ARGE merkezi. Evrenin temel yapısını anlamaya adanmış çalışmalar.</p>
+        <div class="f-domains">
+          <div class="fdi" data-i18n="f.d1">Kuantum Mekaniği</div>
+          <div class="fdi" data-i18n="f.d2">Astrofizik &amp; Kozmoloji</div>
+          <div class="fdi" data-i18n="f.d3">Higgs Fiziği</div>
+          <div class="fdi" data-i18n="f.d4">Matematiksel Fizik</div>
+        </div>
+      </div>
+      <div class="founder-text">
+        <div class="sec-label reveal"><span data-i18n="f.label">Vizyon</span></div>
+        <h2 class="sec-h2 reveal"><span data-i18n="f.h2a">Sınırları</span><br><span data-i18n="f.h2b">Zorlayan</span><br><span data-i18n="f.h2c">Araştırma</span></h2>
+        <p class="sec-sub reveal" data-i18n="f.desc">
+          Quantro, kurumsal kısıtlamalardan bağımsız biçimde en temel fizik sorularına odaklanmak amacıyla kuruldu. Büyük laboratuvarların görmezden geldiği teorik açıkları kapatmak, özgün matematiksel çerçeveler geliştirmek ve evren hakkındaki anlayışımızı ilerletmek temel misyonumuzdur.
+        </p>
+        <div class="founder-quote reveal">
+          <p data-i18n="f.q1">"İbni Haldun'un dediği gibi: Geleceği inşa etmek isteyenler, önce vizyonlarını netleştirmelidir."</p>
+          <cite data-i18n="f.qc">— Quantro Araştırma Felsefesi</cite>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CONTACT ══ -->
+<!-- ══ BLOG ══ -->
 <section style="background:var(--deep);padding:120px 0" id="blog">
   <div class="container">
     <div class="sec-label reveal"><span data-i18n="b.label">Araştırma Blogu</span></div>
@@ -238,6 +1138,8 @@ window.__qc={};
     </div>
   </div>
 </section>
+
+<!-- ══ LAB CTA ══ -->
 <section style="background:var(--void);padding:80px 0">
   <div class="container">
     <div class="lc-box" style="background:var(--deep);border:1px solid rgba(0,200,240,.12);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:32px;position:relative;overflow:hidden">
@@ -251,6 +1153,7 @@ window.__qc={};
     </div>
   </div>
 </section>
+
 <section class="contact" id="contact">
   <div class="contact-inner">
     <div class="sec-label reveal"><span data-i18n="c.label">İletişim</span></div>
@@ -278,12 +1181,11 @@ window.__qc={};
     </div>
   </div>
 </section>
-</main>
 
 <!-- ══ FOOTER ══ -->
 <footer>
   <div class="footer-inner">
-    <a href="index.html" class="footer-logo">Q<span>U</span>ANTRO</a>
+    <a href="#" class="footer-logo">Q<span>U</span>ANTRO</a>
     <span class="footer-copy" data-i18n="ft.copy">© <span id="fyear">2025</span> Quantro ARGE Merkezi</span>
     <span class="footer-sys">SYS :: QTR-Ω-ACTIVE</span>
     <span class="footer-sys"><a href="https://github.com/quantro38/quantro/issues/new" target="_blank" rel="noopener" style="color:rgba(0,200,240,.7)" data-i18n="ft.bug">Hata bildir / Fikir öner →</a></span>
@@ -291,9 +1193,6 @@ window.__qc={};
 </footer>
 
 <button class="btt" id="btt" aria-label="Başa dön" title="Başa dön">↑</button>
-
-<script src="app.js"></script>
-
 
 <!-- ══════════════════════════════════════════
      THREE.JS — gravitational wave / Higgs field
@@ -517,9 +1416,1382 @@ function threeKick(){
 if(document.readyState==='complete')runThreeWhenReady();
 else window.addEventListener('load',runThreeWhenReady);
 
+/* ══════════════════════════════
+   CANVAS WAVE VISUALIZER
+   ══════════════════════════════ */
+(function(){
+  const canvas=document.getElementById('waveCanvas');
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  let W,H,t=0;
+  const mq=window.matchMedia('(prefers-reduced-motion: reduce)');
 
-</script>
-<script>
+  function resize(){
+    const r=canvas.parentElement.getBoundingClientRect();
+    W=canvas.width=r.width; H=canvas.height=r.height;
+    canvas.style.width=r.width+'px'; canvas.style.height=r.height+'px';
+  }
+
+  let _wRun=false;
+  function draw(){
+    if(_wRun||mq.matches)return;
+    _wRun=true;
+    const frame=()=>{
+      if(mq.matches){_wRun=false;return}
+      ctx.clearRect(0,0,W,H);
+      const waves=[
+        {amp:65,freq:.008,speed:.016,phase:0,   color:'rgba(0,200,240,0.75)',lw:1.5},
+        {amp:42,freq:.014,speed:.022,phase:1.5, color:'rgba(120,80,255,0.55)',lw:1.0},
+        {amp:28,freq:.022,speed:.011,phase:3.0, color:'rgba(0,200,240,0.3)', lw:0.8},
+        {amp:85,freq:.005,speed:.009,phase:0.8, color:'rgba(0,200,240,0.12)',lw:2.0},
+      ];
+      waves.forEach(w=>{
+        ctx.beginPath();
+        ctx.strokeStyle=w.color; ctx.lineWidth=w.lw;
+        for(let x=0;x<=W;x+=2){
+          const env=Math.exp(-Math.pow((x/W-.5)*2.5,2)*.3);
+          const y=H/2+w.amp*env*Math.sin(x*w.freq+t*w.speed+w.phase);
+          x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+        }
+        ctx.stroke();
+      });
+      const g=ctx.createLinearGradient(0,H/2-85,0,H/2+85);
+      g.addColorStop(0,'rgba(0,200,240,0)');
+      g.addColorStop(.5,'rgba(0,200,240,0.04)');
+      g.addColorStop(1,'rgba(0,200,240,0)');
+      ctx.beginPath(); ctx.fillStyle=g;
+      ctx.moveTo(0,H/2);
+      for(let x=0;x<=W;x+=2){
+        const env=Math.exp(-Math.pow((x/W-.5)*2.5,2)*.3);
+        ctx.lineTo(x,H/2+65*env*Math.sin(x*.008+t*.016));
+      }
+      ctx.lineTo(W,H/2); ctx.fill();
+      t++; requestAnimationFrame(frame);
+    };
+    frame();
+  }
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)draw()},{passive:true});
+  window.addEventListener('resize',resize,{passive:true});
+  resize(); draw();
+})();
+
+/* ══════════════════════════════
+   NAV + MOBILE MENU + REVEAL
+   ══════════════════════════════ */
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>60),{passive:true});
+
+const LANGS_ORDER=["tr","en","fr","es","it","ru","ko","ar"];
+const I18N={
+ tr:{
+  "qc.title": "Çerez Tercihleri",
+  "qc.body": "Gizliliğinize saygı duyuyoruz. Ziyaret istatistikleri için Google Analytics çerezleri (izleme amaçlı) kullanılabilir; bunlar için onayınızı istiyoruz. Onay verdiğinizde yalnızca izleme çerezleri yüklenir.",
+  "qc.accept": "Kabul Et",
+  "qc.reject": "Reddet",
+  "qc.info": "Ayrıntılar",
+  "skip": "İçeriğe Geç",
+  "nav.about": "Hakkımızda",
+  "nav.research": "Araştırma",
+  "nav.method": "Metodoloji",
+  "nav.blog": "Blog",
+  "nav.vision": "Vizyon",
+  "nav.lab": "Lab ⚗",
+  "nav.contact": "İletişim",
+  "hero.eyebrow": "Quantro · Kuantum &amp; Astrofizik ARGE · Est. 2025",
+  "hero.h1a": "Evrenin",
+  "hero.h1b": "Dokusu",
+  "hero.h1c": "Titreşiyor",
+  "hero.desc": "Kuantum alanlarının simetri kırılmasından galaktik ölçek yapılarına kadar — evrenin en derin katmanlarını araştırıyoruz.",
+  "hero.b1": "Araştırma Alanları",
+  "hero.b2": "Metodoloji",
+  "hero.scroll": "Kaydır",
+  "m.planck": "Planck Uzunluğu · m",
+  "m.age": "Kozmik Yaş",
+  "m.heis": "Heisenberg Sınırı",
+  "m.higgs": "Higgs Bozon Kütlesi",
+  "a.label": "Hakkımızda",
+  "a.h2a": "Bağımsız",
+  "a.h2b": "Bilim Üssü",
+  "a.desc": "Quantro; kuantum mekaniği ve astrofizik alanlarında bağımsız, derinlemesine araştırma yürüten bir ARGE merkezidir. Planck ölçeğinden kozmolojik ufka uzanan geniş bir spektrumda çalışmalar yürütülür.",
+  "a.p1t": "Kuantum Araştırması",
+  "a.p1d": "Dalga fonksiyonları, kuantum dolanıklığı ve ölçüm problemleri üzerine teorik çalışmalar.",
+  "a.p2t": "Astrofizik Modelleme",
+  "a.p2d": "Kozmik yapıların oluşumu, karanlık madde ve büyük ölçekli evren modelleri.",
+  "a.p3t": "Teori &amp; Analiz",
+  "a.p3d": "Matematiksel fizik temelli yaklaşımlarla özgün teorik çerçeveler geliştirme.",
+  "d.label": "Araştırma Alanları",
+  "d.h2a": "Altı Temel",
+  "d.h2b": "Disiplin",
+  "d.sub": "Kuantumdan kozmosa uzanan altı araştırma alanında özgün teorik çalışmalar ve modelleme.",
+  "d.qm.t": "Kuantum Mekaniği",
+  "d.qm.d": "Dalga-parçacık dualitesi, tünel etkisi ve kuantum ölçüm teorisi.",
+  "d.t.sup": "Süperpozisyon",
+  "d.t.ent": "Dolanıklık",
+  "d.gr.t": "Genel Görelilik",
+  "d.gr.d": "Uzay-zaman eğriliği, kara delik fiziği ve gravitasyonel dalgalar.",
+  "d.t.st": "Uzay-Zaman",
+  "d.t.gw": "GW Fiziği",
+  "d.t.bh": "Kara Delikler",
+  "d.higgs.t": "Higgs Alanı",
+  "d.higgs.d": "Simetri kırılması, kütle kazanım mekanizması ve skaler alan dinamikleri.",
+  "d.t.sb": "Simetri Kırılması",
+  "d.t.vac": "Vakum",
+  "d.t.sc": "Skaler Alan",
+  "d.cosmo.t": "Kozmoloji",
+  "d.cosmo.d": "Büyük patlama, CMB ve evrenin büyük ölçekli yapısının modellenmesi.",
+  "d.t.inf": "Enflasyon",
+  "d.t.de": "Karanlık Enerji",
+  "d.dm.t": "Karanlık Madde",
+  "d.dm.d": "Galaktik rotasyon eğrileri, WIMP adayları ve halo modelleri.",
+  "d.t.ax": "Aksiyon",
+  "d.qtd.t": "Kuantum Termodinamik",
+  "d.qtd.d": "Von Neumann entropisi, bilgi teorisi ve kuantum sınırındaki ısıl süreçler.",
+  "d.t.entr": "Entropi",
+  "d.t.inf2": "Bilgi",
+  "v.label": "Canlı Simülasyon",
+  "v.h2a": "Dalga Fonksiyonu",
+  "v.h2b": "Görselleştirici",
+  "v.wf": "Dalga Fonksiyonu",
+  "v.prob": "Olasılık Yoğunluğu",
+  "v.energy": "Kuantum Enerjisi",
+  "v.phase": "Faz Faktörü",
+  "m.label": "Metodoloji",
+  "m.h2a": "Araştırma",
+  "m.h2b": "Süreci",
+  "m1.t": "Problemin Tanımlanması",
+  "m1.d": "Her araştırma döngüsü, fiziksel bir gözlem anomalisi veya teorik tutarsızlığın kesin biçimde formüle edilmesiyle başlar.",
+  "m2.t": "Matematiksel Çerçeveleme",
+  "m2.d": "Problem, diferansiyel denklemler, topoloji veya operatör cebiri içinde yeniden ifade edilir.",
+  "m3.t": "Analitik &amp; Nümerik Analiz",
+  "m3.d": "Kapalı form çözümler aranır; analitik yaklaşım yetersiz kaldığında nümerik simülasyon devreye girer.",
+  "m4.t": "Sonuçların Sentezi",
+  "m4.d": "Bulgular mevcut literatürle karşılaştırılır, tutarsızlıklar irdelenir ve özgün katkı netleştirilir.",
+  "m.panel": "// Temel Denklemler",
+  "m.eq.sch": "— Schrödinger Denklemi",
+  "m.eq.ein": "— Einstein Alan Denklemi",
+  "m.eq.heis": "— Heisenberg Belirsizlik",
+  "m.eq.higgs": "— Higgs Potansiyeli (Meksika Şapkası)",
+  "m.eq.vn": "— Von Neumann Entropisi",
+  "m.note": "\"Tanrı zar atmaz\" — ancak kuantum mekaniği aksini göstermektedir. Belirsizlik, fiziksel gerçekliğin özündedir.",
+  "hg.label": "Higgs Fiziği",
+  "hg.h2a": "Meksika Şapkası",
+  "hg.h2b": "Potansiyeli",
+  "hg.desc": "Higgs alanının V(φ) = −μ²φ² + λφ⁴ potansiyeli, evrenin simetri kırılmasının matematiksel kalbidir. Gerçek vakum, φ = 0 noktası değil, ±v noktalarında yatar — bu kırılma tüm kütlelere kaynak olur.",
+  "hg.q1": "\"İbni Rüşd'ün dediği gibi: Bilgi, gözlemle başlar ve akılla olgunlaşır.\"",
+  "hg.qc": "— Quantro Araştırma Felsefesi",
+  "f.role": "Kurucu · Baş Araştırmacı",
+  "f.bio": "Kuantum mekaniği ve astrofizik kesişiminde özgün teorik araştırmalar yürüten bağımsız bir ARGE merkezi. Evrenin temel yapısını anlamaya adanmış çalışmalar.",
+  "f.d1": "Kuantum Mekaniği",
+  "f.d2": "Astrofizik &amp; Kozmoloji",
+  "f.d3": "Higgs Fiziği",
+  "f.d4": "Matematiksel Fizik",
+  "f.label": "Vizyon",
+  "f.h2a": "Sınırları",
+  "f.h2b": "Zorlayan",
+  "f.h2c": "Araştırma",
+  "f.desc": "Quantro, kurumsal kısıtlamalardan bağımsız biçimde en temel fizik sorularına odaklanmak amacıyla kuruldu. Büyük laboratuvarların görmezden geldiği teorik açıkları kapatmak, özgün matematiksel çerçeveler geliştirmek ve evren hakkındaki anlayışımızı ilerletmek temel misyonumuzdur.",
+  "f.q1": "\"İbni Haldun'un dediği gibi: Geleceği inşa etmek isteyenler, önce vizyonlarını netleştirmelidir.\"",
+  "f.qc": "— Quantro Araştırma Felsefesi",
+  "b.label": "Araştırma Blogu",
+  "b.h2a": "Son",
+  "b.h2b": "Yazılar",
+  "b.loading": "Yazılar yükleniyor...",
+  "b.back": "← Tüm Yazılar",
+  "b.failed": "Yazılar yüklenemedi.",
+  "b.none": "Henüz yazı yok.",
+  "b.min": "dk",
+  "b.read": "dakika okuma",
+  "b.like": "Beğen",
+  "b.comments": "Yorumlar",
+  "b.commentForm": "Yorum Yap",
+  "b.name": "Adınız *",
+  "b.email": "E-posta (isteğe bağlı)",
+  "b.commentPh": "Yorumunuz... *",
+  "b.send": "Gönder",
+  "b.noComments": "Henüz yorum yok. İlk yorumu sen yap!",
+  "b.loadingC": "Yorumlar yükleniyor...",
+  "b.failedC": "Yorumlar yüklenemedi.",
+  "b.okC": "✓ Yorumunuz alındı, onay sonrası yayınlanacak.",
+  "b.errC": "Yorum gönderilemedi. Lütfen tekrar deneyin.",
+  "b.rateC": "Çok hızlı! 15 dakika sonra tekrar deneyin.",
+  "b.errName": "Adınızı ve en az 3 karakterlik bir yorum girin.",
+  "b.reply": "Yanıtla",
+  "lc.badge": "Türkiye'de İlk · 13 Araç",
+  "lc.h2a": "Quantro Lab'ı",
+  "lc.h2b": "Deneyin",
+  "lc.desc": "Kuantum Rastgelelik Motoru, Devre Simülatörü, Evren Yaşı Hesaplayıcı ve daha fazlası.",
+  "lc.btn": "⚗ Lab'a Git →",
+  "c.label": "İletişim",
+  "c.h2a": "Birlikte",
+  "c.h2b": "Keşfedelim",
+  "c.sub": "Araştırma iş birlikleri, teorik tartışmalar veya evrenin yapısı üzerine konuşmak için ulaşın.",
+  "c.name": "Adınız",
+  "c.email": "E-posta Adresiniz",
+  "c.msg": "Mesajınız...",
+  "c.submit": "Mesaj Gönder",
+  "c.fill": "Lütfen tüm alanları doldurun.",
+  "c.sending": "Gönderiliyor...",
+  "c.ok": "Mesajınız iletildi. Teşekkürler.",
+  "c.err": "Bir hata oluştu. Lütfen tekrar deneyin.",
+  "c.net": "Bağlantı hatası. Lütfen tekrar deneyin.",
+  "cg.center": "Merkez",
+  "cg.center.val": "Kayseri / Türkiye",
+  "cg.activity": "Faaliyet",
+  "cg.activity.val": "ARGE",
+  "cg.insta": "Instagram",
+  "ft.copy": "© 2025 Quantro ARGE Merkezi",
+  "ft.bug": "Hata bildir / Fikir öner →"
+},
+ en:{
+  "qc.title": "Cookie Preferences",
+  "qc.body": "We respect your privacy. Google Analytics cookies (tracking) may be used for visit statistics; we ask for your consent. When you consent, only tracking cookies are loaded.",
+  "qc.accept": "Accept",
+  "qc.reject": "Reject",
+  "qc.info": "Details",
+  "skip": "Skip to Content",
+  "nav.about": "About Us",
+  "nav.research": "Research",
+  "nav.method": "Methodology",
+  "nav.blog": "Blog",
+  "nav.vision": "Vision",
+  "nav.lab": "Lab ⚗",
+  "nav.contact": "Contact",
+  "hero.eyebrow": "Quantro · Quantum &amp; Astrophysics R&amp;D · Est. 2025",
+  "hero.h1a": "The Fabric",
+  "hero.h1b": "of the",
+  "hero.h1c": "Cosmos Awaits",
+  "hero.desc": "From the symmetry breaking of quantum fields to galactic-scale structures — we explore the deepest layers of the universe.",
+  "hero.b1": "Research Areas",
+  "hero.b2": "Methodology",
+  "hero.scroll": "Scroll",
+  "m.planck": "Planck Length · m",
+  "m.age": "Cosmic Age",
+  "m.heis": "Heisenberg Limit",
+  "m.higgs": "Higgs Boson Mass",
+  "a.label": "About Us",
+  "a.h2a": "Independent",
+  "a.h2b": "Research Hub",
+  "a.desc": "Quantro is an independent R&amp;D center conducting deep research in quantum mechanics and astrophysics. Work spans a broad spectrum from the Planck scale to the cosmological horizon.",
+  "a.p1t": "Quantum Research",
+  "a.p1d": "Theoretical studies on wave functions, quantum entanglement and measurement problems.",
+  "a.p2t": "Astrophysical Modeling",
+  "a.p2d": "Formation of cosmic structures, dark matter and large-scale universe models.",
+  "a.p3t": "Theory &amp; Analysis",
+  "a.p3d": "Developing original theoretical frameworks based on mathematical physics.",
+  "d.label": "Research Areas",
+  "d.h2a": "Six Core",
+  "d.h2b": "Disciplines",
+  "d.sub": "Original theoretical work and modeling across six research areas spanning from quantum to cosmos.",
+  "d.qm.t": "Quantum Mechanics",
+  "d.qm.d": "Wave-particle duality, tunneling effect and quantum measurement theory.",
+  "d.t.sup": "Superposition",
+  "d.t.ent": "Entanglement",
+  "d.gr.t": "General Relativity",
+  "d.gr.d": "Spacetime curvature, black hole physics and gravitational waves.",
+  "d.t.st": "Spacetime",
+  "d.t.gw": "GW Physics",
+  "d.t.bh": "Black Holes",
+  "d.higgs.t": "Higgs Field",
+  "d.higgs.d": "Symmetry breaking, mass generation mechanism and scalar field dynamics.",
+  "d.t.sb": "Symmetry Breaking",
+  "d.t.vac": "Vacuum",
+  "d.t.sc": "Scalar Field",
+  "d.cosmo.t": "Cosmology",
+  "d.cosmo.d": "Big Bang, CMB and modeling of the large-scale structure of the universe.",
+  "d.t.inf": "Inflation",
+  "d.t.de": "Dark Energy",
+  "d.dm.t": "Dark Matter",
+  "d.dm.d": "Galactic rotation curves, WIMP candidates and halo models.",
+  "d.t.ax": "Axion",
+  "d.qtd.t": "Quantum Thermodynamics",
+  "d.qtd.d": "Von Neumann entropy, information theory and thermal processes at the quantum limit.",
+  "d.t.entr": "Entropy",
+  "d.t.inf2": "Information",
+  "v.label": "Live Simulation",
+  "v.h2a": "Wave Function",
+  "v.h2b": "Visualizer",
+  "v.wf": "Wave Function",
+  "v.prob": "Probability Density",
+  "v.energy": "Quantum Energy",
+  "v.phase": "Phase Factor",
+  "m.label": "Methodology",
+  "m.h2a": "Research",
+  "m.h2b": "Process",
+  "m1.t": "Defining the Problem",
+  "m1.d": "Every research cycle begins with precisely formulating a physical observation anomaly or theoretical inconsistency.",
+  "m2.t": "Mathematical Framing",
+  "m2.d": "The problem is re-expressed in differential equations, topology or operator algebra.",
+  "m3.t": "Analytic &amp; Numerical Analysis",
+  "m3.d": "Closed-form solutions are sought; when the analytic approach falls short, numerical simulation takes over.",
+  "m4.t": "Synthesis of Results",
+  "m4.d": "Findings are compared with existing literature, inconsistencies are examined and the original contribution is clarified.",
+  "m.panel": "// Core Equations",
+  "m.eq.sch": "— Schrödinger Equation",
+  "m.eq.ein": "— Einstein Field Equation",
+  "m.eq.heis": "— Heisenberg Uncertainty",
+  "m.eq.higgs": "— Higgs Potential (Mexican Hat)",
+  "m.eq.vn": "— Von Neumann Entropy",
+  "m.note": "\"God does not play dice\" — yet quantum mechanics shows otherwise. Uncertainty lies at the very core of physical reality.",
+  "hg.label": "Higgs Physics",
+  "hg.h2a": "Mexican Hat",
+  "hg.h2b": "Potential",
+  "hg.desc": "The Higgs field's V(φ) = −μ²φ² + λφ⁴ potential is the mathematical heart of the universe's symmetry breaking. The true vacuum lies not at φ = 0 but at ±v — this breaking is the source of all mass.",
+  "hg.q1": "\"As Ibn Rushd said: Knowledge begins with observation and matures with reason.\"",
+  "hg.qc": "— Quantro Research Philosophy",
+  "f.role": "Founder · Principal Investigator",
+  "f.bio": "An independent R&amp;D center conducting original theoretical research at the intersection of quantum mechanics and astrophysics. Work devoted to understanding the fundamental structure of the universe.",
+  "f.d1": "Quantum Mechanics",
+  "f.d2": "Astrophysics &amp; Cosmology",
+  "f.d3": "Higgs Physics",
+  "f.d4": "Mathematical Physics",
+  "f.label": "Vision",
+  "f.h2a": "Research That",
+  "f.h2b": "Pushes",
+  "f.h2c": "Boundaries",
+  "f.desc": "Quantro was founded to focus on the most fundamental physics questions, free from institutional constraints. Closing the theoretical gaps that large laboratories ignore, developing original mathematical frameworks and advancing our understanding of the universe are our core mission.",
+  "f.q1": "\"As Ibn Khaldun said: Those who wish to build the future must first clarify their vision.\"",
+  "f.qc": "— Quantro Research Philosophy",
+  "b.label": "Research Blog",
+  "b.h2a": "Latest",
+  "b.h2b": "Posts",
+  "b.loading": "Loading posts...",
+  "b.back": "← All Posts",
+  "b.failed": "Failed to load posts.",
+  "b.none": "No posts yet.",
+  "b.min": "min",
+  "b.read": "min read",
+  "b.like": "Like",
+  "b.comments": "Comments",
+  "b.commentForm": "Leave a Comment",
+  "b.name": "Your name *",
+  "b.email": "Email (optional)",
+  "b.commentPh": "Your comment... *",
+  "b.send": "Send",
+  "b.noComments": "No comments yet. Be the first!",
+  "b.loadingC": "Loading comments...",
+  "b.failedC": "Failed to load comments.",
+  "b.okC": "✓ Your comment has been received and will appear after approval.",
+  "b.errC": "Could not send your comment. Please try again.",
+  "b.rateC": "Too fast! Try again in 15 minutes.",
+  "b.errName": "Please enter your name and a comment of at least 3 characters.",
+  "b.reply": "Reply",
+  "lc.badge": "First in Türkiye · 13 Tools",
+  "lc.h2a": "Try the",
+  "lc.h2b": "Quantro Lab",
+  "lc.desc": "Quantum Randomness Engine, Circuit Simulator, Universe Age Calculator and more.",
+  "lc.btn": "⚗ Go to Lab →",
+  "c.label": "Contact",
+  "c.h2a": "Let's",
+  "c.h2b": "Explore Together",
+  "c.sub": "Reach out for research collaborations, theoretical discussions or conversations about the nature of the universe.",
+  "c.name": "Your Name",
+  "c.email": "Your Email",
+  "c.msg": "Your message...",
+  "c.submit": "Send Message",
+  "c.fill": "Please fill in all fields.",
+  "c.sending": "Sending...",
+  "c.ok": "Your message has been sent. Thank you.",
+  "c.err": "An error occurred. Please try again.",
+  "c.net": "Connection error. Please try again.",
+  "cg.center": "Headquarters",
+  "cg.center.val": "Kayseri / Türkiye",
+  "cg.activity": "Activity",
+  "cg.activity.val": "R&amp;D",
+  "cg.insta": "Instagram",
+  "ft.copy": "© 2025 Quantro R&amp;D Center",
+  "ft.bug": "Report an issue / Suggest an idea →"
+},
+ fr:{
+  "qc.title": "Préférences de cookies",
+  "qc.body": "Nous respectons votre vie privée. Des cookies Google Analytics (suivi) peuvent être utilisés pour les statistiques de visite ; votre consentement est requis. Si vous consentez, seuls les cookies de suivi sont chargés.",
+  "qc.accept": "Accepter",
+  "qc.reject": "Refuser",
+  "qc.info": "Détails",
+  "skip": "Aller au contenu",
+  "nav.about": "À propos",
+  "nav.research": "Recherche",
+  "nav.method": "Méthodologie",
+  "nav.blog": "Blog",
+  "nav.vision": "Vision",
+  "nav.lab": "Labo ⚗",
+  "nav.contact": "Contact",
+  "hero.eyebrow": "Quantro · R&amp;D Quantique &amp; Astrophysique · Est. 2025",
+  "hero.h1a": "La Trame",
+  "hero.h1b": "de",
+  "hero.h1c": "l'Univers",
+  "hero.desc": "De la brisure de symétrie des champs quantiques aux structures à l'échelle galactique — nous explorons les couches les plus profondes de l'univers.",
+  "hero.b1": "Domaines de Recherche",
+  "hero.b2": "Méthodologie",
+  "hero.scroll": "Défiler",
+  "m.planck": "Longueur de Planck · m",
+  "m.age": "Âge Cosmique",
+  "m.heis": "Limite de Heisenberg",
+  "m.higgs": "Masse du Boson de Higgs",
+  "a.label": "À propos",
+  "a.h2a": "Base",
+  "a.h2b": "Scientifique",
+  "a.desc": "Quantro est un centre de R&amp;D indépendant menant des recherches approfondies en mécanique quantique et en astrophysique. Les travaux couvrent un large spectre, de l'échelle de Planck à l'horizon cosmologique.",
+  "a.p1t": "Recherche Quantique",
+  "a.p1d": "Études théoriques sur les fonctions d'onde, l'intrication quantique et les problèmes de mesure.",
+  "a.p2t": "Modélisation Astrophysique",
+  "a.p2d": "Formation des structures cosmiques, matière noire et modèles d'univers à grande échelle.",
+  "a.p3t": "Théorie &amp; Analyse",
+  "a.p3d": "Développement de cadres théoriques originaux fondés sur la physique mathématique.",
+  "d.label": "Domaines de Recherche",
+  "d.h2a": "Six",
+  "d.h2b": "Disciplines",
+  "d.sub": "Travaux théoriques originaux et modélisation dans six domaines de recherche, du quantique au cosmos.",
+  "d.qm.t": "Mécanique Quantique",
+  "d.qm.d": "Dualité onde-particule, effet tunnel et théorie de la mesure quantique.",
+  "d.t.sup": "Superposition",
+  "d.t.ent": "Intrication",
+  "d.gr.t": "Relativité Générale",
+  "d.gr.d": "Courbure de l'espace-temps, physique des trous noirs et ondes gravitationnelles.",
+  "d.t.st": "Espace-Temps",
+  "d.t.gw": "Physique OG",
+  "d.t.bh": "Trous Noirs",
+  "d.higgs.t": "Champ de Higgs",
+  "d.higgs.d": "Brisure de symétrie, mécanisme de génération de masse et dynamique des champs scalaires.",
+  "d.t.sb": "Brisure de Symétrie",
+  "d.t.vac": "Vide",
+  "d.t.sc": "Champ Scalaire",
+  "d.cosmo.t": "Cosmologie",
+  "d.cosmo.d": "Big Bang, CMB et modélisation de la structure à grande échelle de l'univers.",
+  "d.t.inf": "Inflation",
+  "d.t.de": "Énergie Noire",
+  "d.dm.t": "Matière Noire",
+  "d.dm.d": "Courbes de rotation galactiques, candidats WIMP et modèles de halo.",
+  "d.t.ax": "Axion",
+  "d.qtd.t": "Thermodynamique Quantique",
+  "d.qtd.d": "Entropie de Von Neumann, théorie de l'information et processus thermiques à la limite quantique.",
+  "d.t.entr": "Entropie",
+  "d.t.inf2": "Information",
+  "v.label": "Simulation en Direct",
+  "v.h2a": "Fonction d'Onde",
+  "v.h2b": "Visualiseur",
+  "v.wf": "Fonction d'Onde",
+  "v.prob": "Densité de Probabilité",
+  "v.energy": "Énergie Quantique",
+  "v.phase": "Facteur de Phase",
+  "m.label": "Méthodologie",
+  "m.h2a": "Processus",
+  "m.h2b": "de Recherche",
+  "m1.t": "Définition du Problème",
+  "m1.d": "Chaque cycle de recherche commence par la formulation précise d'une anomalie d'observation ou d'une incohérence théorique.",
+  "m2.t": "Cadre Mathématique",
+  "m2.d": "Le problème est réexprimé en équations différentielles, topologie ou algèbre d'opérateurs.",
+  "m3.t": "Analyse Analytique &amp; Numérique",
+  "m3.d": "On cherche des solutions de forme fermée ; quand l'approche analytique est insuffisante, la simulation numérique prend le relais.",
+  "m4.t": "Synthèse des Résultats",
+  "m4.d": "Les résultats sont comparés à la littérature existante, les incohérences sont examinées et la contribution originale est précisée.",
+  "m.panel": "// Équations Fondamentales",
+  "m.eq.sch": "— Équation de Schrödinger",
+  "m.eq.ein": "— Équation du Champ d'Einstein",
+  "m.eq.heis": "— Incertitude de Heisenberg",
+  "m.eq.higgs": "— Potentiel de Higgs (Chapeau Mexicain)",
+  "m.eq.vn": "— Entropie de Von Neumann",
+  "m.note": "\"Dieu ne joue pas aux dés\" — pourtant la mécanique quantique montre le contraire. L'incertitude est au cœur même de la réalité physique.",
+  "hg.label": "Physique du Higgs",
+  "hg.h2a": "Chapeau",
+  "hg.h2b": "Mexicain",
+  "hg.desc": "Le potentiel V(φ) = −μ²φ² + λφ⁴ du champ de Higgs est le cœur mathématique de la brisure de symétrie de l'univers. Le vrai vide ne se trouve pas à φ = 0 mais à ±v — cette brisure est la source de toute masse.",
+  "hg.q1": "\"Comme disait Ibn Rushd : La connaissance commence par l'observation et mûrit par la raison.\"",
+  "hg.qc": "— Philosophie de Recherche Quantro",
+  "f.role": "Fondateur · Chercheur Principal",
+  "f.bio": "Un centre de R&amp;D indépendant menant des recherches théoriques originales à l'intersection de la mécanique quantique et de l'astrophysique. Des travaux dédiés à la compréhension de la structure fondamentale de l'univers.",
+  "f.d1": "Mécanique Quantique",
+  "f.d2": "Astrophysique &amp; Cosmologie",
+  "f.d3": "Physique du Higgs",
+  "f.d4": "Physique Mathématique",
+  "f.label": "Vision",
+  "f.h2a": "Repousser",
+  "f.h2b": "les",
+  "f.h2c": "Frontières",
+  "f.desc": "Quantro a été fondé pour se concentrer sur les questions de physique les plus fondamentales, libre de toute contrainte institutionnelle. Combler les lacunes théoriques ignorées par les grands laboratoires, développer des cadres mathématiques originaux et faire progresser notre compréhension de l'univers est notre mission essentielle.",
+  "f.q1": "\"Comme disait Ibn Khaldoun : Ceux qui veulent bâtir l'avenir doivent d'abord clarifier leur vision.\"",
+  "f.qc": "— Philosophie de Recherche Quantro",
+  "b.label": "Blog de Recherche",
+  "b.h2a": "Derniers",
+  "b.h2b": "Articles",
+  "b.loading": "Chargement des articles...",
+  "b.back": "← Tous les Articles",
+  "b.failed": "Échec du chargement des articles.",
+  "b.none": "Aucun article pour l'instant.",
+  "b.min": "min",
+  "b.read": "min de lecture",
+  "b.like": "J'aime",
+  "b.comments": "Commentaires",
+  "b.commentForm": "Laisser un commentaire",
+  "b.name": "Votre nom *",
+  "b.email": "E-mail (optionnel)",
+  "b.commentPh": "Votre commentaire... *",
+  "b.send": "Envoyer",
+  "b.noComments": "Aucun commentaire. Soyez le premier !",
+  "b.loadingC": "Chargement des commentaires...",
+  "b.failedC": "Échec du chargement des commentaires.",
+  "b.okC": "✓ Votre commentaire a été reçu et sera publié après approbation.",
+  "b.errC": "Impossible d'envoyer. Réessayez.",
+  "b.rateC": "Trop rapide ! Réessayez dans 15 minutes.",
+  "b.errName": "Entrez votre nom et un commentaire d'au moins 3 caractères.",
+  "b.reply": "Répondre",
+  "lc.badge": "Premier en Turquie · 12 Outils",
+  "lc.h2a": "Essayez le",
+  "lc.h2b": "Quantro Lab",
+  "lc.desc": "Moteur de hasard quantique, simulateur de circuits, calculateur d'âge de l'univers et plus encore.",
+  "lc.btn": "⚗ Aller au Labo →",
+  "c.label": "Contact",
+  "c.h2a": "Explorons",
+  "c.h2b": "Ensemble",
+  "c.sub": "Contactez-nous pour des collaborations de recherche, des discussions théoriques ou des conversations sur la nature de l'univers.",
+  "c.name": "Votre Nom",
+  "c.email": "Votre E-mail",
+  "c.msg": "Votre message...",
+  "c.submit": "Envoyer le Message",
+  "c.fill": "Veuillez remplir tous les champs.",
+  "c.sending": "Envoi en cours...",
+  "c.ok": "Votre message a été envoyé. Merci.",
+  "c.err": "Une erreur s'est produite. Veuillez réessayer.",
+  "c.net": "Erreur de connexion. Veuillez réessayer.",
+  "cg.center": "Siège",
+  "cg.center.val": "Kayseri / Turquie",
+  "cg.activity": "Activité",
+  "cg.activity.val": "R&amp;D",
+  "cg.insta": "Instagram",
+  "ft.copy": "© 2025 Centre de R&amp;D Quantro",
+  "ft.bug": "Signaler un problème / Suggérer une idée →"
+},
+ es:{
+  "qc.title": "Preferencias de cookies",
+  "qc.body": "Respetamos su privacidad. Pueden usarse cookies de Google Analytics (seguimiento) para estadísticas de visita; solicitamos su consentimiento. Si acepta, solo se cargan las cookies de seguimiento.",
+  "qc.accept": "Aceptar",
+  "qc.reject": "Rechazar",
+  "qc.info": "Detalles",
+  "skip": "Ir al Contenido",
+  "nav.about": "Nosotros",
+  "nav.research": "Investigación",
+  "nav.method": "Metodología",
+  "nav.blog": "Blog",
+  "nav.vision": "Visión",
+  "nav.lab": "Lab ⚗",
+  "nav.contact": "Contacto",
+  "hero.eyebrow": "Quantro · I+D Cuántica y Astrofísica · Est. 2025",
+  "hero.h1a": "El Tejido",
+  "hero.h1b": "del",
+  "hero.h1c": "Universo Vibra",
+  "hero.desc": "Desde la ruptura de simetría de los campos cuánticos hasta las estructuras a escala galáctica — exploramos las capas más profundas del universo.",
+  "hero.b1": "Áreas de Investigación",
+  "hero.b2": "Metodología",
+  "hero.scroll": "Desplazar",
+  "m.planck": "Longitud de Planck · m",
+  "m.age": "Edad Cósmica",
+  "m.heis": "Límite de Heisenberg",
+  "m.higgs": "Masa del Bosón de Higgs",
+  "a.label": "Nosotros",
+  "a.h2a": "Base",
+  "a.h2b": "Científica",
+  "a.desc": "Quantro es un centro de I+D independiente que realiza investigaciones profundas en mecánica cuántica y astrofísica. El trabajo abarca un amplio espectro, desde la escala de Planck hasta el horizonte cosmológico.",
+  "a.p1t": "Investigación Cuántica",
+  "a.p1d": "Estudios teóricos sobre funciones de onda, entrelazamiento cuántico y problemas de medición.",
+  "a.p2t": "Modelado Astrofísico",
+  "a.p2d": "Formación de estructuras cósmicas, materia oscura y modelos de universo a gran escala.",
+  "a.p3t": "Teoría &amp; Análisis",
+  "a.p3d": "Desarrollo de marcos teóricos originales basados en física matemática.",
+  "d.label": "Áreas de Investigación",
+  "d.h2a": "Seis",
+  "d.h2b": "Disciplinas",
+  "d.sub": "Trabajo teórico original y modelado en seis áreas de investigación, desde lo cuántico hasta el cosmos.",
+  "d.qm.t": "Mecánica Cuántica",
+  "d.qm.d": "Dualidad onda-partícula, efecto túnel y teoría de la medición cuántica.",
+  "d.t.sup": "Superposición",
+  "d.t.ent": "Entrelazamiento",
+  "d.gr.t": "Relatividad General",
+  "d.gr.d": "Curvatura del espacio-tiempo, física de agujeros negros y ondas gravitacionales.",
+  "d.t.st": "Espacio-Tiempo",
+  "d.t.gw": "Física OG",
+  "d.t.bh": "Agujeros Negros",
+  "d.higgs.t": "Campo de Higgs",
+  "d.higgs.d": "Ruptura de simetría, mecanismo de generación de masa y dinámica de campos escalares.",
+  "d.t.sb": "Ruptura de Simetría",
+  "d.t.vac": "Vacío",
+  "d.t.sc": "Campo Escalar",
+  "d.cosmo.t": "Cosmología",
+  "d.cosmo.d": "Big Bang, CMB y modelado de la estructura a gran escala del universo.",
+  "d.t.inf": "Inflación",
+  "d.t.de": "Energía Oscura",
+  "d.dm.t": "Materia Oscura",
+  "d.dm.d": "Curvas de rotación galácticas, candidatos WIMP y modelos de halo.",
+  "d.t.ax": "Axión",
+  "d.qtd.t": "Termodinámica Cuántica",
+  "d.qtd.d": "Entropía de Von Neumann, teoría de la información y procesos térmicos en el límite cuántico.",
+  "d.t.entr": "Entropía",
+  "d.t.inf2": "Información",
+  "v.label": "Simulación en Vivo",
+  "v.h2a": "Función de Onda",
+  "v.h2b": "Visualizador",
+  "v.wf": "Función de Onda",
+  "v.prob": "Densidad de Probabilidad",
+  "v.energy": "Energía Cuántica",
+  "v.phase": "Factor de Fase",
+  "m.label": "Metodología",
+  "m.h2a": "Proceso",
+  "m.h2b": "de Investigación",
+  "m1.t": "Definición del Problema",
+  "m1.d": "Cada ciclo de investigación comienza con la formulación precisa de una anomalía de observación o una inconsistencia teórica.",
+  "m2.t": "Marco Matemático",
+  "m2.d": "El problema se reexpresa en ecuaciones diferenciales, topología o álgebra de operadores.",
+  "m3.t": "Análisis Analítico &amp; Numérico",
+  "m3.d": "Se buscan soluciones de forma cerrada; cuando el enfoque analítico es insuficiente, la simulación numérica toma el relevo.",
+  "m4.t": "Síntesis de Resultados",
+  "m4.d": "Los hallazgos se comparan con la literatura existente, se examinan las inconsistencias y se clarifica la contribución original.",
+  "m.panel": "// Ecuaciones Fundamentales",
+  "m.eq.sch": "— Ecuación de Schrödinger",
+  "m.eq.ein": "— Ecuación de Campo de Einstein",
+  "m.eq.heis": "— Incertidumbre de Heisenberg",
+  "m.eq.higgs": "— Potencial de Higgs (Sombrero Mexicano)",
+  "m.eq.vn": "— Entropía de Von Neumann",
+  "m.note": "\"Dios no juega a los dados\" — pero la mecánica cuántica demuestra lo contrario. La incertidumbre está en el núcleo mismo de la realidad física.",
+  "hg.label": "Física del Higgs",
+  "hg.h2a": "Sombrero",
+  "hg.h2b": "Mexicano",
+  "hg.desc": "El potencial V(φ) = −μ²φ² + λφ⁴ del campo de Higgs es el corazón matemático de la ruptura de simetría del universo. El vacío real no está en φ = 0 sino en ±v — esta ruptura es la fuente de toda masa.",
+  "hg.q1": "\"Como dijo Ibn Rushd: El conocimiento comienza con la observación y madura con la razón.\"",
+  "hg.qc": "— Filosofía de Investigación Quantro",
+  "f.role": "Fundador · Investigador Principal",
+  "f.bio": "Un centro de I+D independiente que realiza investigaciones teóricas originales en la intersección de la mecánica cuántica y la astrofísica. Trabajos dedicados a comprender la estructura fundamental del universo.",
+  "f.d1": "Mecánica Cuántica",
+  "f.d2": "Astrofísica &amp; Cosmología",
+  "f.d3": "Física del Higgs",
+  "f.d4": "Física Matemática",
+  "f.label": "Visión",
+  "f.h2a": "Investigación",
+  "f.h2b": "que Trasciende",
+  "f.h2c": "Fronteras",
+  "f.desc": "Quantro fue fundado para centrarse en las preguntas de física más fundamentales, libre de restricciones institucionales. Cerrar las brechas teóricas que ignoran los grandes laboratorios, desarrollar marcos matemáticos originales y avanzar nuestra comprensión del universo es nuestra misión esencial.",
+  "f.q1": "\"Como dijo Ibn Jaldún: Quienes quieren construir el futuro primero deben aclarar su visión.\"",
+  "f.qc": "— Filosofía de Investigación Quantro",
+  "b.label": "Blog de Investigación",
+  "b.h2a": "Últimos",
+  "b.h2b": "Artículos",
+  "b.loading": "Cargando artículos...",
+  "b.back": "← Todos los Artículos",
+  "b.failed": "Error al cargar los artículos.",
+  "b.none": "Aún no hay artículos.",
+  "b.min": "min",
+  "b.read": "min de lectura",
+  "b.like": "Me gusta",
+  "b.comments": "Comentarios",
+  "b.commentForm": "Dejar un comentario",
+  "b.name": "Tu nombre *",
+  "b.email": "Correo (opcional)",
+  "b.commentPh": "Tu comentario... *",
+  "b.send": "Enviar",
+  "b.noComments": "Aún no hay comentarios. ¡Sé el primero!",
+  "b.loadingC": "Cargando comentarios...",
+  "b.failedC": "No se pudieron cargar los comentarios.",
+  "b.okC": "✓ Recibimos tu comentario, se publicará tras la aprobación.",
+  "b.errC": "No se pudo enviar. Inténtalo de nuevo.",
+  "b.rateC": "¡Muy rápido! Inténtalo en 15 minutos.",
+  "b.errName": "Ingresa tu nombre y un comentario de al menos 3 caracteres.",
+  "b.reply": "Responder",
+  "lc.badge": "Primero en Turquía · 12 Herramientas",
+  "lc.h2a": "Prueba el",
+  "lc.h2b": "Quantro Lab",
+  "lc.desc": "Motor de aleatoriedad cuántica, simulador de circuitos, calculadora de edad del universo y más.",
+  "lc.btn": "⚗ Ir al Lab →",
+  "c.label": "Contacto",
+  "c.h2a": "Exploremos",
+  "c.h2b": "Juntos",
+  "c.sub": "Contacta para colaboraciones de investigación, discusiones teóricas o conversaciones sobre la naturaleza del universo.",
+  "c.name": "Tu Nombre",
+  "c.email": "Tu Email",
+  "c.msg": "Tu mensaje...",
+  "c.submit": "Enviar Mensaje",
+  "c.fill": "Por favor, completa todos los campos.",
+  "c.sending": "Enviando...",
+  "c.ok": "Tu mensaje ha sido enviado. Gracias.",
+  "c.err": "Ocurrió un error. Inténtalo de nuevo.",
+  "c.net": "Error de conexión. Inténtalo de nuevo.",
+  "cg.center": "Sede",
+  "cg.center.val": "Kayseri / Turquía",
+  "cg.activity": "Actividad",
+  "cg.activity.val": "I+D",
+  "cg.insta": "Instagram",
+  "ft.copy": "© 2025 Centro de I+D Quantro",
+  "ft.bug": "Reportar un problema / Sugerir una idea →"
+},
+ it:{
+  "qc.title": "Preferenze sui cookie",
+  "qc.body": "Rispettiamo la tua privacy. I cookie di Google Analytics (tracciamento) possono essere utilizzati per le statistiche delle visite; richiediamo il tuo consenso. Se acconsenti, vengono caricati solo i cookie di tracciamento.",
+  "qc.accept": "Accetta",
+  "qc.reject": "Rifiuta",
+  "qc.info": "Dettagli",
+  "skip": "Vai al Contenuto",
+  "nav.about": "Chi Siamo",
+  "nav.research": "Ricerca",
+  "nav.method": "Metodologia",
+  "nav.blog": "Blog",
+  "nav.vision": "Visione",
+  "nav.lab": "Lab ⚗",
+  "nav.contact": "Contatti",
+  "hero.eyebrow": "Quantro · R&amp;S Quantistica e Astrofisica · Est. 2025",
+  "hero.h1a": "Il Tessuto",
+  "hero.h1b": "della",
+  "hero.h1c": "Realtà Vibra",
+  "hero.desc": "Dalla rottura di simmetria dei campi quantistici alle strutture su scala galattica — esploriamo gli strati più profondi dell'universo.",
+  "hero.b1": "Aree di Ricerca",
+  "hero.b2": "Metodologia",
+  "hero.scroll": "Scorri",
+  "m.planck": "Lunghezza di Planck · m",
+  "m.age": "Età Cosmica",
+  "m.heis": "Limite di Heisenberg",
+  "m.higgs": "Massa del Bosone di Higgs",
+  "a.label": "Chi Siamo",
+  "a.h2a": "Base",
+  "a.h2b": "Scientifica",
+  "a.desc": "Quantro è un centro R&amp;S indipendente che conduce ricerche approfondite in meccanica quantistica e astrofisica. Il lavoro copre un ampio spettro, dalla scala di Planck all'orizzonte cosmologico.",
+  "a.p1t": "Ricerca Quantistica",
+  "a.p1d": "Studi teorici su funzioni d'onda, entanglement quantistico e problemi di misura.",
+  "a.p2t": "Modellazione Astrofisica",
+  "a.p2d": "Formazione delle strutture cosmiche, materia oscura e modelli di universo su larga scala.",
+  "a.p3t": "Teoria &amp; Analisi",
+  "a.p3d": "Sviluppo di quadri teorici originali basati sulla fisica matematica.",
+  "d.label": "Aree di Ricerca",
+  "d.h2a": "Sei",
+  "d.h2b": "Discipline",
+  "d.sub": "Lavoro teorico originale e modellazione in sei aree di ricerca, dal quantistico al cosmo.",
+  "d.qm.t": "Meccanica Quantistica",
+  "d.qm.d": "Dualità onda-particella, effetto tunnel e teoria della misura quantistica.",
+  "d.t.sup": "Superposizione",
+  "d.t.ent": "Entanglement",
+  "d.gr.t": "Relatività Generale",
+  "d.gr.d": "Curvatura dello spazio-tempo, fisica dei buchi neri e onde gravitazionali.",
+  "d.t.st": "Spazio-Tempo",
+  "d.t.gw": "Fisica OG",
+  "d.t.bh": "Buchi Neri",
+  "d.higgs.t": "Campo di Higgs",
+  "d.higgs.d": "Rottura di simmetria, meccanismo di generazione della massa e dinamica dei campi scalari.",
+  "d.t.sb": "Rottura di Simmetria",
+  "d.t.vac": "Vuoto",
+  "d.t.sc": "Campo Scalare",
+  "d.cosmo.t": "Cosmologia",
+  "d.cosmo.d": "Big Bang, CMB e modellazione della struttura su larga scala dell'universo.",
+  "d.t.inf": "Inflazione",
+  "d.t.de": "Energia Oscura",
+  "d.dm.t": "Materia Oscura",
+  "d.dm.d": "Curve di rotazione galattiche, candidati WIMP e modelli di alone.",
+  "d.t.ax": "Assione",
+  "d.qtd.t": "Termodinamica Quantistica",
+  "d.qtd.d": "Entropia di Von Neumann, teoria dell'informazione e processi termici al limite quantistico.",
+  "d.t.entr": "Entropia",
+  "d.t.inf2": "Informazione",
+  "v.label": "Simulazione dal Vivo",
+  "v.h2a": "Funzione d'Onda",
+  "v.h2b": "Visualizzatore",
+  "v.wf": "Funzione d'Onda",
+  "v.prob": "Densità di Probabilità",
+  "v.energy": "Energia Quantistica",
+  "v.phase": "Fattore di Fase",
+  "m.label": "Metodologia",
+  "m.h2a": "Processo",
+  "m.h2b": "di Ricerca",
+  "m1.t": "Definizione del Problema",
+  "m1.d": "Ogni ciclo di ricerca inizia con la formulazione precisa di un'anomalia osservativa o di un'incoerenza teorica.",
+  "m2.t": "Inquadramento Matematico",
+  "m2.d": "Il problema viene riformulato in equazioni differenziali, topologia o algebra degli operatori.",
+  "m3.t": "Analisi Analitica &amp; Numerica",
+  "m3.d": "Si cercano soluzioni in forma chiusa; quando l'approccio analitico è insufficiente, subentra la simulazione numerica.",
+  "m4.t": "Sintesi dei Risultati",
+  "m4.d": "I risultati vengono confrontati con la letteratura esistente, si esaminano le incoerenze e si chiarisce il contributo originale.",
+  "m.panel": "// Equazioni Fondamentali",
+  "m.eq.sch": "— Equazione di Schrödinger",
+  "m.eq.ein": "— Equazione di Campo di Einstein",
+  "m.eq.heis": "— Indeterminazione di Heisenberg",
+  "m.eq.higgs": "— Potenziale di Higgs (Cappello Messicano)",
+  "m.eq.vn": "— Entropia di Von Neumann",
+  "m.note": "\"Dio non gioca a dadi\" — ma la meccanica quantistica dimostra il contrario. L'incertezza è al cuore stesso della realtà fisica.",
+  "hg.label": "Fisica di Higgs",
+  "hg.h2a": "Cappello",
+  "hg.h2b": "Messicano",
+  "hg.desc": "Il potenziale V(φ) = −μ²φ² + λφ⁴ del campo di Higgs è il cuore matematico della rottura di simmetria dell'universo. Il vero vuoto non sta a φ = 0 ma a ±v — questa rottura è la fonte di tutta la massa.",
+  "hg.q1": "\"Come disse Ibn Rushd: La conoscenza inizia con l'osservazione e matura con la ragione.\"",
+  "hg.qc": "— Filosofia di Ricerca Quantro",
+  "f.role": "Fondatore · Ricercatore Principale",
+  "f.bio": "Un centro R&amp;S indipendente che conduce ricerche teoriche originali all'intersezione tra meccanica quantistica e astrofisica. Lavori dedicati alla comprensione della struttura fondamentale dell'universo.",
+  "f.d1": "Meccanica Quantistica",
+  "f.d2": "Astrofisica &amp; Cosmologia",
+  "f.d3": "Fisica di Higgs",
+  "f.d4": "Fisica Matematica",
+  "f.label": "Visione",
+  "f.h2a": "Ricerca",
+  "f.h2b": "Oltre i",
+  "f.h2c": "Confini",
+  "f.desc": "Quantro è stato fondato per concentrarsi sulle domande di fisica più fondamentali, libero da vincoli istituzionali. Colmare le lacune teoriche ignorate dai grandi laboratori, sviluppare quadri matematici originali e far avanzare la nostra comprensione dell'universo è la nostra missione essenziale.",
+  "f.q1": "\"Come disse Ibn Khaldun: Chi vuole costruire il futuro deve prima chiarire la propria visione.\"",
+  "f.qc": "— Filosofia di Ricerca Quantro",
+  "b.label": "Blog di Ricerca",
+  "b.h2a": "Ultimi",
+  "b.h2b": "Articoli",
+  "b.loading": "Caricamento articoli...",
+  "b.back": "← Tutti gli Articoli",
+  "b.failed": "Impossibile caricare gli articoli.",
+  "b.none": "Nessun articolo per ora.",
+  "b.min": "min",
+  "b.read": "min di lettura",
+  "b.like": "Mi piace",
+  "b.comments": "Commenti",
+  "b.commentForm": "Lascia un commento",
+  "b.name": "Il tuo nome *",
+  "b.email": "Email (opzionale)",
+  "b.commentPh": "Il tuo commento... *",
+  "b.send": "Invia",
+  "b.noComments": "Nessun commento. Sii il primo!",
+  "b.loadingC": "Caricamento commenti...",
+  "b.failedC": "Impossibile caricare i commenti.",
+  "b.okC": "✓ Commento ricevuto, verrà pubblicato dopo l'approvazione.",
+  "b.errC": "Invio non riuscito. Riprova.",
+  "b.rateC": "Troppo veloce! Riprova tra 15 minuti.",
+  "b.errName": "Inserisci nome e un commento di almeno 3 caratteri.",
+  "b.reply": "Rispondi",
+  "lc.badge": "Primo in Turchia · 12 Strumenti",
+  "lc.h2a": "Prova il",
+  "lc.h2b": "Quantro Lab",
+  "lc.desc": "Motore di casualità quantistica, simulatore di circuiti, calcolatore dell'età dell'universo e altro.",
+  "lc.btn": "⚗ Vai al Lab →",
+  "c.label": "Contatti",
+  "c.h2a": "Esploriamo",
+  "c.h2b": "Insieme",
+  "c.sub": "Contattaci per collaborazioni di ricerca, discussioni teoriche o conversazioni sulla natura dell'universo.",
+  "c.name": "Il Tuo Nome",
+  "c.email": "La Tua Email",
+  "c.msg": "Il tuo messaggio...",
+  "c.submit": "Invia Messaggio",
+  "c.fill": "Per favore, compila tutti i campi.",
+  "c.sending": "Invio in corso...",
+  "c.ok": "Il tuo messaggio è stato inviato. Grazie.",
+  "c.err": "Si è verificato un errore. Riprova.",
+  "c.net": "Errore di connessione. Riprova.",
+  "cg.center": "Sede",
+  "cg.center.val": "Kayseri / Turchia",
+  "cg.activity": "Attività",
+  "cg.activity.val": "R&amp;S",
+  "cg.insta": "Instagram",
+  "ft.copy": "© 2025 Centro R&amp;S Quantro",
+  "ft.bug": "Segnala un problema / Suggerisci un'idea →"
+},
+ ru:{
+  "qc.title": "Настройка файлов cookie",
+  "qc.body": "Мы уважаем вашу конфиденциальность. Файлы cookie Google Analytics (для отслеживания) могут использоваться для статистики посещений; требуется ваше согласие. При согласии загружаются только файлы cookie отслеживания.",
+  "qc.accept": "Принять",
+  "qc.reject": "Отклонить",
+  "qc.info": "Подробнее",
+  "skip": "Перейти к содержанию",
+  "nav.about": "О нас",
+  "nav.research": "Исследования",
+  "nav.method": "Методология",
+  "nav.blog": "Блог",
+  "nav.vision": "Видение",
+  "nav.lab": "Лаб ⚗",
+  "nav.contact": "Контакты",
+  "hero.eyebrow": "Quantro · НИР Квантовая и астрофизика · Осн. 2025",
+  "hero.h1a": "Ткань",
+  "hero.h1b": "Вселенной",
+  "hero.h1c": "Вибрация",
+  "hero.desc": "От нарушения симметрии квантовых полей до структур галактического масштаба — мы исследуем глубочайшие слои Вселенной.",
+  "hero.b1": "Области исследований",
+  "hero.b2": "Методология",
+  "hero.scroll": "Листать",
+  "m.planck": "Планковская длина · м",
+  "m.age": "Возраст Вселенной",
+  "m.heis": "Предел Гейзенберга",
+  "m.higgs": "Масса бозона Хиггса",
+  "a.label": "О нас",
+  "a.h2a": "Независимая",
+  "a.h2b": "Научная база",
+  "a.desc": "Quantro — независимый центр НИР, ведущий глубокие исследования в квантовой механике и астрофизике. Работы охватывают широкий спектр — от планковского масштаба до космологического горизонта.",
+  "a.p1t": "Квантовые исследования",
+  "a.p1d": "Теоретические исследования волновых функций, квантовой запутанности и проблем измерения.",
+  "a.p2t": "Астрофизическое моделирование",
+  "a.p2d": "Формирование космических структур, тёмная материя и модели Вселенной в больших масштабах.",
+  "a.p3t": "Теория и анализ",
+  "a.p3d": "Разработка оригинальных теоретических рамок на основе математической физики.",
+  "d.label": "Области исследований",
+  "d.h2a": "Шесть",
+  "d.h2b": "дисциплин",
+  "d.sub": "Оригинальные теоретические работы и моделирование в шести областях исследований — от квантов до космоса.",
+  "d.qm.t": "Квантовая механика",
+  "d.qm.d": "Корпускулярно-волновой дуализм, туннельный эффект и теория квантового измерения.",
+  "d.t.sup": "Суперпозиция",
+  "d.t.ent": "Запутанность",
+  "d.gr.t": "Общая теория относительности",
+  "d.gr.d": "Кривизна пространства-времени, физика чёрных дыр и гравитационные волны.",
+  "d.t.st": "Пространство-время",
+  "d.t.gw": "Физика ГВ",
+  "d.t.bh": "Чёрные дыры",
+  "d.higgs.t": "Поле Хиггса",
+  "d.higgs.d": "Нарушение симметрии, механизм возникновения массы и динамика скалярных полей.",
+  "d.t.sb": "Нарушение симметрии",
+  "d.t.vac": "Вакуум",
+  "d.t.sc": "Скалярное поле",
+  "d.cosmo.t": "Космология",
+  "d.cosmo.d": "Большой взрыв, CMB и моделирование крупномасштабной структуры Вселенной.",
+  "d.t.inf": "Инфляция",
+  "d.t.de": "Тёмная энергия",
+  "d.dm.t": "Тёмная материя",
+  "d.dm.d": "Кривые вращения галактик, кандидаты WIMP и модели гало.",
+  "d.t.ax": "Аксион",
+  "d.qtd.t": "Квантовая термодинамика",
+  "d.qtd.d": "Энтропия фон Неймана, теория информации и тепловые процессы на квантовом пределе.",
+  "d.t.entr": "Энтропия",
+  "d.t.inf2": "Информация",
+  "v.label": "Живая симуляция",
+  "v.h2a": "Визуализатор",
+  "v.h2b": "волновой функции",
+  "v.wf": "Волновая функция",
+  "v.prob": "Плотность вероятности",
+  "v.energy": "Квантовая энергия",
+  "v.phase": "Фазовый множитель",
+  "m.label": "Методология",
+  "m.h2a": "Процесс",
+  "m.h2b": "исследования",
+  "m1.t": "Определение проблемы",
+  "m1.d": "Каждый цикл исследования начинается с точной формулировки наблюдательной аномалии или теоретического противоречия.",
+  "m2.t": "Математическое оформление",
+  "m2.d": "Проблема переформулируется в терминах дифференциальных уравнений, топологии или алгебры операторов.",
+  "m3.t": "Аналитический и численный анализ",
+  "m3.d": "Ищутся решения в замкнутой форме; когда аналитический подход недостаточен, подключается численное моделирование.",
+  "m4.t": "Синтез результатов",
+  "m4.d": "Результаты сравниваются с существующей литературой, анализируются противоречия и уточняется оригинальный вклад.",
+  "m.panel": "// Основные уравнения",
+  "m.eq.sch": "— Уравнение Шрёдингера",
+  "m.eq.ein": "— Уравнение поля Эйнштейна",
+  "m.eq.heis": "— Принцип неопределённости Гейзенберга",
+  "m.eq.higgs": "— Потенциал Хиггса (Мексиканская шляпа)",
+  "m.eq.vn": "— Энтропия фон Неймана",
+  "m.note": "\"Бог не играет в кости\" — однако квантовая механика показывает обратное. Неопределённость лежит в самой основе физической реальности.",
+  "hg.label": "Физика Хиггса",
+  "hg.h2a": "Мексиканская",
+  "hg.h2b": "шляпа",
+  "hg.desc": "Потенциал V(φ) = −μ²φ² + λφ⁴ поля Хиггса — математическое сердце нарушения симметрии Вселенной. Истинный вакуум находится не при φ = 0, а при ±v — это нарушение и есть источник всей массы.",
+  "hg.q1": "\"Как сказал Ибн Рушд: Знание начинается с наблюдения и созревает с разумом.\"",
+  "hg.qc": "— Исследовательская философия Quantro",
+  "f.role": "Основатель · Главный исследователь",
+  "f.bio": "Независимый центр НИР, ведущий оригинальные теоретические исследования на стыке квантовой механики и астрофизики. Работы, посвящённые пониманию фундаментальной структуры Вселенной.",
+  "f.d1": "Квантовая механика",
+  "f.d2": "Астрофизика и космология",
+  "f.d3": "Физика Хиггса",
+  "f.d4": "Математическая физика",
+  "f.label": "Видение",
+  "f.h2a": "Наука",
+  "f.h2b": "на",
+  "f.h2c": "пределе",
+  "f.desc": "Quantro был основан, чтобы сосредоточиться на самых фундаментальных вопросах физики, свободных от институциональных ограничений. Закрыть теоретические пробелы, которые игнорируют большие лаборатории, разрабатывать оригинальные математические рамки и продвигать наше понимание Вселенной — наша главная миссия.",
+  "f.q1": "\"Как сказал Ибн Халдун: Те, кто хочет построить будущее, должны сначала прояснить своё видение.\"",
+  "f.qc": "— Исследовательская философия Quantro",
+  "b.label": "Исследовательский блог",
+  "b.h2a": "Последние",
+  "b.h2b": "записи",
+  "b.loading": "Загрузка записей...",
+  "b.back": "← Все записи",
+  "b.failed": "Не удалось загрузить записи.",
+  "b.none": "Пока нет записей.",
+  "b.min": "мин",
+  "b.read": "мин чтения",
+  "b.like": "Нравится",
+  "b.comments": "Комментарии",
+  "b.commentForm": "Оставить комментарий",
+  "b.name": "Ваше имя *",
+  "b.email": "Эл. почта (необязательно)",
+  "b.commentPh": "Ваш комментарий... *",
+  "b.send": "Отправить",
+  "b.noComments": "Комментариев пока нет. Будьте первым!",
+  "b.loadingC": "Загрузка комментариев...",
+  "b.failedC": "Не удалось загрузить комментарии.",
+  "b.okC": "✓ Комментарий получен, появится после модерации.",
+  "b.errC": "Не удалось отправить. Попробуйте ещё раз.",
+  "b.rateC": "Слишком быстро! Попробуйте через 15 минут.",
+  "b.errName": "Введите имя и комментарий минимум из 3 символов.",
+  "b.reply": "Ответить",
+  "lc.badge": "Первый в Турции · 13 инструментов",
+  "lc.h2a": "Попробуйте",
+  "lc.h2b": "Quantro Lab",
+  "lc.desc": "Генератор квантовой случайности, симулятор схем, калькулятор возраста Вселенной и многое другое.",
+  "lc.btn": "⚗ Перейти в Лаб →",
+  "c.label": "Контакты",
+  "c.h2a": "Исследуем",
+  "c.h2b": "вместе",
+  "c.sub": "Свяжитесь с нами для исследовательских коллабораций, теоретических дискуссий или бесед о природе Вселенной.",
+  "c.name": "Ваше имя",
+  "c.email": "Ваш email",
+  "c.msg": "Ваше сообщение...",
+  "c.submit": "Отправить сообщение",
+  "c.fill": "Пожалуйста, заполните все поля.",
+  "c.sending": "Отправка...",
+  "c.ok": "Ваше сообщение отправлено. Спасибо.",
+  "c.err": "Произошла ошибка. Попробуйте ещё раз.",
+  "c.net": "Ошибка соединения. Попробуйте ещё раз.",
+  "cg.center": "Центр",
+  "cg.center.val": "Кайсери / Турция",
+  "cg.activity": "Деятельность",
+  "cg.activity.val": "НИР",
+  "cg.insta": "Instagram",
+  "ft.copy": "© 2025 Центр НИР Quantro",
+  "ft.bug": "Сообщить о проблеме / Предложить идею →"
+},
+ ko:{
+  "qc.title": "쿠키 기본 설정",
+  "qc.body": "저희는 귀하의 개인정보를 존중합니다. 방문 통계를 위해 Google Analytics 쿠키(추적)가 사용될 수 있으며 이에 대한 동의가 필요합니다. 동의하시면 추적 쿠키만 로드됩니다.",
+  "qc.accept": "동의",
+  "qc.reject": "거부",
+  "qc.info": "자세히",
+  "skip": "본문으로 건너뛰기",
+  "nav.about": "소개",
+  "nav.research": "연구",
+  "nav.method": "방법론",
+  "nav.blog": "블로그",
+  "nav.vision": "비전",
+  "nav.lab": "랩 ⚗",
+  "nav.contact": "문의",
+  "hero.eyebrow": "Quantro · 양자 및 천체물리 연구개발 · 설립 2025",
+  "hero.h1a": "우주의",
+  "hero.h1b": "구조가",
+  "hero.h1c": "진동한다",
+  "hero.desc": "양자장의 대칭성 붕괴부터 은하 규모의 구조까지 — 우리는 우주의 가장 깊은 층을 탐구합니다.",
+  "hero.b1": "연구 분야",
+  "hero.b2": "방법론",
+  "hero.scroll": "아래로",
+  "m.planck": "플랑크 길이 · m",
+  "m.age": "우주 나이",
+  "m.heis": "하이젠베르크 한계",
+  "m.higgs": "힉스 보손 질량",
+  "a.label": "소개",
+  "a.h2a": "독립적인",
+  "a.h2b": "과학 연구소",
+  "a.desc": "Quantro는 양자역학과 천체물리학 분야에서 깊이 있는 연구를 수행하는 독립적인 연구개발 센터입니다. 플랑크 척도부터 우주론적 지평까지 광범위한 연구를 진행합니다.",
+  "a.p1t": "양자 연구",
+  "a.p1d": "파동함수, 양자 얽힘 및 측정 문제에 대한 이론적 연구.",
+  "a.p2t": "천체물리 모델링",
+  "a.p2d": "우주 구조의 형성, 암흑물질 및 대규모 우주 모델.",
+  "a.p3t": "이론 및 분석",
+  "a.p3d": "수리물리학 기반의 독창적인 이론 프레임워크 개발.",
+  "d.label": "연구 분야",
+  "d.h2a": "여섯 가지",
+  "d.h2b": "학문",
+  "d.sub": "양자에서 우주까지 여섯 가지 연구 분야에서 독창적인 이론 연구와 모델링.",
+  "d.qm.t": "양자역학",
+  "d.qm.d": "파동-입자 이중성, 터널 효과 및 양자 측정 이론.",
+  "d.t.sup": "중첩",
+  "d.t.ent": "얽힘",
+  "d.gr.t": "일반상대성이론",
+  "d.gr.d": "시공간 곡률, 블랙홀 물리 및 중력파.",
+  "d.t.st": "시공간",
+  "d.t.gw": "중력파 물리",
+  "d.t.bh": "블랙홀",
+  "d.higgs.t": "힉스 장",
+  "d.higgs.d": "대칭성 붕괴, 질량 생성 메커니즘 및 스칼라장 동역학.",
+  "d.t.sb": "대칭성 붕괴",
+  "d.t.vac": "진공",
+  "d.t.sc": "스칼라장",
+  "d.cosmo.t": "우주론",
+  "d.cosmo.d": "빅뱅, CMB 및 우주의 대규모 구조 모델링.",
+  "d.t.inf": "인플레이션",
+  "d.t.de": "암흑에너지",
+  "d.dm.t": "암흑물질",
+  "d.dm.d": "은하 회전 곡선, WIMP 후보 및 헤일로 모델.",
+  "d.t.ax": "액시온",
+  "d.qtd.t": "양자 열역학",
+  "d.qtd.d": "폰 노이만 엔트로피, 정보 이론 및 양자 한계에서의 열 과정.",
+  "d.t.entr": "엔트로피",
+  "d.t.inf2": "정보",
+  "v.label": "실시간 시뮬레이션",
+  "v.h2a": "파동함수",
+  "v.h2b": "시각화",
+  "v.wf": "파동함수",
+  "v.prob": "확률 밀도",
+  "v.energy": "양자 에너지",
+  "v.phase": "위상 인자",
+  "m.label": "방법론",
+  "m.h2a": "연구",
+  "m.h2b": "과정",
+  "m1.t": "문제 정의",
+  "m1.d": "모든 연구 주기는 관측 이상 징후나 이론적 불일치를 정확히 공식화하는 것으로 시작됩니다.",
+  "m2.t": "수학적 틀",
+  "m2.d": "문제는 미분방정식, 위상수학 또는 연산자 대수로 재표현됩니다.",
+  "m3.t": "해석 및 수치 분석",
+  "m3.d": "닫힌 형태의 해를 찾고, 해석적 접근이 부족할 때 수치 시뮬레이션이 투입됩니다.",
+  "m4.t": "결과 종합",
+  "m4.d": "결과는 기존 문헌과 비교되고, 불일치가 검토되며, 독창적 기여가 명확해집니다.",
+  "m.panel": "// 핵심 방정식",
+  "m.eq.sch": "— 슈뢰딩거 방정식",
+  "m.eq.ein": "— 아인슈타인 장 방정식",
+  "m.eq.heis": "— 하이젠베르크 불확정성",
+  "m.eq.higgs": "— 힉스 퍼텐셜 (멕시칸햇)",
+  "m.eq.vn": "— 폰 노이만 엔트로피",
+  "m.note": "\"신은 주사위를 던지지 않는다\" — 그러나 양자역학은 반대를 보여줍니다. 불확정성은 물리적 실재의 핵심에 있습니다.",
+  "hg.label": "힉스 물리학",
+  "hg.h2a": "멕시칸햇",
+  "hg.h2b": "퍼텐셜",
+  "hg.desc": "힉스 장의 V(φ) = −μ²φ² + λφ⁴ 퍼텐셜은 우주 대칭성 붕괴의 수학적 핵심입니다. 진짜 진공은 φ = 0이 아니라 ±v에 있습니다 — 이 붕괴가 모든 질량의 원천입니다.",
+  "hg.q1": "\"이븐 루슈드의 말처럼: 지식은 관찰에서 시작되어 이성으로 성숙한다.\"",
+  "hg.qc": "— Quantro 연구 철학",
+  "f.role": "설립자 · 수석 연구원",
+  "f.bio": "양자역학과 천체물리학의 경계에서 독창적인 이론 연구를 수행하는 독립적인 연구개발 센터. 우주의 근본 구조를 이해하는 데 헌신합니다.",
+  "f.d1": "양자역학",
+  "f.d2": "천체물리학 및 우주론",
+  "f.d3": "힉스 물리학",
+  "f.d4": "수리물리학",
+  "f.label": "비전",
+  "f.h2a": "경계를",
+  "f.h2b": "넘는",
+  "f.h2c": "연구",
+  "f.desc": "Quantro는 제도적 제약 없이 가장 근본적인 물리학 질문에 집중하기 위해 설립되었습니다. 대형 연구소가 무시하는 이론적 공백을 메우고, 독창적인 수학적 프레임워크를 개발하며, 우주에 대한 이해를 발전시키는 것이 핵심 사명입니다.",
+  "f.q1": "\"이븐 할둔의 말처럼: 미래를 건설하려는 자는 먼저 비전을 명확히 해야 한다.\"",
+  "f.qc": "— Quantro 연구 철학",
+  "b.label": "연구 블로그",
+  "b.h2a": "최신",
+  "b.h2b": "글",
+  "b.loading": "글을 불러오는 중...",
+  "b.back": "← 모든 글",
+  "b.failed": "글을 불러오지 못했습니다.",
+  "b.none": "아직 글이 없습니다.",
+  "b.min": "분",
+  "b.read": "분 읽기",
+  "b.like": "좋아요",
+  "b.comments": "댓글",
+  "b.commentForm": "댓글 작성",
+  "b.name": "이름 *",
+  "b.email": "이메일 (선택)",
+  "b.commentPh": "댓글... *",
+  "b.send": "보내기",
+  "b.noComments": "아직 댓글이 없습니다. 첫 댓글을 남겨보세요!",
+  "b.loadingC": "댓글 불러오는 중...",
+  "b.failedC": "댓글을 불러오지 못했습니다.",
+  "b.okC": "✓ 댓글이 접수되었으며 승인 후 게시됩니다.",
+  "b.errC": "전송하지 못했습니다. 다시 시도하세요.",
+  "b.rateC": "너무 빠릅니다! 15분 후 다시 시도하세요.",
+  "b.errName": "이름과 최소 3자 이상의 댓글을 입력하세요.",
+  "b.reply": "답글",
+  "lc.badge": "터키 최초 · 12개 도구",
+  "lc.h2a": "양자랩을",
+  "lc.h2b": "체험하세요",
+  "lc.desc": "양자 난수 생성기, 회로 시뮬레이터, 우주 나이 계산기 등.",
+  "lc.btn": "⚗ 랩 가기 →",
+  "c.label": "문의",
+  "c.h2a": "함께",
+  "c.h2b": "탐구하자",
+  "c.sub": "연구 협업, 이론 토론 또는 우주의 본질에 관한 대화를 위해 연락하세요.",
+  "c.name": "이름",
+  "c.email": "이메일",
+  "c.msg": "메시지...",
+  "c.submit": "메시지 보내기",
+  "c.fill": "모든 필드를 입력해 주세요.",
+  "c.sending": "전송 중...",
+  "c.ok": "메시지가 전송되었습니다. 감사합니다.",
+  "c.err": "오류가 발생했습니다. 다시 시도해 주세요.",
+  "c.net": "연결 오류입니다. 다시 시도해 주세요.",
+  "cg.center": "본부",
+  "cg.center.val": "카이세리 / 터키",
+  "cg.activity": "활동",
+  "cg.activity.val": "연구개발",
+  "cg.insta": "인스타그램",
+  "ft.copy": "© 2025 Quantro 연구개발 센터",
+  "ft.bug": "문제 신고 / 아이디어 제안 →"
+},
+ ar:{
+  "qc.title": "تفضيلات ملفات تعريف الارتباط",
+  "qc.body": "نحن نحترم خصوصيتك. قد تُستخدم ملفات تعريف ارتباط Google Analytics (التتبع) لإحصاءات الزيارة؛ ونطلب موافقتك. عند الموافقة، تُحمَّل ملفات التتبع فقط.",
+  "qc.accept": "موافق",
+  "qc.reject": "رفض",
+  "qc.info": "التفاصيل",
+  "skip": "تخطى إلى المحتوى",
+  "nav.about": "من نحن",
+  "nav.research": "البحوث",
+  "nav.method": "المنهجية",
+  "nav.blog": "المدونة",
+  "nav.vision": "الرؤية",
+  "nav.lab": "المختبر ⚗",
+  "nav.contact": "اتصل بنا",
+  "hero.eyebrow": "Quantro · البحث والتطوير في الكم والفيزياء الفلكية · تأسست 2025",
+  "hero.h1a": "نسيج",
+  "hero.h1b": "الكون",
+  "hero.h1c": "يهتز",
+  "hero.desc": "من كسر تناظر الحقول الكمومية إلى البنى على المقاييس المجرية — نستكشف أعمق طبقات الكون.",
+  "hero.b1": "مجالات البحث",
+  "hero.b2": "المنهجية",
+  "hero.scroll": "مرر",
+  "m.planck": "طول بلانك · م",
+  "m.age": "العمر الكوني",
+  "m.heis": "حد هايزنبرغ",
+  "m.higgs": "كتلة بوزون هيغز",
+  "a.label": "من نحن",
+  "a.h2a": "قاعدة",
+  "a.h2b": "علمية مستقلة",
+  "a.desc": "Quantro مركز بحث وتطوير مستقل يجري أبحاثاً معمقة في ميكانيكا الكم والفيزياء الفلكية. تغطي الأعمال طيفاً واسعاً من مقياس بلانك إلى الأفق الكوني.",
+  "a.p1t": "البحوث الكمومية",
+  "a.p1d": "دراسات نظرية حول الدوال الموجية والتشابك الكمومي ومسائل القياس.",
+  "a.p2t": "النمذجة الفيزيائية الفلكية",
+  "a.p2d": "تكوين البنى الكونية والمادة المظلمة ونماذج الكون واسع النطاق.",
+  "a.p3t": "النظرية والتحليل",
+  "a.p3d": "تطوير أطر نظرية أصيلة مبنية على الفيزياء الرياضية.",
+  "d.label": "مجالات البحث",
+  "d.h2a": "ستة",
+  "d.h2b": "تخصصات",
+  "d.sub": "أعمال نظرية أصيلة ونمذجة في ستة مجالات بحثية تمتد من الكم إلى الكون.",
+  "d.qm.t": "ميكانيكا الكم",
+  "d.qm.d": "ازدواجية الموجة والجسيم، تأثير النفق، ونظرية القياس الكمومي.",
+  "d.t.sup": "التراكب",
+  "d.t.ent": "التشابك",
+  "d.gr.t": "النسبية العامة",
+  "d.gr.d": "انحناء الزمكان، فيزياء الثقوب السوداء والموجات الثقالية.",
+  "d.t.st": "الزمكان",
+  "d.t.gw": "فيزياء الموجات الثقالية",
+  "d.t.bh": "الثقوب السوداء",
+  "d.higgs.t": "حقل هيغز",
+  "d.higgs.d": "كسر التناظر، آلية توليد الكتلة، وديناميكا الحقول العددية.",
+  "d.t.sb": "كسر التناظر",
+  "d.t.vac": "الفراغ",
+  "d.t.sc": "حقل عددي",
+  "d.cosmo.t": "علم الكون",
+  "d.cosmo.d": "الانفجار العظيم، إشعاع الخلفية الكونية ونمذجة البنية واسعة النطاق.",
+  "d.t.inf": "التضخم",
+  "d.t.de": "الطاقة المظلمة",
+  "d.dm.t": "المادة المظلمة",
+  "d.dm.d": "منحنيات دوران المجرات، مرشحو WIMP ونماذج الهالة.",
+  "d.t.ax": "أكسيون",
+  "d.qtd.t": "الديناميكا الحرارية الكمومية",
+  "d.qtd.d": "إنتروبيا فون نيومان، نظرية المعلومات والعمليات الحرارية عند الحد الكمومي.",
+  "d.t.entr": "إنتروبيا",
+  "d.t.inf2": "المعلومات",
+  "v.label": "محاكاة مباشرة",
+  "v.h2a": "مرئي",
+  "v.h2b": "الدالة الموجية",
+  "v.wf": "الدالة الموجية",
+  "v.prob": "كثافة الاحتمال",
+  "v.energy": "الطاقة الكمومية",
+  "v.phase": "عامل الطور",
+  "m.label": "المنهجية",
+  "m.h2a": "عملية",
+  "m.h2b": "البحث",
+  "m1.t": "تحديد المشكلة",
+  "m1.d": "تبدأ كل دورة بحثية بصياغة دقيقة لشذوذ رصدي أو تناقض نظري.",
+  "m2.t": "التأطير الرياضي",
+  "m2.d": "يُعاد التعبير عن المشكلة في المعادلات التفاضلية أو الطوبولوجيا أو جبر المؤثرات.",
+  "m3.t": "التحليل التحليلي والعددي",
+  "m3.d": "تُبحث الحلول المغلقة؛ وعندما لا يكفي النهج التحليلي، تدخل المحاكاة العددية.",
+  "m4.t": "توليف النتائج",
+  "m4.d": "تُقارن النتائج بالأدبيات الموجودة، وتُفحص التناقضات، ويتضح الإسهام الأصيل.",
+  "m.panel": "// المعادلات الأساسية",
+  "m.eq.sch": "— معادلة شرودنغر",
+  "m.eq.ein": "— معادلة حقل أينشتاين",
+  "m.eq.heis": "— عدم يقين هايزنبرغ",
+  "m.eq.higgs": "— جهد هيغز (القبعة المكسيكية)",
+  "m.eq.vn": "— إنتروبيا فون نيومان",
+  "m.note": "\"الله لا يلعب بالنرد\" — لكن ميكانيكا الكم تثبت عكس ذلك. عدم اليقين في صميم الواقع الفيزيائي.",
+  "hg.label": "فيزياء هيغز",
+  "hg.h2a": "القبعة",
+  "hg.h2b": "المكسيكية",
+  "hg.desc": "جهد V(φ) = −μ²φ² + λφ⁴ لحقل هيغز هو القلب الرياضي لكسر التناظر في الكون. الفراغ الحقيقي ليس عند φ = 0 بل عند ±v — وهذا الكسر هو مصدر كل كتلة.",
+  "hg.q1": "\"كما قال ابن رشد: المعرفة تبدأ بالملاحظة وتنضج بالعقل.\"",
+  "hg.qc": "— فلسفة Quantro البحثية",
+  "f.role": "المؤسس · كبير الباحثين",
+  "f.bio": "مركز بحث وتطوير مستقل يجري أبحاثاً نظرية أصيلة عند تقاطع ميكانيكا الكم والفيزياء الفلكية. أعمال مكرسة لفهم البنية الأساسية للكون.",
+  "f.d1": "ميكانيكا الكم",
+  "f.d2": "الفيزياء الفلكية وعلم الكون",
+  "f.d3": "فيزياء هيغز",
+  "f.d4": "الفيزياء الرياضية",
+  "f.label": "الرؤية",
+  "f.h2a": "بحث",
+  "f.h2b": "يتجاوز",
+  "f.h2c": "الحدود",
+  "f.desc": "تأسس Quantro للتركيز على أسئلة الفيزياء الأساسية بعيداً عن القيود المؤسسية. سد الثغرات النظرية التي تتجاهلها المختبرات الكبرى، وتطوير أطر رياضية أصيلة، والارتقاء بفهمنا للكون هي مهمتنا الأساسية.",
+  "f.q1": "\"كما قال ابن خلدون: من يريد بناء المستقبل عليه أولاً أن يصفي رؤيته.\"",
+  "f.qc": "— فلسفة Quantro البحثية",
+  "b.label": "مدونة البحث",
+  "b.h2a": "أحدث",
+  "b.h2b": "المقالات",
+  "b.loading": "جارٍ تحميل المقالات...",
+  "b.back": "← كل المقالات",
+  "b.failed": "تعذر تحميل المقالات.",
+  "b.none": "لا توجد مقالات بعد.",
+  "b.min": "د",
+  "b.read": "د قراءة",
+  "b.like": "أعجبني",
+  "b.comments": "التعليقات",
+  "b.commentForm": "اترك تعليقًا",
+  "b.name": "اسمك *",
+  "b.email": "البريد الإلكتروني (اختياري)",
+  "b.commentPh": "تعليقك... *",
+  "b.send": "إرسال",
+  "b.noComments": "لا توجد تعليقات بعد. كن الأول!",
+  "b.loadingC": "جارٍ تحميل التعليقات...",
+  "b.failedC": "تعذر تحميل التعليقات.",
+  "b.okC": "✓ تم استلام تعليقك وسيُنشر بعد الموافقة.",
+  "b.errC": "تعذر الإرسال. حاول مرة أخرى.",
+  "b.rateC": "سريع جدًا! حاول بعد 15 دقيقة.",
+  "b.errName": "أدخل اسمك وتعليقًا من 3 أحرف على الأقل.",
+  "b.reply": "رد",
+  "lc.badge": "الأول في تركيا · 13 أدوات",
+  "lc.h2a": "جرّب",
+  "lc.h2b": "مختبر Quantro",
+  "lc.desc": "مولّد العشوائية الكمومية، محاكي الدوائر، حاسبة عمر الكون والمزيد.",
+  "lc.btn": "⚗ اذهب إلى المختبر ←",
+  "c.label": "اتصل بنا",
+  "c.h2a": "لنستكشف",
+  "c.h2b": "معاً",
+  "c.sub": "تواصل معنا للتعاون البحثي أو النقاشات النظرية أو الحديث عن طبيعة الكون.",
+  "c.name": "اسمك",
+  "c.email": "بريدك الإلكتروني",
+  "c.msg": "رسالتك...",
+  "c.submit": "إرسال الرسالة",
+  "c.fill": "يرجى ملء جميع الحقول.",
+  "c.sending": "جارٍ الإرسال...",
+  "c.ok": "تم إرسال رسالتك. شكراً لك.",
+  "c.err": "حدث خطأ. يرجى المحاولة مجدداً.",
+  "c.net": "خطأ في الاتصال. يرجى المحاولة مجدداً.",
+  "cg.center": "المقر",
+  "cg.center.val": "قيصري / تركيا",
+  "cg.activity": "النشاط",
+  "cg.activity.val": "بحث وتطوير",
+  "cg.insta": "إنستغرام",
+  "ft.copy": "© 2025 مركز Quantro للبحث والتطوير",
+  "ft.bug": "أبلغ عن مشكلة / اقترح فكرة →"
+},
+};
+const LOCALE_MAP={tr:'tr-TR',en:'en-US',fr:'fr-FR',es:'es-ES',it:'it-IT',ru:'ru-RU',ko:'ko-KR',ar:'ar-SA'};
+let LANG=(localStorage.getItem('qlang')&&I18N[localStorage.getItem('qlang')])?localStorage.getItem('qlang'):'tr';
+function t(k,...a){let s=(I18N[LANG]&&I18N[LANG][k])||I18N.tr[k]||k;if(a.length)for(let i=0;i<a.length;i++)s=s.split('{'+i+'}').join(a[i]);return s}
+function applyLang(){
+  document.documentElement.lang=LANG;
+  const btn=document.getElementById('langbtn');
+  if(btn)btn.textContent=(LANG==='tr'?'TR':LANG.toUpperCase());
+  document.querySelectorAll('[data-i18n]').forEach(el=>{el.innerHTML=t(el.dataset.i18n)});
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{el.placeholder=t(el.dataset.i18nPh)});
+  const qc=document.getElementById('qc-banner');
+  if(qc){
+    const s=qc.querySelector('.qc-text');if(s)s.innerHTML='<strong>'+t('qc.title')+'</strong> — '+t('qc.body');
+    const acc=qc.querySelector('.qc-accept');if(acc)acc.textContent=t('qc.accept');
+    const rej=qc.querySelector('.qc-reject');if(rej)rej.textContent=t('qc.reject');
+  }
+}
+function toggleLang(){LANG=LANGS_ORDER[(LANGS_ORDER.indexOf(LANG)+1)%LANGS_ORDER.length];localStorage.setItem('qlang',LANG);applyLang()}
+applyLang();
+
+const burger=document.getElementById('burger'), mobnav=document.getElementById('mobnav');
+burger.addEventListener('click',()=>{
+  const o=mobnav.classList.toggle('open');
+  burger.setAttribute('aria-expanded',o);
+  document.body.style.overflow=o?'hidden':'';
+});
+document.querySelectorAll('.ml').forEach(l=>l.addEventListener('click',()=>{
+  mobnav.classList.remove('open');
+  burger.setAttribute('aria-expanded',false);
+  document.body.style.overflow='';
+}));
+
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');obs.unobserve(e.target);}});
+},{threshold:.1,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+/* ══ BLOG ══ */
 const SB_URL_BLOG='https://mzlludkzkddxbbcrjmfu.supabase.co';
 const SB_KEY_BLOG='sb_publishable_MsSvoJUyhPO8HJ4d3FFBdg_bnw1D3BD';
 const SBH_BLOG={'apikey':SB_KEY_BLOG,'Authorization':'Bearer '+SB_KEY_BLOG};
@@ -842,9 +3114,7 @@ function blogMd(md){
 
 loadBlog();
 
-
-</script>
-<script>
+/* ══ İletişim Formu — Sunucu Üzerinden (rate-limit + honeypot) ══ */
 const cform = document.getElementById('contact-form');
 if (cform) {
   cform.addEventListener('submit', async (e) => {
@@ -894,7 +3164,39 @@ if (cform) {
 }
 if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(function(){})}
 
+/* ══ Footer yılı ══ */
+(function(){var y=document.getElementById('fyear');if(y)y.textContent=new Date().getFullYear();})();
 
+/* ══ Başa dön ══ */
+(function(){
+  var b=document.getElementById('btt');if(!b)return;
+  window.addEventListener('scroll',function(){b.classList.toggle('show',scrollY>600)},{passive:true});
+  b.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+})();
+
+/* ══ Çerez Onayı (KVKK 6698) ══ */
+(function(){
+  var d=window.__qc||{};
+  if(d.c&&d.c.a!==undefined)return;
+  var b=document.createElement('div');
+  b.className='qc-cookie';b.id='qc-banner';
+  b.innerHTML='<div class="qc-inner"><div class="qc-text"><strong>'+t('qc.title')+'</strong> — '+t('qc.body')+'</div><div class="qc-btns"><button class="qc-btn qc-accept">'+t('qc.accept')+'</button><button class="qc-btn qc-reject">'+t('qc.reject')+'</button></div></div>';
+  document.body.appendChild(b);
+  requestAnimationFrame(function(){b.classList.add('show')});
+  function set(a){
+    try{localStorage.setItem('qc_consent',JSON.stringify({a:a,d:Date.now()}))}catch(e){}
+    d.c={a:a};
+    if(a){
+      if(!document.getElementById('qgtag')){var s=document.createElement('script');s.id='qgtag';s.async=true;s.src='https://www.googletagmanager.com/gtag/js?id=G-HR4Z4E0JLK';document.head.appendChild(s);}
+      gtag('js',new Date());gtag('config','G-HR4Z4E0JLK');
+    }
+    b.classList.remove('show');
+    setTimeout(function(){b.remove()},300);
+  }
+  b.querySelector('.qc-accept').onclick=function(){set(true)};
+  b.querySelector('.qc-reject').onclick=function(){set(false)};
+  window.__qcInfo=function(){};
+})();
 </script>
 </body>
 </html>
