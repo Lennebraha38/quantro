@@ -245,7 +245,7 @@ textarea.finput{min-height:220px;resize:vertical;font-family:var(--fm);font-size
     </div>
 
     <!-- New post form -->
-    <div class="section-title">Yeni Yazı</div>
+    <div class="section-title" id="form-title">Yeni Yazı</div>
     <div class="form-card">
       <div class="frow">
         <div class="fgroup">
@@ -403,6 +403,7 @@ async function loadPosts(){
         </div>
         <span class="pi-status ${p.published?'pub':'draft'}">${p.published?'Yayında':'Taslak'}</span>
         <div class="pi-actions">
+          <button class="act-btn" onclick="editPost('${p.id}')">Düzenle</button>
           <button class="act-btn ${p.published?'toggle-draft':'toggle-pub'}" onclick="togglePub('${p.id}',${p.published})">
             ${p.published?'Gizle':'Yayınla'}
           </button>
@@ -437,6 +438,8 @@ async function loadMessages(){
 }
 
 /* ── BLOG İŞLEMLERİ ── */
+let editingId=null;
+
 async function submit(publish){
   const title=document.getElementById('f-title').value.trim();
   const slug=document.getElementById('f-slug').value.trim();
@@ -449,19 +452,40 @@ async function submit(publish){
   if(!title||!content){st.textContent='Başlık ve içerik zorunlu.';st.className='fstatus err';return}
 
   st.textContent='Kaydediliyor...';st.className='fstatus';
-  const res=await fetch('/api/blog',{
-    method:'POST',
+  const body={title,slug:slug||autoSlug(title),summary,content,cover_emoji:emoji,tags,published:publish};
+  const res=await fetch(editingId?`/api/blog?id=${encodeURIComponent(editingId)}`:'/api/blog',{
+    method:editingId?'PATCH':'POST',
     headers:{'Authorization':'Bearer '+sessionStorage.getItem('qtr_token'),'Content-Type':'application/json'},
-    body:JSON.stringify({title,slug:slug||autoSlug(title),summary,content,cover_emoji:emoji,tags,published:publish})
+    body:JSON.stringify(body)
   });
 
   if(res.ok){
     st.textContent=publish?'✓ Yazı yayınlandı!':'✓ Taslak kaydedildi.';
     st.className='fstatus ok';
+    if(editingId){editingId=null;document.getElementById('form-title').textContent='Yeni Yazı';}
     clearForm();loadPosts();
   } else {
     st.textContent='Hata oluştu. Slug çakışıyor olabilir.';st.className='fstatus err';
   }
+}
+
+function editPost(id){
+  fetch('/api/blog').then(r=>r.json()).then(data=>{
+    const p=data.find(x=>x.id===id);
+    if(!p)return;
+    editingId=id;
+    document.getElementById('form-title').textContent='Yazıyı Düzenle';
+    document.getElementById('f-title').value=p.title||'';
+    document.getElementById('f-slug').value=p.slug||'';
+    document.getElementById('f-emoji').value=p.cover_emoji||'';
+    document.getElementById('f-tags').value=(p.tags||[]).join(', ');
+    document.getElementById('f-summary').value=p.summary||'';
+    document.getElementById('f-content').value=p.content||'';
+    document.getElementById('fstatus').textContent='Düzenleme modu — kaydettiğinde güncellenecek.';
+    document.getElementById('fstatus').className='fstatus';
+    document.getElementById('f-title').focus();
+    document.getElementById('f-title').scrollIntoView({behavior:'smooth',block:'center'});
+  });
 }
 
 async function togglePub(id,current){
@@ -565,6 +589,8 @@ function mdToHtml(md){
 }
 
 function clearForm(){
+  editingId=null;
+  document.getElementById('form-title').textContent='Yeni Yazı';
   ['f-title','f-slug','f-emoji','f-tags','f-summary','f-content'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('fstatus').textContent='';
   document.getElementById('preview').style.display='none';
