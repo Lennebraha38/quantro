@@ -6,10 +6,11 @@ let blockAt = 0;
 let off = 0;
 
 module.exports = async function handler(req, res) {
-  const len = Math.min(1024, Math.max(1, parseInt(req.query.length, 10) || 8));
+  const raw = parseInt(req.query.length, 10);
+  const len = Math.min(1024, Math.max(1, Number.isFinite(raw) ? raw : 8));
   const now = Date.now();
   try {
-    if (!block || now - blockAt > WINDOW) {
+    if (!block || now - blockAt > WINDOW || off + len > 1024) {
       const r = await fetch(ANU + '?length=1024&type=uint8');
       if (!r.ok) throw new Error('ANU HTTP ' + r.status);
       const j = await r.json();
@@ -18,7 +19,6 @@ module.exports = async function handler(req, res) {
       blockAt = now;
       off = 0;
     }
-    if (off + len > 1024) off = 0;
     const data = block.slice(off, off + len);
     off = (off + len) % 1024;
     res.setHeader('Access-Control-Allow-Origin', '*');

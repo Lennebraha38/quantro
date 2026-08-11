@@ -22,11 +22,15 @@ module.exports = async function handler(req, res) {
 
     let likes = 0;
     if (action === 'unlike') {
-      await supabaseFetch('/rest/v1/rpc/decrement_comment_like', {
-        method: 'POST',
-        body: JSON.stringify({ p_id: id })
-      });
-      res.setHeader('Set-Cookie', `${ck}=; Path=/; Max-Age=0; SameSite=Lax`);
+      // Beğenmemiş biri unlike yapamaz — beğenme çerezi zorunlu.
+      if (already) {
+        const r = await supabaseFetch('/rest/v1/rpc/decrement_comment_like', {
+          method: 'POST',
+          body: JSON.stringify({ p_id: id })
+        });
+        if (!r.ok) return res.status(502).json({ error: 'supabase', status: r.status });
+        res.setHeader('Set-Cookie', `${ck}=; Path=/; Max-Age=0; SameSite=Lax`);
+      }
     } else {
       if (!already) {
         const r = await supabaseFetch('/rest/v1/rpc/increment_comment_like', {

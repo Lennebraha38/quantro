@@ -1,4 +1,4 @@
-const CACHE = 'quantro-v1.6.0';
+const CACHE = 'quantro-v1.7.0';
 const SHELL = ['/index.html', '/blog.html', '/quantro-lab.html', '/quantro.js', '/lab-core.js'];
 
 self.addEventListener('install', (e) => {
@@ -23,17 +23,17 @@ self.addEventListener('fetch', (e) => {
   const isShell = SHELL.includes(norm);
 
   if (isShell) {
+    // Network-first: güncellemeler hemen görünsün; offline'da cache'e düş.
     e.respondWith(
       caches.open(CACHE).then(async (c) => {
+        try {
+          const fresh = await fetch(e.request);
+          if (fresh.ok) {
+            c.put(new Request(norm), fresh.clone());
+            return fresh;
+          }
+        } catch (err) {}
         const cached = await c.match(new Request(norm));
-        fetch(e.request)
-          .then((r) => {
-            if (r.ok) {
-              const clone = r.clone();
-              caches.open(CACHE).then((cc) => cc.put(new Request(norm), clone));
-            }
-          })
-          .catch(() => {});
         return cached || fetch(e.request).catch(() => cached);
       })
     );
