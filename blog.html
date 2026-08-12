@@ -266,6 +266,9 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
 .share-btn:hover{color:var(--cyan);border-color:rgba(0,200,240,.4);box-shadow:0 0 12px rgba(0,200,240,.12)}
 .share-btn .ic{font-size:13px}
 .share-btn .ck{font-size:9px;letter-spacing:2px;color:var(--green)}
+.share-card{display:inline-flex;align-items:center;gap:6px;font-family:var(--fm);font-size:9px;letter-spacing:1px;text-transform:uppercase;
+  color:var(--muted);background:rgba(0,200,240,.04);border:1px solid rgba(0,200,240,.14);padding:6px 10px;cursor:pointer;transition:all .2s}
+.share-card:hover{color:var(--cyan);border-color:rgba(0,200,240,.4)}
 .pv-related{margin-top:44px;padding-top:34px;border-top:1px solid rgba(0,200,240,.1)}
 .related-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px}
 .rel-card{background:var(--deep);border:1px solid rgba(0,200,240,.07);padding:22px;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:10px}
@@ -556,6 +559,7 @@ function renderPosts(posts){
       <div class="post-stats">
         <button class="like-btn" data-slug="${s}" onclick="likePost('${s}',this,event)"><span class="lb-ic">♡</span> <b class="lb-n">0</b></button>
         <button class="cm-toggle" data-slug="${s}" onclick="toggleCardComments('${s}',event)"><span>💬</span> <b class="cm-n">0</b> <span class="cm-lbl">Yorum</span></button>
+        <button class="share-card" onclick="sharePostCard('${s}',event)" title="Paylaş"><span>🔗</span> <span class="sc-lbl">Paylaş</span></button>
       </div>
       <div class="card-comments" id="cms-${s}" style="display:none" onclick="event.stopPropagation()">
         <div class="cm-list" id="cml-${s}"><div class="cm-empty">Yorumlar yükleniyor…</div></div>
@@ -652,6 +656,23 @@ function shareCopy(btn){
       const old=btn.innerHTML;
       btn.innerHTML='<span class="ck">✓ Kopyalandı</span>';
       setTimeout(()=>{btn.innerHTML=old},1600);
+    });
+  }
+}
+
+function sharePostCard(slug,ev){
+  if(ev)ev.stopPropagation();
+  const p=allPosts.find(x=>x.slug===slug);
+  const u=location.origin+location.pathname+'#'+slug;
+  const text=(p&&p.title?p.title:'Quantro')+' — Quantro Araştırma Blogu';
+  if(navigator.share){
+    navigator.share({title:text,text:text,url:u}).catch(()=>{});
+    return;
+  }
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(u).then(()=>{
+      const b=ev.target.closest('.share-card');
+      if(b){const old=b.innerHTML;b.innerHTML='<span>✓</span> <span class="sc-lbl">Kopyalandı</span>';setTimeout(()=>{b.innerHTML=old},1400)}
     });
   }
 }
