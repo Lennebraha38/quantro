@@ -258,6 +258,23 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
 .qc-btn:hover{opacity:.8}
 .qc-accept{background:var(--cyan);color:#020810;font-weight:700}
 .qc-reject{background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,.18)}
+
+/* ══ Share + Related ══ */
+.pv-share{display:flex;gap:8px;flex-wrap:wrap;margin:28px 0 6px}
+.share-btn{font-family:var(--fm);font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);
+  background:rgba(0,200,240,.04);border:1px solid rgba(0,200,240,.14);padding:9px 14px;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px}
+.share-btn:hover{color:var(--cyan);border-color:rgba(0,200,240,.4);box-shadow:0 0 12px rgba(0,200,240,.12)}
+.share-btn .ic{font-size:13px}
+.share-btn .ck{font-size:9px;letter-spacing:2px;color:var(--green)}
+.pv-related{margin-top:44px;padding-top:34px;border-top:1px solid rgba(0,200,240,.1)}
+.related-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px}
+.rel-card{background:var(--deep);border:1px solid rgba(0,200,240,.07);padding:22px;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;gap:10px}
+.rel-card:hover{border-color:rgba(0,200,240,.3);transform:translateY(-3px)}
+.rel-emoji{font-size:22px}
+.rel-title{font-family:var(--fd);font-size:13px;font-weight:700;text-transform:uppercase;line-height:1.4;color:var(--text)}
+.rel-meta{font-family:var(--fm);font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-top:auto}
+@media(max-width:768px){.related-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.related-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -309,7 +326,14 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
       <button class="like-btn" id="pv-like" onclick="likePost(currentSlug,this,event)"><span class="lb-ic">♡</span> <b class="lb-n">0</b></button>
       <span class="cm-toggle" style="cursor:default"><span>💬</span> <b id="pv-cm-n">0</b> <span>Yorum</span></span>
     </div>
+    <div class="pv-share" id="pv-share"></div>
     <div class="pv-content" id="pv-content"></div>
+
+    <!-- RELATED -->
+    <div class="pv-related" id="pv-related" style="display:none">
+      <div class="cm-title">İlgili Yazılar</div>
+      <div class="related-grid" id="related-grid"></div>
+    </div>
 
     <!-- COMMENTS -->
     <div class="pv-comments">
@@ -352,7 +376,10 @@ function showView(id){
   document.getElementById('view-'+id).classList.add('active');
   window.scrollTo(0,0);
 }
-function showList(){showView('list')}
+function showList(){
+  try{history.replaceState(null,'',location.pathname)}catch(e){}
+  showView('list');
+}
 
 /* FETCH POSTS */
 const SBH={'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY};
@@ -504,6 +531,8 @@ async function fetchPosts(){
     renderPosts(allPosts);
     renderFilters(allPosts);
     fetchCounts();
+    const h=(location.hash||'').slice(1);
+    if(h&&allPosts.some(p=>p.slug===h))openPost(h);
   }catch(e){
     document.getElementById('posts-grid').innerHTML='<div class="loading">Yazılar yüklenemedi</div>';
   }
@@ -588,9 +617,58 @@ function openPost(slug){
   setLiked(document.getElementById('pv-like'),slug);
   const pvLb=document.getElementById('pv-like')&&document.getElementById('pv-like').querySelector('.lb-n');
   if(pvLb)pvLb.textContent=stats.likes[slug]||0;
+  renderShare();
+  renderRelated(p);
   currentSlug=slug;
+  try{history.replaceState(null,'','#'+slug)}catch(e){}
   showView('post');
   loadComments(slug);
+}
+
+/* SHARE */
+function postUrl(){
+  return location.origin+location.pathname+'#'+currentSlug;
+}
+function renderShare(){
+  const box=document.getElementById('pv-share');
+  const title=document.getElementById('pv-title').textContent;
+  const u=postUrl();
+  box.innerHTML=`
+    <button class="share-btn" onclick="shareX()"><span class="ic">𝕏</span> Paylaş</button>
+    <button class="share-btn" onclick="shareWA()"><span class="ic">✆</span> WhatsApp</button>
+    <button class="share-btn" onclick="shareCopy(this)"><span class="ic">🔗</span> Kopyala</button>`;
+}
+function shareX(){
+  const t=document.getElementById('pv-title').textContent;
+  window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(t+' — Quantro Araştırma Blogu')+'&url='+encodeURIComponent(postUrl()),'_blank','width=600,height=520,noopener');
+}
+function shareWA(){
+  const t=document.getElementById('pv-title').textContent;
+  window.open('https://wa.me/?text='+encodeURIComponent(t+' — '+postUrl()),'_blank','noopener');
+}
+function shareCopy(btn){
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(postUrl()).then(()=>{
+      const old=btn.innerHTML;
+      btn.innerHTML='<span class="ck">✓ Kopyalandı</span>';
+      setTimeout(()=>{btn.innerHTML=old},1600);
+    });
+  }
+}
+
+/* RELATED */
+function renderRelated(cur){
+  const box=document.getElementById('pv-related');
+  if(!cur||!cur.tags){box.style.display='none';return}
+  const rel=allPosts.filter(p=>p.slug!==cur.slug&&(p.tags||[]).some(t=>(cur.tags||[]).includes(t))).slice(0,3);
+  if(!rel.length){box.style.display='none';return}
+  document.getElementById('related-grid').innerHTML=rel.map(p=>`
+    <div class="rel-card" onclick="openPost('${p.slug}')">
+      <span class="rel-emoji">${p.cover_emoji||'⚛'}</span>
+      <div class="rel-title">${p.title}</div>
+      <div class="rel-meta">${Math.ceil(p.content.split(' ').length/200)} dk okuma</div>
+    </div>`).join('');
+  box.style.display='block';
 }
 
 /* COMMENTS */

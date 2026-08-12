@@ -28,5 +28,11 @@
       "destination": "/blog.html",
       "permanent": true
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/feed.xml",
+      "destination": "/api/feed"
+    }
   ]
 }

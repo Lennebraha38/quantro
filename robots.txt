@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /qtr-admin.html
+Disallow: /api/
+Disallow: /insta/
 
 Sitemap: https://quantro-1.vercel.app/sitemap.xml
