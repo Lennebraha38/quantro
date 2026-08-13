@@ -1375,8 +1375,11 @@ let LANG=(localStorage.getItem('qlang')&&I18N[localStorage.getItem('qlang')])?lo
 function t(k,...a){let s=(I18N[LANG]&&I18N[LANG][k])||I18N.tr[k]||k;if(a.length)for(let i=0;i<a.length;i++)s=s.split('{'+i+'}').join(a[i]);return s}
 function applyLang(){
   document.documentElement.lang=LANG;
+  document.documentElement.dir=(LANG==='ar')?'rtl':'ltr';
   const btn=document.getElementById('langbtn');
   if(btn)btn.textContent=(LANG==='tr'?'TR':LANG.toUpperCase());
+  const mb=document.querySelector('.ml');
+  if(mb)mb.textContent=(LANG==='tr'?'TR':LANG.toUpperCase());
   document.querySelectorAll('[data-i18n]').forEach(el=>{el.innerHTML=t(el.dataset.i18n)});
   document.querySelectorAll('[data-i18n-ph]').forEach(el=>{el.placeholder=t(el.dataset.i18nPh)});
   const qc=document.getElementById('qc-banner');

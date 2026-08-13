@@ -17,11 +17,23 @@
 <meta name="twitter:description" content="Kuantum mekaniği ve astrofizik üzerine araştırma yazıları.">
 <meta name="twitter:image" content="https://quantro-1.vercel.app/img/og-quantro.png">
 <link rel="canonical" href="https://quantro-1.vercel.app/blog.html">
+<link rel="alternate" type="application/rss+xml" title="Quantro Araştırma Blogu" href="https://quantro-1.vercel.app/feed.xml">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="48x48" href="img/favicon-48.png">
 <link rel="apple-touch-icon" sizes="180x180" href="img/icon-180.png">
 <meta name="theme-color" content="#020810">
 <title>Quantro Blog</title>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "name": "Quantro Araştırma Blogu",
+  "url": "https://quantro-1.vercel.app/blog.html",
+  "description": "Kuantum mekaniği, astrofizik ve araştırma notları.",
+  "inLanguage": "tr",
+  "publisher": { "@type": "Organization", "name": "Quantro ARGE Merkezi" }
+}
+</script>
 <!-- Google Analytics (GA4) — yalnızca kullanıcı onayı sonrası yüklenir (KVKK) -->
 <script>
 window.__qc={};
@@ -98,12 +110,12 @@ nav.sc{background:rgba(2,8,16,.92);backdrop-filter:blur(20px);padding:13px 0;bor
 .blog-ey span{font-family:var(--fm);font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--cyan)}
 .blog-h1{font-family:var(--fd);font-size:clamp(44px,7vw,88px);font-weight:800;line-height:.92;letter-spacing:-2px;text-transform:uppercase;margin-bottom:16px}
 .blog-h1 .o{color:transparent;-webkit-text-stroke:1.5px var(--cyan);display:block}
-.blog-sub{font-size:14px;font-weight:300;color:rgba(232,237,245,.4);line-height:1.8;max-width:480px;margin:0 auto}
+.blog-sub{font-size:14px;font-weight:300;color:rgba(232,237,245,.62);line-height:1.8;max-width:480px;margin:0 auto}
 
 .blog-list{max-width:1200px;margin:0 auto;padding:0 40px 100px}
 .blog-filter{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:40px}
 .blog-search{margin-bottom:16px}
-.search-input{width:100%;max-width:480px;background:var(--deep);border:1px solid rgba(0,200,240,.15);color:var(--text);font-family:var(--font-mono);font-size:13px;letter-spacing:1px;padding:14px 18px;outline:none;transition:border-color .2s}
+.search-input{width:100%;max-width:480px;background:var(--deep);border:1px solid rgba(0,200,240,.15);color:var(--text);font-family:var(--fm);font-size:13px;letter-spacing:1px;padding:14px 18px;outline:none;transition:border-color .2s}
 .search-input:focus{border-color:var(--cyan)}
 .search-input::placeholder{color:var(--muted)}
 .ftag{font-family:var(--fm);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);border:1px solid rgba(0,200,240,.12);padding:6px 14px;cursor:pointer;transition:all .2s;background:none}
@@ -116,9 +128,9 @@ nav.sc{background:rgba(2,8,16,.92);backdrop-filter:blur(20px);padding:13px 0;bor
 .post-card:hover::after{opacity:1}
 .post-emoji{font-size:36px;margin-bottom:20px;display:block}
 .post-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
-.ptag{font-family:var(--fm);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(0,200,240,.55);border:1px solid rgba(0,200,240,.12);padding:3px 8px}
+.ptag{font-family:var(--fm);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(0,200,240,.78);border:1px solid rgba(0,200,240,.22);padding:3px 8px}
 .post-title{font-family:var(--fd);font-size:20px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--text);margin-bottom:12px;line-height:1.15}
-.post-summary{font-size:13px;color:rgba(232,237,245,.4);line-height:1.75;margin-bottom:20px}
+.post-summary{font-size:13px;color:rgba(232,237,245,.62);line-height:1.75;margin-bottom:20px}
 .post-meta{display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(0,200,240,.07);padding-top:14px}
 .post-date{font-family:var(--fm);font-size:10px;letter-spacing:2px;color:var(--muted)}
 .post-read{font-family:var(--fm);font-size:10px;letter-spacing:2px;color:var(--cyan)}
@@ -360,7 +372,7 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
 <footer>
   <div class="fi">
     <a href="index.html" class="fl">Q<em>U</em>ANTRO</a>
-    <span class="fc">© 2025 Quantro ARGE · Kayseri, Türkiye</span>
+    <span class="fc">© <span id="fyear">2025</span> Quantro ARGE · Kayseri, Türkiye</span>
     <span class="fc" style="color:rgba(0,200,240,.25)">Araştırma Blogu</span>
   </div>
 </footer>
@@ -895,6 +907,9 @@ document.addEventListener('DOMContentLoaded',fetchPosts);
   b.querySelector('.qc-accept').onclick=function(){set(true)};
   b.querySelector('.qc-reject').onclick=function(){set(false)};
 })();
+
+/* Footer yılı */
+(function(){const el=document.getElementById('fyear');if(el)el.textContent=new Date().getFullYear();})();
 </script>
 </body>
 </html>

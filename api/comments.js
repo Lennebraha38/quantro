@@ -38,16 +38,8 @@ module.exports = async function handler(req, res) {
       return res.status(400).json({ error: 'validation' });
     }
 
-    // Yanıt (reply): üst yorum onaylıysa yanıtı da otomatik onayla ki anında görünsün.
-    // Üst yorum onaysız/mevcut değilse yanıt onaysız bekler (ağaçta öksüz görünmez).
-    let is_approved = false;
-    if (parent_id) {
-      const pr = await supabaseFetch(`/rest/v1/blog_comments?id=eq.${encodeURIComponent(parent_id)}&select=is_approved`);
-      try {
-        const arr = await pr.json();
-        if (Array.isArray(arr) && arr[0] && arr[0].is_approved) is_approved = true;
-      } catch (e) {}
-    }
+    // Tüm yorumlar (yanıtlar dahil) önce admin onayından geçer — spam vektörü kapalı.
+    const is_approved = false;
 
     const r = await supabaseFetch('/rest/v1/blog_comments', {
       method: 'POST',

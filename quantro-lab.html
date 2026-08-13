@@ -10,10 +10,13 @@
 <meta property="og:url" content="https://quantro-1.vercel.app/quantro-lab.html">
 <meta property="og:image" content="https://quantro-1.vercel.app/img/og-quantro.png">
 <meta name="robots" content="index, follow">
+<meta property="og:locale" content="tr_TR">
+<meta property="og:site_name" content="Quantro Lab">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Quantro Lab — Kuantum Araçları">
 <meta name="twitter:description" content="Türkiye'nin ilk interaktif kuantum araç seti. Kuantumu tarayıcında dene.">
 <meta name="twitter:image" content="https://quantro-1.vercel.app/img/og-quantro.png">
+<link rel="alternate" type="application/rss+xml" title="Quantro Blog" href="https://quantro-1.vercel.app/feed.xml">
 <link rel="canonical" href="https://quantro-1.vercel.app/quantro-lab.html">
 <script type="application/ld+json">
 {
@@ -30,6 +33,8 @@
 }
 </script>
 <link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#020810">
 <link rel="icon" type="image/png" sizes="48x48" href="img/favicon-48.png">
 <link rel="apple-touch-icon" sizes="180x180" href="img/icon-180.png">
@@ -120,7 +125,7 @@ nav.sc{background:rgba(2,8,16,.92);backdrop-filter:blur(20px);padding:13px 0;bor
 .hero-h1{font-family:var(--fd);font-size:clamp(44px,8vw,100px);font-weight:800;line-height:.92;letter-spacing:-2px;text-transform:uppercase;margin-bottom:20px}
 .hero-h1 .o{color:transparent;-webkit-text-stroke:1.5px var(--cyan);display:block}
 .hero-row{display:flex;align-items:flex-end;justify-content:space-between;gap:32px;flex-wrap:wrap}
-.hero-desc{font-size:14px;font-weight:300;color:rgba(232,237,245,.45);line-height:1.85;max-width:400px}
+.hero-desc{font-size:14px;font-weight:300;color:rgba(232,237,245,.66);line-height:1.85;max-width:400px}
 .hero-badge{font-family:var(--fm);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--green);border:1px solid rgba(0,240,160,.2);padding:8px 18px;white-space:nowrap;max-width:100%}
 [data-i18n]{overflow-wrap:break-word}
 .tool-title,.hero-h1 span,.hero-sub,.step-lbl,.lbl,.opt-lbl,.stat-lbl,.stat-num,.md-lbl,.md-val,.tool-note{overflow-wrap:break-word}
@@ -649,8 +654,8 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
         <span class="qlbl" data-i18n="t6.mass">Kütle (Güneş kütlesi ×)</span>
         <input class="qin" id="bh-mass" type="number" value="10" min="1" max="1000000000" style="width:120px">
         <button class="btn btn-p" onclick="uBH()" data-i18n="t6.calc">Hesapla</button>
-        <button class="btn btn-g" onclick="()=>{ document.getElementById('bh-mass').value=4000000; uBH(); }" data-i18n="t6.sgra">Sgr A* (Samanyolu)</button>
-        <button class="btn btn-g" onclick="()=>{ document.getElementById('bh-mass').value=6500000000; uBH(); }" data-i18n="t6.m87">M87*</button>
+        <button class="btn btn-g" onclick="document.getElementById('bh-mass').value=4000000;uBH();" data-i18n="t6.sgra">Sgr A* (Samanyolu)</button>
+        <button class="btn btn-g" onclick="document.getElementById('bh-mass').value=6500000000;uBH();" data-i18n="t6.m87">M87*</button>
       </div>
       <canvas id="bh-canvas" class="canvas3d" style="height:320px"></canvas>
       <div class="bh-info">
@@ -940,7 +945,7 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
 <footer>
   <div class="fi">
     <a href="index.html" class="fl">Q<em>U</em>ANTRO</a>
-    <span class="fc">© 2025 Quantro ARGE · Kayseri, Türkiye</span>
+    <span class="fc">© <span id="fyear">2025</span> Quantro ARGE · Kayseri, Türkiye</span>
     <span class="fc" style="color:rgba(0,200,240,.3)">Türkiye'de İlk · 13 Kuantum Aracı</span>
     <span class="fc" style="color:rgba(0,200,240,.5)"><a href="https://github.com/quantro38/quantro/issues/new" target="_blank" rel="noopener" style="color:rgba(0,200,240,.7)">Hata bildir / Fikir öner →</a></span>
   </div>
@@ -972,6 +977,9 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
   b.querySelector('.qc-accept').onclick=function(){set(true)};
   b.querySelector('.qc-reject').onclick=function(){set(false)};
 })();
+
+/* Footer yılı */
+(function(){var el=document.getElementById('fyear');if(el)el.textContent=new Date().getFullYear();})();
 </script>
 </body>
 </html>

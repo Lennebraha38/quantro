@@ -50,7 +50,9 @@ function rateLimiter(limit, windowMs) {
   const hits = new Map();
   return function (key) {
     const now = Date.now();
+    // Eski penceredeki kayıtları at; anahtar tamamen eskiyse sil (memory-safe)
     const arr = (hits.get(key) || []).filter((t) => now - t < windowMs);
+    if (!arr.length) hits.delete(key);
     if (arr.length >= limit) {
       hits.set(key, arr);
       return false;
