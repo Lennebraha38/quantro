@@ -22,6 +22,17 @@ function blochReadout(){
   if(el)el.innerHTML=`|ψ⟩ = ${a.toFixed(3)}·|0⟩ + e<sup>iφ</sup>·${bb.toFixed(3)}·|1⟩<br><b>|α|² = P(|0⟩) = ${(a*a).toFixed(4)}</b> &nbsp; <b>|β|² = P(|1⟩) = ${(bb*bb).toFixed(4)}</b><br>Bloch vektörü: (${x.toFixed(3)}, ${y.toFixed(3)}, ${z.toFixed(3)})`;
 }
 function blochStart(){if(!bloch||bloch.dead)bloch=new BlochSphere();else bloch.update()}
+function blochDemo(){
+  if(!bloch||bloch.dead)blochStart();
+  const t0=Date.now();
+  const iv=setInterval(()=>{
+    const el=document.getElementById('tb9');
+    if(!el||!el.classList.contains('open')){clearInterval(iv);return}
+    const dt=Date.now()-t0;
+    if(dt>4200){clearInterval(iv);blochSet(90,0);return}
+    blochSet(90+70*Math.sin(dt/260),dt/9);
+  },33);
+}
 class BlochSphere{
   constructor(){
     this.th=thv()||90;this.ph=phv()||0;

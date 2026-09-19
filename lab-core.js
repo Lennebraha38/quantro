@@ -58,6 +58,33 @@ async function tog(n){
   if(n===13)qwStart();
   QLab.bindExports();
 }
+/* ══ KART: spot ışığı · bilgi paneli · hızlı demo ══ */
+document.addEventListener('mousemove',e=>{
+  const c=e.target&&e.target.closest?e.target.closest('.tool-card'):null;
+  if(!c)return;
+  const r=c.getBoundingClientRect();
+  c.style.setProperty('--mx',(e.clientX-r.left)+'px');
+  c.style.setProperty('--my',(e.clientY-r.top)+'px');
+},{passive:true});
+const _DEMO={1:'genQS',2:'bellDemo',3:'uU',4:'rBB84',5:'uH',6:'uBH',7:'uD',8:'teleRun',9:'blochDemo',10:'catOpen',11:'tunAlpha',12:'dsFire',13:'qwRun'};
+function cardInfo(n,ev){
+  if(ev&&ev.stopPropagation)ev.stopPropagation();
+  const p=document.getElementById('tc-panel-'+n);
+  if(!p)return;
+  const open=p.classList.toggle('open');
+  p.innerHTML=open&&typeof t==='function'?'<p>'+t('t'+n+'.explain')+'</p>':'';
+}
+function cardDemo(n,ev){
+  if(ev&&ev.stopPropagation)ev.stopPropagation();
+  tog(n).then(()=>{
+    try{
+      const k=_DEMO[n];
+      if(!k)return;
+      if(k==='tunAlpha')window.tunPreset('alpha');
+      else if(typeof window[k]==='function')window[k]();
+    }catch(e){}
+  }).catch(()=>{});
+}
 /* ══ HERO THREE.JS ══ */
 if(window.THREE&&document.getElementById('hero-canvas')){
 let _lh=null,_lhLost=false;
@@ -427,6 +454,21 @@ tr:{
   "t11.canvas.energy": "E={0} eV",
   "t13.canvas.quantum": "■ Kuantum",
   "t13.canvas.classical": "■ Klasik",
+  "card.info": "ⓘ Bilgi",
+  "card.demo": "▶ Hızlı Demo",
+  "t1.card": "ANU'ya bağlanan gerçek kuantum rastgelelik motoru — χ² testiyle doğrulanır",
+  "t2.card": "Kapılarla 2 kübitlik devre kur, 1024 atışla ölç, Bell durumunu keşfet",
+  "t3.card": "Friedmann integraliyle evrenin yaşını hesapla (H₀, Ωₘ, ΩΛ)",
+  "t4.card": "BB84 protokolüyle kuantum anahtar dağıtımı — Eve dinleyiciyi yakala",
+  "t5.card": "Δx·Δp ≥ ℏ/2 belirsizlik ilkesini 3D faz uzayında sürükle",
+  "t6.card": "Schwarzschild yarıçapı, Hawking sıcaklığı, Bekenstein entropisi",
+  "t7.card": "Galaksi ışığının kırmızıya kaymasını hız ve mesafeye çevir",
+  "t8.card": "Kübitin bilgisini Bell çiftiyle 2 klasik bit üzerinden ışınla",
+  "t9.card": "Kübit durumunu 3D küre üzerinde θ/φ ile canlandır",
+  "t10.card": "Süperpozisyonu gerçek kuantum rastgeleliğiyle çökert",
+  "t11.card": "Dalga fonksiyonu engeli nasıl deler? T ≈ e^(−2κa)",
+  "t12.card": "Tek tek fırlat, girişim saçaklarını gör — gözlemlemeyi dene",
+  "t13.card": "Hadamard yürüyüşü kuadratik hızlanır; gözlem klasikleştirir",
   "t13.canvas.step": "adım {0}/{1}",
   "t13.canvas.sigmaQ": "σ_Q={0}  (teorik ≈{1})",
   "t13.canvas.sigmaC": "σ_C={0}  (teorik ≈{1})",

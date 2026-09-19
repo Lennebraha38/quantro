@@ -332,3 +332,35 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:3
 .qw-leg .sw{display:inline-block;width:9px;height:9px;border-radius:2px;margin:0 5px 0 10px;vertical-align:-1px}
 .swq{background:#00c8f0}
 .swc{background:#8040c0}
+
+/* ── QLAB KARTLARI · yeni jenerasyon ── */
+.tool-card{position:relative;border-radius:14px;border:1px solid rgba(0,200,240,.1);transition:border-color .3s,transform .25s,box-shadow .25s,border-radius .3s}
+.tool-card:hover{transform:translateY(-2px);border-color:rgba(0,200,240,.4);box-shadow:0 18px 50px rgba(0,0,0,.45),0 0 0 1px rgba(0,200,240,.08)}
+.tool-card::before{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;opacity:0;transition:opacity .3s;background:radial-gradient(520px circle at var(--mx,50%) var(--my,50%),rgba(0,200,240,.10),transparent 65%);border-radius:inherit}
+.tool-card:hover::before{opacity:1}
+.tool-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;z-index:1;background:linear-gradient(90deg,var(--ac,#00c8f0),transparent 72%);opacity:.9;border-radius:14px 2px 0 0}
+.tc1{--ac:#00c8f0}.tc2{--ac:#00f0a0}.tc3{--ac:#ffaa33}.tc4{--ac:#ff66cc}.tc5{--ac:#00e0ff}.tc6{--ac:#bb66ff}.tc7{--ac:#ff5566}.tc8{--ac:#66e0ff}.tc9{--ac:#cc66ff}.tc10{--ac:#66ffaa}.tc11{--ac:#ff8844}.tc12{--ac:#55ddff}.tc13{--ac:#88ccff}
+.tool-header{position:relative;z-index:1;display:flex;align-items:center;gap:16px;padding:20px 28px;cursor:pointer;user-select:none}
+.tc-ico{position:relative;flex-shrink:0;width:46px;height:46px;display:grid;place-items:center;font-size:21px;height:46px;background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.14),rgba(4,13,26,.9));border:1px solid rgba(0,200,240,.25);border-radius:12px;box-shadow:inset 0 0 18px rgba(0,200,240,.14)}
+.tc-ico::after{content:'';position:absolute;inset:-4px;border-radius:14px;border:1px solid var(--ac);opacity:.2;animation:tcPulse 3.2s ease-in-out infinite}
+@keyframes tcPulse{0%,100%{opacity:.15;transform:scale(1)}50%{opacity:.4;transform:scale(1.06)}}
+.tc-mid{display:flex;flex-direction:column;gap:4px;flex:1;min-width:0}
+.tt{font-size:16px;letter-spacing:1px}
+.tc-prev{font-family:var(--fm);font-size:10.5px;letter-spacing:.4px;color:var(--muted);text-transform:none;line-height:1.55;opacity:.88}
+.tc-actions{display:flex;gap:8px;flex-shrink:0}
+.tc-btn{background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,.14);font-family:var(--fm);font-size:9px;letter-spacing:1.5px;padding:8px 13px;cursor:pointer;border-radius:9px;transition:all .2s;white-space:nowrap}
+.tc-btn:hover{color:var(--cyan);border-color:var(--cyanM);background:rgba(0,200,240,.07)}
+.tc-demo{color:var(--cyan);border-color:rgba(0,200,240,.35)}
+.tc-demo:hover{background:var(--cyan);color:var(--void)}
+.tc-panel{display:none;position:relative;z-index:1;padding:18px 28px 22px 90px;border-top:1px dashed rgba(0,200,240,.14);background:rgba(0,200,240,.02)}
+.tc-panel.open{display:block;animation:panelIn .3s ease}
+@keyframes panelIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.tc-panel p{font-size:13px;color:var(--muted);line-height:1.8}
+.tc-panel p strong{color:var(--cyan)}
+@media(max-width:760px){
+  .tool-header{flex-wrap:wrap;row-gap:10px}
+  .tc-mid{min-width:56%;order:2}
+  .tc-actions{order:3;width:100%;justify-content:flex-end}
+  .tc-prev{display:none}
+  .tc-panel{padding-left:28px}
+}

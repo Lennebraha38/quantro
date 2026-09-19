@@ -106,13 +106,21 @@ window.__qc={};
   </div>
 
   <!-- T1: QRNG -->
-  <div class="tool-card">
-    <div class="tool-header" onclick="tog(1)">
-      <span class="tn">01</span>
-      <span class="tt" data-i18n="t1.title">Kuantum Rastgelelik Motoru</span>
+  <div class="tool-card tc1">
+      <div class="tool-header" onclick="tog(1)">
+        <span class="tc-ico">⚛️</span>
+        <span class="tc-mid">
+          <span class="tt" data-i18n="t1.title">Kuantum Rastgelelik Motoru</span>
+          <span class="tc-prev" data-i18n="t1.card">Kuantum Rastgelelik Motoru</span>
+        </span>
+        <span class="tc-actions">
+          <button type="button" class="tc-btn" data-i18n="card.info" onclick="cardInfo(1,event)">ⓘ Bilgi</button>
+          <button type="button" class="tc-btn tc-demo" data-i18n="card.demo" onclick="cardDemo(1,event)">▶ Hızlı Demo</button>
+        </span>
       <span class="tb-badge first" data-i18n="badge.first">Açık Kaynak (MIT)</span>
-      <span class="tg" id="tg1">+</span>
-    </div>
+        <span class="tg" id="tg1">+</span>
+      </div>
+      <div class="tc-panel" id="tc-panel-1"></div>
     <div class="tool-body" id="tb1">
       <div class="qrng-display">
         <canvas id="qrng-3d" class="qlab-3d qrng-3d" data-export="qrng-foam"></canvas>
@@ -148,13 +156,21 @@ window.__qc={};
   </div>
 
   <!-- T2: CIRCUIT -->
-  <div class="tool-card">
-    <div class="tool-header" onclick="tog(2)">
-      <span class="tn">02</span>
-      <span class="tt" data-i18n="t2.title">Kuantum Devre Simülatörü</span>
+  <div class="tool-card tc2">
+      <div class="tool-header" onclick="tog(2)">
+        <span class="tc-ico">🧮</span>
+        <span class="tc-mid">
+          <span class="tt" data-i18n="t2.title">Kuantum Devre Simülatörü</span>
+          <span class="tc-prev" data-i18n="t2.card">Kuantum Devre Simülatörü</span>
+        </span>
+        <span class="tc-actions">
+          <button type="button" class="tc-btn" data-i18n="card.info" onclick="cardInfo(2,event)">ⓘ Bilgi</button>
+          <button type="button" class="tc-btn tc-demo" data-i18n="card.demo" onclick="cardDemo(2,event)">▶ Hızlı Demo</button>
+        </span>
       <span class="tb-badge first" data-i18n="badge.first">Açık Kaynak (MIT)</span>
-      <span class="tg" id="tg2">+</span>
-    </div>
+        <span class="tg" id="tg2">+</span>
+      </div>
+      <div class="tc-panel" id="tc-panel-2"></div>
     <div class="tool-body" id="tb2">
       <div class="circ-wrap">
         <div class="gate-panel">
@@ -191,13 +207,21 @@ window.__qc={};
   </div>
 
   <!-- T3: UNIVERSE -->
-  <div class="tool-card">
-    <div class="tool-header" onclick="tog(3)">
-      <span class="tn">03</span>
-      <span class="tt" data-i18n="t3.title">Evren Yaşı Hesaplayıcı</span>
+  <div class="tool-card tc3">
+      <div class="tool-header" onclick="tog(3)">
+        <span class="tc-ico">🌌</span>
+        <span class="tc-mid">
+          <span class="tt" data-i18n="t3.title">Evren Yaşı Hesaplayıcı</span>
+          <span class="tc-prev" data-i18n="t3.card">Evren Yaşı Hesaplayıcı</span>
+        </span>
+        <span class="tc-actions">
+          <button type="button" class="tc-btn" data-i18n="card.info" onclick="cardInfo(3,event)">ⓘ Bilgi</button>
+          <button type="button" class="tc-btn tc-demo" data-i18n="card.demo" onclick="cardDemo(3,event)">▶ Hızlı Demo</button>
+        </span>
       <span class="tb-badge first" data-i18n="badge.first">Açık Kaynak (MIT)</span>
-      <span class="tg" id="tg3">+</span>
-    </div>
+        <span class="tg" id="tg3">+</span>
+      </div>
+      <div class="tc-panel" id="tc-panel-3"></div>
     <div class="tool-body" id="tb3">
       <div class="univ-grid">
         <div>
@@ -244,13 +268,21 @@ window.__qc={};
   </div>
 
   <!-- T4: QKD -->
-  <div class="tool-card">
-    <div class="tool-header" onclick="tog(4)">
-      <span class="tn">04</span>
-      <span class="tt" data-i18n="t4.title">Kuantum Şifreleme — BB84</span>
+  <div class="tool-card tc4">
+      <div class="tool-header" onclick="tog(4)">
+        <span class="tc-ico">🔐</span>
+        <span class="tc-mid">
+          <span class="tt" data-i18n="t4.title">Kuantum Şifreleme — BB84</span>
+          <span class="tc-prev" data-i18n="t4.card">Kuantum Şifreleme — BB84</span>
+        </span>
+        <span class="tc-actions">
+          <button type="button" class="tc-btn" data-i18n="card.info" onclick="cardInfo(4,event)">ⓘ Bilgi</button>
+          <button type="button" class="tc-btn tc-demo" data-i18n="card.demo" onclick="cardDemo(4,event)">▶ Hızlı Demo</button>
+        </span>
       <span class="tb-badge first" data-i18n="badge.first">Açık Kaynak (MIT)</span>
-      <span class="tg" id="tg4">+</span>
-    </div>
+        <span class="tg" id="tg4">+</span>
+      </div>
+      <div class="tc-panel" id="tc-panel-4"></div>
     <div class="tool-body" id="tb4">
       <div class="eve-toggle">
         <input type="checkbox" id="eve">
@@ -286,13 +318,21 @@ window.__qc={};
   </div>
 
   <!-- T5: HEISENBERG -->
-  <div class="tool-card">
-    <div class="tool-header" onclick="tog(5)">
-      <span class="tn">05</span>
-      <span class="tt" data-i18n="t5.title">Heisenberg Belirsizlik Görselleştiricisi</span>
+  <div class="tool-card tc5">
+      <div class="tool-header" onclick="tog(5)">
+        <span class="tc-ico">🎯</span>
+        <span class="tc-mid">
+          <span class="tt" data-i18n="t5.title">Heisenberg Belirsizlik Görselleştiricisi</span>
+          <span class="tc-prev" data-i18n="t5.card">Heisenberg Belirsizlik Görselleştiricisi</span>
+        </span>
+        <span class="tc-actions">
+          <button type="button" class="tc-btn" data-i18n="card.info" onclick="cardInfo(5,event)">ⓘ Bilgi</button>
+          <button type="button" class="tc-btn tc-demo" data-i18n="card.demo" onclick="cardDemo(5,event)">▶ Hızlı Demo</button>
+        </span>
       <span class="tb-badge new" data-i18n="badge.new">Yeni</span>
-      <span class="tg" id="tg5">+</span>
-    </div>
+        <span class="tg" id="tg5">+</span>
+      </div>
+      <div class="tc-panel" id="tc-panel-5"></div>
     <div class="tool-body" id="tb5">
       <div class="heis-wrap">
         <div class="heis-left">
@@ -325,13 +365,21 @@ window.__qc={};
   </div>
 
   <!-- T6: BLACK HOLE -->
-  <div class="tool-card">
-    <div class="tool-header" onclick="tog(6)">
-      <span class="tn">06</span>
-      <span class="tt" data-i18n="t6.title">Kara Delik Fizik Simülatörü</span>
+  <div class="tool-card tc6">
+      <div class="tool-header" onclick="tog(6)">
+        <span class="tc-ico">🕳️</span>
+        <span class="tc-mid">
+          <span class="tt" data-i18n="t6.title">Kara Delik Fizik Simülatörü</span>
+          <span class="tc-prev" data-i18n="t6.card">Kara Delik Fizik Simülatörü</span>
+        </span>
+        <span class="tc-actions">
+          <button type="button" class="tc-btn" data-i18n="card.info" onclick="cardInfo(6,event)">ⓘ Bilgi</button>
+          <button type="button" class="tc-btn tc-demo" data-i18n="card.demo" onclick="cardDemo(6,event)">▶ Hızlı Demo</button>
+        </span>
       <span class="tb-badge new" data-i18n="badge.new">Yeni</span>
-      <span class="tg" id="tg6">+</span>
-    </div>
+        <span class="tg" id="tg6">+</span>
+      </div>
+      <div class="tc-panel" id="tc-panel-6"></div>
     <div class="tool-body" id="tb6">
       <div class="bh-ctrl">
         <span class="qlbl" data-i18n="t6.mass">Kütle (Güneş kütlesi ×)</span>
@@ -351,13 +399,21 @@ window.__qc={};
   </div>
 
   <!-- T7: DOPPLER -->
-  <div class="tool-card">
-    <div class="tool-header" onclick="tog(7)">
-      <span class="tn">07</span>
-      <span class="tt" data-i18n="t7.title">Kozmik Doppler Kayması Hesaplayıcı</span>
+  <div class="tool-card tc7">
+      <div class="tool-header" onclick="tog(7)">
+        <span class="tc-ico">🔭</span>
+        <span class="tc-mid">
+          <span class="tt" data-i18n="t7.title">Kozmik Doppler Kayması Hesaplayıcı</span>
+          <span class="tc-prev" data-i18n="t7.card">Kozmik Doppler Kayması Hesaplayıcı</span>
+        </span>
+        <span class="tc-actions">
+          <button type="button" class="tc-btn" data-i18n="card.info" onclick="cardInfo(7,event)">ⓘ Bilgi</button>
+          <button type="button" class="tc-btn tc-demo" data-i18n="card.demo" onclick="cardDemo(7,event)">▶ Hızlı Demo</button>
+        </span>
       <span class="tb-badge new" data-i18n="badge.new">Yeni</span>
-      <span class="tg" id="tg7">+</span>
-    </div>
+        <span class="tg" id="tg7">+</span>
+      </div>
+      <div class="tc-panel" id="tc-panel-7"></div>
     <div class="tool-body" id="tb7">
       <div class="dop-wrap">
         <div>
@@ -401,13 +457,21 @@ window.__qc={};
   </div>
 
   <!-- T8: TELEPORTATION -->
-  <div class="tool-card">
-    <div class="tool-header" onclick="tog(8)">
-      <span class="tn">08</span>
-      <span class="tt" data-i18n="t8.title">Kuantum Işınlanma</span>
+  <div class="tool-card tc8">
+      <div class="tool-header" onclick="tog(8)">
+        <span class="tc-ico">📡</span>
+        <span class="tc-mid">
+          <span class="tt" data-i18n="t8.title">Kuantum Işınlanma</span>
+          <span class="tc-prev" data-i18n="t8.card">Kuantum Işınlanma</span>
+        </span>
+        <span class="tc-actions">
+          <button type="button" class="tc-btn" data-i18n="card.info" onclick="cardInfo(8,event)">ⓘ Bilgi</button>
+          <button type="button" class="tc-btn tc-demo" data-i18n="card.demo" onclick="cardDemo(8,event)">▶ Hızlı Demo</button>
+        </span>
       <span class="tb-badge new">New · v1.1</span>
-      <span class="tg" id="tg8">+</span>
-    </div>
+        <span class="tg" id="tg8">+</span>
+      </div>
+      <div class="tc-panel" id="tc-panel-8"></div>
     <div class="tool-body" id="tb8">
       <div class="tele-wrap">
         <div class="tele-btns">
@@ -421,13 +485,21 @@ window.__qc={};
   </div>
 
   <!-- T9: BLOCH SPHERE -->
-  <div class="tool-card">
-    <div class="tool-header" onclick="tog(9)">
-      <span class="tn">09</span>
-      <span class="tt" data-i18n="t9.title">Bloch Küresi</span>
+  <div class="tool-card tc9">
+      <div class="tool-header" onclick="tog(9)">
+        <span class="tc-ico">🔮</span>
+        <span class="tc-mid">
+          <span class="tt" data-i18n="t9.title">Bloch Küresi</span>
+          <span class="tc-prev" data-i18n="t9.card">Bloch Küresi</span>
+        </span>
+        <span class="tc-actions">
+          <button type="button" class="tc-btn" data-i18n="card.info" onclick="cardInfo(9,event)">ⓘ Bilgi</button>
+          <button type="button" class="tc-btn tc-demo" data-i18n="card.demo" onclick="cardDemo(9,event)">▶ Hızlı Demo</button>
+        </span>
       <span class="tb-badge new">New · v1.1</span>
-      <span class="tg" id="tg9">+</span>
-    </div>
+        <span class="tg" id="tg9">+</span>
+      </div>
+      <div class="tc-panel" id="tc-panel-9"></div>
     <div class="tool-body" id="tb9">
       <div class="bloch-grid">
         <div>
@@ -460,13 +532,21 @@ window.__qc={};
   </div>
 
   <!-- T10: SCHRODINGER CAT -->
-  <div class="tool-card">
-    <div class="tool-header" onclick="tog(10)">
-      <span class="tn">10</span>
-      <span class="tt" data-i18n="t10.title">Schrödinger'in Kedisi</span>
+  <div class="tool-card tc10">
+      <div class="tool-header" onclick="tog(10)">
+        <span class="tc-ico">🐱</span>
+        <span class="tc-mid">
+          <span class="tt" data-i18n="t10.title">Schrödinger'in Kedisi</span>
+          <span class="tc-prev" data-i18n="t10.card">Schrödinger'in Kedisi</span>
+        </span>
+        <span class="tc-actions">
+          <button type="button" class="tc-btn" data-i18n="card.info" onclick="cardInfo(10,event)">ⓘ Bilgi</button>
+          <button type="button" class="tc-btn tc-demo" data-i18n="card.demo" onclick="cardDemo(10,event)">▶ Hızlı Demo</button>
+        </span>
       <span class="tb-badge new">New · v1.2</span>
-      <span class="tg" id="tg10">+</span>
-    </div>
+        <span class="tg" id="tg10">+</span>
+      </div>
+      <div class="tc-panel" id="tc-panel-10"></div>
     <div class="tool-body" id="tb10">
       <div class="cat-grid">
         <div>
@@ -492,13 +572,21 @@ window.__qc={};
   </div>
 
   <!-- T11: TUNNELING -->
-  <div class="tool-card">
-    <div class="tool-header" onclick="tog(11)">
-      <span class="tn">11</span>
-      <span class="tt" data-i18n="t11.title">Kuantum Tünelleme</span>
+  <div class="tool-card tc11">
+      <div class="tool-header" onclick="tog(11)">
+        <span class="tc-ico">⚡</span>
+        <span class="tc-mid">
+          <span class="tt" data-i18n="t11.title">Kuantum Tünelleme</span>
+          <span class="tc-prev" data-i18n="t11.card">Kuantum Tünelleme</span>
+        </span>
+        <span class="tc-actions">
+          <button type="button" class="tc-btn" data-i18n="card.info" onclick="cardInfo(11,event)">ⓘ Bilgi</button>
+          <button type="button" class="tc-btn tc-demo" data-i18n="card.demo" onclick="cardDemo(11,event)">▶ Hızlı Demo</button>
+        </span>
       <span class="tb-badge new">New · v1.2</span>
-      <span class="tg" id="tg11">+</span>
-    </div>
+        <span class="tg" id="tg11">+</span>
+      </div>
+      <div class="tc-panel" id="tc-panel-11"></div>
     <div class="tool-body" id="tb11">
       <div class="tun-grid">
         <div>
@@ -534,13 +622,21 @@ window.__qc={};
   </div>
 
   <!-- T12: DOUBLE SLIT -->
-  <div class="tool-card">
-    <div class="tool-header" onclick="tog(12)">
-      <span class="tn">12</span>
-      <span class="tt" data-i18n="t12.title">Çift Yarık Deneyi</span>
+  <div class="tool-card tc12">
+      <div class="tool-header" onclick="tog(12)">
+        <span class="tc-ico">🌊</span>
+        <span class="tc-mid">
+          <span class="tt" data-i18n="t12.title">Çift Yarık Deneyi</span>
+          <span class="tc-prev" data-i18n="t12.card">Çift Yarık Deneyi</span>
+        </span>
+        <span class="tc-actions">
+          <button type="button" class="tc-btn" data-i18n="card.info" onclick="cardInfo(12,event)">ⓘ Bilgi</button>
+          <button type="button" class="tc-btn tc-demo" data-i18n="card.demo" onclick="cardDemo(12,event)">▶ Hızlı Demo</button>
+        </span>
       <span class="tb-badge new">New · v1.3</span>
-      <span class="tg" id="tg12">+</span>
-    </div>
+        <span class="tg" id="tg12">+</span>
+      </div>
+      <div class="tc-panel" id="tc-panel-12"></div>
     <div class="tool-body" id="tb12">
       <div class="ds-wrap">
         <div class="ds-canvas-wrap">
@@ -589,13 +685,21 @@ window.__qc={};
   </div>
 
   <!-- T13: QUANTUM WALK -->
-  <div class="tool-card">
-    <div class="tool-header" onclick="tog(13)">
-      <span class="tn">13</span>
-      <span class="tt" data-i18n="t13.title">Kuantum Yürüyüşü</span>
+  <div class="tool-card tc13">
+      <div class="tool-header" onclick="tog(13)">
+        <span class="tc-ico">🌀</span>
+        <span class="tc-mid">
+          <span class="tt" data-i18n="t13.title">Kuantum Yürüyüşü</span>
+          <span class="tc-prev" data-i18n="t13.card">Kuantum Yürüyüşü</span>
+        </span>
+        <span class="tc-actions">
+          <button type="button" class="tc-btn" data-i18n="card.info" onclick="cardInfo(13,event)">ⓘ Bilgi</button>
+          <button type="button" class="tc-btn tc-demo" data-i18n="card.demo" onclick="cardDemo(13,event)">▶ Hızlı Demo</button>
+        </span>
       <span class="tb-badge new">New · v1.0</span>
-      <span class="tg" id="tg13">+</span>
-    </div>
+        <span class="tg" id="tg13">+</span>
+      </div>
+      <div class="tc-panel" id="tc-panel-13"></div>
     <div class="tool-body" id="tb13">
       <div class="qw-grid">
         <div class="qw-canvas-wrap">
