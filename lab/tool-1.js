@@ -48,7 +48,57 @@ async function genQS(){
     addQH(n);
   }
 }
-function addQH(n){qh.unshift(n);if(qh.length>12)qh.pop();document.getElementById('qh').innerHTML=qh.map(x=>`<div class="qhi">${x.toLocaleString('tr-TR')}</div>`).join('')}
+function addQH(n){
+  qh.unshift(n);if(qh.length>12)qh.pop();
+  document.getElementById('qh').innerHTML=qh.map(x=>`<div class="qhi">${x.toLocaleString('tr-TR')}</div>`).join('');
+  try{try{q3dBuild()}catch(e){};q3dBurst()}catch(e){}
+}
+/* ══ T1 · 3D kuantum köpüğü arka planı ══ */
+let q3r=null;
+window._stop3d=window._stop3d||{};
+window._stop3d[1]=()=>{if(window.Q3D&&q3r){q3r.stop();q3r=null}};
+function q3dBuild(){
+  if(q3r&&!q3r.dead)return;
+  if(!window.Q3D||!window.THREE)return;
+  const o=Q3D.mount('qrng-3d',{cam:[0,0,2.4],fov:64,amb:.85,autoRot:false});
+  if(!o)return;
+  const g=o.g;
+  Q3D.stars(o,80,1.6,0.035,0.85);
+  o.parts=[];
+  for(let i=0;i<90;i++){
+    const m=new THREE.Mesh(new THREE.SphereGeometry(0.0055,6,5),Q3D.m(0x00c8f0,0.9));
+    m.position.set((Math.random()*2-1)*1.5,(Math.random()*2-1)*1.0,(Math.random()*2-1)*1.5);
+    g.add(m);
+    o.parts.push({m:m,ph:Math.random()*6.3,v:0.01+Math.random()*0.03});
+  }
+  o._core=Q3D.glow('rgba(0,225,255,0.9)',1.5);
+  o._core.position.z=0.6;g.add(o._core);
+  o.on.update=o=>(o.parts||[]).forEach(p=>{
+    p.m.position.y+=Math.sin(o.k*3+p.ph)*0.003;
+    p.m.position.x+=Math.cos(o.k*2.2+p.ph)*0.0018;
+    p.m.material.opacity=0.2+0.7*(0.4+0.6*Math.abs(Math.sin(o.k*4+p.ph)));
+    if(p.burst){
+      p.m.position.add(p.jd);
+      p.life-=0.09;
+      p.m.material.opacity=Math.max(0,p.life);
+      if(p.life<=0){g.remove(p.m);p.dead=true}
+    }
+  });
+  q3r={o,dead:false,stop:function(){if(this.o){this.o.stop();this.o=null}this.dead=true}};
+}
+function q3dBurst(){
+  if(!q3r||!q3r.o||!window.THREE)return;
+  if(q3r.o.parts.length>170)q3r.o.parts=q3r.o.parts.filter(p=>!p.dead);
+  const g=q3r.o.g;
+  for(let i=0;i<16;i++){
+    const m=new THREE.Mesh(new THREE.SphereGeometry(0.02,8,6),Q3D.m(0x00f0ff,1));
+    const seed=q3r.o.parts[(Math.random()*q3r.o.parts.length)|0];
+    m.position.copy(seed?seed.m.position:new THREE.Vector3(0,0,0.6));
+    const dir=new THREE.Vector3(Math.random()*2-1,Math.random()*2-1,Math.random()*2-1).normalize().multiplyScalar(0.02+Math.random()*0.06);
+    g.add(m);
+    q3r.o.parts.push({m:m,ph:Math.random()*6.3,v:0.01,jd:dir,life:1,burst:true});
+  }
+}
 function clearQ(){qh=[];document.getElementById('qh').innerHTML='';document.getElementById('qn').textContent='—'}
 const CHI_CRIT=[null,3.841,5.991,7.815,9.488,11.070,12.592,14.067,15.507,16.919,18.307,19.675,21.026,22.362,23.685,24.996,26.296,27.587,28.869,30.144,31.410,32.671,33.924,35.172,36.415,37.652,38.885,40.113,41.337,42.557,43.773,44.985];
 function chiToggle(){const p=document.getElementById('qstats');p.hidden=!p.hidden;if(!p.hidden&&document.getElementById('qbars').innerHTML==='')chiRun()}

@@ -115,6 +115,7 @@ window.__qc={};
     </div>
     <div class="tool-body" id="tb1">
       <div class="qrng-display">
+        <canvas id="qrng-3d" class="qlab-3d qrng-3d" data-export="qrng-foam"></canvas>
         <div class="qrng-num" id="qn">—</div>
         <div class="qrng-lbl" data-i18n="t1.lbl">Kuantum Süperpozisyon Tabanlı Rastgele Sayı</div>
         <div class="qwave"></div>
@@ -180,6 +181,7 @@ window.__qc={};
           <div id="cr" style="display:none;margin-top:16px;background:rgba(0,200,240,.03);border:1px solid rgba(0,200,240,.07);padding:14px">
             <div style="font-family:var(--fm);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:10px" data-i18n="t2.results">Ölçüm Sonuçları (1024 atış)</div>
             <div class="cr-bars" id="crb"></div>
+            <canvas id="crb3d" class="crb3d" data-export="quantum-circuit-outcomes" style="display:none"></canvas>
             <div class="cr-exact" id="crx" style="font-family:var(--fm);font-size:11px;color:var(--muted);margin-top:10px"></div>
           </div>
         </div>
@@ -468,7 +470,7 @@ window.__qc={};
     <div class="tool-body" id="tb10">
       <div class="cat-grid">
         <div>
-          <div class="cat-canvas-wrap"><canvas id="cat-canvas" data-export="schrodinger-cat" class="cat-canvas"></canvas></div>
+          <div class="cat-canvas-wrap"><canvas id="cat-canvas" data-export="schrodinger-cat" class="cat-canvas"></canvas><div class="qlab-ov" id="cat-ov"></div></div>
           <div class="cat-log" id="cat-log"><span data-i18n="t10.log.ready">Hazır — kutuyu kapatın ve açın.</span></div>
         </div>
         <div>
@@ -598,6 +600,10 @@ window.__qc={};
       <div class="qw-grid">
         <div class="qw-canvas-wrap">
           <canvas id="qw-canvas" data-export="quantum-walk" class="qw-canvas"></canvas>
+          <div class="qlab-ov qw-ov">
+            <span id="qw-legq" class="qw-leg"></span>
+            <span id="qw-stepv" class="qw-stp"></span>
+          </div>
         </div>
         <div>
           <div class="param-item">
@@ -635,6 +641,7 @@ window.__qc={};
 <!-- THREE.JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="lab-core.js"></script>
+<script src="lab/lab3d.js"></script>
 <script>
 /* ══ Çerez Onayı (KVKK 6698) ══ */
 (function(){

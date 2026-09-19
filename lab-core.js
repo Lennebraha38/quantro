@@ -35,14 +35,18 @@ async function tog(n){
   const open=tb.classList.toggle('open');
   tg.textContent=open?'×':'+';
   tg.classList.toggle('open',open);
-  if(!open)return;
+  if(!open){
+    if(window.Q3D){const id={1:'qrng-3d',2:'crb3d',9:'bloch-canvas',10:'cat-canvas',13:'qw-canvas'}[n];if(id)Q3D.stop(id)}
+    if(window._stop3d&&window._stop3d[n])try{window._stop3d[n]()}catch(e){}
+    return;
+  }
   try{if(window.gtag)gtag('event','lab_tool_open',{tool:n})}catch(e){}
   if(opening){
     tb.setAttribute('data-busy','');
     try{await loadScripts(TOOL_FILES[n]);}catch(e){tb.removeAttribute('data-busy');return}
     tb.removeAttribute('data-busy');
   }
-  if(n===1&&!_t1Init){_t1Init=true;qInit();}
+  if(n===1){if(!_t1Init){_t1Init=true;qInit()}if(typeof q3dBuild==='function')q3dBuild()}
   if(n===3&&!_t3Init){_t3Init=true;uU();}
   if(n===5){if(!window.heis3dInit)initHeis3D();uH();}
   if(n===6&&!window.bhInit)initBH();
