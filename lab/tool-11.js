@@ -62,13 +62,13 @@ function tunLoop(c){
   ctx.strokeRect(bl,h-30-wallV,br-bl,wallV);
   ctx.font='11px monospace';ctx.fillStyle='rgba(160,130,255,.9)';
   ctx.textAlign='center';
-  ctx.fillText('V₀='+V.toFixed(1)+' eV',(bl+br)/2,h-30-wallV-8);
+  ctx.fillText(t('t11.canvas.barrier').replace('{0}',V.toFixed(1)),(bl+br)/2,h-30-wallV-8);
   /* energy line */
   ctx.strokeStyle='rgba(0,200,240,.6)';ctx.setLineDash([5,4]);
   ctx.beginPath();ctx.moveTo(0,energyY);ctx.lineTo(w,energyY);ctx.stroke();
   ctx.setLineDash([]);
   ctx.fillStyle='rgba(0,200,240,.8)';ctx.textAlign='right';
-  ctx.fillText('E='+E.toFixed(1)+' eV',w-8,energyY-6);
+  ctx.fillText(t('t11.canvas.energy').replace('{0}',E.toFixed(1)),w-8,energyY-6);
 
   drawPkt(tunPkt.p,tunPkt.amp,k,sigma,bl,br,'#00c8f0');
   if(tunPkt.ref)drawPkt(tunPkt.ref.p,tunPkt.ref.amp,k,sigma,bl,br,'rgba(255,150,60,.9)');
@@ -76,10 +76,10 @@ function tunLoop(c){
   /* kuantum karar etiketi */
   ctx.font='11px monospace';ctx.textAlign='left';
   if(tunPkt.decided){
-    if(pass){ctx.fillStyle='rgba(0,200,240,.9)';ctx.fillText('⚛ GEÇTİ — gerçek kuantum kararı',10,16);}
-    else{ctx.fillStyle='rgba(255,150,60,.9)';ctx.fillText('⚛ YANSIDI — gerçek kuantum kararı',10,16);}
+    if(pass){ctx.fillStyle='rgba(0,200,240,.9)';ctx.fillText(t('t11.canvas.pass'),10,16);}
+    else{ctx.fillStyle='rgba(255,150,60,.9)';ctx.fillText(t('t11.canvas.reflect'),10,16);}
   }else{
-    ctx.fillStyle='rgba(255,255,255,.35)';ctx.fillText('⚛ süperpozisyon… (T='+(T*100).toFixed(1)+'%)',10,16);
+    ctx.fillStyle='rgba(255,255,255,.35)';ctx.fillText(t('t11.canvas.super').replace('{0}',(T*100).toFixed(1)),10,16);
   }
 
   /* motion — geçiş/yansıma kararı gerçek kuantum RNG'den (T olasılığıyla) */

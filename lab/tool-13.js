@@ -108,15 +108,15 @@ function qwDraw(){
   cx.strokeStyle='rgba(255,255,255,.08)';
   cx.beginPath();cx.moveTo(N*barW+barW/2,top);cx.lineTo(N*barW+barW/2,bottom);cx.stroke();
   cx.font='10px JetBrains Mono,monospace';
-  cx.fillStyle='rgba(0,200,240,.85)';cx.fillText('■ Kuantum',10,18);
-  cx.fillStyle='rgba(160,96,255,.85)';cx.fillText('■ Klasik',100,18);
+  cx.fillStyle='rgba(0,200,240,.85)';cx.fillText(t('t13.canvas.quantum'),10,18);
+  cx.fillStyle='rgba(160,96,255,.85)';cx.fillText(t('t13.canvas.classical'),100,18);
   cx.fillStyle='rgba(255,255,255,.28)';
-  cx.fillText('adım '+qw.step+'/'+qw.steps,W-92,18);
+  cx.fillText(t('t13.canvas.step').replace('{0}',qw.step).replace('{1}',qw.steps),W-92,18);
   const sQ=qwSigma(qp,N),sC=qwSigma(qw.cl,N);
   cx.fillStyle='rgba(0,200,240,.75)';
-  cx.fillText('σ_Q='+sQ.toFixed(2)+'  (teorik ≈'+(0.5*qw.step).toFixed(1)+')',10,H-22);
+  cx.fillText(t('t13.canvas.sigmaQ').replace('{0}',sQ.toFixed(2)).replace('{1}',(0.5*qw.step).toFixed(1)),10,H-22);
   cx.fillStyle='rgba(160,96,255,.75)';
-  cx.fillText('σ_C='+sC.toFixed(2)+'  (teorik ≈'+Math.sqrt(qw.step*4*qw.p*(1-qw.p)).toFixed(1)+')',248,H-22);
+  cx.fillText(t('t13.canvas.sigmaC').replace('{0}',sC.toFixed(2)).replace('{1}',Math.sqrt(qw.step*4*qw.p*(1-qw.p)).toFixed(1)),248,H-22);
 }
 function qwTick(ms){
   if(!qw.run)return;

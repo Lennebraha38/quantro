@@ -16,10 +16,16 @@ function uU(){
   age/=H0g;
   const tot=Om+Ol+Or;
   const geo=Math.abs(tot-1)<0.05?t('t3.geo.flat'):tot>1?t('t3.geo.closed'):t('t3.geo.open');
+  const omk=1-tot;
+  const q0=Or+Om/2-Ol;
   document.getElementById('ua').innerHTML=age.toFixed(2)+'<span> Gyr</span>';
   document.getElementById('ht').textContent=tH.toFixed(2)+' Gyr';
   document.getElementById('geo').textContent=geo;
   document.getElementById('nowt').textContent=age.toFixed(1)+' Gyr';
+  const okEl=document.getElementById('omk');
+  if(okEl)okEl.textContent=(omk>=0?'+':'−')+Math.abs(omk).toFixed(3);
+  const q0El=document.getElementById('q0');
+  if(q0El)q0El.textContent=(q0>=0?'+':'-')+Math.abs(q0).toFixed(3);
 }
 function rU(){document.getElementById('h0').value=67.4;document.getElementById('om').value=0.315;document.getElementById('ol').value=0.685;document.getElementById('orr').value=0.00009;uU()}
 uU();

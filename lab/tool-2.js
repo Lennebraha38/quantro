@@ -21,7 +21,18 @@ async function mc(){
   const slots=[0,0,0,0];
   for(const k in counts)slots[k]=counts[k];
   const mx=Math.max(...slots);
-  document.getElementById('crb').innerHTML=['|00⟩','|01⟩','|10⟩','|11⟩'].map((l,i)=>`<div class="crb-w"><div class="crb-val">${slots[i]}</div><div class="crb ${slots[i]===mx&&slots[i]>0?'active':''}" style="height:${mx>0?Math.round(slots[i]/mx*60):3}px"></div><div class="crb-lbl">${l}</div></div>`).join('');
+  const probs=qc.probabilities();
+  const total=slots.reduce((a,b)=>a+b,0)||1;
+  const states=['|00⟩','|01⟩','|10⟩','|11⟩'];
+  document.getElementById('crb').innerHTML=states.map((l,i)=>{
+    const mh=mx>0?Math.round(slots[i]/mx*60):3;
+    const eh=Math.max(2,Math.round(probs[i]*60));
+    return `<div class="crb-w"><div class="crb-val">${slots[i]}</div><div class="crb-track"><div class="crb ${slots[i]===mx&&slots[i]>0?'active':''}" style="height:${mh}px"></div><span class="crb-exp" style="height:${eh}px"></span></div><div class="crb-lbl">${l}</div><div class="crb-pct">${(probs[i]*100).toFixed(1)}%</div></div>`;
+  }).join('');
+  const ex=document.getElementById('crx');
+  if(ex)ex.innerHTML=`${t('t2.exact')}: ${states.map((l,i)=>
+    `<span class="crx-item">${l} <b style="color:var(--cyan)">${(probs[i]*100).toFixed(1)}%</b></span>`
+  ).join('<span class="crx-sep">·</span>')}`;
   document.getElementById('cr').style.display='block';
 }
 function bellDemo(){

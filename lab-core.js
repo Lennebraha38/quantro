@@ -52,6 +52,7 @@ async function tog(n){
   if(n===11)tunStart();
   if(n===12)dsStart();
   if(n===13)qwStart();
+  QLab.bindExports();
 }
 /* ══ HERO THREE.JS ══ */
 if(window.THREE&&document.getElementById('hero-canvas')){
@@ -402,6 +403,29 @@ tr:{
   "qc.body": "Gizliliğinize saygı duyuyoruz. Ziyaret istatistikleri için Google Analytics çerezleri (izleme amaçlı) kullanılabilir; bunlar için onayınızı istiyoruz. Onay verdiğinizde yalnızca izleme çerezleri yüklenir.",
   "qc.accept": "Kabul Et",
   "qc.reject": "Reddet",
+  "copy.hint": "Sonucu kopyalamak için tıkla",
+  "copy.ok": "✓ Kopyalandı",
+  "export.png": "PNG",
+  "t2.exact": "Teorik Olasılıklar (tam durum)",
+  "t3.omk": "Eğrilik Ωk",
+  "t3.q0": "Yavaşlama q₀",
+  "t10.canvas.stats.alive": "Canlı",
+  "t10.canvas.stats.dead": "Ölü",
+  "t10.canvas.stats.total": "Toplam",
+  "t10.canvas.alive.label": "|CANLI⟩",
+  "t10.canvas.dead.label": "|ÖLÜ⟩",
+  "t10.canvas.detector.paused": "DEDEKTÖR: BEKLEMEDE — kutu kapalı",
+  "t10.canvas.detector.collapsed": "DEDEKTÖR: ÇÖKTÜ — kutu açık",
+  "t11.canvas.pass": "⚛ GEÇTİ — gerçek kuantum kararı",
+  "t11.canvas.reflect": "⚛ YANSIDI — gerçek kuantum kararı",
+  "t11.canvas.super": "⚛ Süperpozisyon… (T={0}%)",
+  "t11.canvas.barrier": "V₀={0} eV",
+  "t11.canvas.energy": "E={0} eV",
+  "t13.canvas.quantum": "■ Kuantum",
+  "t13.canvas.classical": "■ Klasik",
+  "t13.canvas.step": "adım {0}/{1}",
+  "t13.canvas.sigmaQ": "σ_Q={0}  (teorik ≈{1})",
+  "t13.canvas.sigmaC": "σ_C={0}  (teorik ≈{1})",
 }};
 
 window.lastQStat=null;
@@ -512,6 +536,56 @@ const Qrng=(()=>{
   };
 })();
 window.Qrng=Qrng;
+
+/* ══ QLAB — paylaşılan profesyonel yardımcılar ══
+   Tüm araçların ortak kullandığı katman: kopyala (toast ile),
+   PNG dışa aktarma, bilimsel sayı biçimlendirme. */
+window.QLab=(()=>{
+  let _toast=null;
+  function toast(msg){
+    if(!_toast){_toast=document.createElement('div');_toast.id='qlab-toast';_toast.className='qlab-toast';document.body.appendChild(_toast)}
+    _toast.textContent=msg;
+    _toast.classList.add('show');
+    clearTimeout(_toast._h);_toast._h=setTimeout(()=>_toast.classList.remove('show'),1500);
+  }
+  function fmt(v,sig){
+    sig=sig||3;
+    if(!isFinite(v))return String(v);
+    const a=Math.abs(v);
+    if(a!==0&&(a>=1e6||a<1e-3))return Number(v).toExponential(sig-1);
+    if(a>=1e4)return Number(v).toPrecision(sig);
+    return Number(v).toFixed(sig).replace(/\.?0+$/,'')||'0';
+  }
+  function copy(text){
+    const s=String(text==null?'':text);
+    const done=()=>toast(t('copy.ok'));
+    if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(s).then(done).catch(()=>fb(s,done))}
+    else fb(s,done);
+    function fb(str,ok){
+      const ta=document.createElement('textarea');ta.value=str;ta.style.cssText='position:fixed;opacity:0;top:0';document.body.appendChild(ta);
+      try{ta.select();document.execCommand('copy')}catch(e){toast('✗')}ta.remove();ok();
+    }
+  }
+  function png(canvas,filename){
+    if(!canvas||!canvas.toDataURL)return;
+    const a=document.createElement('a');
+    a.download=filename||'quantro-lab.png';
+    a.href=canvas.toDataURL('image/png');
+    document.body.appendChild(a);a.click();a.remove();
+  }
+  function bindExports(){
+    document.querySelectorAll('canvas[data-export]').forEach(c=>{
+      if(c._qx)return;c._qx=true;
+      const wrap=c.parentElement;
+      if(!wrap)return;
+      const b=document.createElement('button');
+      b.type='button';b.className='qlab-xp';b.textContent=t('export.png');b.title=t('export.png');
+      b.onclick=e=>{e.preventDefault();e.stopPropagation();png(c,c.dataset.export+'.png')};
+      wrap.appendChild(b);
+    });
+  }
+  return {toast,fmt,copy,png,bindExports};
+})();
 
 /* ══ PWA ══ */
 if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(function(){})}

@@ -63,7 +63,7 @@ async function chiRun(){
   let chi=0;counts.forEach(c=>chi+=(c-exp)*(c-exp)/exp);
   const crit=CHI_CRIT[K-1],pass=chi<crit;
   let h='';
-  for(let i=0;i<K;i++){const r=counts[i]/exp;const hgt=Math.max(3,Math.min(120,Math.round(r*60)));h+=`<div class="qbar"><div class="qbar-f" style="height:${hgt}px"></div><div class="qbar-l">${i*16}–${i*16+15}</div><div class="qbar-v">${counts[i]}</div></div>`}
+  for(let i=0;i<K;i++){const r=counts[i]/exp;const hgt=Math.max(3,Math.min(120,Math.round(r*60)));h+=`<div class="qbar"><div class="qbar-f" style="height:${hgt}px"></div><span class="qbar-exp"></span><div class="qbar-l">${i*16}–${i*16+15}</div><div class="qbar-v">${counts[i]}</div></div>`}
   document.getElementById('qbars').innerHTML=h;
   el.innerHTML=(o.label?`<span style="color:${o.label?'var(--green)':'var(--gold)'}">${t(o.label)}</span><br>`:'')+`N=${N}, kova(K)=${K}, beklenen=${exp}, χ²=${chi.toFixed(2)} (serbestlik=${K-1}, kritik≈${crit})<br><b style="color:${pass?'var(--green)':'var(--red)'}">${pass?t('chi.ok'):t('chi.fail')}</b>`;
 }
@@ -73,3 +73,7 @@ function qInit(){
     qStat(lbl&&lbl!=='stat.none'?'stat.init.ok':'stat.init.fail',lbl&&lbl!=='stat.none'?'var(--green)':'var(--gold)');
   }).catch(()=>qStat('stat.init.fail','var(--gold)'));
 }
+(function(){
+  const qn=document.getElementById('qn');
+  if(qn){qn.title=t('copy.hint');qn.onclick=()=>{const v=qn.textContent.trim();if(v&&v!=='—')QLab.copy(v)}}
+})();

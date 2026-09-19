@@ -7,15 +7,15 @@ async function teleRun(){
   const log=document.getElementById('tele-log');
   log.innerHTML='';
   const L=[];
-  L.push(`<b>① Bell çifti</b> |β00⟩ = (|00⟩+|11⟩)/√2 — Alice'in q1'i ve Bob'un q2'si dolaşık`);
-  L.push(`<b>② Alice'in kübiti</b> |ψ⟩ = √0.7·|0⟩ + √0.3·|1⟩`);
-  L.push(`<b>③ Alice</b> CNOT(q0→q1) ve H(q0) uygular → q0 dolaşıklığa dahil`);
+  L.push(`<div>${t('t8.log.bell')}</div>`);
+  L.push(`<div>${t('t8.log.qubit')}</div>`);
+  L.push(`<div>${t('t8.log.step3')}</div>`);
   let bits=null;
   try{const o=await qBytes(2);bits=[o.bytes[0]&1,o.bytes[1]&1];}catch(e){bits=[qRNG(0,1),qRNG(0,1)]}
   const m0=bits[0],m1=bits[1];
-  L.push(`<b>④ Bell ölçümü</b> (gerçek kuantum rastgele): ${m0}${m1}`);
+  L.push(`<div>${t('t8.log.measure').replace('{0}',m0).replace('{1}',m1)}</div>`);
   const corr=(m0&&m1)?'ZX':m1?'X':m0?'Z':'I';
-  L.push(`<b>⑤ Bob</b> düzeltme: ${corr==='I'?'gerekmedi (I)':corr}`);
+  L.push(`<div>${t('t8.log.corr').replace('{0}',corr==='I'?t('t8.log.corr.none'):corr)}</div>`);
   const qc=new Quantro.QuantumCircuit(3);
   qc.ry(2*Math.acos(Math.sqrt(0.7)),0);
   qc.h(1);qc.cx(1,2);qc.cx(0,1);qc.h(0);
@@ -24,9 +24,9 @@ async function teleRun(){
   let one=0,tot=0;
   for(const k in counts){tot+=counts[k];if((parseInt(k,10)&1)===1)one+=counts[k]}
   const obs=(one/tot).toFixed(3);
-  L.push(`<b>⑥ Bob'un kübiti ölçüldü</b> (400 atış): P(|1⟩) = <b>${obs}</b> — beklenen 0.300`);
+  L.push(`<div>${t('t8.log.step6').replace('{0}',obs)}</div>`);
   const ok=parseFloat(obs)>=0.25&&parseFloat(obs)<=0.35;
-  L.push(`<span class="${ok?'ok':''}">${ok?'✓ Işınlanma doğrulandı — |ψ⟩ Bob\'ta birebir oluştu!':'≈ Beklenen aralıkta değil — tekrar dene'}</span>`);
+  L.push(`<span class="${ok?'ok':''}">${ok?t('t8.log.ok'):t('t8.log.no')}</span>`);
   let i=0;
   const iv=setInterval(()=>{
     if(i>=L.length){clearInterval(iv);return}

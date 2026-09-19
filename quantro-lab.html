@@ -180,6 +180,7 @@ window.__qc={};
           <div id="cr" style="display:none;margin-top:16px;background:rgba(0,200,240,.03);border:1px solid rgba(0,200,240,.07);padding:14px">
             <div style="font-family:var(--fm);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:10px" data-i18n="t2.results">Ölçüm Sonuçları (1024 atış)</div>
             <div class="cr-bars" id="crb"></div>
+            <div class="cr-exact" id="crx" style="font-family:var(--fm);font-size:11px;color:var(--muted);margin-top:10px"></div>
           </div>
         </div>
       </div>
@@ -224,6 +225,8 @@ window.__qc={};
             <div class="upd"><span class="upd-k" data-i18n="t3.hubble.time">Hubble Zamanı</span><span class="upd-v" id="ht">—</span></div>
             <div class="upd"><span class="upd-k" data-i18n="t3.horizon">Işık Ufku</span><span class="upd-v">46.5 Gly</span></div>
             <div class="upd"><span class="upd-k" data-i18n="t3.geometry">Geometri</span><span class="upd-v" id="geo">Düz (k=0)</span></div>
+            <div class="upd"><span class="upd-k" data-i18n="t3.omk">Eğrilik Ωk</span><span class="upd-v" id="omk">—</span></div>
+            <div class="upd"><span class="upd-k" data-i18n="t3.q0">Yavaşlama q₀</span><span class="upd-v" id="q0">—</span></div>
             <div style="margin-top:16px">
               <div style="font-family:var(--fm);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:8px" data-i18n="t3.timeline">Kozmik Zaman Çizelgesi</div>
               <div class="utl-item"><span class="utl-t">10⁻⁴³ s</span><span class="utl-d" data-i18n="t3.tl.planck">Planck Çağı</span></div>
@@ -296,7 +299,7 @@ window.__qc={};
             <input class="slider" type="range" id="dx" min="0.1" max="10" value="1" step="0.01" oninput="uH()">
           </div>
           <div class="heis-canvas-wrap">
-            <canvas id="heis-canvas" width="400" height="200" style="width:100%;height:auto;display:block"></canvas>
+            <canvas id="heis-canvas" data-export="heisenberg" width="400" height="200" style="width:100%;height:auto;display:block"></canvas>
           </div>
           <div class="explain" style="margin-top:12px">
             <p data-i18n="t5.explain"><strong>Heisenberg Belirsizlik İlkesi:</strong> Bir parçacığın konumunu ne kadar kesin bilirsek, momentumunu o kadar az bileceğiz. <strong>Δx · Δp ≥ ℏ/2</strong> — Bu bir ölçüm hatası değil, doğanın kendisidir.</p>
@@ -335,7 +338,7 @@ window.__qc={};
         <button class="btn btn-g" onclick="document.getElementById('bh-mass').value=4000000;uBH();" data-i18n="t6.sgra">Sgr A* (Samanyolu)</button>
         <button class="btn btn-g" onclick="document.getElementById('bh-mass').value=6500000000;uBH();" data-i18n="t6.m87">M87*</button>
       </div>
-      <canvas id="bh-canvas" class="canvas3d" style="height:320px"></canvas>
+      <canvas id="bh-canvas" data-export="kerr-black-hole" class="canvas3d" style="height:320px"></canvas>
       <div class="bh-info">
         <div class="bh-stat"><div class="bh-stat-val" id="bh-rs">—</div><div class="bh-stat-lbl" data-i18n="t6.rs">Schwarzschild Yarıçapı</div></div>
         <div class="bh-stat"><div class="bh-stat-val" id="bh-temp">—</div><div class="bh-stat-lbl" data-i18n="t6.temp">Hawking Sıcaklığı</div></div>
@@ -365,7 +368,7 @@ window.__qc={};
             <input class="slider" type="range" id="ls" min="380" max="780" value="656" step="1" oninput="uD()">
           </div>
           <div class="dop-canvas-wrap">
-            <canvas id="dop-canvas" width="400" height="160" style="width:100%;height:auto;display:block"></canvas>
+            <canvas id="dop-canvas" data-export="doppler" width="400" height="160" style="width:100%;height:auto;display:block"></canvas>
           </div>
           <div class="explain" style="margin-top:12px"><p data-i18n="t7.explain">Kozmolojik kırmızıya kayma: <strong>z = (λ_obs - λ₀)/λ₀</strong>. Hubble yasası: <strong>v = H₀ · d</strong>. Evren genişledikçe uzak galaksilerden gelen ışık kırmızıya kayar.</p></div>
         </div>
@@ -426,7 +429,7 @@ window.__qc={};
     <div class="tool-body" id="tb9">
       <div class="bloch-grid">
         <div>
-          <div class="bloch-canvas-wrap"><canvas id="bloch-canvas" class="bloch-canvas"></canvas></div>
+          <div class="bloch-canvas-wrap"><canvas id="bloch-canvas" data-export="bloch-sphere" class="bloch-canvas"></canvas></div>
           <div class="explain"><p data-i18n="t9.explain">Bloch küresi bir kübitin durumunu birim küre üzerinde gösterir. <strong>Kuzey kutup |0⟩</strong>, <strong>güney kutup |1⟩</strong>, ekvator saf süperpozisyonlardır (|+⟩, |−⟩, |+i⟩, |−i⟩). θ/φ kaydırıcıları veya ön ayar butonlarıyla durumu değiştirin; küreyi sürükleyerek görünümü döndürebilirsiniz.</p></div>
         </div>
         <div>
@@ -465,7 +468,7 @@ window.__qc={};
     <div class="tool-body" id="tb10">
       <div class="cat-grid">
         <div>
-          <div class="cat-canvas-wrap"><canvas id="cat-canvas" class="cat-canvas"></canvas></div>
+          <div class="cat-canvas-wrap"><canvas id="cat-canvas" data-export="schrodinger-cat" class="cat-canvas"></canvas></div>
           <div class="cat-log" id="cat-log"><span data-i18n="t10.log.ready">Hazır — kutuyu kapatın ve açın.</span></div>
         </div>
         <div>
@@ -497,7 +500,7 @@ window.__qc={};
     <div class="tool-body" id="tb11">
       <div class="tun-grid">
         <div>
-          <div class="tun-canvas-wrap"><canvas id="tun-canvas" class="tun-canvas"></canvas></div>
+          <div class="tun-canvas-wrap"><canvas id="tun-canvas" data-export="tunneling" class="tun-canvas"></canvas></div>
           <div class="tun-res">
             <div class="tun-t" id="tun-tv">—</div>
             <div class="tun-lbl" data-i18n="t11.t">İletim Olasılığı (T)</div>
@@ -539,7 +542,7 @@ window.__qc={};
     <div class="tool-body" id="tb12">
       <div class="ds-wrap">
         <div class="ds-canvas-wrap">
-          <canvas id="ds-canvas" class="ds-canvas"></canvas>
+          <canvas id="ds-canvas" data-export="double-slit" class="ds-canvas"></canvas>
           <div class="ds-stat" id="ds-stat"></div>
           <div class="ds-count" id="ds-count"><b id="ds-cv">0</b> / <b id="ds-nv">200</b></div>
         </div>
@@ -594,7 +597,7 @@ window.__qc={};
     <div class="tool-body" id="tb13">
       <div class="qw-grid">
         <div class="qw-canvas-wrap">
-          <canvas id="qw-canvas" class="qw-canvas"></canvas>
+          <canvas id="qw-canvas" data-export="quantum-walk" class="qw-canvas"></canvas>
         </div>
         <div>
           <div class="param-item">

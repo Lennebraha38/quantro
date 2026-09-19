@@ -36,7 +36,7 @@ async function catOpen(){
 function updateCatLog(){
   const alive=catLog.filter(x=>x.alive).length;
   const el=document.getElementById('cat-log2');
-  el.innerHTML=`<div>${t('t10.log.ready')}</div><div style="margin-top:8px"><span>●</span> Canlı: ${alive} &nbsp; <span>●</span> Ölü: ${catLog.length-alive} &nbsp; <span>●</span> Toplam: ${catLog.length}</div>`;
+  el.innerHTML=`<div>${t('t10.log.ready')}</div><div style="margin-top:8px"><span>●</span> ${t('t10.canvas.stats.alive')}: ${alive} &nbsp; <span>●</span> ${t('t10.canvas.stats.dead')}: ${catLog.length-alive} &nbsp; <span>●</span> ${t('t10.canvas.stats.total')}: ${catLog.length}</div>`;
 }
 function catDraw(){
   const c=document.getElementById('cat-canvas');
@@ -118,12 +118,12 @@ function catDraw(){
       ctx.save();ctx.translate(cxm,cym);ctx.rotate(0.02);ctx.fillText('😿',0,0);ctx.restore();
     }
     ctx.font='bold 22px monospace';ctx.fillStyle=catState==='alive'?'#7dffb0':'#ff6b6b';
-    ctx.fillText(catState==='alive'?'|CANLI⟩':'|ÖLÜ⟩',ix+iw/2,iy+30);
+    ctx.fillText(catState==='alive'?t('t10.canvas.alive.label'):t('t10.canvas.dead.label'),ix+iw/2,iy+30);
   }
 
   /* status footer */
   ctx.font='11px monospace';ctx.textAlign='center';ctx.fillStyle='rgba(232,237,245,.45)';
-  ctx.fillText('detector: '+(catState==='super'?'PAUSED — box closed':'COLLAPSED — box open'),w/2,h-18);
+  ctx.fillText(catState==='super'?t('t10.canvas.detector.paused'):t('t10.canvas.detector.collapsed'),w/2,h-18);
 
   if(catState==='super'){catRaf=requestAnimationFrame(catDraw)}
 }
