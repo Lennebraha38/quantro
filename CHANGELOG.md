@@ -3,6 +3,19 @@
 Tüm önemli değişiklikler bu dosyada not edilir. Format: [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/),
 sürüm: [SemVer](https://semver.org/).
 
+## 1.6.0 — 2026-09-19
+
+### Eklendi
+- **Başarılar bölümü** (`index.html#basari`) — 3 savunulabilir "ilk" iddiası:
+  açık kaynak (MIT) çok araçlı set · canlı kuantum rastgelelik (ANU) · 8 dilli
+  araç seti + blog. `app.js`'de 8 dile çevrildi.
+- README'ye **"Savunulabilir ilk iddiaları"** bölümü (niş + kanıt zinciri).
+
+### Değişti
+- Riskli genel iddialar kaldırıldı (savunulamaz): "Türkiye'de İlk · 13 Araç",
+  "Türkiye'nin ilk interaktif kuantum araç seti" → niş/savunulabilir ifadelere
+  çevirildi (index, lab hero/badge/intro, tüm `lab/i18n-*.js` + fallback HTML).
+
 ## 1.5.0 — 2026-09-19
 
 ### Eklendi

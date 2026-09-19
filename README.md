@@ -26,6 +26,25 @@ bağımlılıksız (dependency-free) çalışır.
 
 ---
 
+## Savunulabilir "ilk" iddiaları
+
+Genel ("Türkiye'de ilk kuantum site") iddialarından kaçınılır — aşağıdaki üçü niş ve
+ölçülebilir olduğu için sitede (Başarılar bölümü, `index.html#basari`) ve lab
+için söylenir:
+
+1. **İlk Türkçe, açık kaynak (MIT) lisanslı çok araçlı kuantum + astrofizik araç seti**
+   — rakip Türkçe platformlar (Quantum4Edu, QuantumLab Pro) açık kaynak değil.
+2. **İlk Türkçe canlı kuantum rastgelelik motoru** — ANU'nun fiziksel kuantum kaynağına
+   bağlanır (`api/anu.js`); rakiplerde gerçek fiziksel kaynak yok.
+3. **İlk 8 dilli kuantum araç seti ve blog** — arayüz + içerik birlikte
+   TR/EN/FR/ES/IT/RU/KO/AR.
+
+Kanıt zinciri: git commit geçmişi + `CHANGELOG.md` tarihleri + Wayback/Archive kaydı
+(kampanya yayınlanınca) + canlı demo (Vercel). Bu metinler `app.js` ve `lab/i18n-*.js`
+içinde 8 dilde tutulur.
+
+---
+
 ## Mimari
 
 ```

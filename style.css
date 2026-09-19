@@ -557,6 +557,18 @@ section{padding:120px 0}
 .ex-card:hover .ex-arrow{opacity:1}
 @media(max-width:900px){.ex-grid{grid-template-columns:1fr;gap:10px}}
 
+/* ══════════════════════════════════════
+   ACHIEVEMENTS
+   ══════════════════════════════════════ */
+.ach-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:52px}
+.ach-card{background:var(--deep);border:1px solid rgba(0,200,240,.08);padding:40px 34px;position:relative;overflow:hidden;transition:border-color .3s,transform .3s,background .3s;display:flex;flex-direction:column;gap:18px;min-height:180px}
+.ach-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),transparent);opacity:0;transition:opacity .3s}
+.ach-card:hover{border-color:var(--cyanM);background:var(--surface);transform:translateY(-4px)}
+.ach-card:hover::before{opacity:1}
+.ach-num{font-family:var(--fm);font-size:12px;letter-spacing:3px;color:var(--cyan);opacity:.8}
+.ach-txt{font-family:var(--fd);font-size:17px;line-height:1.6;letter-spacing:-.2px;color:var(--text);margin:0;font-weight:600}
+@media(max-width:900px){.ach-grid{grid-template-columns:1fr;gap:10px}.ach-card{min-height:0}}
+
 
 /* ══════════════════════════════════════
    FOOTER
