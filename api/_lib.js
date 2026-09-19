@@ -7,6 +7,17 @@ const AUTH_SECRET = process.env.AUTH_SECRET || '';
 
 const SESSION_TTL = 2 * 60 * 60 * 1000; // 2 saat
 
+// ── Admin şifre doğrulama (scrypt, salt = AUTH_SECRET türevi) ──
+// Plaintext değer hiçbir yerde karşılaştırılmaz; yalnızca scrypt türevi
+// timing-safe karşılaştırılır. Beklenen anahtar boot'ta bir kez hesaplanır.
+const _pwSalt = crypto.createHash('sha256').update(AUTH_SECRET || 'quantro').digest('base64url').slice(0, 16);
+const _expected = ADMIN_PASSWORD ? crypto.scryptSync(ADMIN_PASSWORD, _pwSalt, 32) : null;
+
+function verifyAdminPassword(candidate) {
+  if (!_expected || candidate == null) return false;
+  return safeEqual(crypto.scryptSync(String(candidate), _pwSalt, 32), _expected);
+}
+
 function supabaseFetch(path, opts = {}) {
   return fetch(`${SB}${path}`, {
     ...opts,
@@ -100,5 +111,5 @@ function readJson(req) {
 module.exports = {
   SB, SERVICE, ADMIN_PASSWORD, AUTH_SECRET, SESSION_TTL,
   supabaseFetch, signToken, verifyToken, safeEqual, rateLimiter,
-  requireAuth, clientIp, readJson
+  requireAuth, clientIp, readJson, verifyAdminPassword
 };

@@ -56,6 +56,14 @@ test('safeEqual — eşit/uzunluk farkı/içerik farkı', () => {
   assert.equal(L.safeEqual('abc', 'abd'), false);
 });
 
+test('verifyAdminPassword — scrypt doğrulama', () => {
+  assert.equal(L.verifyAdminPassword('sifre'), true, 'doğru şifre kabul');
+  assert.equal(L.verifyAdminPassword('yanlis'), false, 'yanlış şifre red');
+  assert.equal(L.verifyAdminPassword(''), false);
+  assert.equal(L.verifyAdminPassword(null), false);
+  assert.equal(L.verifyAdminPassword('sifre' + ' '), false, 'trailing boşluk red');
+});
+
 test('rateLimiter — pencere içi izin/red + pencere dışı yeniden izin', async () => {
   const lim = L.rateLimiter(3, 40);
   assert.equal(lim('k'), true);

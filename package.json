@@ -14,10 +14,15 @@
   "license": "MIT",
   "scripts": {
     "build": "node scripts/build.mjs",
-    "test": "node --test test/*.test.js",
+    "test": "node --test test/quantro.test.js test/_lib.test.js",
+    "test:e2e": "node --test test/e2e.test.js",
+    "test:coverage": "node --test --experimental-test-coverage test/quantro.test.js test/_lib.test.js",
     "check": "npm run build && npm test"
   },
   "engines": {
     "node": ">=18"
+  },
+  "devDependencies": {
+    "playwright": "^1.62.1"
   }
 }

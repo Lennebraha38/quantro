@@ -1,4 +1,4 @@
-const { ADMIN_PASSWORD, AUTH_SECRET, safeEqual, rateLimiter, clientIp, readJson, signToken } = require('./_lib');
+const { ADMIN_PASSWORD, AUTH_SECRET, verifyAdminPassword, rateLimiter, clientIp, readJson, signToken } = require('./_lib');
 
 const limiter = rateLimiter(10, 10 * 60 * 1000);
 
@@ -21,7 +21,7 @@ module.exports = async function handler(req, res) {
     res.status(400).json({ error: 'bad-request' });
     return;
   }
-  if (!safeEqual(body.password, ADMIN_PASSWORD)) {
+  if (!verifyAdminPassword(body.password)) {
     res.status(401).json({ error: 'unauthorized' });
     return;
   }

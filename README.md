@@ -73,15 +73,25 @@ bağımlılıksız (dependency-free) çalışır.
 
 ## Başlangıç
 
-Gereksinim: **Node.js ≥ 18** (yerleşik CI de dâhil hiçbir npm paketi gerekmez).
+Gereksinim: **Node.js ≥ 18**. Runtime (site + `/api`) harici npm paketi içermez;
+yalnızca test araçları devDependency'dir.
 
 ```bash
 git clone https://github.com/Lennebraha38/Quantro-Vercel-Project.git
 cd Quantro-Vercel-Project
-npm install --package-lock-only   # lock senkronu (opsiyonel)
-npm run build                     # bütünlük kontrolü
-npm test                          # 23 test (simülatör + API güvenliği)
-npm run check                     # build + test birlikte
+npm ci                # lock'a göre kurulum
+npm run build         # bütünlük kontrolü (HTML referansları + vercel.json)
+npm test              # 24 birim testi (simülatör + API güvenliği)
+npm run test:coverage # aynı testler + kapsam raporu (Node ≥ 20)
+npm run check         # build + test birlikte
+```
+
+Tarayıcı E2E testleri (9 senaryo) için önce Playwright tarayıcısı:
+
+```bash
+npm ci
+npx playwright install chromium
+npm run test:e2e      # sayfa render, lab akışları, i18n, PWA, CSP ihlali
 ```
 
 Vercel CLI ile yerel çalıştırma:
@@ -102,7 +112,7 @@ vercel dev        # http://localhost:3000
 | `SUPABASE_URL` | Evet | Supabase proje URL'i (`https://xxxx.supabase.co`) |
 | `SUPABASE_SERVICE_ROLE_KEY` | Evet | Service-role key (sadece serverless tarafı — tarayıcıya asla) |
 | `AUTH_SECRET` | Evet | Panel JWT imzalama anahtarı (uzun, rastgele) |
-| `ADMIN_PASSWORD` | Evet | Panel şifresi (timing-safe karşılaştırma; uzun/rastgele değer kullanın) |
+| `ADMIN_PASSWORD` | Evet | Panel şifresi (scrypt türeviyle timing-safe doğrulanır; uzun/rastgele değer kullanın) |
 | `RESEND_API_KEY` | Kayıt bildirimi için | Resend API anahtarı |
 | `NOTIFY_EMAIL` | Kayıt bildirimi için | Alıcı e-posta |
 | `NOTIFY_FROM` | Hayır | Gönderici (`Quantro <onboarding@resend.dev>` varsayılan) |
@@ -128,6 +138,12 @@ HMAC-SHA256 (`AUTH_SECRET`) ile imzalı, 2 saat geçerli bir oturum token'ı ür
 ### Güvenlik notları
 
 - Service-role key yalnızca sunucuda tutulur; tarayıcı koduna asla düşmez.
+- Şifre ve token'lar **timing-safe** karşılaştırılır; admin şifresi plaintext
+  hatırlanmaz — `api/_lib.js#verifyAdminPassword` `scrypt` türevi anahtarla
+  doğrular (salt, `AUTH_SECRET`'ten türer).
+- **CSP** sıkılaştırılmıştır: script kaynaklarında `unsafe-eval` yok; bu E2E
+  ile doğrulanır (`test/e2e.test.js` — sıfır ihlal). İzin verilen kaynaklar
+  `vercel.json`'dadır.
 - Yorum/iletişim uçları honeypot + IP tabanlı **rate-limit** korumalıdır.
 - Supabase'te **RLS** açıktır; doğrudan istemci erişimi veriye erişemez.
 
@@ -136,13 +152,24 @@ HMAC-SHA256 (`AUTH_SECRET`) ile imzalı, 2 saat geçerli bir oturum token'ı ür
 ## Test & CI
 
 ```bash
-npm test
-└── test/quantro.test.js   # Kuantum simülatör davranışları (X, H, Bell, GHZ, PRNG)
-└── test/_lib.test.js      # JWT doğrulama, rate-limiter, auth katmanı
+npm test                 # 24 birim testi
+└── test/quantro.test.js # Kuantum simülatör (X, H, CX, Bell, GHZ, seeded PRNG)
+└── test/_lib.test.js    # JWT doğrulama, scrypt, rate-limiter, auth katmanı
+
+npm run test:e2e         # 9 E2E (Playwright + Chromium)
+└── test/e2e.test.js     # sayfa render, lab(13 araç/QRNG/QuantumCircuit),
+                         # admin giriş, PWA, i18n+kalıcılık, CSP sıfır-ihlal
+
+npm run test:coverage    # birim + kapsam raporu (Node ≥ 20)
 ```
 
-GitHub Actions (`.github/workflows/node.js.yml`) her push'ta şunları çalıştırır:
-`npm ci` → `npm run build` → `npm test`. Bağımlılık yok, network gerektirmez.
+GitHub Actions (`.github/workflows/node.js.yml`) 3 iş çalıştırır:
+- **unit** — `npm ci` → `npm run build` → `npm test` (Node 18/20/22)
+- **coverage** — `npm run test:coverage` (PR'lerde)
+- **e2e** — `npx playwright install --with-deps chromium` → `npm run test:e2e`
+
+PR'lere Vercel önizleme deploy'u: `.github/workflows/preview.yml`
+(`VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` secret'larını gerektirir).
 
 ---
 
@@ -151,7 +178,9 @@ GitHub Actions (`.github/workflows/node.js.yml`) her push'ta şunları çalışt
 - **Vanilla JS** (build sistemi yok, doğrudan `module.exports`/global uyumlu)
 - Node 18+ Serverless Functions + Supabase (Postgres/RLS)
 - Resend (e-posta), ANU Qrng (gerçek kuantum rastgelelik)
-- PWA Service Worker, JSON-LD SEO, 8 dil i18n (`/lab/` klasörü)
+- PWA Service Worker, JSON-LD SEO, **8 dil i18n** — ana site (`app.js` I18N)
+  ve lab (`/lab/` + `lab-core.js`) ortak `qlang` ile; RTL (Arapça) destekli.
+  Kapsam notu: blog sayfası ve yönetim paneli Türkçe'dir.
 
 ---
 

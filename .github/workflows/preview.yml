@@ -1,0 +1,31 @@
+# PR için önizleme deploy'u (Vercel)
+# Kullanabilmek için repo secrets: VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID
+# Not: main push olduğunda Vercel zaten otomatik deploy eder; bu workflow PR'lere
+# ayrı önizleme URL'i sağlar.
+
+name: Deploy Preview
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      deployments: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Vercel PR Deploy
+        id: preview
+        uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-comment: true
+          github-deployment: true
+          working-directory: .

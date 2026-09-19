@@ -1,6 +1,4 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
-
+# CI: birim test + build + coverage; ayrı job'da Playwright E2E (gerçek Chromium)
 name: Node.js CI
 
 on:
@@ -10,14 +8,12 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
-
+  unit:
+    name: Birim (Node ${{ matrix.node-version }})
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: [18.x, 20.x, 22.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
     - uses: actions/checkout@v4
@@ -27,5 +23,39 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm ci
-    - run: npm run build --if-present
+    - run: npm run build
     - run: npm test
+
+  coverage:
+    name: Kapsam (Node 22)
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22.x
+        cache: 'npm'
+    - run: npm ci
+    - run: npm run test:coverage
+
+  e2e:
+    name: E2E (Playwright · Chromium)
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22.x
+        cache: 'npm'
+    - run: npm ci
+    - run: npx playwright install --with-deps chromium
+    - name: E2E smoke + CSP doğrulaması
+      run: npm run test:e2e
+    - name: E2E raporu (screenshot arşiv)
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: playwright-testlog
+        path: test-results/
+        if-no-files-found: ignore
