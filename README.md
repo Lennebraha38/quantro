@@ -81,17 +81,17 @@ git clone https://github.com/Lennebraha38/Quantro-Vercel-Project.git
 cd Quantro-Vercel-Project
 npm ci                # lock'a göre kurulum
 npm run build         # bütünlük kontrolü (HTML referansları + vercel.json)
-npm test              # 24 birim testi (simülatör + API güvenliği)
-npm run test:coverage # aynı testler + kapsam raporu (Node ≥ 20)
+npm test              # 39 birim testi (simülatör + API güvenliği + handler'lar)
+npm run test:coverage # eşik kontrollü kapsam (satır 80% · dal 75% · fonksiyon 85%)
 npm run check         # build + test birlikte
 ```
 
-Tarayıcı E2E testleri (9 senaryo) için önce Playwright tarayıcısı:
+Tarayıcı E2E testleri (10 senaryo) için önce Playwright tarayıcısı:
 
 ```bash
 npm ci
 npx playwright install chromium
-npm run test:e2e      # sayfa render, lab akışları, i18n, PWA, CSP ihlali
+npm run test:e2e      # sayfa render, lab akışları, i18n(+blog), PWA, CSP ihlali
 ```
 
 Vercel CLI ile yerel çalıştırma:
@@ -146,21 +146,28 @@ HMAC-SHA256 (`AUTH_SECRET`) ile imzalı, 2 saat geçerli bir oturum token'ı ür
   `vercel.json`'dadır.
 - Yorum/iletişim uçları honeypot + IP tabanlı **rate-limit** korumalıdır.
 - Supabase'te **RLS** açıktır; doğrudan istemci erişimi veriye erişemez.
+- İstemci **hata raporlama** bağımlılıksızdır: `api/report.js` tarayıcıdaki
+  alınmamış hataları (en fazla 1 / 10 sn) `errors` tablosuna yazar
+  (`supabase-errors.sql` şeması) — arıza durumunda sessizce geçer, siteyi
+  etkilemez.
 
 ---
 
 ## Test & CI
 
 ```bash
-npm test                 # 24 birim testi
+npm test                 # 39 birim testi
 └── test/quantro.test.js # Kuantum simülatör (X, H, CX, Bell, GHZ, seeded PRNG)
 └── test/_lib.test.js    # JWT doğrulama, scrypt, rate-limiter, auth katmanı
+└── test/api-handlers.test.js # api/auth · comments · blog (mock fetch)
 
-npm run test:e2e         # 9 E2E (Playwright + Chromium)
+npm run test:e2e         # 10 E2E (Playwright + Chromium)
 └── test/e2e.test.js     # sayfa render, lab(13 araç/QRNG/QuantumCircuit),
-                         # admin giriş, PWA, i18n+kalıcılık, CSP sıfır-ihlal
+                         # admin giriş, PWA, i18n+kalıcılık, blog i18n, CSP sıfır-ihlal
 
-npm run test:coverage    # birim + kapsam raporu (Node ≥ 20)
+npm run test:coverage    # birim + kapsam eşiği kontrolü (Node ≥ 20)
+                         # eşikler: satır 80% · dal 75% · fonksiyon 85%
+                         # (scripts/coverage.mjs — altında kalırsa exit 1)
 ```
 
 GitHub Actions (`.github/workflows/node.js.yml`) 3 iş çalıştırır:
@@ -178,9 +185,9 @@ PR'lere Vercel önizleme deploy'u: `.github/workflows/preview.yml`
 - **Vanilla JS** (build sistemi yok, doğrudan `module.exports`/global uyumlu)
 - Node 18+ Serverless Functions + Supabase (Postgres/RLS)
 - Resend (e-posta), ANU Qrng (gerçek kuantum rastgelelik)
-- PWA Service Worker, JSON-LD SEO, **8 dil i18n** — ana site (`app.js` I18N)
-  ve lab (`/lab/` + `lab-core.js`) ortak `qlang` ile; RTL (Arapça) destekli.
-  Kapsam notu: blog sayfası ve yönetim paneli Türkçe'dir.
+- PWA Service Worker, JSON-LD SEO, **8 dil i18n** — ana site (`app.js` I18N),
+  lab (`/lab/` + `lab-core.js`) ve blog arayüzü (`blog-i18n.js`) ortak `qlang`
+  ile; RTL (Arapça) destekli. Kapsam notu: yönetim paneli Türkçe'dir.
 
 ---
 

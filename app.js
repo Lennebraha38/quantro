@@ -1446,3 +1446,22 @@ applyLang();
   b.querySelector('.qc-reject').onclick=function(){set(false)};
   window.__qcInfo=function(){};
 })();
+
+/* ══ Hata raporlama (opsiyonel; arıza olursa sessiz) ══ */
+(function(){
+  var muteUntil=0;
+  function send(msg,stack){
+    var now=Date.now();
+    if(now<muteUntil)return;
+    muteUntil=now+10000; /* en fazla 1 rapor / 10 sn */
+    try{
+      fetch('/api/report',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({message:msg,stack:stack,page:location.pathname||'',lang:(document.documentElement&&document.documentElement.lang)||'tr'})
+      }).catch(function(){});
+    }catch(e){}
+  }
+  window.addEventListener('error',function(e){send(e.message||'error',(e.error&&e.error.stack)||'')});
+  window.addEventListener('unhandledrejection',function(e){send('unhandledrejection:'+String(e.reason&&e.reason.message||e.reason||''),(e.reason&&e.reason.stack)||'')});
+})();

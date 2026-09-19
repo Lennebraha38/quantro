@@ -208,3 +208,23 @@ test('i18n: dil değişimi çalışır ve kalıcıdır', async () => {
   await r.close();
   await c.close();
 });
+
+test('i18n: blog arayüzü de dil değişimini takip eder', async () => {
+  const c = await browser.newContext();
+  const r = await open('/blog.html', c);
+  const hero0 = (await r.page.textContent('[data-blog-i18n="hero.ey"]')).trim();
+  const home0 = (await r.page.textContent('[data-blog-i18n="nav.home"]')).trim();
+  assert.equal(hero0, 'Quantro · Araştırma Blogu', 'blog varsayılan TR');
+  assert.equal(home0, '← Ana Sayfa');
+  await r.page.evaluate(() => { try { localStorage.setItem('qlang', 'en'); } catch (e) {} });
+  await r.page.reload({ waitUntil: 'domcontentloaded' });
+  const hero1 = (await r.page.textContent('[data-blog-i18n="hero.ey"]')).trim();
+  const home1 = (await r.page.textContent('[data-blog-i18n="nav.home"]')).trim();
+  const sub = (await r.page.textContent('[data-blog-i18n="hero.sub"]')).trim();
+  assert.equal(hero1, 'Quantro · Research Blog', 'blog arayüzü EN olmalı');
+  assert.equal(home1, '← Home');
+  assert.match(sub, /Quantum mechanics/i);
+  assert.equal(r.violations.length, 0, `blog i18n CSP ihlali: ${r.violations.join('|')}`);
+  await r.close();
+  await c.close();
+});

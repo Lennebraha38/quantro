@@ -14,9 +14,9 @@
   "license": "MIT",
   "scripts": {
     "build": "node scripts/build.mjs",
-    "test": "node --test test/quantro.test.js test/_lib.test.js",
+    "test": "node --test test/quantro.test.js test/_lib.test.js test/api-handlers.test.js",
     "test:e2e": "node --test test/e2e.test.js",
-    "test:coverage": "node --test --experimental-test-coverage test/quantro.test.js test/_lib.test.js",
+    "test:coverage": "node scripts/coverage.mjs",
     "check": "npm run build && npm test"
   },
   "engines": {

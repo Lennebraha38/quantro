@@ -3,6 +3,18 @@
 Tüm önemli değişiklikler bu dosyada not edilir. Format: [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/),
 sürüm: [SemVer](https://semver.org/).
 
+## 1.2.0 — 2026-09-19
+
+### Eklendi
+- **Kalan kalite açıkları**:
+  - `test/api-handlers.test.js` → 15 API handler testi (auth/comments/blog, mock fetch); toplam 39 birim testi.
+  - `scripts/coverage.mjs` → kapsam eşiği zorlaması (satır 80% · dal 75% · fonksiyon 85%); `npm run test:coverage` eşik altında exit 1.
+  - **Blog arayüzü i18n** — `blog-i18n.js`, ana site ve lab ile aynı `qlang`/`#langbtn` üzerinden 8 dil + RTL (Arapça); blog yazılarının kendisi TR kalır.
+  - **İstemci hata raporlama** — `api/report.js` + `app.js` global error hook + `supabase-errors.sql`; bağımlılıksız, fail-safe.
+
+### Değişti
+- E2E 9 → 10 senaryo (blog dil değişimi).
+
 ## 1.1.0 — 2026-09-19
 
 ### Eklendi

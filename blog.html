@@ -58,6 +58,7 @@ window.__qc={};
 <noscript><link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@300;400;500&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet"></noscript>
 <link rel="stylesheet" href="css/base.css">
 <link rel="stylesheet" href="css/blog.css">
+<script src="blog-i18n.js" defer></script>
 </head>
 <body>
 
@@ -68,8 +69,8 @@ window.__qc={};
   <div class="ni">
     <a href="index.html" class="nl">Q<em>U</em>ANTRO</a>
     <div class="nav-right">
-      <a href="index.html" class="nb">← Ana Sayfa</a>
-      
+      <a href="index.html" class="nb" data-blog-i18n="nav.home">← Ana Sayfa</a>
+      <button class="nb" id="langbtn" onclick="blogToggleLang()" style="background:none;cursor:pointer;font-family:var(--fm);font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--cyan);border:1px solid rgba(0,200,240,.25);padding:10px 16px;transition:background .2s,color .2s">TR</button>
     </div>
   </div>
 </nav>
@@ -77,17 +78,17 @@ window.__qc={};
 <!-- LIST VIEW -->
 <div class="view active" id="view-list">
   <div class="blog-hero">
-    <div class="blog-ey"><span>Quantro · Araştırma Blogu</span></div>
-    <h1 class="blog-h1">ARAŞTIRMA<br><span class="o">BLOGU</span></h1>
-    <p class="blog-sub">Kuantum mekaniği, astrofizik ve ileri araştırma yazıları.</p>
+    <div class="blog-ey"><span data-blog-i18n="hero.ey">Quantro · Araştırma Blogu</span></div>
+    <h1 class="blog-h1"><span data-blog-i18n="hero.h1a">ARAŞTIRMA</span><br><span class="o" data-blog-i18n="hero.h1b">BLOGU</span></h1>
+    <p class="blog-sub" data-blog-i18n="hero.sub">Kuantum mekaniği, astrofizik ve ileri araştırma yazıları.</p>
   </div>
   <div class="blog-list">
     <div class="blog-search">
-      <input type="text" id="search-input" class="search-input" placeholder="Yazılarda ara... (başlık, özet, etiket)" oninput="filterPosts(currentTag,activeBtn)">
+      <input type="text" id="search-input" class="search-input" placeholder="Yazılarda ara... (başlık, özet, etiket)" data-blog-i18n-ph="search.ph" oninput="filterPosts(currentTag,activeBtn)">
     </div>
     <div class="blog-filter" id="filter-bar"></div>
     <div class="posts-grid" id="posts-grid">
-      <div class="loading">Yazılar yükleniyor</div>
+      <div class="loading" data-blog-i18n="loading">Yazılar yükleniyor</div>
     </div>
   </div>
 </div>
@@ -95,7 +96,7 @@ window.__qc={};
 <!-- POST VIEW -->
 <div class="view" id="view-post">
   <div class="post-view">
-    <button class="back-btn" onclick="showList()">← Tüm Yazılar</button>
+    <button class="back-btn" onclick="showList()" data-blog-i18n="back">← Tüm Yazılar</button>
     <span class="pv-emoji" id="pv-emoji"></span>
     <div class="pv-tags" id="pv-tags"></div>
     <h1 class="pv-title" id="pv-title"></h1>
@@ -106,30 +107,30 @@ window.__qc={};
     </div>
     <div class="pv-stats">
       <button class="like-btn" id="pv-like" onclick="likePost(currentSlug,this,event)"><span class="lb-ic">♡</span> <b class="lb-n">0</b></button>
-      <span class="cm-toggle" style="cursor:default"><span>💬</span> <b id="pv-cm-n">0</b> <span>Yorum</span></span>
+      <span class="cm-toggle" style="cursor:default"><span>💬</span> <b id="pv-cm-n">0</b> <span data-blog-i18n="cm.lbl">Yorum</span></span>
     </div>
     <div class="pv-share" id="pv-share"></div>
     <div class="pv-content" id="pv-content"></div>
 
     <!-- RELATED -->
     <div class="pv-related" id="pv-related" style="display:none">
-      <div class="cm-title">İlgili Yazılar</div>
+      <div class="cm-title" data-blog-i18n="related">İlgili Yazılar</div>
       <div class="related-grid" id="related-grid"></div>
     </div>
 
     <!-- COMMENTS -->
     <div class="pv-comments">
-      <div class="cm-title">Yorumlar <span id="cm-count"></span></div>
-      <div class="cm-list" id="cm-list"><div class="cm-empty">Yorumlar yükleniyor…</div></div>
+      <div class="cm-title" data-blog-i18n="cm.title">Yorumlar <span id="cm-count"></span></div>
+      <div class="cm-list" id="cm-list"><div class="cm-empty" data-blog-i18n="cm.empty">Yorumlar yükleniyor…</div></div>
       <div class="cm-form">
-        <div class="cm-form-head">Yorum Yap</div>
+        <div class="cm-form-head" data-blog-i18n="cm.form">Yorum Yap</div>
         <div class="cm-row">
-          <input class="cm-input" id="cm-name" placeholder="Adınız *" maxlength="80" autocomplete="name">
-          <input class="cm-input" id="cm-email" placeholder="E-posta (isteğe bağlı)" maxlength="254" autocomplete="email">
+          <input class="cm-input" id="cm-name" data-blog-i18n-ph="cm.name" placeholder="Adınız *" maxlength="80" autocomplete="name">
+          <input class="cm-input" id="cm-email" data-blog-i18n-ph="cm.email" placeholder="E-posta (isteğe bağlı)" maxlength="254" autocomplete="email">
         </div>
         <input class="cm-input hp" id="cm-website" tabindex="-1" autocomplete="off" aria-hidden="true">
-        <textarea class="cm-input cm-text" id="cm-content" placeholder="Yorumunuz… *" maxlength="1200"></textarea>
-        <button class="cm-btn" id="cm-submit" onclick="submitComment()">Gönder</button>
+        <textarea class="cm-input cm-text" id="cm-content" data-blog-i18n-ph="cm.content" placeholder="Yorumunuz… *" maxlength="1200"></textarea>
+        <button class="cm-btn" id="cm-submit" onclick="submitComment()" data-blog-i18n="cm.submit">Gönder</button>
         <div class="cm-status" id="cm-status"></div>
       </div>
     </div>
@@ -139,8 +140,8 @@ window.__qc={};
 <footer>
   <div class="fi">
     <a href="index.html" class="fl">Q<em>U</em>ANTRO</a>
-    <span class="fc">© <span id="fyear">2025</span> Quantro ARGE · Kayseri, Türkiye</span>
-    <span class="fc" style="color:rgba(0,200,240,.25)">Araştırma Blogu</span>
+    <span class="fc" id="ft-copy">© <span id="fyear">2025</span> Quantro ARGE · Kayseri, Türkiye</span>
+    <span class="fc" style="color:rgba(0,200,240,.25)" data-blog-i18n="ft.tag">Araştırma Blogu</span>
   </div>
 </footer>
 
