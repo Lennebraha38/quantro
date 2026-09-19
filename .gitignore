@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Environment / secrets (asla commit etme)
+.env
+.env.*
+!.env.example
+*.local
+.vercel/
+
+# Build / logs
+dist/
+build/
+*.log
+npm-debug.log*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.swp
+
+# Test coverage
+coverage/
+.nyc_output/

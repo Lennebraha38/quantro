@@ -1,0 +1,49 @@
+/* ═══════════════════════════════════════════════════
+   QUANTRO · DESIGN BASE
+   Tüm sayfaların ortak temeli: reset, tasarım token'ları,
+   body, scrollbar, focus ve KVKK çerez onayı.
+   Sayfaya özel stiller ayrı dosyalardadır:
+   style.css (ana site) · css/blog.css · css/lab.css · css/admin.css
+   ═══════════════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --void:    #020810;
+  --deep:    #07111f;
+  --surface: #0d1f35;
+  --subtle:  #1e3248;
+  --cyan:    #00c8f0;
+  --cyanD:   rgba(0,200,240,0.12);
+  --cyanM:   rgba(0,200,240,0.35);
+  --text:    #e8edf5;
+  --muted:   #7a93a8;
+  --red:     #ff4466;
+  --green:   #00f0a0;
+  --gold:    #f0c040;
+  --purple:  #a060ff;
+  --fd:'Syne',sans-serif;
+  --fb:'Space Grotesk',sans-serif;
+  --fm:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{background:var(--void);color:var(--text);font-family:var(--fb);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:var(--void)}
+::-webkit-scrollbar-thumb{background:var(--cyanM)}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+
+/* ══ Cookie Consent (KVKK) — tek kaynak ══ */
+.qc-cookie{position:fixed;left:0;right:0;bottom:0;z-index:9999;background:rgba(4,10,20,.97);border-top:1px solid rgba(0,200,240,.25);padding:18px 24px;display:none}
+.qc-cookie.show{display:block}
+.qc-inner{max-width:1100px;margin:0 auto;display:flex;gap:24px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.qc-text{flex:1 1 480px;font-family:var(--fb);font-size:13px;line-height:1.6;color:var(--muted)}
+.qc-text strong{color:var(--text);font-family:var(--fd)}
+.qc-btns{display:flex;gap:12px;flex-wrap:wrap}
+.qc-btn{border:none;cursor:pointer;font-family:var(--fm);font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:12px 22px;transition:opacity .2s}
+.qc-btn:hover{opacity:.8}
+.qc-accept{background:var(--cyan);color:#020810;font-weight:700}
+.qc-reject{background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,.18)}
+.qc-link{color:var(--cyan);text-decoration:underline;margin-left:6px}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.1ms!important}
+}

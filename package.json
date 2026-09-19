@@ -1,0 +1,23 @@
+{
+  "name": "quantro",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Quantro — Kuantum ve Astrofizik ARGE · statik site + Vercel serverless API",
+  "keywords": [
+    "kuantum",
+    "astrofizik",
+    "AGRE",
+    "quantum",
+    "vercel",
+    "supabase"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test test/*.test.js",
+    "check": "npm run build && npm test"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

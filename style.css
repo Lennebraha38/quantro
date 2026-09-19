@@ -523,17 +523,7 @@ section{padding:120px 0}
   margin-top:16px;font-family:var(--fm);font-size:11px;
   letter-spacing:1px;text-align:center;min-height:16px;
 }
-/* ══ Cookie Consent (KVKK) ══ */
-.qc-cookie{position:fixed;left:0;right:0;bottom:0;z-index:9999;background:rgba(4,10,20,.97);border-top:1px solid rgba(0,200,240,.25);padding:18px 24px;display:none}.qc-cookie.show{display:block}
-.qc-inner{max-width:1100px;margin:0 auto;display:flex;gap:24px;align-items:center;flex-wrap:wrap;justify-content:space-between}
-.qc-text{flex:1 1 480px;font-family:var(--fb);font-size:13px;line-height:1.6;color:var(--muted)}
-.qc-text strong{color:var(--text);font-family:var(--fd)}
-.qc-btns{display:flex;gap:12px;flex-wrap:wrap}
-.qc-btn{border:none;cursor:pointer;font-family:var(--fm);font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:12px 22px;transition:opacity .2s}
-.qc-btn:hover{opacity:.8}
-.qc-accept{background:var(--cyan);color:#020810;font-weight:700}
-.qc-reject{background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,.18)}
-.qc-link{color:var(--cyan);text-decoration:underline;margin-left:6px}
+/* ══ Cookie Consent (KVKK) — ortak: css/base.css ══ */
 .cf-status.ok{color:var(--cyan)}
 .cf-status.err{color:#ff6b6b}
 @media(max-width:540px){.cf-row{grid-template-columns:1fr}}
@@ -637,6 +627,4 @@ footer{background:var(--deep);border-top:1px solid rgba(0,200,240,.07);padding:4
   .contact-inner{padding:0 24px}
   #blog-list{grid-template-columns:1fr!important}
 }
-@media(prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.1ms!important}
-}
+/* @media(prefers-reduced-motion) — ortak: css/base.css */
