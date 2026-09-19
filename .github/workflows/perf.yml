@@ -1,0 +1,43 @@
+name: Perf — PageSpeed (Alan + Lab)
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 3 * * *'   # her gece
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'blog.html'
+      - 'style.css'
+      - 'app.js'
+      - 'blog-*.js'
+      - 'admin-i18n.js'
+      - 'sw.js'
+      - 'manifest.webmanifest'
+
+permissions:
+  contents: read
+
+jobs:
+  metrics:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Kurulum
+        run: npm ci
+      - name: Alan + Lab metrikleri (PageSpeed Insights)
+        env:
+          PSI_API_KEY: ${{ secrets.PSI_API_KEY }}
+        run: |
+          node scripts/metrics.mjs https://quantro-1.vercel.app mobile | tee pagespeed-metrics.log
+      - name: Metrik logunu kaydet
+        uses: actions/upload-artifact@v4
+        with:
+          name: pagespeed-metrics
+          path: pagespeed-metrics.log
+          if-no-files-found: error

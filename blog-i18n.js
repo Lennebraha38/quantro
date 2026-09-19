@@ -19,6 +19,8 @@
       'cm.empty': 'Yorumlar yükleniyor…', 'cm.form': 'Yorum Yap',
       'cm.name': 'Adınız *', 'cm.email': 'E-posta (isteğe bağlı)',
       'cm.content': 'Yorumunuz… *', 'cm.submit': 'Gönder',
+      'share': 'Paylaş', 'wa': 'WhatsApp', 'copy': 'Kopyala', 'copied': 'Kopyalandı',
+      'reply': '↩ Yanıtla', 'like': 'Beğen',
       'ft.tag': 'Araştırma Blogu', 'ft.copy': '© {0} Quantro ARGE · Kayseri, Türkiye'
     },
     en: {
@@ -32,6 +34,8 @@
       'cm.empty': 'Loading comments…', 'cm.form': 'Leave a Comment',
       'cm.name': 'Your name *', 'cm.email': 'Email (optional)',
       'cm.content': 'Your comment… *', 'cm.submit': 'Submit',
+      'share': 'Share', 'wa': 'WhatsApp', 'copy': 'Copy', 'copied': 'Copied',
+      'reply': '↩ Reply', 'like': 'Like',
       'ft.tag': 'Research Blog', 'ft.copy': '© {0} Quantro ARGE · Kayseri, Türkiye'
     },
     fr: {
@@ -45,6 +49,8 @@
       'cm.empty': 'Chargement des commentaires…', 'cm.form': 'Commenter',
       'cm.name': 'Votre nom *', 'cm.email': 'E-mail (facultatif)',
       'cm.content': 'Votre commentaire… *', 'cm.submit': 'Envoyer',
+      'share': 'Partager', 'wa': 'WhatsApp', 'copy': 'Copier', 'copied': 'Copié',
+      'reply': '↩ Répondre', 'like': 'Aimer',
       'ft.tag': 'Blog de recherche', 'ft.copy': '© {0} Quantro ARGE · Kayseri, Türkiye'
     },
     es: {
@@ -58,6 +64,8 @@
       'cm.empty': 'Cargando comentarios…', 'cm.form': 'Comentar',
       'cm.name': 'Tu nombre *', 'cm.email': 'Correo (opcional)',
       'cm.content': 'Tu comentario… *', 'cm.submit': 'Enviar',
+      'share': 'Compartir', 'wa': 'WhatsApp', 'copy': 'Copiar', 'copied': 'Copiado',
+      'reply': '↩ Responder', 'like': 'Me gusta',
       'ft.tag': 'Blog de investigación', 'ft.copy': '© {0} Quantro ARGE · Kayseri, Turquía'
     },
     it: {
@@ -71,6 +79,8 @@
       'cm.empty': 'Caricamento commenti…', 'cm.form': 'Commenta',
       'cm.name': 'Il tuo nome *', 'cm.email': 'Email (facoltativa)',
       'cm.content': 'Il tuo commento… *', 'cm.submit': 'Invia',
+      'share': 'Condividi', 'wa': 'WhatsApp', 'copy': 'Copia', 'copied': 'Copiato',
+      'reply': '↩ Rispondi', 'like': 'Mi piace',
       'ft.tag': 'Blog di ricerca', 'ft.copy': '© {0} Quantro ARGE · Kayseri, Turchia'
     },
     ru: {
@@ -84,6 +94,8 @@
       'cm.empty': 'Загрузка комментариев…', 'cm.form': 'Оставить комментарий',
       'cm.name': 'Ваше имя *', 'cm.email': 'Email (необязательно)',
       'cm.content': 'Ваш комментарий… *', 'cm.submit': 'Отправить',
+      'share': 'Поделиться', 'wa': 'WhatsApp', 'copy': 'Копировать', 'copied': 'Скопировано',
+      'reply': '↩ Ответить', 'like': 'Нравится',
       'ft.tag': 'Исследовательский блог', 'ft.copy': '© {0} Quantro ARGE · Кайсери, Турция'
     },
     ko: {
@@ -97,6 +109,8 @@
       'cm.empty': '댓글 불러오는 중…', 'cm.form': '댓글 작성',
       'cm.name': '이름 *', 'cm.email': '이메일 (선택)',
       'cm.content': '댓글… *', 'cm.submit': '전송',
+      'share': '공유', 'wa': 'WhatsApp', 'copy': '복사', 'copied': '복사됨',
+      'reply': '↩ 댓글 달기', 'like': '좋아요',
       'ft.tag': '연구 블로그', 'ft.copy': '© {0} Quantro ARGE · 카이세리, 튀르키예'
     },
     ar: {
@@ -110,6 +124,8 @@
       'cm.empty': 'جارٍ تحميل التعليقات…', 'cm.form': 'أضف تعليقًا',
       'cm.name': 'اسمك *', 'cm.email': 'البريد الإلكتروني (اختياري)',
       'cm.content': 'تعليقك… *', 'cm.submit': 'إرسال',
+      'share': 'مشاركة', 'wa': 'WhatsApp', 'copy': 'نسخ', 'copied': 'تم النسخ',
+      'reply': '↩ رد', 'like': 'إعجاب',
       'ft.tag': 'مدونة الأبحاث', 'ft.copy': '© {0} Quantro ARGE · قيصري، تركيا'
     }
   };
@@ -144,9 +160,13 @@
     LANG = LANGS[(LANGS.indexOf(LANG) + 1) % LANGS.length];
     try { localStorage.setItem('qlang', LANG); } catch (e) {}
     apply();
+    if (window.__blogOnLangSwitch) { try { window.__blogOnLangSwitch(); } catch (e) {} }
   }
 
+  function currentLang() { return LANG; }
+
   window.blogT = t;
+  window.blogLang = currentLang;
   window.blogToggleLang = toggle;
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
   else apply();

@@ -47,13 +47,18 @@ bağımlılıksız (dependency-free) çalışır.
     feed.js        RSS/feed
     anu.js         Kuantum rastgelelik proxy (ANU Qrng)
   lab/             Laboratuvar araç içerikleri (i18n: 8 dil)
-  blog-articles/   Blog yazıları (Markdown)
-  insta/           Tanıtım/tasarım prototipleri
+  blog-articles/   Blog yazıları (Markdown, `<slug>.<lang>.md` — TR ve EN)
+  tools/
+    import-blog.mjs   blog-articles → Supabase (blog_posts + blog_posts_i18n)
   scripts/
     build.mjs      Build / bütünlük kontrolü (HTML referans doğrulaması)
+    coverage.mjs   Kapsam eşiği kontrolü (satır 80 · dal 75 · fonksiyon 85)
+    metrics.mjs    PageSpeed Insights: ALAN (CrUX) + LAB (Lighthouse)
   test/            Node testleri (node:test)
   supabase-security.sql   Güvenlik politikaları (RLS)
   supabase-comments-v2.sql Yorum tabloları
+  supabase-blog-i18n.sql  İçerik çevirileri (blog_posts_i18n)
+  supabase-errors.sql     Hata raporlama tablosu
 ```
 
 ### API uçları
@@ -81,12 +86,12 @@ git clone https://github.com/Lennebraha38/Quantro-Vercel-Project.git
 cd Quantro-Vercel-Project
 npm ci                # lock'a göre kurulum
 npm run build         # bütünlük kontrolü (HTML referansları + vercel.json)
-npm test              # 39 birim testi (simülatör + API güvenliği + handler'lar)
+npm test              # 44 birim testi (simülatör + API güvenliği + handler'lar + içerik-i18n)
 npm run test:coverage # eşik kontrollü kapsam (satır 80% · dal 75% · fonksiyon 85%)
 npm run check         # build + test birlikte
 ```
 
-Tarayıcı E2E testleri (10 senaryo) için önce Playwright tarayıcısı:
+Tarayıcı E2E testleri (12 senaryo) için önce Playwright tarayıcısı:
 
 ```bash
 npm ci
@@ -121,7 +126,22 @@ vercel dev        # http://localhost:3000
 
 1. `supabase-security.sql`'i **SQL Editor**'da çalıştır (RLS + kullanıcı rolleri).
 2. `supabase-comments-v2.sql`'i çalıştır (blog/comment/like tabloları).
-3. `vercel.json`'daki CORS/orijin kısıtlarını kendi domain'ine göre güncelle.
+3. `supabase-blog-i18n.sql`'i çalıştır (içerik çeviri tablosu `blog_posts_i18n`).
+4. `supabase-errors.sql`'i çalıştır (hata raporlama tablosu, opsiyonel).
+5. `vercel.json`'daki CORS/orijin kısıtlarını kendi domain'ine göre güncelle.
+
+### Blog içeriği
+
+Yazılar `blog-articles/<slug>.<lang>.md` olarak sürülür (TR kaynak + çeviriler).
+Üstbilgi: `# Başlık`, `**Emoji:**`, `**Etiketler:**`/`**Tags:**`, `**Özet:**`/`**Summary:**`.
+Supabase'e yüklemek için (service-role):
+
+```bash
+SUPABASE_URL=... SUPABASE_SERVICE_ROLE_KEY=... node tools/import-blog.mjs
+```
+
+TR kaynak `blog_posts`'a, tüm diller `blog_posts_i18n`'e yazılır. Tarayıcıda
+`blog.html` aktif dili (qlang) çeker, çeviri yoksa TR içeriği gösterir.
 
 ---
 
@@ -156,10 +176,11 @@ HMAC-SHA256 (`AUTH_SECRET`) ile imzalı, 2 saat geçerli bir oturum token'ı ür
 ## Test & CI
 
 ```bash
-npm test                 # 39 birim testi
+npm test                 # 44 birim testi
 └── test/quantro.test.js # Kuantum simülatör (X, H, CX, Bell, GHZ, seeded PRNG)
 └── test/_lib.test.js    # JWT doğrulama, scrypt, rate-limiter, auth katmanı
 └── test/api-handlers.test.js # api/auth · comments · blog (mock fetch)
+└── test/localize.test.js     # blog içerik yerelleştirme (blog-localize.js)
 
 npm run test:e2e         # 12 E2E (Playwright + Chromium)
 └── test/e2e.test.js     # sayfa render, lab(13 araç/QRNG/QuantumCircuit),
@@ -169,12 +190,18 @@ npm run test:e2e         # 12 E2E (Playwright + Chromium)
 npm run test:coverage    # birim + kapsam eşiği kontrolü (Node ≥ 20)
                          # eşikler: satır 80% · dal 75% · fonksiyon 85%
                          # (scripts/coverage.mjs — altında kalırsa exit 1)
+
+npm run metrics:field    # PageSpeed Insights (PSI_API_KEY gerekir)
+                         # ALAN = gerçek kullanıcı (CrUX) · LAB = Lighthouse
 ```
 
 GitHub Actions (`.github/workflows/node.js.yml`) 3 iş çalıştırır:
 - **unit** — `npm ci` → `npm run build` → `npm test` (Node 18/20/22)
 - **coverage** — `npm run test:coverage` (PR'lerde)
 - **e2e** — `npx playwright install --with-deps chromium` → `npm run test:e2e`
+
+Gece performans işi `.github/workflows/perf.yml`: canlı site için PageSpeed
+Alan (CrUX) + Lab (Lighthouse) metriklerini toplar (secret: `PSI_API_KEY`).
 
 PR'lere Vercel önizleme deploy'u: `.github/workflows/preview.yml`
 (`VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` secret'larını gerektirir).
@@ -189,6 +216,9 @@ PR'lere Vercel önizleme deploy'u: `.github/workflows/preview.yml`
 - PWA Service Worker, JSON-LD SEO, **8 dil i18n** — ana site (`app.js` I18N),
   lab (`/lab/` + `lab-core.js`) ve blog arayüzü (`blog-i18n.js`) ortak `qlang`
   ile; RTL (Arapça) destekli. Yönetim paneli TR/EN (`admin-i18n.js`).
+  **Blog içeriği**: TR kaynak dosyalar `blog-articles/*.tr.md`, İngilizce
+  çeviriler `*.en.md` → `blog_posts_i18n` üzerinden aktif dille gösterilir
+  (`blog-localize.js`); çeviri yoksa TR yazı gösterilir.
 - **Core Web Vitals** E2E içinde ölçülür (`test/e2e.test.js` — CWV senaryosu):
   FCP/LCP < 4000 ms ve CLS < 0.1 hedefi, index + blog sayfalarında
   sınır ihlali olursa test kızar.

@@ -58,6 +58,7 @@ window.__qc={};
 <noscript><link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@300;400;500&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet"></noscript>
 <link rel="stylesheet" href="css/base.css">
 <link rel="stylesheet" href="css/blog.css">
+<script src="blog-localize.js" defer></script>
 <script src="blog-i18n.js" defer></script>
 </head>
 <body>
@@ -167,6 +168,24 @@ function showList(){
 /* FETCH POSTS */
 const SBH={'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY};
 let stats={comments:{},likes:{}};
+
+/* İÇERİK YERELLEŞTİRME (blog_posts_i18n + blog-localize.js) */
+let i18nMap={};
+async function fetchTranslations(){
+  try{
+    const rows=await fetch(`${SB_URL}/rest/v1/blog_posts_i18n?select=slug,lang,title,summary,content`,{headers:SBH}).then(r=>r.json());
+    i18nMap=(window.blogLocalize&&blogLocalize.buildIndex(Array.isArray(rows)?rows:[]))||{};
+  }catch(e){i18nMap={};}
+}
+function localizedPost(p){
+  return (window.blogLocalize&&window.blogLang)?blogLocalize.localizePost(p,i18nMap,blogLang()):p;
+}
+function fmtDate(p){
+  return (window.blogLocalize&&window.blogLang)?blogLocalize.formatDate(p.created_at,blogLang()):new Date(p.created_at).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'});
+}
+function readTxt(p){
+  return (window.blogLocalize&&window.blogLang)?blogLocalize.readTime(p.content,blogLang()):'—';
+}
 
 async function fetchCounts(){
   try{
@@ -311,6 +330,7 @@ async function fetchPosts(){
     });
     const data=await res.json();
     allPosts=data||[];
+    await fetchTranslations();
     renderPosts(allPosts);
     renderFilters(allPosts);
     fetchCounts();
@@ -324,7 +344,8 @@ async function fetchPosts(){
 function renderPosts(posts){
   const grid=document.getElementById('posts-grid');
   if(!posts.length){grid.innerHTML='<div class="loading">Henüz yazı yok</div>';return}
-  grid.innerHTML=posts.map(p=>{
+  grid.innerHTML=posts.map(src=>{
+    const p=localizedPost(src);
     const s=p.slug;
     return `
     <div class="post-card" onclick="openPost('${s}')">
@@ -333,25 +354,25 @@ function renderPosts(posts){
       <div class="post-title">${p.title}</div>
       <div class="post-summary">${p.summary}</div>
       <div class="post-meta">
-        <span class="post-date">${new Date(p.created_at).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'})}</span>
-        <span class="post-read">${Math.ceil(p.content.split(' ').length/200)} dk okuma →</span>
+        <span class="post-date">${fmtDate(p)}</span>
+        <span class="post-read">${readTxt(p)} →</span>
       </div>
       <div class="post-stats">
-        <button class="like-btn" data-slug="${s}" onclick="likePost('${s}',this,event)"><span class="lb-ic">♡</span> <b class="lb-n">0</b></button>
-        <button class="cm-toggle" data-slug="${s}" onclick="toggleCardComments('${s}',event)"><span>💬</span> <b class="cm-n">0</b> <span class="cm-lbl">Yorum</span></button>
-        <button class="share-card" onclick="sharePostCard('${s}',event)" title="Paylaş"><span>🔗</span> <span class="sc-lbl">Paylaş</span></button>
+        <button class="like-btn" data-slug="${s}" onclick="likePost('${s}',this,event)" title="${window.blogT?blogT('like'):'Beğen'}"><span class="lb-ic">♡</span> <b class="lb-n">0</b></button>
+        <button class="cm-toggle" data-slug="${s}" onclick="toggleCardComments('${s}',event)"><span>💬</span> <b class="cm-n">0</b> <span class="cm-lbl">${window.blogT?blogT('cm.lbl'):'Yorum'}</span></button>
+        <button class="share-card" onclick="sharePostCard('${s}',event)" title="${window.blogT?blogT('share'):'Paylaş'}"><span>🔗</span> <span class="sc-lbl">${window.blogT?blogT('share'):'Paylaş'}</span></button>
       </div>
       <div class="card-comments" id="cms-${s}" style="display:none" onclick="event.stopPropagation()">
-        <div class="cm-list" id="cml-${s}"><div class="cm-empty">Yorumlar yükleniyor…</div></div>
+        <div class="cm-list" id="cml-${s}"><div class="cm-empty">${window.blogT?blogT('cm.empty'):'Yorumlar yükleniyor…'}</div></div>
         <div class="cm-form">
-          <div class="cm-form-head">Yorum Yap</div>
+          <div class="cm-form-head">${window.blogT?blogT('cm.form'):'Yorum Yap'}</div>
           <div class="cm-row">
-            <input class="cm-input" id="cn-${s}" placeholder="Adınız *" maxlength="80" autocomplete="name">
-            <input class="cm-input" id="ce-${s}" placeholder="E-posta (isteğe bağlı)" maxlength="254" autocomplete="email">
+            <input class="cm-input" id="cn-${s}" placeholder="${window.blogT?blogT('cm.name'):'Adınız *'}" maxlength="80" autocomplete="name">
+            <input class="cm-input" id="ce-${s}" placeholder="${window.blogT?blogT('cm.email'):'E-posta (isteğe bağlı)'}" maxlength="254" autocomplete="email">
           </div>
           <input class="cm-input hp" id="cw-${s}" tabindex="-1" autocomplete="off" aria-hidden="true">
-          <textarea class="cm-input cm-text" id="ct-${s}" placeholder="Yorumunuz… *" maxlength="1200"></textarea>
-          <button class="cm-btn" onclick="submitCardComment('${s}')">Gönder</button>
+          <textarea class="cm-input cm-text" id="ct-${s}" placeholder="${window.blogT?blogT('cm.content'):'Yorumunuz… *'}" maxlength="1200"></textarea>
+          <button class="cm-btn" onclick="submitCardComment('${s}')">${window.blogT?blogT('cm.submit'):'Gönder'}</button>
           <div class="cm-status" id="cs-${s}"></div>
         </div>
       </div>
@@ -376,7 +397,8 @@ function filterPosts(tag,btn){
   let list=allPosts;
   if(tag)list=list.filter(p=>(p.tags||[]).includes(tag));
   if(q)list=list.filter(p=>{
-    const hay=(p.title+' '+(p.summary||'')+' '+(p.tags||[]).join(' ')).toLowerCase();
+    const loc=localizedPost(p);
+    const hay=(loc.title+' '+(loc.summary||'')+' '+(p.tags||[]).join(' ')).toLowerCase();
     return hay.includes(q);
   });
   renderPosts(list);
@@ -385,15 +407,15 @@ function filterPosts(tag,btn){
 /* OPEN POST */
 let currentSlug='';
 function openPost(slug){
-  const p=allPosts.find(x=>x.slug===slug);
+  const p=localizedPost(allPosts.find(x=>x.slug===slug));
   if(!p)return;
   try{if(window.gtag)gtag('event','blog_open',{post:slug,title:p.title})}catch(e){}
   document.getElementById('pv-emoji').textContent=p.cover_emoji||'⚛';
   document.getElementById('pv-tags').innerHTML=(p.tags||[]).map(t=>`<span class="ptag">${t}</span>`).join('');
   document.getElementById('pv-title').textContent=p.title;
   document.getElementById('pv-summary').textContent=p.summary;
-  document.getElementById('pv-date').textContent=new Date(p.created_at).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'});
-  document.getElementById('pv-readtime').textContent=Math.ceil(p.content.split(' ').length/200)+' dakika okuma';
+  document.getElementById('pv-date').textContent=fmtDate(p);
+  document.getElementById('pv-readtime').textContent=readTxt(p);
   document.getElementById('pv-content').innerHTML=mdToHtml(p.content);
   document.getElementById('cm-status').textContent='';
   const pvN=document.getElementById('pv-cm-n');
@@ -418,9 +440,9 @@ function renderShare(){
   const title=document.getElementById('pv-title').textContent;
   const u=postUrl();
   box.innerHTML=`
-    <button class="share-btn" onclick="shareX()"><span class="ic">𝕏</span> Paylaş</button>
-    <button class="share-btn" onclick="shareWA()"><span class="ic">✆</span> WhatsApp</button>
-    <button class="share-btn" onclick="shareCopy(this)"><span class="ic">🔗</span> Kopyala</button>`;
+    <button class="share-btn" onclick="shareX()"><span class="ic">𝕏</span> ${window.blogT?blogT('share'):'Paylaş'}</button>
+    <button class="share-btn" onclick="shareWA()"><span class="ic">✆</span> ${window.blogT?blogT('wa'):'WhatsApp'}</button>
+    <button class="share-btn" onclick="shareCopy(this)"><span class="ic">🔗</span> ${window.blogT?blogT('copy'):'Kopyala'}</button>`;
 }
 function shareX(){
   const t=document.getElementById('pv-title').textContent;
@@ -434,7 +456,7 @@ function shareCopy(btn){
   if(navigator.clipboard&&navigator.clipboard.writeText){
     navigator.clipboard.writeText(postUrl()).then(()=>{
       const old=btn.innerHTML;
-      btn.innerHTML='<span class="ck">✓ Kopyalandı</span>';
+      btn.innerHTML='<span class="ck">✓ '+((window.blogT?blogT('copied'):'Kopyalandı'))+'</span>';
       setTimeout(()=>{btn.innerHTML=old},1600);
     });
   }
@@ -452,7 +474,7 @@ function sharePostCard(slug,ev){
   if(navigator.clipboard&&navigator.clipboard.writeText){
     navigator.clipboard.writeText(u).then(()=>{
       const b=ev.target.closest('.share-card');
-      if(b){const old=b.innerHTML;b.innerHTML='<span>✓</span> <span class="sc-lbl">Kopyalandı</span>';setTimeout(()=>{b.innerHTML=old},1400)}
+      if(b){const old=b.innerHTML;b.innerHTML='<span>✓</span> <span class="sc-lbl">'+((window.blogT?blogT('copied'):'Kopyalandı'))+'</span>';setTimeout(()=>{b.innerHTML=old},1400)}
     });
   }
 }
@@ -463,12 +485,14 @@ function renderRelated(cur){
   if(!cur||!cur.tags){box.style.display='none';return}
   const rel=allPosts.filter(p=>p.slug!==cur.slug&&(p.tags||[]).some(t=>(cur.tags||[]).includes(t))).slice(0,3);
   if(!rel.length){box.style.display='none';return}
-  document.getElementById('related-grid').innerHTML=rel.map(p=>`
+  document.getElementById('related-grid').innerHTML=rel.map(src=>{
+    const p=localizedPost(src);
+    return `
     <div class="rel-card" onclick="openPost('${p.slug}')">
       <span class="rel-emoji">${p.cover_emoji||'⚛'}</span>
       <div class="rel-title">${p.title}</div>
-      <div class="rel-meta">${Math.ceil(p.content.split(' ').length/200)} dk okuma</div>
-    </div>`).join('');
+      <div class="rel-meta">${readTxt(p)}</div>
+    </div>`}).join('');
   box.style.display='block';
 }
 
@@ -479,7 +503,7 @@ function commentLiked(id){return likeStored('qcl_'+id.replace(/[^a-z0-9_\-]/gi,'
 
 function commentLikeBtn(c){
   const liked=commentLiked(c.id);
-  return `<button class="like-btn cmlike" onclick="commentLike('${c.id}',this,event)" title="Beğen"><span class="lb-ic">${liked?'♥':'♡'}</span> <b class="lb-n">${c.likes||0}</b></button>`;
+  return `<button class="like-btn cmlike" onclick="commentLike('${c.id}',this,event)" title="${window.blogT?blogT('like'):'Beğen'}"><span class="lb-ic">${liked?'♥':'♡'}</span> <b class="lb-n">${c.likes||0}</b></button>`;
 }
 
 function commentItemHTML(c,slug,isReply){
@@ -493,7 +517,7 @@ function commentItemHTML(c,slug,isReply){
     <div class="cm-body">${escHtml(c.content).replace(/\n/g,'<br>')}</div>
     <div class="cm-foot">
       ${commentLikeBtn(c)}
-      <button class="cm-reply-btn" onclick="toggleReply('${c.id}',event)">↩ Yanıtla</button>
+      <button class="cm-reply-btn" onclick="toggleReply('${c.id}',event)">${window.blogT?blogT('reply'):'↩ Yanıtla'}</button>
     </div>
     <div class="cm-reply-form" id="crf-${c.id}" style="display:none">
       <div class="cm-row">
@@ -652,6 +676,12 @@ function mdToHtml(md){
 }
 
 document.addEventListener('DOMContentLoaded',fetchPosts);
+
+/* Dil değişince içeriği de yeniden render et (blog-i18n.js kancası) */
+window.__blogOnLangSwitch=function(){
+  if(currentSlug&&document.getElementById('view-post').classList.contains('active'))openPost(currentSlug);
+  else {filterPosts(currentTag,activeBtn);renderFilters(allPosts);}
+};
 
 /* ══ Çerez Onayı (KVKK 6698) ══ */
 (function(){

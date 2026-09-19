@@ -14,9 +14,10 @@
   "license": "MIT",
   "scripts": {
     "build": "node scripts/build.mjs",
-    "test": "node --test test/quantro.test.js test/_lib.test.js test/api-handlers.test.js",
+    "test": "node --test test/quantro.test.js test/_lib.test.js test/api-handlers.test.js test/localize.test.js",
     "test:e2e": "node --test test/e2e.test.js",
     "test:coverage": "node scripts/coverage.mjs",
+    "metrics:field": "node scripts/metrics.mjs",
     "check": "npm run build && npm test"
   },
   "engines": {

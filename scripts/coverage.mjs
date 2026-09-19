@@ -9,7 +9,7 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const FILES = ['test/quantro.test.js', 'test/_lib.test.js', 'test/api-handlers.test.js'];
+const FILES = ['test/quantro.test.js', 'test/_lib.test.js', 'test/api-handlers.test.js', 'test/localize.test.js'];
 const THRESHOLDS = {
   line: 80,
   branch: 75,

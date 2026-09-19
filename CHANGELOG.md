@@ -3,6 +3,24 @@
 Tüm önemli değişiklikler bu dosyada not edilir. Format: [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/),
 sürüm: [SemVer](https://semver.org/).
 
+## 1.4.0 — 2026-09-19
+
+### Eklendi
+- **Blog içerik i18n (TR→EN)** — `blog-articles/*.<lang>.md` yapısı (TR kaynak +
+  EN çeviri); `blog_posts_i18n` tablosu (`supabase-blog-i18n.sql`), import:
+  `tools/import-blog.mjs`; istemcide `blog-localize.js` ile aktif dille birleştirme
+  (çeviri yoksa TR fallback). Arama, tarih, okuma süresi ve tüm kart/buton
+  metinleri dile bağlandı; dil değişince içerik yeniden render edilir.
+- **PageSpeed metrikleri** — `scripts/metrics.mjs` Alan (CrUX/field) + Lab
+  (Lighthouse) toplar, POOR alan metriğinde exit 1; `npm run metrics:field`.
+- **Gece performans CI** — `.github/workflows/perf.yml` (cron + push + manual),
+  secret `PSI_API_KEY`.
+- **Kapsam yükseldi** — satır %87.56 · dal %81.91 · fonksiyon %91.24 (eşiklerin üstü).
+
+### Değişti
+- Birim testleri 39 → 44 (`test/localize.test.js`: pickLang, localizePost,
+  formatDate, readTime).
+
 ## 1.3.0 — 2026-09-19
 
 ### Eklendi
