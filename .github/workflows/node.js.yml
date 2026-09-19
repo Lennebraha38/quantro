@@ -25,6 +25,8 @@ jobs:
     - run: npm ci
     - run: npm run build
     - run: npm test
+    - name: Bağımlılık güvenlik taraması (npm audit)
+      run: npm audit --omit=dev
 
   coverage:
     name: Kapsam (Node 22)

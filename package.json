@@ -18,6 +18,7 @@
     "test:e2e": "node --test test/e2e.test.js",
     "test:coverage": "node scripts/coverage.mjs",
     "metrics:field": "node scripts/metrics.mjs",
+    "audit": "npm audit --omit=dev",
     "check": "npm run build && npm test"
   },
   "engines": {
