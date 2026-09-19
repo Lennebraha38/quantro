@@ -35,6 +35,7 @@ async function tog(n){
   const open=tb.classList.toggle('open');
   tg.textContent=open?'×':'+';
   tg.classList.toggle('open',open);
+  const card=tb.closest('.tool-card');if(card)card.classList.toggle('open',open);
   if(!open){
     if(window.Q3D){const id={1:'qrng-3d',2:'crb3d',9:'bloch-canvas',10:'cat-canvas',13:'qw-canvas'}[n];if(id)Q3D.stop(id)}
     if(window._stop3d&&window._stop3d[n])try{window._stop3d[n]()}catch(e){}
@@ -85,6 +86,18 @@ function cardDemo(n,ev){
     }catch(e){}
   }).catch(()=>{});
 }
+/* ══ KART HUD: araç çıktılarını canlı yansıt ══ */
+const _MIRROR={1:'qstat',2:'crx',3:'ua',4:'sp',5:'hv-prod',6:'bh-rs',7:'dv',8:'tele-log',9:'bloch-readout',10:'cat-pv',11:'tun-tv',12:'ds-count',13:'qw-sv'};
+function mirrorHud(){
+  for(const n in _MIRROR){
+    const src=document.getElementById(_MIRROR[n]),dst=document.getElementById('qlm'+n);
+    if(!src||!dst)continue;
+    const v=(src.textContent||'').replace(/\s+/g,' ').trim();
+    dst.textContent=v?v.slice(0,54):'—';
+  }
+}
+setInterval(mirrorHud,600);
+window.addEventListener('load',()=>setTimeout(mirrorHud,300));
 /* ══ HERO THREE.JS ══ */
 if(window.THREE&&document.getElementById('hero-canvas')){
 let _lh=null,_lhLost=false;
@@ -255,7 +268,7 @@ tr:{
   "nav.home": "← Ana Sayfa",
   "hero.ey": "Quantro Lab · Etkileşimli Araçlar · 13 Modül",
   "hero.desc": "Kuantum mekaniğini ve astrofiziki bizzat deneyimleyin. İlk Türkçe, açık kaynak (MIT) kuantum + astrofizik araç seti.",
-  "hero.badge": "🇹🇷 Açık Kaynak (MIT) · 13 Araç · 8 Dil",
+  "hero.badge": "TR · Açık Kaynak (MIT) · 13 Araç · 8 Dil",
   "hero.scroll": "Keşfet",
   "intro.h2": "13 Özgün<br>Araç",
   "intro.count": "Açık Kaynak (MIT) Kuantum + Astrofizik Araç Seti · Quantro ARGE · 2025",
@@ -266,11 +279,11 @@ tr:{
   "t1.min": "Min",
   "t1.max": "Max",
   "t1.src": "Kaynak",
-  "src.q": "⚛ Gerçek Kuantum (ANU)",
-  "src.s": "◌ Simüle (Web Crypto)",
-  "t1.gen": "⚛ Üret",
+  "src.q": "Gerçek Kuantum (ANU)",
+  "src.s": "Simüle (Web Crypto)",
+  "t1.gen": "Üret",
   "t1.series": "10x Seri",
-  "t1.chi": "𝝌² Test",
+  "t1.chi": "χ² Test",
   "t1.clear": "Temizle",
   "t1.chi.title": "Rastgelelik Testi (Ki-Kare)",
   "t1.chi.run": "Çalıştır",
@@ -286,7 +299,7 @@ tr:{
   "t2.gate.cnot": "CNOT <span class=\"gd\">q0→q1</span>",
   "t2.reset": "Sıfırla",
   "t2.measure": "⟨ψ| Ölç",
-  "t2.bell": "⚛ Bell |00⟩+|11⟩",
+  "t2.bell": "Bell |00⟩+|11⟩",
   "t2.clear": "Temizle",
   "t2.results": "Ölçüm Sonuçları (1024 atış)",
   "t2.explain": "<strong>Kuantum kapıları nedir?</strong> H kapısı kubiti süperpozisyona sokar. X kubiti döndürür (NOT). CNOT iki kubiti dolanıklığa sokar. <strong>Bell durumu: |Φ⁺⟩ = (|00⟩+|11⟩)/√2</strong>",
@@ -295,7 +308,7 @@ tr:{
   "t3.om": "Madde Ωₘ",
   "t3.ol": "Karanlık Enerji ΩΛ",
   "t3.orr": "Radyasyon Ωᵣ",
-  "t3.planck": "↺ Planck 2018 Değerleri",
+  "t3.planck": "Planck 2018 Değerleri",
   "t3.explain": "Friedmann denklemi: <strong>H²(a) = H₀²(Ωᵣ/a⁴ + Ωₘ/a³ + ΩΛ)</strong> — 10.000 adımlı nümerik integral ile hesaplanır.",
   "t3.age.lbl": "Evrenin Tahmini Yaşı",
   "t3.hubble.time": "Hubble Zamanı",
@@ -312,7 +325,7 @@ tr:{
   "t3.geo.closed": "Kapalı (k=+1)",
   "t3.geo.open": "Açık (k=-1)",
   "t4.title": "Kuantum Şifreleme — BB84",
-  "t4.eve": "👁 Dinleyici (Eve) aktif — Kuantum kanalı izleniyor",
+  "t4.eve": "Dinleyici (Eve) aktif — Kuantum kanalı izleniyor",
   "t4.alice": "<em>Alice</em> — Gönderici",
   "t4.bob": "<em>Bob</em> — Alıcı",
   "t4.sent.qubits": "Gönderilen Kubitler",
@@ -370,7 +383,7 @@ tr:{
   "t7.dir.approaching": "Yaklaşıyor (Maviye kayma)",
   "t7.dir.stationary": "Durağan",
   "t8.title": "Kuantum Işınlanma",
-  "t8.go": "⚛ Işınla",
+  "t8.go": "Işınla",
   "t8.reset": "Sıfırla",
   "t8.ready": "Hazır — \"Işınla\"ya bas.",
   "t8.explain": "Kuantum ışınlanma maddeyi değil <strong>bilgiyi</strong> taşır. Alice dolaşık bir Bell çiftinin bir yarısını paylaştığı Bob'a, ölçtüğü kübitin durumunu 2 klasik bit ile iletir; Bob düzeltme kapılarını uygulayarak kübiti <strong>birebir</strong> yeniden oluşturur. Ölçüm sonuçları gerçek kuantum rastgeleliğiyle seçilir.",
@@ -390,7 +403,7 @@ tr:{
   "t9.vector": "Bloch vektörü:",
   "t10.title": "Schrödinger'in Kedisi",
   "t10.p": "Bozunma Olasılığı p",
-  "t10.open": "🐱 Kutuyu Aç",
+  "t10.open": "Kutuyu Aç",
   "t10.reset": "Sıfırla",
   "t10.log.ready": "Hazır — kutuyu kapatın ve açın.",
   "t10.explain": "Schrödinger'in kedisi, süperpozisyonun saçmalığını göstermek için tasarlanmış bir düşünce deneyidir. Kutu kapalıyken kedi <strong>hem canlı hem ölüdür</strong>: durum, bozunmamış/bozunmuş çekirdeğin karışımıdır. Kutu açıldığında dalga fonksiyonu <strong>çöker</strong> ve kedi tek bir sonuçla görünür. Ölçüm sonucu gerçek kuantum rastgeleliğiyle (ANU) seçilir.",
@@ -409,7 +422,7 @@ tr:{
   "t12.wave": "Dalga Boyu λ",
   "t12.speed": "Fırlatma Hızı",
   "t12.which": "Hangi yarıktan geçti? (Gözlem)",
-  "t12.fire": "⚛ Fırlat",
+  "t12.fire": "Fırlat",
   "t12.reset": "Sıfırla",
   "t12.stat.coherent": "GİRİŞİM · dalga",
   "t12.stat.classical": "KLASİK · gözlem",
@@ -418,15 +431,15 @@ tr:{
   "t13.steps": "Adım Sayısı N",
   "t13.bias": "Yazı Olasılığı p",
   "t13.observe": "Her adımda gözlemle (çökert)",
-  "t13.run": "⚛ Yürüt",
+  "t13.run": "Yürüt",
   "t13.reset": "Sıfırla",
   "t13.explain": "Kuantum yürüyüşünde parçacığın \"yazı-tura\" parası <strong>süperpozisyondadır</strong> — aynı anda hem yazı hem turadır. İki yol girişir, dağılım √N yerine ≈ N hızında yayılır (kuadratik hızlanma). Her adımda ölçersen süperpozisyon çöker, parçacık klasikleşir ve √N'ye geri döner. Grover gibi kuantum algoritmaları bu yayılmayı kullanır.",
-  "stat.proxy": "⚛ ANU (proxy) — gerçek kuantum",
-  "stat.anu": "⚛ ANU — gerçek kuantum (vakum dalgalanması)",
+  "stat.proxy": "ANU (proxy) — gerçek kuantum",
+  "stat.anu": "ANU — gerçek kuantum (vakum dalgalanması)",
   "stat.nist": "◇ NIST Beacon — kriptografik rastgele (kuantum değil)",
-  "stat.none": "◌ Dış API yok — simüle (Web Crypto)",
-  "stat.init.ok": "⚛ ANU erişilebilir — gerçek kuantum hazır",
-  "stat.init.fail": "◌ ANU erişilemedi — NIST/Web Crypto devrede",
+  "stat.none": "Dış API yok — simüle (Web Crypto)",
+  "stat.init.ok": "ANU erişilebilir — gerçek kuantum hazır",
+  "stat.init.fail": "ANU erişilemedi — NIST/Web Crypto devrede",
   "chi.busy": "Veri toplanıyor (1024 bayt)…",
   "chi.ok": "✓ Dağılım rastgeleliğe uyumlu (p>0.05)",
   "chi.fail": "✗ Beklenenden sapma — tekrar dene",
@@ -447,9 +460,9 @@ tr:{
   "t10.canvas.dead.label": "|ÖLÜ⟩",
   "t10.canvas.detector.paused": "DEDEKTÖR: BEKLEMEDE — kutu kapalı",
   "t10.canvas.detector.collapsed": "DEDEKTÖR: ÇÖKTÜ — kutu açık",
-  "t11.canvas.pass": "⚛ GEÇTİ — gerçek kuantum kararı",
-  "t11.canvas.reflect": "⚛ YANSIDI — gerçek kuantum kararı",
-  "t11.canvas.super": "⚛ Süperpozisyon… (T={0}%)",
+  "t11.canvas.pass": "GEÇTİ — gerçek kuantum kararı",
+  "t11.canvas.reflect": "YANSIDI — gerçek kuantum kararı",
+  "t11.canvas.super": "Süperpozisyon… (T={0}%)",
   "t11.canvas.barrier": "V₀={0} eV",
   "t11.canvas.energy": "E={0} eV",
   "t13.canvas.quantum": "■ Kuantum",
@@ -470,8 +483,8 @@ tr:{
   "t12.card": "Tek tek fırlat, girişim saçaklarını gör — gözlemlemeyi dene",
   "t13.card": "Hadamard yürüyüşü kuadratik hızlanır; gözlem klasikleştirir",
   "t13.canvas.step": "adım {0}/{1}",
-  "t13.canvas.sigmaQ": "σ_Q={0}  (teorik ≈{1})",
-  "t13.canvas.sigmaC": "σ_C={0}  (teorik ≈{1})",
+  "t13.canvas.sigmaQ": "σ_Q={0} (teorik ≈{1})",
+  "t13.canvas.sigmaC": "σ_C={0} (teorik ≈{1})",
 }};
 
 window.lastQStat=null;
