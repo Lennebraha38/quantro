@@ -3,6 +3,13 @@
 Tüm önemli değişiklikler bu dosyada not edilir. Format: [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/),
 sürüm: [SemVer](https://semver.org/).
 
+## 1.5.0 — 2026-09-19
+
+### Eklendi
+- **İçerik çevirisi 8 dile tamamlandı** — `blog-articles/*.<lang>.md` artık
+  tr/en/fr/es/it/ru/ko/ar (3 yazı × 8 dil = 24 dosya); arayüz + içerik aynı
+  `qlang` ile hizalanıyor. Import: `node tools/import-blog.mjs` (24 satır i18n).
+
 ## 1.4.0 — 2026-09-19
 
 ### Eklendi

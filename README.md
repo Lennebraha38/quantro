@@ -47,7 +47,7 @@ bağımlılıksız (dependency-free) çalışır.
     feed.js        RSS/feed
     anu.js         Kuantum rastgelelik proxy (ANU Qrng)
   lab/             Laboratuvar araç içerikleri (i18n: 8 dil)
-  blog-articles/   Blog yazıları (Markdown, `<slug>.<lang>.md` — TR ve EN)
+  blog-articles/   Blog yazıları (Markdown, `<slug>.<lang>.md` — 8 dil)
   tools/
     import-blog.mjs   blog-articles → Supabase (blog_posts + blog_posts_i18n)
   scripts/
@@ -132,7 +132,8 @@ vercel dev        # http://localhost:3000
 
 ### Blog içeriği
 
-Yazılar `blog-articles/<slug>.<lang>.md` olarak sürülür (TR kaynak + çeviriler).
+Yazılar `blog-articles/<slug>.<lang>.md` olarak sürülür (TR kaynak + 7 çeviri:
+en, fr, es, it, ru, ko, ar → 8 dilin tamamı).
 Üstbilgi: `# Başlık`, `**Emoji:**`, `**Etiketler:**`/`**Tags:**`, `**Özet:**`/`**Summary:**`.
 Supabase'e yüklemek için (service-role):
 
@@ -141,7 +142,8 @@ SUPABASE_URL=... SUPABASE_SERVICE_ROLE_KEY=... node tools/import-blog.mjs
 ```
 
 TR kaynak `blog_posts`'a, tüm diller `blog_posts_i18n`'e yazılır. Tarayıcıda
-`blog.html` aktif dili (qlang) çeker, çeviri yoksa TR içeriği gösterir.
+`blog.html` aktif dili (qlang) çeker, çevirisi olmayan dilde TR içeriği gösterir
+(şu an içerik de 8 dilin tamamında mevcut).
 
 ---
 
@@ -216,9 +218,9 @@ PR'lere Vercel önizleme deploy'u: `.github/workflows/preview.yml`
 - PWA Service Worker, JSON-LD SEO, **8 dil i18n** — ana site (`app.js` I18N),
   lab (`/lab/` + `lab-core.js`) ve blog arayüzü (`blog-i18n.js`) ortak `qlang`
   ile; RTL (Arapça) destekli. Yönetim paneli TR/EN (`admin-i18n.js`).
-  **Blog içeriği**: TR kaynak dosyalar `blog-articles/*.tr.md`, İngilizce
-  çeviriler `*.en.md` → `blog_posts_i18n` üzerinden aktif dille gösterilir
-  (`blog-localize.js`); çeviri yoksa TR yazı gösterilir.
+  **Blog içeriği**: TR kaynak doyalar `blog-articles/*.tr.md` + 7 çeviri
+  (`*.en|fr|es|it|ru|ko|ar.md`) → `blog_posts_i18n` üzerinden aktif dille
+  gösterilir (`blog-localize.js`); çevirisi olmayan dilde TR yazı gösterilir.
 - **Core Web Vitals** E2E içinde ölçülür (`test/e2e.test.js` — CWV senaryosu):
   FCP/LCP < 4000 ms ve CLS < 0.1 hedefi, index + blog sayfalarında
   sınır ihlali olursa test kızar.
