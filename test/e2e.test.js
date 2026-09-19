@@ -281,3 +281,48 @@ test('CWV: fcp/lcp/cls ölçümleri makul aralıkta (index + blog)', async () =>
   }
   await c.close();
 });
+
+test('lab: favoriler kalıcı + yalnız-favoriler filtresi', async () => {
+  const c = await browser.newContext();
+  const r = await open('/quantro-lab.html', c);
+  await r.page.waitForTimeout(700);
+  await r.page.click('.tc-fav[data-fav="3"]');
+  await r.page.waitForTimeout(120);
+  assert.ok(await r.page.$eval('.tc-fav[data-fav="3"]', (el) => el.classList.contains('on')), 'favori işaretlenmedi');
+  assert.ok(await r.page.evaluate(() => JSON.parse(localStorage.getItem('qlab_fav') || '[]').includes(3)), 'favori localStorage yazılmadı');
+  assert.ok(await r.page.$eval('.tc3', (el) => el.classList.contains('is-fav')), 'kart is-fav almadı');
+  await r.page.click('#fav-filter');
+  await r.page.waitForTimeout(120);
+  assert.equal(await r.page.$eval('.tc1', (el) => getComputedStyle(el).display), 'none', 'favori olmayan kart gizlenmedi');
+  assert.notEqual(await r.page.$eval('.tc3', (el) => getComputedStyle(el).display), 'none', 'favori kart gizlendi');
+  assert.equal(r.violations.length, 0, `favori CSP ihlali: ${r.violations.join('|')}`);
+  await r.close();
+  await c.close();
+});
+
+test('lab: klavye kısayolları (1–9 aç · Esc kapat)', async () => {
+  const c = await browser.newContext();
+  const r = await open('/quantro-lab.html', c);
+  await r.page.waitForTimeout(700);
+  await r.page.keyboard.press('5');
+  await r.page.waitForTimeout(600);
+  assert.ok(await r.page.$eval('#tb5', (el) => el.classList.contains('open')), 'tuş 5 kartı açmadı');
+  await r.page.keyboard.press('Escape');
+  await r.page.waitForTimeout(300);
+  assert.equal(await r.page.$$eval('.tool-body.open', (el) => el.length), 0, 'Esc tüm kartları kapatmadı');
+  await r.close();
+  await c.close();
+});
+
+test('lab: derin bağlantı #t9 kartı açar', async () => {
+  const c = await browser.newContext();
+  const r = await open('/quantro-lab.html#t9', c);
+  await r.page.waitForFunction(() => {
+    const tb = document.getElementById('tb9');
+    return tb && tb.classList.contains('open');
+  }, null, { timeout: 8000 });
+  const hud = await r.page.$eval('#qq9', (el) => el.children.length);
+  assert.ok(hud >= 4, `#t9 HUD qubit register boş: ${hud}`);
+  await r.close();
+  await c.close();
+});

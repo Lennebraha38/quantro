@@ -103,6 +103,10 @@ window.__qc={};
   <div class="tools-intro">
     <h2 data-i18n="intro.h2">13 Özgün<br>Araç</h2>
     <span class="tools-count" data-i18n="intro.count">Açık Kaynak (MIT) Kuantum + Astrofizik Araç Seti · Quantro ARGE · 2025</span>
+    <div class="intro-tools">
+      <button type="button" class="fav-filter" id="fav-filter" onclick="favFilterToggle()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.6l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 17l-5.2 2.7 1-5.8L3.5 9.8l5.9-.9z"/></svg> <span>FAV</span></button>
+      <button type="button" class="fav-filter" onclick="kbHelp()" title="Klavye kısayolları">⌨ ?</button>
+    </div>
   </div>
 
   <!-- T1: QRNG -->
@@ -118,6 +122,7 @@ window.__qc={};
           <button type="button" class="tc-btn tc-demo" data-i18n="card.demo" onclick="cardDemo(1,event)">▶ Hızlı Demo</button>
         </span>
       <span class="tb-badge first" data-i18n="badge.first">Açık Kaynak (MIT)</span>
+        <button type="button" class="tc-fav" data-fav="1" onclick="event.stopPropagation();favToggle(1)" aria-label="Favori" title="Favori (F)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.6l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 17l-5.2 2.7 1-5.8L3.5 9.8l5.9-.9z"/></svg></button>
         <span class="tg" id="tg1">+</span>
       </div>
       <div class="tc-panel" id="tc-panel-1"></div>
@@ -126,6 +131,9 @@ window.__qc={};
         <span class="ql-live"><i></i>LIVE</span>
         <span class="ql-tag">QRNG · ANU</span>
         <span class="ql-mirror" id="qlm1">—</span>
+        <span class="ql-qreg" id="qq1"></span>
+        <span class="ql-run" id="qlr1"></span>
+        <button type="button" class="ql-copy" data-copy="1" onclick="hudCopy(1,event)">COPY</button>
       </div>
       <div class="qrng-display">
         <canvas id="qrng-3d" class="qlab-3d qrng-3d" data-export="qrng-foam"></canvas>
@@ -173,6 +181,7 @@ window.__qc={};
           <button type="button" class="tc-btn tc-demo" data-i18n="card.demo" onclick="cardDemo(2,event)">▶ Hızlı Demo</button>
         </span>
       <span class="tb-badge first" data-i18n="badge.first">Açık Kaynak (MIT)</span>
+        <button type="button" class="tc-fav" data-fav="2" onclick="event.stopPropagation();favToggle(2)" aria-label="Favori" title="Favori (F)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.6l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 17l-5.2 2.7 1-5.8L3.5 9.8l5.9-.9z"/></svg></button>
         <span class="tg" id="tg2">+</span>
       </div>
       <div class="tc-panel" id="tc-panel-2"></div>
@@ -181,6 +190,9 @@ window.__qc={};
         <span class="ql-live"><i></i>LIVE</span>
         <span class="ql-tag">2-QUBIT · HADAMARD</span>
         <span class="ql-mirror" id="qlm2">—</span>
+        <span class="ql-qreg" id="qq2"></span>
+        <span class="ql-run" id="qlr2"></span>
+        <button type="button" class="ql-copy" data-copy="2" onclick="hudCopy(2,event)">COPY</button>
       </div>
       <div class="circ-wrap">
         <div class="gate-panel">
@@ -229,6 +241,7 @@ window.__qc={};
           <button type="button" class="tc-btn tc-demo" data-i18n="card.demo" onclick="cardDemo(3,event)">▶ Hızlı Demo</button>
         </span>
       <span class="tb-badge first" data-i18n="badge.first">Açık Kaynak (MIT)</span>
+        <button type="button" class="tc-fav" data-fav="3" onclick="event.stopPropagation();favToggle(3)" aria-label="Favori" title="Favori (F)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.6l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 17l-5.2 2.7 1-5.8L3.5 9.8l5.9-.9z"/></svg></button>
         <span class="tg" id="tg3">+</span>
       </div>
       <div class="tc-panel" id="tc-panel-3"></div>
@@ -237,6 +250,9 @@ window.__qc={};
         <span class="ql-live"><i></i>LIVE</span>
         <span class="ql-tag">ΛCDM · H₀ 67.4</span>
         <span class="ql-mirror" id="qlm3">—</span>
+        <span class="ql-qreg" id="qq3"></span>
+        <span class="ql-run" id="qlr3"></span>
+        <button type="button" class="ql-copy" data-copy="3" onclick="hudCopy(3,event)">COPY</button>
       </div>
       <div class="univ-grid">
         <div>
@@ -295,6 +311,7 @@ window.__qc={};
           <button type="button" class="tc-btn tc-demo" data-i18n="card.demo" onclick="cardDemo(4,event)">▶ Hızlı Demo</button>
         </span>
       <span class="tb-badge first" data-i18n="badge.first">Açık Kaynak (MIT)</span>
+        <button type="button" class="tc-fav" data-fav="4" onclick="event.stopPropagation();favToggle(4)" aria-label="Favori" title="Favori (F)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.6l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 17l-5.2 2.7 1-5.8L3.5 9.8l5.9-.9z"/></svg></button>
         <span class="tg" id="tg4">+</span>
       </div>
       <div class="tc-panel" id="tc-panel-4"></div>
@@ -303,6 +320,9 @@ window.__qc={};
         <span class="ql-live"><i></i>LIVE</span>
         <span class="ql-tag">BB84 · QKD</span>
         <span class="ql-mirror" id="qlm4">—</span>
+        <span class="ql-qreg" id="qq4"></span>
+        <span class="ql-run" id="qlr4"></span>
+        <button type="button" class="ql-copy" data-copy="4" onclick="hudCopy(4,event)">COPY</button>
       </div>
       <div class="eve-toggle">
         <input type="checkbox" id="eve">
@@ -350,6 +370,7 @@ window.__qc={};
           <button type="button" class="tc-btn tc-demo" data-i18n="card.demo" onclick="cardDemo(5,event)">▶ Hızlı Demo</button>
         </span>
       <span class="tb-badge new" data-i18n="badge.new">Yeni</span>
+        <button type="button" class="tc-fav" data-fav="5" onclick="event.stopPropagation();favToggle(5)" aria-label="Favori" title="Favori (F)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.6l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 17l-5.2 2.7 1-5.8L3.5 9.8l5.9-.9z"/></svg></button>
         <span class="tg" id="tg5">+</span>
       </div>
       <div class="tc-panel" id="tc-panel-5"></div>
@@ -358,6 +379,9 @@ window.__qc={};
         <span class="ql-live"><i></i>LIVE</span>
         <span class="ql-tag">Δx·Δp ≥ ℏ/2</span>
         <span class="ql-mirror" id="qlm5">—</span>
+        <span class="ql-qreg" id="qq5"></span>
+        <span class="ql-run" id="qlr5"></span>
+        <button type="button" class="ql-copy" data-copy="5" onclick="hudCopy(5,event)">COPY</button>
       </div>
       <div class="heis-wrap">
         <div class="heis-left">
@@ -402,6 +426,7 @@ window.__qc={};
           <button type="button" class="tc-btn tc-demo" data-i18n="card.demo" onclick="cardDemo(6,event)">▶ Hızlı Demo</button>
         </span>
       <span class="tb-badge new" data-i18n="badge.new">Yeni</span>
+        <button type="button" class="tc-fav" data-fav="6" onclick="event.stopPropagation();favToggle(6)" aria-label="Favori" title="Favori (F)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.6l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 17l-5.2 2.7 1-5.8L3.5 9.8l5.9-.9z"/></svg></button>
         <span class="tg" id="tg6">+</span>
       </div>
       <div class="tc-panel" id="tc-panel-6"></div>
@@ -410,6 +435,9 @@ window.__qc={};
         <span class="ql-live"><i></i>LIVE</span>
         <span class="ql-tag">SCHWARZSCHILD · KERR</span>
         <span class="ql-mirror" id="qlm6">—</span>
+        <span class="ql-qreg" id="qq6"></span>
+        <span class="ql-run" id="qlr6"></span>
+        <button type="button" class="ql-copy" data-copy="6" onclick="hudCopy(6,event)">COPY</button>
       </div>
       <div class="bh-ctrl">
         <span class="qlbl" data-i18n="t6.mass">Kütle (Güneş kütlesi ×)</span>
@@ -441,6 +469,7 @@ window.__qc={};
           <button type="button" class="tc-btn tc-demo" data-i18n="card.demo" onclick="cardDemo(7,event)">▶ Hızlı Demo</button>
         </span>
       <span class="tb-badge new" data-i18n="badge.new">Yeni</span>
+        <button type="button" class="tc-fav" data-fav="7" onclick="event.stopPropagation();favToggle(7)" aria-label="Favori" title="Favori (F)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.6l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 17l-5.2 2.7 1-5.8L3.5 9.8l5.9-.9z"/></svg></button>
         <span class="tg" id="tg7">+</span>
       </div>
       <div class="tc-panel" id="tc-panel-7"></div>
@@ -449,6 +478,9 @@ window.__qc={};
         <span class="ql-live"><i></i>LIVE</span>
         <span class="ql-tag">REDSHIFT · z</span>
         <span class="ql-mirror" id="qlm7">—</span>
+        <span class="ql-qreg" id="qq7"></span>
+        <span class="ql-run" id="qlr7"></span>
+        <button type="button" class="ql-copy" data-copy="7" onclick="hudCopy(7,event)">COPY</button>
       </div>
       <div class="dop-wrap">
         <div>
@@ -504,6 +536,7 @@ window.__qc={};
           <button type="button" class="tc-btn tc-demo" data-i18n="card.demo" onclick="cardDemo(8,event)">▶ Hızlı Demo</button>
         </span>
       <span class="tb-badge new">New · v1.1</span>
+        <button type="button" class="tc-fav" data-fav="8" onclick="event.stopPropagation();favToggle(8)" aria-label="Favori" title="Favori (F)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.6l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 17l-5.2 2.7 1-5.8L3.5 9.8l5.9-.9z"/></svg></button>
         <span class="tg" id="tg8">+</span>
       </div>
       <div class="tc-panel" id="tc-panel-8"></div>
@@ -512,6 +545,9 @@ window.__qc={};
         <span class="ql-live"><i></i>LIVE</span>
         <span class="ql-tag">BELL PAIR · |Φ⁺⟩</span>
         <span class="ql-mirror" id="qlm8">—</span>
+        <span class="ql-qreg" id="qq8"></span>
+        <span class="ql-run" id="qlr8"></span>
+        <button type="button" class="ql-copy" data-copy="8" onclick="hudCopy(8,event)">COPY</button>
       </div>
       <div class="tele-wrap">
         <div class="tele-btns">
@@ -537,6 +573,7 @@ window.__qc={};
           <button type="button" class="tc-btn tc-demo" data-i18n="card.demo" onclick="cardDemo(9,event)">▶ Hızlı Demo</button>
         </span>
       <span class="tb-badge new">New · v1.1</span>
+        <button type="button" class="tc-fav" data-fav="9" onclick="event.stopPropagation();favToggle(9)" aria-label="Favori" title="Favori (F)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.6l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 17l-5.2 2.7 1-5.8L3.5 9.8l5.9-.9z"/></svg></button>
         <span class="tg" id="tg9">+</span>
       </div>
       <div class="tc-panel" id="tc-panel-9"></div>
@@ -545,6 +582,9 @@ window.__qc={};
         <span class="ql-live"><i></i>LIVE</span>
         <span class="ql-tag">BLOCH · θ/φ</span>
         <span class="ql-mirror" id="qlm9">—</span>
+        <span class="ql-qreg" id="qq9"></span>
+        <span class="ql-run" id="qlr9"></span>
+        <button type="button" class="ql-copy" data-copy="9" onclick="hudCopy(9,event)">COPY</button>
       </div>
       <div class="bloch-grid">
         <div>
@@ -589,6 +629,7 @@ window.__qc={};
           <button type="button" class="tc-btn tc-demo" data-i18n="card.demo" onclick="cardDemo(10,event)">▶ Hızlı Demo</button>
         </span>
       <span class="tb-badge new">New · v1.2</span>
+        <button type="button" class="tc-fav" data-fav="10" onclick="event.stopPropagation();favToggle(10)" aria-label="Favori" title="Favori (F)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.6l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 17l-5.2 2.7 1-5.8L3.5 9.8l5.9-.9z"/></svg></button>
         <span class="tg" id="tg10">+</span>
       </div>
       <div class="tc-panel" id="tc-panel-10"></div>
@@ -597,6 +638,9 @@ window.__qc={};
         <span class="ql-live"><i></i>LIVE</span>
         <span class="ql-tag">|ψ⟩ = α|0⟩ + β|1⟩</span>
         <span class="ql-mirror" id="qlm10">—</span>
+        <span class="ql-qreg" id="qq10"></span>
+        <span class="ql-run" id="qlr10"></span>
+        <button type="button" class="ql-copy" data-copy="10" onclick="hudCopy(10,event)">COPY</button>
       </div>
       <div class="cat-grid">
         <div>
@@ -634,6 +678,7 @@ window.__qc={};
           <button type="button" class="tc-btn tc-demo" data-i18n="card.demo" onclick="cardDemo(11,event)">▶ Hızlı Demo</button>
         </span>
       <span class="tb-badge new">New · v1.2</span>
+        <button type="button" class="tc-fav" data-fav="11" onclick="event.stopPropagation();favToggle(11)" aria-label="Favori" title="Favori (F)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.6l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 17l-5.2 2.7 1-5.8L3.5 9.8l5.9-.9z"/></svg></button>
         <span class="tg" id="tg11">+</span>
       </div>
       <div class="tc-panel" id="tc-panel-11"></div>
@@ -642,6 +687,9 @@ window.__qc={};
         <span class="ql-live"><i></i>LIVE</span>
         <span class="ql-tag">T ≈ e^(−2κa)</span>
         <span class="ql-mirror" id="qlm11">—</span>
+        <span class="ql-qreg" id="qq11"></span>
+        <span class="ql-run" id="qlr11"></span>
+        <button type="button" class="ql-copy" data-copy="11" onclick="hudCopy(11,event)">COPY</button>
       </div>
       <div class="tun-grid">
         <div>
@@ -689,6 +737,7 @@ window.__qc={};
           <button type="button" class="tc-btn tc-demo" data-i18n="card.demo" onclick="cardDemo(12,event)">▶ Hızlı Demo</button>
         </span>
       <span class="tb-badge new">New · v1.3</span>
+        <button type="button" class="tc-fav" data-fav="12" onclick="event.stopPropagation();favToggle(12)" aria-label="Favori" title="Favori (F)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.6l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 17l-5.2 2.7 1-5.8L3.5 9.8l5.9-.9z"/></svg></button>
         <span class="tg" id="tg12">+</span>
       </div>
       <div class="tc-panel" id="tc-panel-12"></div>
@@ -697,6 +746,9 @@ window.__qc={};
         <span class="ql-live"><i></i>LIVE</span>
         <span class="ql-tag">|ψ₁ + ψ₂|²</span>
         <span class="ql-mirror" id="qlm12">—</span>
+        <span class="ql-qreg" id="qq12"></span>
+        <span class="ql-run" id="qlr12"></span>
+        <button type="button" class="ql-copy" data-copy="12" onclick="hudCopy(12,event)">COPY</button>
       </div>
       <div class="ds-wrap">
         <div class="ds-canvas-wrap">
@@ -757,6 +809,7 @@ window.__qc={};
           <button type="button" class="tc-btn tc-demo" data-i18n="card.demo" onclick="cardDemo(13,event)">▶ Hızlı Demo</button>
         </span>
       <span class="tb-badge new">New · v1.0</span>
+        <button type="button" class="tc-fav" data-fav="13" onclick="event.stopPropagation();favToggle(13)" aria-label="Favori" title="Favori (F)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.6l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 17l-5.2 2.7 1-5.8L3.5 9.8l5.9-.9z"/></svg></button>
         <span class="tg" id="tg13">+</span>
       </div>
       <div class="tc-panel" id="tc-panel-13"></div>
@@ -765,6 +818,9 @@ window.__qc={};
         <span class="ql-live"><i></i>LIVE</span>
         <span class="ql-tag">N-STEP · HADAMARD</span>
         <span class="ql-mirror" id="qlm13">—</span>
+        <span class="ql-qreg" id="qq13"></span>
+        <span class="ql-run" id="qlr13"></span>
+        <button type="button" class="ql-copy" data-copy="13" onclick="hudCopy(13,event)">COPY</button>
       </div>
       <div class="qw-grid">
         <div class="qw-canvas-wrap">
