@@ -11,6 +11,7 @@
 <noscript><link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@300;400&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet"></noscript>
 <link rel="stylesheet" href="css/base.css">
 <link rel="stylesheet" href="css/admin.css">
+<script src="admin-i18n.js" defer></script>
 </head>
 <body>
 <div class="bg"><div class="bg-grid"></div><div class="bg-neb"></div><div class="bg-neb2"></div></div>
@@ -18,16 +19,17 @@
 <!-- LOGIN -->
 <div id="login-screen">
   <div class="login-box">
+    <button id="langbtn" onclick="adminTT()" type="button" style="align-self:flex-end;background:none;cursor:pointer;font-family:var(--fm);font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--cyan);border:1px solid rgba(0,200,240,.25);padding:10px 16px;transition:background .2s,color .2s">TR</button>
     <div class="login-logo">Q<em>U</em>ANTRO</div>
-    <div class="login-sub">Yönetim Paneli · Gizli Erişim</div>
+    <div class="login-sub" data-admin-i18n="login.sub">Yönetim Paneli · Gizli Erişim</div>
     <div class="login-card">
-      <label class="login-label">Erişim Kodu</label>
+      <label class="login-label" data-admin-i18n="login.code">Erişim Kodu</label>
       <div class="pw-wrap">
         <input class="login-input" id="pwd-input" type="password" placeholder="••••••••" maxlength="32"
           autocomplete="off" onkeydown="if(event.key==='Enter')tryLogin()">
-        <button class="pw-eye" id="pw-eye" type="button" onclick="togglePwd()" aria-label="Şifreyi göster">👁</button>
+        <button class="pw-eye" id="pw-eye" type="button" onclick="togglePwd()" aria-label="Şifreyi göster" data-admin-i18n-aria="login.eye">👁</button>
       </div>
-      <button class="login-btn" id="login-btn" onclick="tryLogin()">Sisteme Gir</button>
+      <button class="login-btn" id="login-btn" onclick="tryLogin()" data-admin-i18n="login.btn">Sisteme Gir</button>
       <div class="login-err" id="login-err"></div>
       <div class="login-attempts" id="login-attempts"></div>
     </div>
@@ -40,93 +42,94 @@
     <aside class="sidebar">
       <div class="sb-logo">Q<em>U</em>ANTRO<span>Control Center</span></div>
       <nav class="sb-nav">
-        <button class="sb-item active" data-t="sec-posts" onclick="goSection('sec-posts')"><span class="sb-ic">📝</span><span class="sb-txt">Yazılar</span></button>
-        <button class="sb-item" data-t="sec-msgs" onclick="goSection('sec-msgs')"><span class="sb-ic">✉</span><span class="sb-txt">Mesajlar</span></button>
-        <button class="sb-item" data-t="sec-coms" onclick="goSection('sec-coms')"><span class="sb-ic">💬</span><span class="sb-txt">Yorumlar</span></button>
+        <button class="sb-item active" data-t="sec-posts" onclick="goSection('sec-posts')"><span class="sb-ic">📝</span><span class="sb-txt" data-admin-i18n="sb.posts">Yazılar</span></button>
+        <button class="sb-item" data-t="sec-msgs" onclick="goSection('sec-msgs')"><span class="sb-ic">✉</span><span class="sb-txt" data-admin-i18n="sb.msgs">Mesajlar</span></button>
+        <button class="sb-item" data-t="sec-coms" onclick="goSection('sec-coms')"><span class="sb-ic">💬</span><span class="sb-txt" data-admin-i18n="sb.coms">Yorumlar</span></button>
       </nav>
       <div class="sb-foot">
-        <div class="sb-user"><span class="dot"></span> Sistem Aktif</div>
-        <button class="logout-btn" onclick="logout()">Çıkış Yap</button>
+        <div class="sb-user"><span class="dot"></span> <span data-admin-i18n="sb.status">Sistem Aktif</span></div>
+        <button class="logout-btn" onclick="logout()" data-admin-i18n="sb.logout">Çıkış Yap</button>
       </div>
     </aside>
 
     <main class="panel-main">
       <div class="topbar">
-        <h1>Yönetim <em>Paneli</em></h1>
+        <h1 data-admin-i18n="top.title">Yönetim <em>Paneli</em></h1>
         <div class="tb-date" id="tb-date"></div>
+        <button id="langbtn" onclick="adminTT()" type="button" style="background:none;cursor:pointer;font-family:var(--fm);font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--cyan);border:1px solid rgba(0,200,240,.25);padding:10px 16px;transition:background .2s,color .2s">TR</button>
       </div>
 
       <!-- Stats -->
       <div class="stats-row">
         <div class="stat-card">
           <div class="stat-val" id="stat-total">—</div>
-          <div class="stat-lbl">Toplam Yazı</div>
+          <div class="stat-lbl" data-admin-i18n="stat.total">Toplam Yazı</div>
         </div>
         <div class="stat-card">
           <div class="stat-val" id="stat-pub">—</div>
-          <div class="stat-lbl">Yayında</div>
+          <div class="stat-lbl" data-admin-i18n="stat.pub">Yayında</div>
         </div>
         <div class="stat-card">
           <div class="stat-val" id="stat-msg">—</div>
-          <div class="stat-lbl">Mesaj</div>
+          <div class="stat-lbl" data-admin-i18n="stat.msg">Mesaj</div>
         </div>
         <div class="stat-card">
           <div class="stat-val" id="stat-com">—</div>
-          <div class="stat-lbl">Bekleyen Yorum</div>
+          <div class="stat-lbl" data-admin-i18n="stat.pending">Bekleyen Yorum</div>
         </div>
       </div>
 
       <!-- Posts -->
       <section class="sec active" id="sec-posts">
-        <div class="section-title">Blog Yazıları</div>
-        <input class="finput post-search" id="post-search" placeholder="🔍 Ara: başlık, slug, etiket" oninput="applyPostFilter()">
+        <div class="section-title" data-admin-i18n="sec.posts">Blog Yazıları</div>
+        <input class="finput post-search" id="post-search" placeholder="🔍 Ara: başlık, slug, etiket" data-admin-i18n-ph="post.search.ph" oninput="applyPostFilter()">
         <div class="post-list" id="post-list">
-          <div style="font-family:var(--fm);font-size:10px;letter-spacing:2px;color:var(--muted);padding:16px 0">Yükleniyor...</div>
+          <div style="font-family:var(--fm);font-size:10px;letter-spacing:2px;color:var(--muted);padding:16px 0" data-admin-i18n="loading">Yükleniyor...</div>
         </div>
 
-        <div class="section-title" id="form-title" style="margin-top:48px">Yeni Yazı</div>
+        <div class="section-title" id="form-title" style="margin-top:48px" data-admin-i18n="form.new">Yeni Yazı</div>
         <div class="form-card">
           <div class="frow">
             <div class="fgroup">
-              <label class="flbl">Başlık</label>
-              <input class="finput" id="f-title" placeholder="Yazı başlığı">
+              <label class="flbl" data-admin-i18n="flbl.title">Başlık</label>
+              <input class="finput" id="f-title" placeholder="Yazı başlığı" data-admin-i18n-ph="ph.title">
             </div>
             <div class="fgroup">
-              <label class="flbl">Slug (otomatik)</label>
+              <label class="flbl" data-admin-i18n="flbl.slug">Slug (otomatik)</label>
               <input class="finput" id="f-slug" placeholder="yazi-basligi">
             </div>
           </div>
           <div class="frow3">
             <div class="fgroup">
-              <label class="flbl">Emoji</label>
+              <label class="flbl" data-admin-i18n="flbl.emoji">Emoji</label>
               <input class="finput" id="f-emoji" placeholder="⚛" style="font-size:22px;text-align:center">
             </div>
             <div class="fgroup" style="grid-column:span 2">
-              <label class="flbl">Etiketler (virgülle ayırın)</label>
+              <label class="flbl" data-admin-i18n="flbl.tags">Etiketler (virgülle ayırın)</label>
               <input class="finput" id="f-tags" placeholder="Kuantum, Astrofizik, Higgs">
             </div>
           </div>
           <div class="fgroup">
-            <label class="flbl">Özet (kart ve meta için)</label>
-            <input class="finput" id="f-summary" placeholder="Yazının kısa özeti...">
+            <label class="flbl" data-admin-i18n="flbl.summary">Özet (kart ve meta için)</label>
+            <input class="finput" id="f-summary" placeholder="Yazının kısa özeti..." data-admin-i18n-ph="ph.summary">
           </div>
           <div class="fgroup">
-            <label class="flbl">İçerik</label>
+            <label class="flbl" data-admin-i18n="flbl.content">İçerik</label>
             <div class="md-help">
               <span class="md-chip" onclick="ins('## ')">## Başlık</span>
               <span class="md-chip" onclick="ins('### ')">### Alt Başlık</span>
               <span class="md-chip" onclick="ins('**','**')">**kalın**</span>
               <span class="md-chip" onclick="ins('\n\n')">Paragraf</span>
               <span class="md-chip" onclick="ins('`','`')">kod</span>
-              <span class="md-chip" onclick="togglePreview()">Önizle</span>
+              <span class="md-chip" onclick="togglePreview()" data-admin-i18n="md.preview">Önizle</span>
             </div>
             <textarea class="finput" id="f-content" placeholder="## Başlık&#10;&#10;İçerik buraya...&#10;&#10;### Alt Başlık&#10;&#10;**Önemli** bir şey." oninput="livePreview()"></textarea>
             <div class="preview-area" id="preview"></div>
           </div>
           <div class="form-actions">
-            <button class="btn btn-p" onclick="submit(true)">✓ Yayınla</button>
-            <button class="btn btn-g" onclick="submit(false)">Taslak Kaydet</button>
-            <button class="btn btn-g" onclick="clearForm()">Temizle</button>
+            <button class="btn btn-p" onclick="submit(true)" data-admin-i18n="btn.publish">✓ Yayınla</button>
+            <button class="btn btn-g" onclick="submit(false)" data-admin-i18n="btn.draft">Taslak Kaydet</button>
+            <button class="btn btn-g" onclick="clearForm()" data-admin-i18n="btn.clear">Temizle</button>
           </div>
           <div class="fstatus" id="fstatus"></div>
         </div>
@@ -134,17 +137,17 @@
 
       <!-- Messages -->
       <section class="sec" id="sec-msgs">
-        <div class="section-title">İletişim Mesajları</div>
+        <div class="section-title" data-admin-i18n="sec.msgs">İletişim Mesajları</div>
         <div class="msg-list" id="msg-list">
-          <div style="font-family:var(--fm);font-size:10px;letter-spacing:2px;color:var(--muted);padding:16px 0">Yükleniyor...</div>
+          <div style="font-family:var(--fm);font-size:10px;letter-spacing:2px;color:var(--muted);padding:16px 0" data-admin-i18n="loading">Yükleniyor...</div>
         </div>
       </section>
 
       <!-- Comments -->
       <section class="sec" id="sec-coms">
-        <div class="section-title">Blog Yorumları</div>
+        <div class="section-title" data-admin-i18n="sec.coms">Blog Yorumları</div>
         <div class="msg-list" id="com-list">
-          <div style="font-family:var(--fm);font-size:10px;letter-spacing:2px;color:var(--muted);padding:16px 0">Yükleniyor...</div>
+          <div style="font-family:var(--fm);font-size:10px;letter-spacing:2px;color:var(--muted);padding:16px 0" data-admin-i18n="loading">Yükleniyor...</div>
         </div>
       </section>
 

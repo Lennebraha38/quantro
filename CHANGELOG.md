@@ -3,6 +3,16 @@
 Tüm önemli değişiklikler bu dosyada not edilir. Format: [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/),
 sürüm: [SemVer](https://semver.org/).
 
+## 1.3.0 — 2026-09-19
+
+### Eklendi
+- **Yönetim paneli i18n (TR/EN)** — `admin-i18n.js`; giriş, kenar çubuğu,
+  istatistikler, form etiketleri/butonları ve dinamik liste butonları
+  (Sil/Onayla) çevrilir, `qlang` ile senkron. Sistem güvenlik mesajları TR kalır.
+- **CWV ölçümü** — E2E içinde `fcp/lcp/cls` hedefi: FCP/LCP < 4000 ms,
+  CLS < 0.1 (index + blog). Sınır ihlalinde test kızar.
+- Admin: `#langbtn` (üst çubuk) ile TR/EN geçişi; script `sw.js` SHELL'ine eklendi.
+
 ## 1.2.0 — 2026-09-19
 
 ### Eklendi

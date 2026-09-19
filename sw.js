@@ -1,5 +1,5 @@
 const CACHE = 'quantro-v1.11.0';
-const SHELL = ['/index.html', '/hakkimizda.html', '/arastirma.html', '/simulasyon.html', '/blog.html', '/quantro-lab.html', '/qtr-admin.html', '/quantro.js', '/lab-core.js', '/style.css', '/app.js', '/blog-i18n.js', '/manifest.webmanifest', '/css/base.css', '/css/blog.css', '/css/lab.css', '/css/admin.css'];
+const SHELL = ['/index.html', '/hakkimizda.html', '/arastirma.html', '/simulasyon.html', '/blog.html', '/quantro-lab.html', '/qtr-admin.html', '/quantro.js', '/lab-core.js', '/style.css', '/app.js', '/blog-i18n.js', '/admin-i18n.js', '/manifest.webmanifest', '/css/base.css', '/css/blog.css', '/css/lab.css', '/css/admin.css'];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting()));

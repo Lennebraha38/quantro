@@ -161,9 +161,10 @@ npm test                 # 39 birim testi
 └── test/_lib.test.js    # JWT doğrulama, scrypt, rate-limiter, auth katmanı
 └── test/api-handlers.test.js # api/auth · comments · blog (mock fetch)
 
-npm run test:e2e         # 10 E2E (Playwright + Chromium)
+npm run test:e2e         # 12 E2E (Playwright + Chromium)
 └── test/e2e.test.js     # sayfa render, lab(13 araç/QRNG/QuantumCircuit),
-                         # admin giriş, PWA, i18n+kalıcılık, blog i18n, CSP sıfır-ihlal
+                         # admin giriş, PWA, i18n+kalıcılık, blog i18n,
+                         # admin i18n, CWV (fcp/lcp/cls), CSP sıfır-ihlal
 
 npm run test:coverage    # birim + kapsam eşiği kontrolü (Node ≥ 20)
                          # eşikler: satır 80% · dal 75% · fonksiyon 85%
@@ -187,7 +188,10 @@ PR'lere Vercel önizleme deploy'u: `.github/workflows/preview.yml`
 - Resend (e-posta), ANU Qrng (gerçek kuantum rastgelelik)
 - PWA Service Worker, JSON-LD SEO, **8 dil i18n** — ana site (`app.js` I18N),
   lab (`/lab/` + `lab-core.js`) ve blog arayüzü (`blog-i18n.js`) ortak `qlang`
-  ile; RTL (Arapça) destekli. Kapsam notu: yönetim paneli Türkçe'dir.
+  ile; RTL (Arapça) destekli. Yönetim paneli TR/EN (`admin-i18n.js`).
+- **Core Web Vitals** E2E içinde ölçülür (`test/e2e.test.js` — CWV senaryosu):
+  FCP/LCP < 4000 ms ve CLS < 0.1 hedefi, index + blog sayfalarında
+  sınır ihlali olursa test kızar.
 
 ---
 

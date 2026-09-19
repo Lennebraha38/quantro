@@ -228,3 +228,56 @@ test('i18n: blog arayüzü de dil değişimini takip eder', async () => {
   await r.close();
   await c.close();
 });
+
+test('i18n: admin paneline düşer (TR/EN) ve çevirir', async () => {
+  const c = await browser.newContext();
+  const r = await open('/qtr-admin.html', c);
+  const sub0 = (await r.page.textContent('[data-admin-i18n="login.sub"]')).trim();
+  const btn0 = (await r.page.textContent('[data-admin-i18n="login.btn"]')).trim();
+  assert.equal(sub0, 'Yönetim Paneli · Gizli Erişim');
+  assert.equal(btn0, 'Sisteme Gir');
+  await r.page.click('#langbtn');
+  await r.page.waitForTimeout(100);
+  const sub1 = (await r.page.textContent('[data-admin-i18n="login.sub"]')).trim();
+  const btn1 = (await r.page.textContent('[data-admin-i18n="login.btn"]')).trim();
+  const lbl = await r.page.textContent('#langbtn');
+  assert.equal(sub1, 'Admin Panel · Restricted Access', 'admin giriş EN');
+  assert.equal(btn1, 'Sign In');
+  assert.equal(lbl.trim(), 'EN');
+  assert.equal(r.violations.length, 0, `admin i18n CSP ihlali: ${r.violations.join('|')}`);
+  await r.close();
+  await c.close();
+});
+
+test('CWV: fcp/lcp/cls ölçümleri makul aralıkta (index + blog)', async () => {
+  const c = await browser.newContext();
+  for (const path of ['/index.html', '/blog.html']) {
+    const r = await open(path, c);
+    await r.page.waitForTimeout(1300);
+    const m = await r.page.evaluate(() => new Promise((resolve) => {
+      let lcp = 0, cls = 0, fcp = 0;
+      try {
+        const p = performance.getEntriesByType('paint');
+        const f = p.find((e) => e.name === 'first-contentful-paint');
+        if (f) fcp = f.startTime;
+      } catch (e) {}
+      try {
+        new PerformanceObserver((list) => {
+          for (const e of list.getEntries()) if (e.entryType === 'largest-contentful-paint') lcp = e.startTime;
+        }).observe({ type: 'largest-contentful-paint', buffered: true });
+      } catch (e) {}
+      setTimeout(() => {
+        try {
+          const sh = performance.getEntriesByType('layout-shift').filter((e) => !e.hadRecentInput);
+          for (const e of sh) cls += e.value;
+        } catch (e) {}
+        resolve({ fcp: Math.round(fcp), lcp: Math.round(lcp), cls: Math.round(cls * 1000) / 1000 });
+      }, 1100);
+    }));
+    assert.ok(m.fcp > 0 && m.fcp < 4000, `${path}: FCP ${m.fcp}ms aşırı yüksek`);
+    assert.ok(m.lcp > 0 && m.lcp < 4000, `${path}: LCP ${m.lcp}ms aşırı yüksek`);
+    assert.ok(m.cls < 0.1, `${path}: CLS ${m.cls} sınırda`);
+    await r.close();
+  }
+  await c.close();
+});
