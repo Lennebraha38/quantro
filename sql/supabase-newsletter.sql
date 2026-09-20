@@ -13,18 +13,14 @@ create table if not exists public.newsletters (
   constraint newsletters_email_key unique (email)
 );
 
--- Küçük harfe normalize et ve tekilleştir
+-- Küçük harfe normalize edilmiş benzersizlik
 create unique index if not exists newsletters_email_lower_idx
   on public.newsletters (lower(email));
 
+-- GİZLİLİK: RLS aç (anon hiçbir şey okuyup yazamaz). Yazma yalnızca
+-- service_role üzerinden yapılır; service_role RLS'i otomatik baypas eder,
+-- bu yüzden ayrı bir insert politikası gerekmez.
 alter table public.newsletters enable row level security;
-
--- İstemci (anon) doğrudan yazamaz; yalnızca service_role üzerinden
--- api/newsletter.js yazar. Okuma da kapalı (gizlilik).
-drop policy if exists "newsletters_insert_via_service" on public.newsletters;
-create policy "newsletters_insert_via_service"
-  on public.newsletters for insert
-  to service_role with check (true);
 
 comment on table public.newsletters is
   'Quantro bülten aboneleri — KVKK 6698 kapsamında yalnızca bülten için kullanılır.';
