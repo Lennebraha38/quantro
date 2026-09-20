@@ -35,11 +35,11 @@ async function collect() {
     out.npm = { downloadsLastMonth: n.downloads || 0 };
   } catch (e) { out.npm = null; }
   try {
-    const fs = await import('node:fs');
-    const path = await import('node:path');
-    const dir = path.join(process.cwd(), 'blog-articles');
-    if (fs.default.existsSync(dir)) {
-      out.blogPosts = fs.default.readdirSync(dir).filter((f) => f.endsWith('.tr.md')).length;
+    const fs = require('node:fs');
+    const path = require('node:path');
+    const dir = path.join(__dirname, '..', 'blog-articles');
+    if (fs.existsSync(dir)) {
+      out.blogPosts = fs.readdirSync(dir).filter((f) => f.endsWith('.tr.md')).length;
     }
   } catch (e) { out.blogPosts = 0; }
   return out;
