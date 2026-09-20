@@ -11,6 +11,8 @@ permissions:
 jobs:
   metrics:
     runs-on: ubuntu-latest
+    env:
+      PSI_API_KEY: ${{ secrets.PSI_API_KEY }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -20,16 +22,14 @@ jobs:
       - name: Kurulum
         run: npm ci
       - name: Alan + Lab metrikleri (PageSpeed Insights)
-        if: ${{ secrets.PSI_API_KEY != '' }}
-        env:
-          PSI_API_KEY: ${{ secrets.PSI_API_KEY }}
+        if: ${{ env.PSI_API_KEY != '' }}
         run: |
           node scripts/metrics.mjs https://quantro-1.vercel.app mobile | tee pagespeed-metrics.log
       - name: PSI anahtarı yok — ölçüm atlandı
-        if: ${{ secrets.PSI_API_KEY == '' }}
+        if: ${{ env.PSI_API_KEY == '' }}
         run: echo "PSI_API_KEY tanımlı değil; metrik job'ı atlandı."
       - name: Metrik logunu kaydet
-        if: ${{ secrets.PSI_API_KEY != '' }}
+        if: ${{ env.PSI_API_KEY != '' }}
         uses: actions/upload-artifact@v4
         with:
           name: pagespeed-metrics
