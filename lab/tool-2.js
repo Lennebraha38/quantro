@@ -24,8 +24,7 @@ async function mc(){
   const probs=qc.probabilities();
   const total=slots.reduce((a,b)=>a+b,0)||1;
   const states=['|00⟩','|01⟩','|10⟩','|11⟩'];
-  const done3d=crb3dRender(slots,probs,states);
-  if(!done3d)document.getElementById('crb').innerHTML=states.map((l,i)=>{
+  document.getElementById('crb').innerHTML=states.map((l,i)=>{
     const mh=mx>0?Math.round(slots[i]/mx*60):3;
     const eh=Math.max(2,Math.round(probs[i]*60));
     return `<div class="crb-w"><div class="crb-val">${slots[i]}</div><div class="crb-track"><div class="crb ${slots[i]===mx&&slots[i]>0?'active':''}" style="height:${mh}px"></div><span class="crb-exp" style="height:${eh}px"></span></div><div class="crb-lbl">${l}</div><div class="crb-pct">${(probs[i]*100).toFixed(1)}%</div></div>`;
@@ -42,54 +41,4 @@ function bellDemo(){
   circ[0].push({g:'CNOT'});
   rend();
   mc();
-}
-/* ══ T2 · 3D ölçüm çubukları ══ */
-let q3c=null;
-window._stop3d=window._stop3d||{};
-window._stop3d[2]=()=>{if(window.Q3D&&q3c){q3c.stop();q3c=null}};
-function crb3dRender(slots,probs,states){
-  const cv=document.getElementById('crb3d');
-  if(!cv||!window.Q3D||!window.THREE)return false;
-  const cr=document.getElementById('cr');
-  if(cr)cr.style.display='block';
-  if(cv.style.display==='none')cv.style.display='block';
-  if(!q3c||q3c.dead){
-    q3c=Q3D.mount('crb3d',{cam:[0,3,6.4],fov:44,amb:.75,autoRot:false,h:170});
-    if(!q3c)return false;
-    const g=q3c.g;
-    const grid=new THREE.BufferGeometry(),pts=[];
-    for(let i=-6;i<=6;i++){pts.push(new THREE.Vector3(i*0.5,-0.02,-0.8),new THREE.Vector3(i*0.5,-0.02,0.8))}
-    grid.setFromPoints(pts);
-    g.add(new THREE.Line(grid,new THREE.LineBasicMaterial({color:0x123a52,transparent:true,opacity:0.5})));
-    q3c.bars=[];q3c.exps=[];
-    for(let i=0;i<4;i++){
-      const b=new THREE.Mesh(new THREE.BoxGeometry(0.42,1,0.42),Q3D.m(Q3D.CYAN,0.95));
-      b.position.set(i-1.5,0.02,-0.35);g.add(b);q3c.bars.push(b);
-      const e=new THREE.Mesh(new THREE.BoxGeometry(0.46,0.03,0.46),Q3D.m(0x00f0a0,0.8));
-      e.position.set(i-1.5,0.02,-0.35);g.add(e);q3c.exps.push(e);
-    }
-    const axis=new THREE.BufferGeometry();
-    axis.setFromPoints([new THREE.Vector3(-2.8,0,0),new THREE.Vector3(2.8,0,0)]);
-    g.add(new THREE.Line(axis,new THREE.LineBasicMaterial({color:0x00c8f0,transparent:true,opacity:0.3})));
-    states.forEach((s,i)=>{
-      const cn=document.createElement('canvas');cn.width=160;cn.height=48;
-      const cc=cn.getContext('2d');cc.font='bold 34px monospace';cc.fillStyle='#a8e6ff';cc.textAlign='center';cc.fillText(s,80,32);
-      const spr=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(cn),transparent:true}));
-      spr.position.set(i-1.5,-0.55,-0.35);spr.scale.set(0.9,0.27,1);
-      g.add(spr);
-    });
-  }
-  const mx=Math.max(...slots,1),bars=q3c.bars,exps=q3c.exps;
-  slots.forEach((v,i)=>{
-    const hh=Math.max(0.05,v/mx*2.2),eh=Math.max(0.05,probs[i]*2.4);
-    bars[i].scale.set(1,hh,1);
-    bars[i].position.y=0.02+hh/2;
-    bars[i].material.color.setHSL(0.53-v/mx*0.15,0.9,0.5);
-    exps[i].position.y=0.02+eh;
-    exps[i].material.color.setHex(0x00f0a0);
-    exps[i].material.opacity=probs[i]>0?0.8:0.25;
-  });
-  document.getElementById('crb').style.display='none';
-  cv.style.display='block';
-  return true;
 }

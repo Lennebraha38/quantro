@@ -90,7 +90,7 @@ window.__qc={};
       <h1 class="hero-h1">KUANTUM<br><span class="o">LAB</span></h1>
       <div class="hero-row">
         <p class="hero-desc" data-i18n="hero.desc">Kuantum mekaniğini ve astrofiziki bizzat deneyimleyin. İlk Türkçe, açık kaynak (MIT) kuantum + astrofizik araç seti.</p>
-        <div class="hero-badge" data-i18n="hero.badge">TR · Açık Kaynak (MIT) · 13 Araç · 8 Dil</div>
+        <div class="hero-badge" data-i18n="hero.badge">🇹🇷 Açık Kaynak (MIT) · 13 Araç · 8 Dil</div>
       </div>
     </div>
   </div>
@@ -103,40 +103,18 @@ window.__qc={};
   <div class="tools-intro">
     <h2 data-i18n="intro.h2">13 Özgün<br>Araç</h2>
     <span class="tools-count" data-i18n="intro.count">Açık Kaynak (MIT) Kuantum + Astrofizik Araç Seti · Quantro ARGE · 2025</span>
-    <div class="intro-tools">
-      <button type="button" class="fav-filter" id="fav-filter" onclick="favFilterToggle()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.6l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 17l-5.2 2.7 1-5.8L3.5 9.8l5.9-.9z"/></svg> <span>FAV</span></button>
-      <button type="button" class="fav-filter" onclick="kbHelp()" title="Klavye kısayolları">⌨ ?</button>
-    </div>
   </div>
 
   <!-- T1: QRNG -->
-  <div class="tool-card tc1">
-      <div class="tool-header" onclick="tog(1)">
-        <span class="tc-ico tc-ico-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="2.3"/><ellipse cx="12" cy="12" rx="9.2" ry="3.6"/><ellipse cx="12" cy="12" rx="9.2" ry="3.6" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="9.2" ry="3.6" transform="rotate(120 12 12)"/></svg></span>
-        <span class="tc-mid">
-          <span class="tt" data-i18n="t1.title">Kuantum Rastgelelik Motoru</span>
-          <span class="tc-prev" data-i18n="t1.card">Kuantum Rastgelelik Motoru</span>
-        </span>
-        <span class="tc-actions">
-          <button type="button" class="tc-btn" data-i18n="card.info" onclick="cardInfo(1,event)">ⓘ Bilgi</button>
-          <button type="button" class="tc-btn tc-demo" data-i18n="card.demo" onclick="cardDemo(1,event)">▶ Hızlı Demo</button>
-        </span>
+  <div class="tool-card">
+    <div class="tool-header" onclick="tog(1)">
+      <span class="tn">01</span>
+      <span class="tt" data-i18n="t1.title">Kuantum Rastgelelik Motoru</span>
       <span class="tb-badge first" data-i18n="badge.first">Açık Kaynak (MIT)</span>
-        <button type="button" class="tc-fav" data-fav="1" onclick="event.stopPropagation();favToggle(1)" aria-label="Favori" title="Favori (F)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.6l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 17l-5.2 2.7 1-5.8L3.5 9.8l5.9-.9z"/></svg></button>
-        <span class="tg" id="tg1">+</span>
-      </div>
-      <div class="tc-panel" id="tc-panel-1"></div>
+      <span class="tg" id="tg1">+</span>
+    </div>
     <div class="tool-body" id="tb1">
-      <div class="ql-hud">
-        <span class="ql-live"><i></i>LIVE</span>
-        <span class="ql-tag">QRNG · ANU</span>
-        <span class="ql-mirror" id="qlm1">—</span>
-        <span class="ql-qreg" id="qq1"></span>
-        <span class="ql-run" id="qlr1"></span>
-        <button type="button" class="ql-copy" data-copy="1" onclick="hudCopy(1,event)">COPY</button>
-      </div>
       <div class="qrng-display">
-        <canvas id="qrng-3d" class="qlab-3d qrng-3d" data-export="qrng-foam"></canvas>
         <div class="qrng-num" id="qn">—</div>
         <div class="qrng-lbl" data-i18n="t1.lbl">Kuantum Süperpozisyon Tabanlı Rastgele Sayı</div>
         <div class="qwave"></div>
@@ -146,12 +124,12 @@ window.__qc={};
         <span class="qlbl" data-i18n="t1.max">Max</span><input class="qin" id="qmax" type="number" value="1000000">
         <span class="qlbl" data-i18n="t1.src">Kaynak</span>
         <select class="qin" id="qsrc" style="width:auto">
-          <option value="quantum" selected data-i18n="src.q">Gerçek Kuantum (ANU)</option>
-          <option value="sim" data-i18n="src.s">Simüle (Web Crypto)</option>
+          <option value="quantum" selected data-i18n="src.q">⚛ Gerçek Kuantum (ANU)</option>
+          <option value="sim" data-i18n="src.s">◌ Simüle (Web Crypto)</option>
         </select>
-        <button class="btn btn-p" onclick="genQ()" data-i18n="t1.gen"> Üret</button>
+        <button class="btn btn-p" onclick="genQ()" data-i18n="t1.gen">⚛ Üret</button>
         <button class="btn btn-g" onclick="genQS()" data-i18n="t1.series">10x Seri</button>
-        <button class="btn btn-g" onclick="chiToggle()" data-i18n="t1.chi">χ² Test</button>
+        <button class="btn btn-g" onclick="chiToggle()" data-i18n="t1.chi">𝝌² Test</button>
         <button class="btn btn-r" onclick="clearQ()" data-i18n="t1.clear">Temizle</button>
         <span class="qlbl" id="qstat" style="color:var(--muted)">…</span>
       </div>
@@ -169,31 +147,14 @@ window.__qc={};
   </div>
 
   <!-- T2: CIRCUIT -->
-  <div class="tool-card tc2">
-      <div class="tool-header" onclick="tog(2)">
-        <span class="tc-ico tc-ico-2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h18M3 16h18"/><rect x="9" y="5.2" width="6" height="5.6" rx="1.2"/><circle cx="12" cy="16" r="2.4"/><path d="M12 13.6v-1.4M9 18.4h6"/></svg></span>
-        <span class="tc-mid">
-          <span class="tt" data-i18n="t2.title">Kuantum Devre Simülatörü</span>
-          <span class="tc-prev" data-i18n="t2.card">Kuantum Devre Simülatörü</span>
-        </span>
-        <span class="tc-actions">
-          <button type="button" class="tc-btn" data-i18n="card.info" onclick="cardInfo(2,event)">ⓘ Bilgi</button>
-          <button type="button" class="tc-btn tc-demo" data-i18n="card.demo" onclick="cardDemo(2,event)">▶ Hızlı Demo</button>
-        </span>
+  <div class="tool-card">
+    <div class="tool-header" onclick="tog(2)">
+      <span class="tn">02</span>
+      <span class="tt" data-i18n="t2.title">Kuantum Devre Simülatörü</span>
       <span class="tb-badge first" data-i18n="badge.first">Açık Kaynak (MIT)</span>
-        <button type="button" class="tc-fav" data-fav="2" onclick="event.stopPropagation();favToggle(2)" aria-label="Favori" title="Favori (F)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.6l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 17l-5.2 2.7 1-5.8L3.5 9.8l5.9-.9z"/></svg></button>
-        <span class="tg" id="tg2">+</span>
-      </div>
-      <div class="tc-panel" id="tc-panel-2"></div>
+      <span class="tg" id="tg2">+</span>
+    </div>
     <div class="tool-body" id="tb2">
-      <div class="ql-hud">
-        <span class="ql-live"><i></i>LIVE</span>
-        <span class="ql-tag">2-QUBIT · HADAMARD</span>
-        <span class="ql-mirror" id="qlm2">—</span>
-        <span class="ql-qreg" id="qq2"></span>
-        <span class="ql-run" id="qlr2"></span>
-        <button type="button" class="ql-copy" data-copy="2" onclick="hudCopy(2,event)">COPY</button>
-      </div>
       <div class="circ-wrap">
         <div class="gate-panel">
           <h4 data-i18n="t2.gates.title">Kuantum Kapıları</h4>
@@ -213,13 +174,12 @@ window.__qc={};
           </div>
           <div style="display:flex;gap:10px">
             <button class="btn btn-p" onclick="mc()" data-i18n="t2.measure">⟨ψ| Ölç</button>
-            <button class="btn btn-g" onclick="bellDemo()" data-i18n="t2.bell"> Bell |00⟩+|11⟩</button>
+            <button class="btn btn-g" onclick="bellDemo()" data-i18n="t2.bell">⚛ Bell |00⟩+|11⟩</button>
             <button class="btn btn-g" onclick="rc()" data-i18n="t2.clear">Temizle</button>
           </div>
           <div id="cr" style="display:none;margin-top:16px;background:rgba(0,200,240,.03);border:1px solid rgba(0,200,240,.07);padding:14px">
             <div style="font-family:var(--fm);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:10px" data-i18n="t2.results">Ölçüm Sonuçları (1024 atış)</div>
             <div class="cr-bars" id="crb"></div>
-            <canvas id="crb3d" class="crb3d" data-export="quantum-circuit-outcomes" style="display:none"></canvas>
             <div class="cr-exact" id="crx" style="font-family:var(--fm);font-size:11px;color:var(--muted);margin-top:10px"></div>
           </div>
         </div>
@@ -229,31 +189,14 @@ window.__qc={};
   </div>
 
   <!-- T3: UNIVERSE -->
-  <div class="tool-card tc3">
-      <div class="tool-header" onclick="tog(3)">
-        <span class="tc-ico tc-ico-3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3c5 0 9 4 9 9M12 21c-5 0-9-4-9-9"/><circle cx="12" cy="12" r="3"/><path d="M5.6 6.6c3-3 8.2-3 11.6.6M18.4 17.4c-3 3-8.2 3-11.6-.6"/></svg></span>
-        <span class="tc-mid">
-          <span class="tt" data-i18n="t3.title">Evren Yaşı Hesaplayıcı</span>
-          <span class="tc-prev" data-i18n="t3.card">Evren Yaşı Hesaplayıcı</span>
-        </span>
-        <span class="tc-actions">
-          <button type="button" class="tc-btn" data-i18n="card.info" onclick="cardInfo(3,event)">ⓘ Bilgi</button>
-          <button type="button" class="tc-btn tc-demo" data-i18n="card.demo" onclick="cardDemo(3,event)">▶ Hızlı Demo</button>
-        </span>
+  <div class="tool-card">
+    <div class="tool-header" onclick="tog(3)">
+      <span class="tn">03</span>
+      <span class="tt" data-i18n="t3.title">Evren Yaşı Hesaplayıcı</span>
       <span class="tb-badge first" data-i18n="badge.first">Açık Kaynak (MIT)</span>
-        <button type="button" class="tc-fav" data-fav="3" onclick="event.stopPropagation();favToggle(3)" aria-label="Favori" title="Favori (F)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.6l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 17l-5.2 2.7 1-5.8L3.5 9.8l5.9-.9z"/></svg></button>
-        <span class="tg" id="tg3">+</span>
-      </div>
-      <div class="tc-panel" id="tc-panel-3"></div>
+      <span class="tg" id="tg3">+</span>
+    </div>
     <div class="tool-body" id="tb3">
-      <div class="ql-hud">
-        <span class="ql-live"><i></i>LIVE</span>
-        <span class="ql-tag">ΛCDM · H₀ 67.4</span>
-        <span class="ql-mirror" id="qlm3">—</span>
-        <span class="ql-qreg" id="qq3"></span>
-        <span class="ql-run" id="qlr3"></span>
-        <button type="button" class="ql-copy" data-copy="3" onclick="hudCopy(3,event)">COPY</button>
-      </div>
       <div class="univ-grid">
         <div>
           <div class="param-item">
@@ -272,7 +215,7 @@ window.__qc={};
             <div class="param-lbl"><span data-i18n="t3.orr">Radyasyon Ωᵣ</span><strong id="orv">0.00009</strong></div>
             <input class="slider" type="range" id="orr" min="0.00001" max="0.001" value="0.00009" step="0.00001" oninput="uU()">
           </div>
-          <button class="btn btn-g" onclick="rU()" data-i18n="t3.planck"> Planck 2018 Değerleri</button>
+          <button class="btn btn-g" onclick="rU()" data-i18n="t3.planck">↺ Planck 2018 Değerleri</button>
           <div class="explain" style="margin-top:16px"><p data-i18n="t3.explain">Friedmann denklemi: <strong>H²(a) = H₀²(Ωᵣ/a⁴ + Ωₘ/a³ + ΩΛ)</strong> — 10.000 adımlı nümerik integral ile hesaplanır.</p></div>
         </div>
         <div>
@@ -299,34 +242,17 @@ window.__qc={};
   </div>
 
   <!-- T4: QKD -->
-  <div class="tool-card tc4">
-      <div class="tool-header" onclick="tog(4)">
-        <span class="tc-ico tc-ico-4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.4" width="14" height="9.2" rx="2.2"/><path d="M8.2 10.4V8a3.8 3.8 0 0 1 7.6 0v2.4"/><circle cx="12" cy="14.8" r="1.4"/><path d="M12 16.2v1.4"/></svg></span>
-        <span class="tc-mid">
-          <span class="tt" data-i18n="t4.title">Kuantum Şifreleme — BB84</span>
-          <span class="tc-prev" data-i18n="t4.card">Kuantum Şifreleme — BB84</span>
-        </span>
-        <span class="tc-actions">
-          <button type="button" class="tc-btn" data-i18n="card.info" onclick="cardInfo(4,event)">ⓘ Bilgi</button>
-          <button type="button" class="tc-btn tc-demo" data-i18n="card.demo" onclick="cardDemo(4,event)">▶ Hızlı Demo</button>
-        </span>
+  <div class="tool-card">
+    <div class="tool-header" onclick="tog(4)">
+      <span class="tn">04</span>
+      <span class="tt" data-i18n="t4.title">Kuantum Şifreleme — BB84</span>
       <span class="tb-badge first" data-i18n="badge.first">Açık Kaynak (MIT)</span>
-        <button type="button" class="tc-fav" data-fav="4" onclick="event.stopPropagation();favToggle(4)" aria-label="Favori" title="Favori (F)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.6l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 17l-5.2 2.7 1-5.8L3.5 9.8l5.9-.9z"/></svg></button>
-        <span class="tg" id="tg4">+</span>
-      </div>
-      <div class="tc-panel" id="tc-panel-4"></div>
+      <span class="tg" id="tg4">+</span>
+    </div>
     <div class="tool-body" id="tb4">
-      <div class="ql-hud">
-        <span class="ql-live"><i></i>LIVE</span>
-        <span class="ql-tag">BB84 · QKD</span>
-        <span class="ql-mirror" id="qlm4">—</span>
-        <span class="ql-qreg" id="qq4"></span>
-        <span class="ql-run" id="qlr4"></span>
-        <button type="button" class="ql-copy" data-copy="4" onclick="hudCopy(4,event)">COPY</button>
-      </div>
       <div class="eve-toggle">
         <input type="checkbox" id="eve">
-        <label for="eve" data-i18n="t4.eve">Dinleyici (Eve) aktif — Kuantum kanalı izleniyor</label>
+        <label for="eve" data-i18n="t4.eve">👁 Dinleyici (Eve) aktif — Kuantum kanalı izleniyor</label>
       </div>
       <div class="qkd-grid">
         <div class="qkd-party">
@@ -358,31 +284,14 @@ window.__qc={};
   </div>
 
   <!-- T5: HEISENBERG -->
-  <div class="tool-card tc5">
-      <div class="tool-header" onclick="tog(5)">
-        <span class="tc-ico tc-ico-5"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.2"/><circle cx="12" cy="12" r="4.2"/><circle cx="12" cy="12" r="1"/></svg></span>
-        <span class="tc-mid">
-          <span class="tt" data-i18n="t5.title">Heisenberg Belirsizlik Görselleştiricisi</span>
-          <span class="tc-prev" data-i18n="t5.card">Heisenberg Belirsizlik Görselleştiricisi</span>
-        </span>
-        <span class="tc-actions">
-          <button type="button" class="tc-btn" data-i18n="card.info" onclick="cardInfo(5,event)">ⓘ Bilgi</button>
-          <button type="button" class="tc-btn tc-demo" data-i18n="card.demo" onclick="cardDemo(5,event)">▶ Hızlı Demo</button>
-        </span>
+  <div class="tool-card">
+    <div class="tool-header" onclick="tog(5)">
+      <span class="tn">05</span>
+      <span class="tt" data-i18n="t5.title">Heisenberg Belirsizlik Görselleştiricisi</span>
       <span class="tb-badge new" data-i18n="badge.new">Yeni</span>
-        <button type="button" class="tc-fav" data-fav="5" onclick="event.stopPropagation();favToggle(5)" aria-label="Favori" title="Favori (F)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.6l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 17l-5.2 2.7 1-5.8L3.5 9.8l5.9-.9z"/></svg></button>
-        <span class="tg" id="tg5">+</span>
-      </div>
-      <div class="tc-panel" id="tc-panel-5"></div>
+      <span class="tg" id="tg5">+</span>
+    </div>
     <div class="tool-body" id="tb5">
-      <div class="ql-hud">
-        <span class="ql-live"><i></i>LIVE</span>
-        <span class="ql-tag">Δx·Δp ≥ ℏ/2</span>
-        <span class="ql-mirror" id="qlm5">—</span>
-        <span class="ql-qreg" id="qq5"></span>
-        <span class="ql-run" id="qlr5"></span>
-        <button type="button" class="ql-copy" data-copy="5" onclick="hudCopy(5,event)">COPY</button>
-      </div>
       <div class="heis-wrap">
         <div class="heis-left">
           <div class="heis-param">
@@ -414,31 +323,14 @@ window.__qc={};
   </div>
 
   <!-- T6: BLACK HOLE -->
-  <div class="tool-card tc6">
-      <div class="tool-header" onclick="tog(6)">
-        <span class="tc-ico tc-ico-6"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3.1"/><ellipse cx="12" cy="12" rx="9.4" ry="3.5"/><path d="M2.7 12c0 1.9 4.2 3.5 9.3 3.5s9.3-1.6 9.3-3.5"/></svg></span>
-        <span class="tc-mid">
-          <span class="tt" data-i18n="t6.title">Kara Delik Fizik Simülatörü</span>
-          <span class="tc-prev" data-i18n="t6.card">Kara Delik Fizik Simülatörü</span>
-        </span>
-        <span class="tc-actions">
-          <button type="button" class="tc-btn" data-i18n="card.info" onclick="cardInfo(6,event)">ⓘ Bilgi</button>
-          <button type="button" class="tc-btn tc-demo" data-i18n="card.demo" onclick="cardDemo(6,event)">▶ Hızlı Demo</button>
-        </span>
+  <div class="tool-card">
+    <div class="tool-header" onclick="tog(6)">
+      <span class="tn">06</span>
+      <span class="tt" data-i18n="t6.title">Kara Delik Fizik Simülatörü</span>
       <span class="tb-badge new" data-i18n="badge.new">Yeni</span>
-        <button type="button" class="tc-fav" data-fav="6" onclick="event.stopPropagation();favToggle(6)" aria-label="Favori" title="Favori (F)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.6l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 17l-5.2 2.7 1-5.8L3.5 9.8l5.9-.9z"/></svg></button>
-        <span class="tg" id="tg6">+</span>
-      </div>
-      <div class="tc-panel" id="tc-panel-6"></div>
+      <span class="tg" id="tg6">+</span>
+    </div>
     <div class="tool-body" id="tb6">
-      <div class="ql-hud">
-        <span class="ql-live"><i></i>LIVE</span>
-        <span class="ql-tag">SCHWARZSCHILD · KERR</span>
-        <span class="ql-mirror" id="qlm6">—</span>
-        <span class="ql-qreg" id="qq6"></span>
-        <span class="ql-run" id="qlr6"></span>
-        <button type="button" class="ql-copy" data-copy="6" onclick="hudCopy(6,event)">COPY</button>
-      </div>
       <div class="bh-ctrl">
         <span class="qlbl" data-i18n="t6.mass">Kütle (Güneş kütlesi ×)</span>
         <input class="qin" id="bh-mass" type="number" value="10" min="1" max="1000000000" style="width:120px">
@@ -457,31 +349,14 @@ window.__qc={};
   </div>
 
   <!-- T7: DOPPLER -->
-  <div class="tool-card tc7">
-      <div class="tool-header" onclick="tog(7)">
-        <span class="tc-ico tc-ico-7"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17l12-7 3 5-12 7z"/><circle cx="19" cy="5.6" r="2"/><path d="M16.6 7.1 18 8.4"/></svg></span>
-        <span class="tc-mid">
-          <span class="tt" data-i18n="t7.title">Kozmik Doppler Kayması Hesaplayıcı</span>
-          <span class="tc-prev" data-i18n="t7.card">Kozmik Doppler Kayması Hesaplayıcı</span>
-        </span>
-        <span class="tc-actions">
-          <button type="button" class="tc-btn" data-i18n="card.info" onclick="cardInfo(7,event)">ⓘ Bilgi</button>
-          <button type="button" class="tc-btn tc-demo" data-i18n="card.demo" onclick="cardDemo(7,event)">▶ Hızlı Demo</button>
-        </span>
+  <div class="tool-card">
+    <div class="tool-header" onclick="tog(7)">
+      <span class="tn">07</span>
+      <span class="tt" data-i18n="t7.title">Kozmik Doppler Kayması Hesaplayıcı</span>
       <span class="tb-badge new" data-i18n="badge.new">Yeni</span>
-        <button type="button" class="tc-fav" data-fav="7" onclick="event.stopPropagation();favToggle(7)" aria-label="Favori" title="Favori (F)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.6l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 17l-5.2 2.7 1-5.8L3.5 9.8l5.9-.9z"/></svg></button>
-        <span class="tg" id="tg7">+</span>
-      </div>
-      <div class="tc-panel" id="tc-panel-7"></div>
+      <span class="tg" id="tg7">+</span>
+    </div>
     <div class="tool-body" id="tb7">
-      <div class="ql-hud">
-        <span class="ql-live"><i></i>LIVE</span>
-        <span class="ql-tag">REDSHIFT · z</span>
-        <span class="ql-mirror" id="qlm7">—</span>
-        <span class="ql-qreg" id="qq7"></span>
-        <span class="ql-run" id="qlr7"></span>
-        <button type="button" class="ql-copy" data-copy="7" onclick="hudCopy(7,event)">COPY</button>
-      </div>
       <div class="dop-wrap">
         <div>
           <div class="param-item">
@@ -524,34 +399,17 @@ window.__qc={};
   </div>
 
   <!-- T8: TELEPORTATION -->
-  <div class="tool-card tc8">
-      <div class="tool-header" onclick="tog(8)">
-        <span class="tc-ico tc-ico-8"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5" cy="12" r="2.2"/><circle cx="19" cy="12" r="2.2"/><path d="M7.2 12h9.6" stroke-dasharray="2 2.4"/><path d="M12 8.4l2.6 3.6L12 15.6 9.4 12z"/></svg></span>
-        <span class="tc-mid">
-          <span class="tt" data-i18n="t8.title">Kuantum Işınlanma</span>
-          <span class="tc-prev" data-i18n="t8.card">Kuantum Işınlanma</span>
-        </span>
-        <span class="tc-actions">
-          <button type="button" class="tc-btn" data-i18n="card.info" onclick="cardInfo(8,event)">ⓘ Bilgi</button>
-          <button type="button" class="tc-btn tc-demo" data-i18n="card.demo" onclick="cardDemo(8,event)">▶ Hızlı Demo</button>
-        </span>
+  <div class="tool-card">
+    <div class="tool-header" onclick="tog(8)">
+      <span class="tn">08</span>
+      <span class="tt" data-i18n="t8.title">Kuantum Işınlanma</span>
       <span class="tb-badge new">New · v1.1</span>
-        <button type="button" class="tc-fav" data-fav="8" onclick="event.stopPropagation();favToggle(8)" aria-label="Favori" title="Favori (F)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.6l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 17l-5.2 2.7 1-5.8L3.5 9.8l5.9-.9z"/></svg></button>
-        <span class="tg" id="tg8">+</span>
-      </div>
-      <div class="tc-panel" id="tc-panel-8"></div>
+      <span class="tg" id="tg8">+</span>
+    </div>
     <div class="tool-body" id="tb8">
-      <div class="ql-hud">
-        <span class="ql-live"><i></i>LIVE</span>
-        <span class="ql-tag">BELL PAIR · |Φ⁺⟩</span>
-        <span class="ql-mirror" id="qlm8">—</span>
-        <span class="ql-qreg" id="qq8"></span>
-        <span class="ql-run" id="qlr8"></span>
-        <button type="button" class="ql-copy" data-copy="8" onclick="hudCopy(8,event)">COPY</button>
-      </div>
       <div class="tele-wrap">
         <div class="tele-btns">
-          <button class="btn btn-p" onclick="teleRun()" data-i18n="t8.go"> Işınla</button>
+          <button class="btn btn-p" onclick="teleRun()" data-i18n="t8.go">⚛ Işınla</button>
           <button class="btn btn-r" onclick="teleReset()" data-i18n="t8.reset">Sıfırla</button>
         </div>
         <div class="tele-log" id="tele-log"><div class="tele-line" style="color:var(--muted)" data-i18n="t8.ready">Hazır — "Işınla"ya bas.</div></div>
@@ -561,31 +419,14 @@ window.__qc={};
   </div>
 
   <!-- T9: BLOCH SPHERE -->
-  <div class="tool-card tc9">
-      <div class="tool-header" onclick="tog(9)">
-        <span class="tc-ico tc-ico-9"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.4"/><ellipse cx="12" cy="12" rx="8.4" ry="3.2"/><path d="M12 3.6v16.8"/><circle cx="16.4" cy="7.8" r="1.4"/></svg></span>
-        <span class="tc-mid">
-          <span class="tt" data-i18n="t9.title">Bloch Küresi</span>
-          <span class="tc-prev" data-i18n="t9.card">Bloch Küresi</span>
-        </span>
-        <span class="tc-actions">
-          <button type="button" class="tc-btn" data-i18n="card.info" onclick="cardInfo(9,event)">ⓘ Bilgi</button>
-          <button type="button" class="tc-btn tc-demo" data-i18n="card.demo" onclick="cardDemo(9,event)">▶ Hızlı Demo</button>
-        </span>
+  <div class="tool-card">
+    <div class="tool-header" onclick="tog(9)">
+      <span class="tn">09</span>
+      <span class="tt" data-i18n="t9.title">Bloch Küresi</span>
       <span class="tb-badge new">New · v1.1</span>
-        <button type="button" class="tc-fav" data-fav="9" onclick="event.stopPropagation();favToggle(9)" aria-label="Favori" title="Favori (F)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.6l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 17l-5.2 2.7 1-5.8L3.5 9.8l5.9-.9z"/></svg></button>
-        <span class="tg" id="tg9">+</span>
-      </div>
-      <div class="tc-panel" id="tc-panel-9"></div>
+      <span class="tg" id="tg9">+</span>
+    </div>
     <div class="tool-body" id="tb9">
-      <div class="ql-hud">
-        <span class="ql-live"><i></i>LIVE</span>
-        <span class="ql-tag">BLOCH · θ/φ</span>
-        <span class="ql-mirror" id="qlm9">—</span>
-        <span class="ql-qreg" id="qq9"></span>
-        <span class="ql-run" id="qlr9"></span>
-        <button type="button" class="ql-copy" data-copy="9" onclick="hudCopy(9,event)">COPY</button>
-      </div>
       <div class="bloch-grid">
         <div>
           <div class="bloch-canvas-wrap"><canvas id="bloch-canvas" data-export="bloch-sphere" class="bloch-canvas"></canvas></div>
@@ -617,34 +458,17 @@ window.__qc={};
   </div>
 
   <!-- T10: SCHRODINGER CAT -->
-  <div class="tool-card tc10">
-      <div class="tool-header" onclick="tog(10)">
-        <span class="tc-ico tc-ico-10"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 11c0-3.2 2.1-5.2 6-5.2s6 2 6 5.2v4a6 6 0 0 1-12 0z"/><path d="M7.6 6.6l1 3.1M16.4 6.6l-1 3.1"/><circle cx="10" cy="11.8" r="1"/><circle cx="14" cy="11.8" r="1"/><path d="M10.9 15.3c.7.6 1.5.6 2.2 0"/></svg></span>
-        <span class="tc-mid">
-          <span class="tt" data-i18n="t10.title">Schrödinger'in Kedisi</span>
-          <span class="tc-prev" data-i18n="t10.card">Schrödinger'in Kedisi</span>
-        </span>
-        <span class="tc-actions">
-          <button type="button" class="tc-btn" data-i18n="card.info" onclick="cardInfo(10,event)">ⓘ Bilgi</button>
-          <button type="button" class="tc-btn tc-demo" data-i18n="card.demo" onclick="cardDemo(10,event)">▶ Hızlı Demo</button>
-        </span>
+  <div class="tool-card">
+    <div class="tool-header" onclick="tog(10)">
+      <span class="tn">10</span>
+      <span class="tt" data-i18n="t10.title">Schrödinger'in Kedisi</span>
       <span class="tb-badge new">New · v1.2</span>
-        <button type="button" class="tc-fav" data-fav="10" onclick="event.stopPropagation();favToggle(10)" aria-label="Favori" title="Favori (F)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.6l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 17l-5.2 2.7 1-5.8L3.5 9.8l5.9-.9z"/></svg></button>
-        <span class="tg" id="tg10">+</span>
-      </div>
-      <div class="tc-panel" id="tc-panel-10"></div>
+      <span class="tg" id="tg10">+</span>
+    </div>
     <div class="tool-body" id="tb10">
-      <div class="ql-hud">
-        <span class="ql-live"><i></i>LIVE</span>
-        <span class="ql-tag">|ψ⟩ = α|0⟩ + β|1⟩</span>
-        <span class="ql-mirror" id="qlm10">—</span>
-        <span class="ql-qreg" id="qq10"></span>
-        <span class="ql-run" id="qlr10"></span>
-        <button type="button" class="ql-copy" data-copy="10" onclick="hudCopy(10,event)">COPY</button>
-      </div>
       <div class="cat-grid">
         <div>
-          <div class="cat-canvas-wrap"><canvas id="cat-canvas" data-export="schrodinger-cat" class="cat-canvas"></canvas><div class="qlab-ov" id="cat-ov"></div></div>
+          <div class="cat-canvas-wrap"><canvas id="cat-canvas" data-export="schrodinger-cat" class="cat-canvas"></canvas></div>
           <div class="cat-log" id="cat-log"><span data-i18n="t10.log.ready">Hazır — kutuyu kapatın ve açın.</span></div>
         </div>
         <div>
@@ -653,7 +477,7 @@ window.__qc={};
             <input class="slider" type="range" id="cat-ps" min="0" max="95" value="50" step="1" oninput="catSetP()">
           </div>
           <div class="cat-btns">
-            <button class="btn btn-p" onclick="catOpen()" id="cat-go" data-i18n="t10.open"> Kutuyu Aç</button>
+            <button class="btn btn-p" onclick="catOpen()" id="cat-go" data-i18n="t10.open">🐱 Kutuyu Aç</button>
             <button class="btn btn-g" onclick="catReset()" data-i18n="t10.reset">Sıfırla</button>
           </div>
           <div class="cat-src" id="cat-src" style="min-height:16px;margin-top:6px;font-size:12px;color:var(--muted)"></div>
@@ -666,31 +490,14 @@ window.__qc={};
   </div>
 
   <!-- T11: TUNNELING -->
-  <div class="tool-card tc11">
-      <div class="tool-header" onclick="tog(11)">
-        <span class="tc-ico tc-ico-11"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.2 2.6 5.6 13.2h5.2l-1 8.2 7.6-10.6h-5.2z"/></svg></span>
-        <span class="tc-mid">
-          <span class="tt" data-i18n="t11.title">Kuantum Tünelleme</span>
-          <span class="tc-prev" data-i18n="t11.card">Kuantum Tünelleme</span>
-        </span>
-        <span class="tc-actions">
-          <button type="button" class="tc-btn" data-i18n="card.info" onclick="cardInfo(11,event)">ⓘ Bilgi</button>
-          <button type="button" class="tc-btn tc-demo" data-i18n="card.demo" onclick="cardDemo(11,event)">▶ Hızlı Demo</button>
-        </span>
+  <div class="tool-card">
+    <div class="tool-header" onclick="tog(11)">
+      <span class="tn">11</span>
+      <span class="tt" data-i18n="t11.title">Kuantum Tünelleme</span>
       <span class="tb-badge new">New · v1.2</span>
-        <button type="button" class="tc-fav" data-fav="11" onclick="event.stopPropagation();favToggle(11)" aria-label="Favori" title="Favori (F)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.6l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 17l-5.2 2.7 1-5.8L3.5 9.8l5.9-.9z"/></svg></button>
-        <span class="tg" id="tg11">+</span>
-      </div>
-      <div class="tc-panel" id="tc-panel-11"></div>
+      <span class="tg" id="tg11">+</span>
+    </div>
     <div class="tool-body" id="tb11">
-      <div class="ql-hud">
-        <span class="ql-live"><i></i>LIVE</span>
-        <span class="ql-tag">T ≈ e^(−2κa)</span>
-        <span class="ql-mirror" id="qlm11">—</span>
-        <span class="ql-qreg" id="qq11"></span>
-        <span class="ql-run" id="qlr11"></span>
-        <button type="button" class="ql-copy" data-copy="11" onclick="hudCopy(11,event)">COPY</button>
-      </div>
       <div class="tun-grid">
         <div>
           <div class="tun-canvas-wrap"><canvas id="tun-canvas" data-export="tunneling" class="tun-canvas"></canvas></div>
@@ -725,31 +532,14 @@ window.__qc={};
   </div>
 
   <!-- T12: DOUBLE SLIT -->
-  <div class="tool-card tc12">
-      <div class="tool-header" onclick="tog(12)">
-        <span class="tc-ico tc-ico-12"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11c2-3.6 4-3.6 6 0s4 3.6 6 0 4-3.6 6 0"/><path d="M3 16.4c2-3.6 4-3.6 6 0s4 3.6 6 0 4-3.6 6 0"/></svg></span>
-        <span class="tc-mid">
-          <span class="tt" data-i18n="t12.title">Çift Yarık Deneyi</span>
-          <span class="tc-prev" data-i18n="t12.card">Çift Yarık Deneyi</span>
-        </span>
-        <span class="tc-actions">
-          <button type="button" class="tc-btn" data-i18n="card.info" onclick="cardInfo(12,event)">ⓘ Bilgi</button>
-          <button type="button" class="tc-btn tc-demo" data-i18n="card.demo" onclick="cardDemo(12,event)">▶ Hızlı Demo</button>
-        </span>
+  <div class="tool-card">
+    <div class="tool-header" onclick="tog(12)">
+      <span class="tn">12</span>
+      <span class="tt" data-i18n="t12.title">Çift Yarık Deneyi</span>
       <span class="tb-badge new">New · v1.3</span>
-        <button type="button" class="tc-fav" data-fav="12" onclick="event.stopPropagation();favToggle(12)" aria-label="Favori" title="Favori (F)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.6l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 17l-5.2 2.7 1-5.8L3.5 9.8l5.9-.9z"/></svg></button>
-        <span class="tg" id="tg12">+</span>
-      </div>
-      <div class="tc-panel" id="tc-panel-12"></div>
+      <span class="tg" id="tg12">+</span>
+    </div>
     <div class="tool-body" id="tb12">
-      <div class="ql-hud">
-        <span class="ql-live"><i></i>LIVE</span>
-        <span class="ql-tag">|ψ₁ + ψ₂|²</span>
-        <span class="ql-mirror" id="qlm12">—</span>
-        <span class="ql-qreg" id="qq12"></span>
-        <span class="ql-run" id="qlr12"></span>
-        <button type="button" class="ql-copy" data-copy="12" onclick="hudCopy(12,event)">COPY</button>
-      </div>
       <div class="ds-wrap">
         <div class="ds-canvas-wrap">
           <canvas id="ds-canvas" data-export="double-slit" class="ds-canvas"></canvas>
@@ -787,7 +577,7 @@ window.__qc={};
             <label class="ds-check"><input type="checkbox" id="ds-which" onchange="dsSet()"><span data-i18n="t12.which">Hangi yarıktan geçti? (Gözlem)</span></label>
           </div>
           <div class="ds-btns">
-            <button class="btn btn-p" onclick="dsFire()" data-i18n="t12.fire"> Fırlat</button>
+            <button class="btn btn-p" onclick="dsFire()" data-i18n="t12.fire">⚛ Fırlat</button>
             <button class="btn btn-r" onclick="dsReset()" data-i18n="t12.reset">Sıfırla</button>
           </div>
           <div class="explain" style="margin-top:16px"><p data-i18n="t12.explain">Tek tek fırlatılan parçacıklar bile ekranda <strong>girişim saçakları</strong> oluşturur — her parçacık kendi kendisiyle girişir. Gözlemleyince (hangi yarık sorusu) girişim kaybolur, klasik dağılım görünür. Bu, kuantum ölçümünün dalga fonksiyonunu nasıl çökerttiğinin en meşhur kanıtıdır.</p></div>
@@ -797,38 +587,17 @@ window.__qc={};
   </div>
 
   <!-- T13: QUANTUM WALK -->
-  <div class="tool-card tc13">
-      <div class="tool-header" onclick="tog(13)">
-        <span class="tc-ico tc-ico-13"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="4" r="2"/><circle cx="5.6" cy="20" r="2"/><circle cx="18.4" cy="20" r="2"/><path d="M12 6v5.2M12 11.2 6.6 18M12 11.2 17.4 18"/></svg></span>
-        <span class="tc-mid">
-          <span class="tt" data-i18n="t13.title">Kuantum Yürüyüşü</span>
-          <span class="tc-prev" data-i18n="t13.card">Kuantum Yürüyüşü</span>
-        </span>
-        <span class="tc-actions">
-          <button type="button" class="tc-btn" data-i18n="card.info" onclick="cardInfo(13,event)">ⓘ Bilgi</button>
-          <button type="button" class="tc-btn tc-demo" data-i18n="card.demo" onclick="cardDemo(13,event)">▶ Hızlı Demo</button>
-        </span>
+  <div class="tool-card">
+    <div class="tool-header" onclick="tog(13)">
+      <span class="tn">13</span>
+      <span class="tt" data-i18n="t13.title">Kuantum Yürüyüşü</span>
       <span class="tb-badge new">New · v1.0</span>
-        <button type="button" class="tc-fav" data-fav="13" onclick="event.stopPropagation();favToggle(13)" aria-label="Favori" title="Favori (F)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.6l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 17l-5.2 2.7 1-5.8L3.5 9.8l5.9-.9z"/></svg></button>
-        <span class="tg" id="tg13">+</span>
-      </div>
-      <div class="tc-panel" id="tc-panel-13"></div>
+      <span class="tg" id="tg13">+</span>
+    </div>
     <div class="tool-body" id="tb13">
-      <div class="ql-hud">
-        <span class="ql-live"><i></i>LIVE</span>
-        <span class="ql-tag">N-STEP · HADAMARD</span>
-        <span class="ql-mirror" id="qlm13">—</span>
-        <span class="ql-qreg" id="qq13"></span>
-        <span class="ql-run" id="qlr13"></span>
-        <button type="button" class="ql-copy" data-copy="13" onclick="hudCopy(13,event)">COPY</button>
-      </div>
       <div class="qw-grid">
         <div class="qw-canvas-wrap">
           <canvas id="qw-canvas" data-export="quantum-walk" class="qw-canvas"></canvas>
-          <div class="qlab-ov qw-ov">
-            <span id="qw-legq" class="qw-leg"></span>
-            <span id="qw-stepv" class="qw-stp"></span>
-          </div>
         </div>
         <div>
           <div class="param-item">
@@ -843,7 +612,7 @@ window.__qc={};
             <label class="ds-check"><input type="checkbox" id="qw-observe" onchange="qwSet()"><span data-i18n="t13.observe">Her adımda gözlemle (çökert)</span></label>
           </div>
           <div class="ds-btns">
-            <button class="btn btn-p" onclick="qwRun()" data-i18n="t13.run"> Yürüt</button>
+            <button class="btn btn-p" onclick="qwRun()" data-i18n="t13.run">⚛ Yürüt</button>
             <button class="btn btn-r" onclick="qwReset()" data-i18n="t13.reset">Sıfırla</button>
           </div>
           <div class="explain" style="margin-top:16px"><p data-i18n="t13.explain">Kuantum yürüyüşünde parçacığın "yazı-tura" parası <strong>süperpozisyondadır</strong> — aynı anda hem yazı hem turadır. İki yol girişir, dağılım √N yerine ≈ N hızında yayılır (kuadratik hızlanma). Her adımda ölçersen süperpozisyon çöker, parçacık klasikleşir ve √N'ye geri döner. Grover gibi kuantum algoritmaları bu yayılmayı kullanır.</p></div>
@@ -866,7 +635,6 @@ window.__qc={};
 <!-- THREE.JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="lab-core.js"></script>
-<script src="lab/lab3d.js"></script>
 <script>
 /* ══ Çerez Onayı (KVKK 6698) ══ */
 (function(){

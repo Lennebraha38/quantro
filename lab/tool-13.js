@@ -1,151 +1,145 @@
-/* ══ T13: QUANTUM WALK (3D) ══ */
-let qwN=60,qwP=0.5,qwObs=false;
-let qwA=null,qwB=null,qwPos=0,qwStepCount=0,qwTimer=null;
-let q3w=null,q3Bars=[],q3C=[],qwCls=null;
-window._stop3d=window._stop3d||{};
-window._stop3d[13]=()=>{if(qwTimer){clearTimeout(qwTimer);qwTimer=null}if(window.Q3D&&q3w){q3w.stop();q3w=null}q3Bars=[];q3C=[]};
-function qwSet(){
-  qwN=+document.getElementById('qw-steps').value||60;
-  qwP=(+document.getElementById('qw-bias').value||50)/100;
-  qwObs=!!document.getElementById('qw-observe')&&document.getElementById('qw-observe').checked;
-  const a=document.getElementById('qw-sv'),b=document.getElementById('qw-bv');
-  if(a)a.textContent=qwN;if(b)b.textContent=qwP.toFixed(2);
+/* ══ T13: QUANTUM WALK ══ */
+var qw={cv:null,cx:null,W:860,H:340,N:60,p:0.5,observe:false,
+        aUp:null,aDn:null,cl:null,step:0,steps:60,run:false,raf:null,t0:0};
+function qwGet(id){return document.getElementById(id)}
+function qwStart(){
+  qw.cv=qwGet('qw-canvas');
+  if(!qw.cv)return;
+  if(qw.cv.width!==qw.W){qw.cv.width=qw.W;qw.cv.height=qw.H}
+  qw.cx=qw.cv.getContext('2d');
+  qwRead();
   qwInit();
-  if(window.Q3D&&!q3w){qwBuild()}
-  else if(q3w&&q3w._curN!==qwN){qwBuild()}
   qwDraw();
 }
-function qwReset(){
-  if(qwTimer){clearTimeout(qwTimer);qwTimer=null}
-  qwSet();
+function qwRead(){
+  const s=qwGet('qw-steps'),b=qwGet('qw-bias'),o=qwGet('qw-observe');
+  if(!s||!b||!o)return;
+  qw.steps=Math.max(5,Math.min(160,(+s.value)||60));
+  qw.p=Math.min(0.9,Math.max(0.1,((+b.value)||50)/100));
+  qw.observe=o.checked;
+  qwGet('qw-sv').textContent=qw.steps;
+  qwGet('qw-bv').textContent=qw.p.toFixed(2);
 }
 function qwInit(){
-  const n=2*qwN+1,h=Math.SQRT1_2;
-  qwA=new Float64Array(n);qwB=new Float64Array(n);
-  qwA[qwN]=h;qwB[qwN]=h;qwPos=qwN;qwStepCount=0;
+  const N=qw.steps;
+  qw.aUp=new Array(2*N+1).fill(0);
+  qw.aDn=new Array(2*N+1).fill(0);
+  qw.cl =new Array(2*N+1).fill(0);
+  qw.aUp[N]=1;
+  qw.cl[N]=1;
+  qw.pos=N;
+  qw.pi=0;
+  qw.pool=null;
+  qw.step=0;
+  qw.run=false;
 }
-function qwStart(){qwReset();qwRun()}
-function qwRun(){
-  qwInit();
-  if(window.Q3D&&!q3w)qwBuild();
-  qwCls=classicalRow();
-  qwDraw();
-  let i=0;
-  const step=async()=>{
-    const tb=document.getElementById('tb13');
-    if(!tb||!tb.classList.contains('open')){qwTimer=null;return}
-    if(i>=qwN){qwDraw();return}
-    i++;
-    await qwStep(qwObs);
-    qwDraw();
-    qwTimer=setTimeout(step,70);
-  };
-  if(qwTimer){clearTimeout(qwTimer);qwTimer=null}
-  step();
+function qwCoin(){
+  if(qw.pool&&qw.pi+1<qw.pool.length){
+    const r=((qw.pool[qw.pi++]<<8)|qw.pool[qw.pi++])/65536;
+    return r<qw.p?1:-1;
+  }
+  return Math.random()<qw.p?1:-1;
 }
-async function qwStep(observe){
-  const n=2*qwN+1,h=Math.SQRT1_2;
-  if(observe){
-    let r;
-    try{r=(await Qrng.bits(1))&1}catch(e){r=Math.random()<0.5?0:1}
-    const p=Math.random()<qwP?1:0;
-    qwPos+=p?1:-1;
-    if(qwPos<0)qwPos=0;if(qwPos>=n)qwPos=n-1;
-    qwA=new Float64Array(n);qwB=new Float64Array(n);
-    qwA[qwPos]=h;qwB[qwPos]=h;
+function qwStep(){
+  const N=qw.steps;
+  const up=Math.sqrt(qw.p),dn=Math.sqrt(1-qw.p);
+  if(qw.observe){
+    const d=qwCoin();
+    qw.pos+=d;
+    if(qw.pos<0)qw.pos=0;
+    if(qw.pos>2*N)qw.pos=2*N;
+    qw.cl[qw.pos]++;
   }else{
-    const a=qwA.slice(0),b=qwB.slice(0);
-    const A=new Float64Array(n),B=new Float64Array(n);
-    for(let i=0;i<n;i++){
-      if(a[i]===0&&b[i]===0)continue;
-      const u=(a[i]+b[i])*h,d=(a[i]-b[i])*h;
-      if(i+1<n)B[i+1]+=u;
-      if(i-1>=0)A[i-1]+=d;
+    const ncl=new Array(2*N+1).fill(0);
+    for(let i=0;i<=2*N;i++){
+      if(qw.cl[i]<=0)continue;
+      ncl[i+1]+=qw.cl[i]*qw.p;
+      ncl[i-1]+=qw.cl[i]*(1-qw.p);
     }
-    qwA=A;qwB=B;
+    qw.cl=ncl;
+    const nu=new Array(2*N+1).fill(0),nd=new Array(2*N+1).fill(0);
+    for(let i=0;i<=2*N;i++){
+      const u=qw.aUp[i],d=qw.aDn[i];
+      const ru=up*u+dn*d;
+      const rd=dn*u-up*d;
+      nu[i+1]+=ru;nd[i-1]+=rd;
+    }
+    qw.aUp=nu;qw.aDn=nd;
   }
-  qwStepCount++;
+  qw.step++;
 }
-function classicalRow(){
-  let row=new Float64Array(1);row[0]=1;
-  const n=2*qwN+1;
-  for(let s=0;s<qwN;s++){
-    const nr=new Float64Array(row.length+1);
-    for(let i=0;i<row.length;i++){nr[i]+=row[i]*0.5;nr[i+1]+=row[i]*0.5}
-    row=nr;
-  }
-  const out=new Float64Array(n),off=qwN-((row.length-1)>>1),mxC=Math.max(...row,1e-9);
-  for(let i=0;i<row.length;i++){const idx=off+i;if(idx>=0&&idx<n)out[idx]=row[i]/mxC}
-  return out;
+function qwProb(aUp,aDn,N){
+  const p=new Array(2*N+1).fill(0);
+  for(let i=0;i<=2*N;i++)p[i]=aUp[i]*aUp[i]+aDn[i]*aDn[i];
+  return p;
 }
-function qwProbs(){
-  const n=2*qwN+1,out=new Float64Array(n);let mx=1e-9;
-  for(let i=0;i<n;i++){out[i]=qwA[i]*qwA[i]+qwB[i]*qwB[i];if(out[i]>mx)mx=out[i]}
-  for(let i=0;i<n;i++)out[i]/=mx;
-  return out;
-}
-function qwBuild(){
-  if(!q3w)return;
-  const g=q3w.g;
-  if(q3w._bg){g.remove(q3w._bg)}
-  const bg=new THREE.Group();
-  const grid=new THREE.BufferGeometry(),pts=[];
-  for(let i=-qwN;i<=qwN;i++){pts.push(new THREE.Vector3(i*0.32,-1.45,-0.6),new THREE.Vector3(i*0.32,-1.45,0.6))}
-  grid.setFromPoints(pts);
-  bg.add(new THREE.Line(grid,new THREE.LineBasicMaterial({color:0x123a52,transparent:true,opacity:0.5})));
-  q3Bars=[];q3C=[];
-  const geo=new THREE.BoxGeometry(0.24,1,0.24),gc=new THREE.BoxGeometry(0.16,1,0.16);
-  for(let i=0;i<2*qwN+1;i++){
-    const m=new THREE.Mesh(geo,Q3D.m(Q3D.CYAN,0.9));
-    m.position.x=(i-qwN)*0.32;bg.add(m);q3Bars.push(m);
-    const mc=new THREE.Mesh(gc,Q3D.m(0x8040c0,0.55));
-    mc.position.set((i-qwN)*0.32,0,-0.85);bg.add(mc);q3C.push(mc);
-  }
-  const ax=new THREE.BufferGeometry();
-  ax.setFromPoints([new THREE.Vector3(-qwN*0.32-0.6,-0.25,0),new THREE.Vector3(qwN*0.32+0.6,-0.25,0)]);
-  bg.add(new THREE.Line(ax,new THREE.LineBasicMaterial({color:0x00c8f0,transparent:true,opacity:0.35})));
-  g.add(bg);q3w._bg=bg;q3w._curN=qwN;
+function qwSigma(arr,N){
+  let tot=0;for(let i=0;i<=2*N;i++)tot+=arr[i];
+  if(tot<=0)return 0;
+  let m=0;for(let i=0;i<=2*N;i++)m+=(i-N)*arr[i];
+  m/=tot;
+  let v=0;for(let i=0;i<=2*N;i++)v+=((i-N)-m)*((i-N)-m)*arr[i];
+  return Math.sqrt(v/tot);
 }
 function qwDraw(){
-  const p=qwProbs();
-  if(q3w&&q3Bars.length){
-    for(let i=0;i<q3Bars.length;i++){
-      const v=p[i];
-      q3Bars[i].scale.set(1,Math.max(0.01,v*2.6),1);
-      q3Bars[i].position.y=-1.45+v*1.3;
-      q3Bars[i].material.color.setHSL(0.53-v*0.15,0.9,0.45+v*0.25);
-      q3Bars[i].material.opacity=0.3+v*0.65;
-      const cv=qwCls?(qwCls[i]||0):0;
-      q3C[i].scale.set(1,Math.max(0.01,cv*1.8),1);
-      q3C[i].position.y=-1.45+cv*0.9;
-    }
-  }else{
-    drawWalk2d(p);
+  const cx=qw.cx;if(!cx)return;
+  const N=qw.steps,W=qw.W,H=qw.H;
+  cx.clearRect(0,0,W,H);
+  cx.fillStyle='#020810';cx.fillRect(0,0,W,H);
+  const top=H*0.09,bottom=H*0.8;
+  const barW=Math.max(1,Math.floor(W/(2*N+1)));
+  cx.strokeStyle='rgba(0,200,240,.05)';
+  cx.lineWidth=1;
+  for(let x=0;x<=W;x+=43){cx.beginPath();cx.moveTo(x,top);cx.lineTo(x,bottom);cx.stroke();}
+  const qp=qwProb(qw.aUp,qw.aDn,N);
+  let qmax=0;for(let i=0;i<=2*N;i++)if(qp[i]>qmax)qmax=qp[i];
+  for(let i=0;i<=2*N;i++){
+    if(qw.cl[i]<=0)continue;
+    const h=(qw.cl[i]/qmax)*(bottom-top);
+    cx.fillStyle='rgba(160,96,255,.45)';
+    cx.fillRect(i*barW,bottom-h,barW,h);
   }
-  const st=document.getElementById('qw-stepv');
-  if(st)st.textContent=t('t13.canvas.step').replace('{0}',qwStepCount).replace('{1}',qwN)+'   σq ≈ '+(sigma(p)*1.3).toFixed(1);
-  const lq=document.getElementById('qw-legq');
-  if(lq)lq.innerHTML='<span class="sw swq"></span>'+t('t13.canvas.quantum')+' <span style="opacity:.45">·</span> <span class="sw swc"></span>'+t('t13.canvas.classical');
-}
-function sigma(p){
-  let m=0,m2=0,s=0;
-  for(let i=0;i<p.length;i++){m+=p[i]*i;m2+=p[i]*i*i;s+=p[i]}
-  if(!s)return 0;
-  return Math.sqrt(Math.max(0,m2/s-(m/s)*(m/s)));
-}
-function drawWalk2d(ps){
-  const c=document.getElementById('qw-canvas');if(!c)return;
-  const ctx=c.getContext('2d');
-  const w=c.clientWidth||520,h=c.clientHeight||300;
-  const dpr=window.devicePixelRatio||1;c.width=w*dpr;c.height=h*dpr;
-  ctx.setTransform(dpr,0,0,dpr,0,0);
-  ctx.fillStyle='rgba(2,8,16,.96)';ctx.fillRect(0,0,w,h);
-  const n=ps.length,bw=Math.min(14,(w-40)/n);
-  for(let i=0;i<n;i++){
-    const x=w/2+(i-qwN)*bw,hh=ps[i]*Math.min(90,h*0.4);
-    ctx.fillStyle='rgba(0,200,240,'+(0.25+0.7*ps[i]).toFixed(2)+')';
-    ctx.fillRect(x-bw/3,h-30-hh,bw*0.66,hh);
+  if(qmax>0)for(let i=0;i<=2*N;i++){
+    if(qp[i]<=0)continue;
+    const h=(qp[i]/qmax)*(bottom-top);
+    cx.fillStyle='rgba(0,200,240,.85)';
+    cx.fillRect(i*barW,bottom-h,barW,h);
   }
-  ctx.fillStyle='rgba(0,200,240,.85)';ctx.font='11px monospace';
-  ctx.fillText(t('t13.canvas.quantum'),12,18);
+  cx.strokeStyle='rgba(255,255,255,.08)';
+  cx.beginPath();cx.moveTo(N*barW+barW/2,top);cx.lineTo(N*barW+barW/2,bottom);cx.stroke();
+  cx.font='10px JetBrains Mono,monospace';
+  cx.fillStyle='rgba(0,200,240,.85)';cx.fillText(t('t13.canvas.quantum'),10,18);
+  cx.fillStyle='rgba(160,96,255,.85)';cx.fillText(t('t13.canvas.classical'),100,18);
+  cx.fillStyle='rgba(255,255,255,.28)';
+  cx.fillText(t('t13.canvas.step').replace('{0}',qw.step).replace('{1}',qw.steps),W-92,18);
+  const sQ=qwSigma(qp,N),sC=qwSigma(qw.cl,N);
+  cx.fillStyle='rgba(0,200,240,.75)';
+  cx.fillText(t('t13.canvas.sigmaQ').replace('{0}',sQ.toFixed(2)).replace('{1}',(0.5*qw.step).toFixed(1)),10,H-22);
+  cx.fillStyle='rgba(160,96,255,.75)';
+  cx.fillText(t('t13.canvas.sigmaC').replace('{0}',sC.toFixed(2)).replace('{1}',Math.sqrt(qw.step*4*qw.p*(1-qw.p)).toFixed(1)),248,H-22);
 }
+function qwTick(ms){
+  if(!qw.run)return;
+  if(ms-qw.t0>=140){
+    qw.t0=ms;
+    if(qw.step<qw.steps){qwStep();qwDraw();}
+    else{qw.run=false;return;}
+  }
+  qw.raf=requestAnimationFrame(qwTick);
+}
+async function qwRun(){
+  qwRead();
+  if(qw.run)return;
+  if(qw.step>=qw.steps){qwInit();}
+  try{qw.pool=await Qrng.bytes(Math.min(qw.steps*2,256))}catch(e){qw.pool=null}
+  qw.run=true;
+  qw.t0=performance.now();
+  qw.raf=requestAnimationFrame(qwTick);
+}
+function qwReset(){
+  qw.run=false;
+  qwRead();
+  qwInit();
+  qwDraw();
+}
+function qwSet(){qwRead();qwDraw();}

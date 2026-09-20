@@ -35,19 +35,14 @@ async function tog(n){
   const open=tb.classList.toggle('open');
   tg.textContent=open?'×':'+';
   tg.classList.toggle('open',open);
-  const card=tb.closest('.tool-card');if(card)card.classList.toggle('open',open);
-  if(!open){
-    if(window.Q3D){const id={1:'qrng-3d',2:'crb3d',9:'bloch-canvas',10:'cat-canvas',13:'qw-canvas'}[n];if(id)Q3D.stop(id)}
-    if(window._stop3d&&window._stop3d[n])try{window._stop3d[n]()}catch(e){}
-    return;
-  }
+  if(!open)return;
   try{if(window.gtag)gtag('event','lab_tool_open',{tool:n})}catch(e){}
   if(opening){
     tb.setAttribute('data-busy','');
     try{await loadScripts(TOOL_FILES[n]);}catch(e){tb.removeAttribute('data-busy');return}
     tb.removeAttribute('data-busy');
   }
-  if(n===1){if(!_t1Init){_t1Init=true;qInit()}if(typeof q3dBuild==='function')q3dBuild()}
+  if(n===1&&!_t1Init){_t1Init=true;qInit();}
   if(n===3&&!_t3Init){_t3Init=true;uU();}
   if(n===5){if(!window.heis3dInit)initHeis3D();uH();}
   if(n===6&&!window.bhInit)initBH();
@@ -57,69 +52,8 @@ async function tog(n){
   if(n===11)tunStart();
   if(n===12)dsStart();
   if(n===13)qwStart();
-  markRun(n);
-  _hashSet(n);
   QLab.bindExports();
 }
-/* ══ KART: spot ışığı · bilgi paneli · hızlı demo ══ */
-document.addEventListener('mousemove',e=>{
-  const c=e.target&&e.target.closest?e.target.closest('.tool-card'):null;
-  if(!c)return;
-  const r=c.getBoundingClientRect();
-  c.style.setProperty('--mx',(e.clientX-r.left)+'px');
-  c.style.setProperty('--my',(e.clientY-r.top)+'px');
-},{passive:true});
-const _DEMO={1:'genQS',2:'bellDemo',3:'uU',4:'rBB84',5:'uH',6:'uBH',7:'uD',8:'teleRun',9:'blochDemo',10:'catOpen',11:'tunAlpha',12:'dsFire',13:'qwRun'};
-function cardInfo(n,ev){
-  if(ev&&ev.stopPropagation)ev.stopPropagation();
-  const p=document.getElementById('tc-panel-'+n);
-  if(!p)return;
-  const open=p.classList.toggle('open');
-  p.innerHTML=open&&typeof t==='function'?'<p>'+t('t'+n+'.explain')+'</p>':'';
-}
-function cardDemo(n,ev){
-  if(ev&&ev.stopPropagation)ev.stopPropagation();
-  tog(n).then(()=>{
-    try{
-      const k=_DEMO[n];
-      if(!k)return;
-      if(k==='tunAlpha')window.tunPreset('alpha');
-      else if(typeof window[k]==='function')window[k]();
-    }catch(e){}
-  }).catch(()=>{});
-}
-/* ══ KART HUD: araç çıktılarını canlı yansıt ══ */
-const _MIRROR={1:'qstat',2:'crx',3:'ua',4:'sp',5:'hv-prod',6:'bh-rs',7:'dv',8:'tele-log',9:'bloch-readout',10:'cat-pv',11:'tun-tv',12:'ds-count',13:'qw-sv'};
-const _RUN={};
-function _qbits(str){
-  let h=2166136261>>>0;
-  for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)}
-  const bits=[];for(let i=0;i<6;i++){h=(Math.imul(h,1103515245)+12345)>>>0;bits.push((h>>>28)&1)}
-  return bits;
-}
-function mirrorHud(){
-  for(const n in _MIRROR){
-    const src=document.getElementById(_MIRROR[n]),dst=document.getElementById('qlm'+n);
-    if(!src||!dst)continue;
-    const v=(src.textContent||'').replace(/\s+/g,' ').trim();
-    dst.textContent=v?v.slice(0,54):'—';
-    const reg=document.getElementById('qq'+n);
-    if(reg){
-      const bits=_qbits(v||String(n));
-      let html='';for(let i=0;i<bits.length;i++)html+='<i class="'+(bits[i]?'on':'')+'"></i>';
-      if(reg._sig!==html){reg._sig=html;reg.innerHTML=html}
-    }
-  }
-}
-function markRun(n){_RUN[n]=Date.now();const el=document.getElementById('qlr'+n);if(el)el.textContent=new Date(_RUN[n]).toLocaleTimeString()}
-function hudCopy(n,ev){
-  if(ev&&ev.stopPropagation)ev.stopPropagation();
-  const src=document.getElementById(_MIRROR[n]);
-  const v=src?(src.textContent||'').replace(/\s+/g,' ').trim():'';
-  QLab.copy(v||'—');
-}
-setInterval(mirrorHud,600);
-window.addEventListener('load',()=>setTimeout(mirrorHud,300));
 /* ══ HERO THREE.JS ══ */
 if(window.THREE&&document.getElementById('hero-canvas')){
 let _lh=null,_lhLost=false;
@@ -290,7 +224,7 @@ tr:{
   "nav.home": "← Ana Sayfa",
   "hero.ey": "Quantro Lab · Etkileşimli Araçlar · 13 Modül",
   "hero.desc": "Kuantum mekaniğini ve astrofiziki bizzat deneyimleyin. İlk Türkçe, açık kaynak (MIT) kuantum + astrofizik araç seti.",
-  "hero.badge": "TR · Açık Kaynak (MIT) · 13 Araç · 8 Dil",
+  "hero.badge": "🇹🇷 Açık Kaynak (MIT) · 13 Araç · 8 Dil",
   "hero.scroll": "Keşfet",
   "intro.h2": "13 Özgün<br>Araç",
   "intro.count": "Açık Kaynak (MIT) Kuantum + Astrofizik Araç Seti · Quantro ARGE · 2025",
@@ -301,11 +235,11 @@ tr:{
   "t1.min": "Min",
   "t1.max": "Max",
   "t1.src": "Kaynak",
-  "src.q": "Gerçek Kuantum (ANU)",
-  "src.s": "Simüle (Web Crypto)",
-  "t1.gen": "Üret",
+  "src.q": "⚛ Gerçek Kuantum (ANU)",
+  "src.s": "◌ Simüle (Web Crypto)",
+  "t1.gen": "⚛ Üret",
   "t1.series": "10x Seri",
-  "t1.chi": "χ² Test",
+  "t1.chi": "𝝌² Test",
   "t1.clear": "Temizle",
   "t1.chi.title": "Rastgelelik Testi (Ki-Kare)",
   "t1.chi.run": "Çalıştır",
@@ -321,7 +255,7 @@ tr:{
   "t2.gate.cnot": "CNOT <span class=\"gd\">q0→q1</span>",
   "t2.reset": "Sıfırla",
   "t2.measure": "⟨ψ| Ölç",
-  "t2.bell": "Bell |00⟩+|11⟩",
+  "t2.bell": "⚛ Bell |00⟩+|11⟩",
   "t2.clear": "Temizle",
   "t2.results": "Ölçüm Sonuçları (1024 atış)",
   "t2.explain": "<strong>Kuantum kapıları nedir?</strong> H kapısı kubiti süperpozisyona sokar. X kubiti döndürür (NOT). CNOT iki kubiti dolanıklığa sokar. <strong>Bell durumu: |Φ⁺⟩ = (|00⟩+|11⟩)/√2</strong>",
@@ -330,7 +264,7 @@ tr:{
   "t3.om": "Madde Ωₘ",
   "t3.ol": "Karanlık Enerji ΩΛ",
   "t3.orr": "Radyasyon Ωᵣ",
-  "t3.planck": "Planck 2018 Değerleri",
+  "t3.planck": "↺ Planck 2018 Değerleri",
   "t3.explain": "Friedmann denklemi: <strong>H²(a) = H₀²(Ωᵣ/a⁴ + Ωₘ/a³ + ΩΛ)</strong> — 10.000 adımlı nümerik integral ile hesaplanır.",
   "t3.age.lbl": "Evrenin Tahmini Yaşı",
   "t3.hubble.time": "Hubble Zamanı",
@@ -347,7 +281,7 @@ tr:{
   "t3.geo.closed": "Kapalı (k=+1)",
   "t3.geo.open": "Açık (k=-1)",
   "t4.title": "Kuantum Şifreleme — BB84",
-  "t4.eve": "Dinleyici (Eve) aktif — Kuantum kanalı izleniyor",
+  "t4.eve": "👁 Dinleyici (Eve) aktif — Kuantum kanalı izleniyor",
   "t4.alice": "<em>Alice</em> — Gönderici",
   "t4.bob": "<em>Bob</em> — Alıcı",
   "t4.sent.qubits": "Gönderilen Kubitler",
@@ -405,7 +339,7 @@ tr:{
   "t7.dir.approaching": "Yaklaşıyor (Maviye kayma)",
   "t7.dir.stationary": "Durağan",
   "t8.title": "Kuantum Işınlanma",
-  "t8.go": "Işınla",
+  "t8.go": "⚛ Işınla",
   "t8.reset": "Sıfırla",
   "t8.ready": "Hazır — \"Işınla\"ya bas.",
   "t8.explain": "Kuantum ışınlanma maddeyi değil <strong>bilgiyi</strong> taşır. Alice dolaşık bir Bell çiftinin bir yarısını paylaştığı Bob'a, ölçtüğü kübitin durumunu 2 klasik bit ile iletir; Bob düzeltme kapılarını uygulayarak kübiti <strong>birebir</strong> yeniden oluşturur. Ölçüm sonuçları gerçek kuantum rastgeleliğiyle seçilir.",
@@ -425,7 +359,7 @@ tr:{
   "t9.vector": "Bloch vektörü:",
   "t10.title": "Schrödinger'in Kedisi",
   "t10.p": "Bozunma Olasılığı p",
-  "t10.open": "Kutuyu Aç",
+  "t10.open": "🐱 Kutuyu Aç",
   "t10.reset": "Sıfırla",
   "t10.log.ready": "Hazır — kutuyu kapatın ve açın.",
   "t10.explain": "Schrödinger'in kedisi, süperpozisyonun saçmalığını göstermek için tasarlanmış bir düşünce deneyidir. Kutu kapalıyken kedi <strong>hem canlı hem ölüdür</strong>: durum, bozunmamış/bozunmuş çekirdeğin karışımıdır. Kutu açıldığında dalga fonksiyonu <strong>çöker</strong> ve kedi tek bir sonuçla görünür. Ölçüm sonucu gerçek kuantum rastgeleliğiyle (ANU) seçilir.",
@@ -444,7 +378,7 @@ tr:{
   "t12.wave": "Dalga Boyu λ",
   "t12.speed": "Fırlatma Hızı",
   "t12.which": "Hangi yarıktan geçti? (Gözlem)",
-  "t12.fire": "Fırlat",
+  "t12.fire": "⚛ Fırlat",
   "t12.reset": "Sıfırla",
   "t12.stat.coherent": "GİRİŞİM · dalga",
   "t12.stat.classical": "KLASİK · gözlem",
@@ -453,15 +387,15 @@ tr:{
   "t13.steps": "Adım Sayısı N",
   "t13.bias": "Yazı Olasılığı p",
   "t13.observe": "Her adımda gözlemle (çökert)",
-  "t13.run": "Yürüt",
+  "t13.run": "⚛ Yürüt",
   "t13.reset": "Sıfırla",
   "t13.explain": "Kuantum yürüyüşünde parçacığın \"yazı-tura\" parası <strong>süperpozisyondadır</strong> — aynı anda hem yazı hem turadır. İki yol girişir, dağılım √N yerine ≈ N hızında yayılır (kuadratik hızlanma). Her adımda ölçersen süperpozisyon çöker, parçacık klasikleşir ve √N'ye geri döner. Grover gibi kuantum algoritmaları bu yayılmayı kullanır.",
-  "stat.proxy": "ANU (proxy) — gerçek kuantum",
-  "stat.anu": "ANU — gerçek kuantum (vakum dalgalanması)",
+  "stat.proxy": "⚛ ANU (proxy) — gerçek kuantum",
+  "stat.anu": "⚛ ANU — gerçek kuantum (vakum dalgalanması)",
   "stat.nist": "◇ NIST Beacon — kriptografik rastgele (kuantum değil)",
-  "stat.none": "Dış API yok — simüle (Web Crypto)",
-  "stat.init.ok": "ANU erişilebilir — gerçek kuantum hazır",
-  "stat.init.fail": "ANU erişilemedi — NIST/Web Crypto devrede",
+  "stat.none": "◌ Dış API yok — simüle (Web Crypto)",
+  "stat.init.ok": "⚛ ANU erişilebilir — gerçek kuantum hazır",
+  "stat.init.fail": "◌ ANU erişilemedi — NIST/Web Crypto devrede",
   "chi.busy": "Veri toplanıyor (1024 bayt)…",
   "chi.ok": "✓ Dağılım rastgeleliğe uyumlu (p>0.05)",
   "chi.fail": "✗ Beklenenden sapma — tekrar dene",
@@ -482,31 +416,16 @@ tr:{
   "t10.canvas.dead.label": "|ÖLÜ⟩",
   "t10.canvas.detector.paused": "DEDEKTÖR: BEKLEMEDE — kutu kapalı",
   "t10.canvas.detector.collapsed": "DEDEKTÖR: ÇÖKTÜ — kutu açık",
-  "t11.canvas.pass": "GEÇTİ — gerçek kuantum kararı",
-  "t11.canvas.reflect": "YANSIDI — gerçek kuantum kararı",
-  "t11.canvas.super": "Süperpozisyon… (T={0}%)",
+  "t11.canvas.pass": "⚛ GEÇTİ — gerçek kuantum kararı",
+  "t11.canvas.reflect": "⚛ YANSIDI — gerçek kuantum kararı",
+  "t11.canvas.super": "⚛ Süperpozisyon… (T={0}%)",
   "t11.canvas.barrier": "V₀={0} eV",
   "t11.canvas.energy": "E={0} eV",
   "t13.canvas.quantum": "■ Kuantum",
   "t13.canvas.classical": "■ Klasik",
-  "card.info": "ⓘ Bilgi",
-  "card.demo": "▶ Hızlı Demo",
-  "t1.card": "ANU'ya bağlanan gerçek kuantum rastgelelik motoru — χ² testiyle doğrulanır",
-  "t2.card": "Kapılarla 2 kübitlik devre kur, 1024 atışla ölç, Bell durumunu keşfet",
-  "t3.card": "Friedmann integraliyle evrenin yaşını hesapla (H₀, Ωₘ, ΩΛ)",
-  "t4.card": "BB84 protokolüyle kuantum anahtar dağıtımı — Eve dinleyiciyi yakala",
-  "t5.card": "Δx·Δp ≥ ℏ/2 belirsizlik ilkesini 3D faz uzayında sürükle",
-  "t6.card": "Schwarzschild yarıçapı, Hawking sıcaklığı, Bekenstein entropisi",
-  "t7.card": "Galaksi ışığının kırmızıya kaymasını hız ve mesafeye çevir",
-  "t8.card": "Kübitin bilgisini Bell çiftiyle 2 klasik bit üzerinden ışınla",
-  "t9.card": "Kübit durumunu 3D küre üzerinde θ/φ ile canlandır",
-  "t10.card": "Süperpozisyonu gerçek kuantum rastgeleliğiyle çökert",
-  "t11.card": "Dalga fonksiyonu engeli nasıl deler? T ≈ e^(−2κa)",
-  "t12.card": "Tek tek fırlat, girişim saçaklarını gör — gözlemlemeyi dene",
-  "t13.card": "Hadamard yürüyüşü kuadratik hızlanır; gözlem klasikleştirir",
   "t13.canvas.step": "adım {0}/{1}",
-  "t13.canvas.sigmaQ": "σ_Q={0} (teorik ≈{1})",
-  "t13.canvas.sigmaC": "σ_C={0} (teorik ≈{1})",
+  "t13.canvas.sigmaQ": "σ_Q={0}  (teorik ≈{1})",
+  "t13.canvas.sigmaC": "σ_C={0}  (teorik ≈{1})",
 }};
 
 window.lastQStat=null;
@@ -671,74 +590,10 @@ window.QLab=(()=>{
 /* ══ PWA ══ */
 if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(function(){})}
 
-/* ══ FAVORİLER · DERİN BAĞLANTI · KLAVYE ══ */
-const _FAV=new Set((()=>{try{return JSON.parse(localStorage.getItem('qlab_fav')||'[]')}catch(e){return[]}})());
-function _favSave(){try{localStorage.setItem('qlab_fav',JSON.stringify([..._FAV]))}catch(e){}}
-function favApply(){
-  document.querySelectorAll('.tool-card').forEach(c=>{
-    const b=c.querySelector('.tc-fav');const n=b?+b.dataset.fav:0;
-    c.classList.toggle('is-fav',_FAV.has(n));
-    if(b)b.classList.toggle('on',_FAV.has(n));
-  });
-  const f=document.getElementById('fav-filter');
-  if(f)f.classList.toggle('on',document.body.classList.contains('favonly'));
-}
-function favToggle(n){
-  if(_FAV.has(n)){_FAV.delete(n);QLab.toast('☆ Favoriden çıkarıldı')}
-  else{_FAV.add(n);QLab.toast('★ Favorilere eklendi')}
-  _favSave();favApply();
-}
-function favFilterToggle(){
-  const on=document.body.classList.toggle('favonly');
-  favApply();
-  QLab.toast(on?'★ Yalnız favoriler':'Tüm araçlar');
-}
-function _hashSet(n){try{history.replaceState(null,'','#t'+n)}catch(e){}}
-function _fromHash(){
-  const m=/^#t(\d{1,2})$/.exec(location.hash||'');
-  if(!m)return;
-  const n=+m[1];const tb=document.getElementById('tb'+n);
-  if(tb&&!tb.classList.contains('open')){
-    tog(n);
-    setTimeout(()=>{const c=tb.closest('.tool-card');if(c)c.scrollIntoView({behavior:'smooth',block:'center'})},500);
-  }
-}
-function _step(d){
-  const cards=[...document.querySelectorAll('.tool-card')];
-  if(!cards.length)return;
-  const open=cards.find(c=>c.querySelector('.tool-body.open'));
-  let i=open?cards.indexOf(open):-1;
-  i=Math.max(0,Math.min(cards.length-1,i+d));
-  const oc=cards[i].querySelector('.tool-header').getAttribute('onclick')||'';
-  const n=+(oc.match(/\d+/)||[i+1])[0];
-  tog(n);
-  cards[i].scrollIntoView({behavior:'smooth',block:'center'});
-}
-function kbHelp(){QLab.toast('1–9 aç · J/K ileri-geri · F favoriler · Esc kapat · ? yardım')}
-document.addEventListener('keydown',e=>{
-  const el=e.target;
-  if(el&&(el.tagName==='INPUT'||el.tagName==='SELECT'||el.tagName==='TEXTAREA'||el.isContentEditable))return;
-  if(e.metaKey||e.ctrlKey||e.altKey)return;
-  if(e.key>='1'&&e.key<='9'){tog(+e.key);return}
-  if(e.key==='j'||e.key==='J'){_step(1);return}
-  if(e.key==='k'||e.key==='K'){_step(-1);return}
-  if(e.key==='Escape'){
-    let any=false;
-    for(let n=1;n<=13;n++){const tb=document.getElementById('tb'+n);if(tb&&tb.classList.contains('open')){tog(n);any=true}}
-    if(any)QLab.toast('Kapatıldı');
-    return;
-  }
-  if(e.key==='f'||e.key==='F'){favFilterToggle();return}
-  if(e.key==='?'){kbHelp();return}
-});
-window.addEventListener('hashchange',_fromHash);
-window.favToggle=favToggle;window.favFilterToggle=favFilterToggle;window.hudCopy=hudCopy;window.kbHelp=kbHelp;
-
 /* ══ BOOT ══ */
 (function boot(){
   const saved=localStorage.getItem('qlang');
   LANG=(saved&&I18N[saved])?saved:'tr';
-  const go=()=>{favApply();setTimeout(_fromHash,450)};
-  if(LANG==='tr'){applyLang();go();return}
-  loadI18n(LANG).then(applyLang).then(go).catch(()=>{applyLang();go()});
+  if(LANG==='tr'){applyLang();return}
+  loadI18n(LANG).then(applyLang).catch(applyLang);
 })();
