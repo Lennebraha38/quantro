@@ -5,6 +5,17 @@ sürüm: [SemVer](https://semver.org/).
 
 ## 1.7.0 — 2026-09-20
 
+### Notlar (canlı durum)
+- **Supabase yeniden çevrimiçi** — proje DNS'i döndü, mevcut Vercel env
+  (`SUPABASE_SERVICE_ROLE_KEY` vb.) ile backend tam aktif: `/api/health` → `ok`,
+  RSS yazıları backend'den, yorum/beğeni/iletişim canlı.
+- `GITHUB_TOKEN` env eklendi — `/api/stats` özel repoyu auth ile okuyor.
+- `blog-articles/` üretime dahil (lambda yedekleri + `X-Robots-Tag: noindex`).
+- **Kalan (kullanıcı)**: `sql/supabase-newsletter.sql`'i dashboard SQL editor'de
+  çalıştırıp `newsletters` tablosunu oluştur (şu an bellek kuyruğu + `persisted:false`);
+  npm `quantro-js` yayını (indirme sayacı); repo'yu public yapmak istersen yıldız/fork
+  artar.
+
 ### Eklendi
 - **Blog statikleştirme** — `scripts/gen-blog.mjs` + üretilen `blog-static.js`
   (3 yazı × 8 dil, `window.blogStatic`). Blog içeriği artık Supabase olmadan
