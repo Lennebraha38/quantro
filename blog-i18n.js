@@ -132,7 +132,9 @@
 
   var saved;
   try { saved = localStorage.getItem('qlang'); } catch (e) { saved = null; }
-  var LANG = (saved && LANGS.indexOf(saved) > -1) ? saved : 'tr';
+  var uq;
+  try { uq = new URLSearchParams(location.search).get('lang'); } catch (e) { uq = null; }
+  var LANG = (uq && LANGS.indexOf(uq) > -1) ? uq : ((saved && LANGS.indexOf(saved) > -1) ? saved : 'tr');
 
   function t(k) {
     return ((I18N[LANG] && I18N[LANG][k]) || I18N.tr[k] || k);

@@ -19,7 +19,10 @@
     "test:coverage": "node scripts/coverage.mjs",
     "metrics:field": "node scripts/metrics.mjs",
     "audit": "npm audit --omit=dev",
-    "check": "npm run build && npm test"
+    "check": "npm run build && npm test",
+    "pkg:sync": "node tools/sync-pkg.mjs",
+    "pkg:test": "node tools/sync-pkg.mjs && npm --prefix package/quantro test",
+    "pkg:pack": "node tools/sync-pkg.mjs && npm --prefix package/quantro pack --dry-run"
   },
   "engines": {
     "node": ">=18"

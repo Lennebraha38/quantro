@@ -1,0 +1,43 @@
+{
+  "name": "quantro-js",
+  "version": "1.0.0",
+  "description": "Bağımlılıksız tam JavaScript kuantum devre simülatörü — Bell/GHZ dolanıklık, tohumlanabilir PRNG. Tarayıcı + Node (MIT).",
+  "keywords": [
+    "quantum",
+    "quantum-circuit",
+    "quantum-computing",
+    "qubit",
+    "bell-state",
+    "ghz-state",
+    "bloch",
+    "quantro",
+    "simulation",
+    "kuantum"
+  ],
+  "license": "MIT",
+  "main": "quantro.js",
+  "exports": {
+    ".": "./quantro.js",
+    "./quantro.js": "./quantro.js"
+  },
+  "files": [
+    "quantro.js",
+    "LICENSE",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lennebraha38/Quantro-Vercel-Project.git"
+  },
+  "homepage": "https://quantro-1.vercel.app",
+  "bugs": {
+    "url": "https://github.com/Lennebraha38/Quantro-Vercel-Project/issues"
+  },
+  "engines": {
+    "node": ">=0.12"
+  },
+  "scripts": {
+    "test": "node -e \"const q=require('./quantro.js');const c=new q.QuantumCircuit(2);q.bellState(c);const d=q.sampleDistribution(c,1024,42);if(d[0]<400||d[3]<400)process.exit(1);console.log('quantro-js: Bell |00> (%d) + |11> (%d) örnekleme OK',d[0],d[3])\""
+  }
+}

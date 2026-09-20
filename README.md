@@ -6,6 +6,12 @@ bağımlılıksız (dependency-free) çalışır.
 
 > Canlı: https://quantro-1.vercel.app · PWA (offline çalışır) · 8 dil desteği
 
+[![Lisans MIT](https://img.shields.io/badge/license-MIT-00c8f0)](./LICENSE)
+[![Bağımlılık yok](https://img.shields.io/badge/dependencies-0-00c8f0)]()
+[![npm: quantro-js](https://img.shields.io/badge/npm-quantro--js-00c8f0)](https://www.npmjs.com/package/quantro-js)
+[![Test](https://img.shields.io/github/actions/workflow/status/Lennebraha38/Quantro-Vercel-Project/node.js.yml?branch=main&label=CI)](https://github.com/Lennebraha38/Quantro-Vercel-Project/actions)
+[![Stars](https://img.shields.io/github/stars/Lennebraha38/Quantro-Vercel-Project?style=social)]()
+
 ---
 
 ## Özellikler
@@ -245,6 +251,22 @@ PR'lere Vercel önizleme deploy'u: `.github/workflows/preview.yml`
   sınır ihlali olursa test kızar.
 
 ---
+
+## Marka / SEO / PR
+
+- [SEO · GSC + Bing kurulum](MARKA/SEO-GSC-KURULUM.md) — hreflang (8 dil) + sitemap hazır
+- [PR / Medya dosyası](MARKA/PR-MEDYA-DOSYASI.md) — basın bülteni, medya pitch, 7 günlük X/LinkedIn serisi
+- [Alan adı kurulumu](MARKA/DOMAIN-KURULUM.md) — kalıcı domain, Vercel bağlama, GitHub/npm marka taşıma
+
+npm kütüphanesi (`quantro-js`, MIT):
+
+```bash
+npm install quantro-js
+const { QuantumCircuit, bellState, sampleDistribution } = require('quantro-js');
+const qc = new QuantumCircuit(2);
+bellState(qc);
+console.log(sampleDistribution(qc, 1024, 42)); // Bell |00> + |11>
+```
 
 ## Lisans
 

@@ -1,0 +1,21 @@
+# Marka/operasyonel dokümanlar (repo içinde kalır, produkte yayınlanmaz)
+MARKA/
+
+# npm paket çalışma alanı + senkron araçları
+package/
+tools/
+
+# Testler ve CI dosyaları üretimde gerekmez
+test/
+.github/
+
+# Blog içerik kaynakları (Supabase'ten servis edilir)
+blog-articles/
+
+# Bağımlılıklar / yerel
+node_modules/
+.git/
+*.log
+.env
+.env.*
+.vercel/

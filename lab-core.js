@@ -592,8 +592,9 @@ if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch
 
 /* ══ BOOT ══ */
 (function boot(){
+  const _u=(new URLSearchParams(location.search)).get('lang');
   const saved=localStorage.getItem('qlang');
-  LANG=(saved&&I18N[saved])?saved:'tr';
+  LANG=_u||((saved&&I18N[saved])?saved:'tr');
   if(LANG==='tr'){applyLang();return}
   loadI18n(LANG).then(applyLang).catch(applyLang);
 })();

@@ -1419,7 +1419,8 @@ const I18N={
 },
 };
 const LOCALE_MAP={tr:'tr-TR',en:'en-US',fr:'fr-FR',es:'es-ES',it:'it-IT',ru:'ru-RU',ko:'ko-KR',ar:'ar-SA'};
-let LANG=(localStorage.getItem('qlang')&&I18N[localStorage.getItem('qlang')])?localStorage.getItem('qlang'):'tr';
+const _u=(new URLSearchParams(location.search)).get('lang');
+let LANG=(_u&&I18N[_u])?_u:((localStorage.getItem('qlang')&&I18N[localStorage.getItem('qlang')])?localStorage.getItem('qlang'):'tr');
 function t(k,...a){let s=(I18N[LANG]&&I18N[LANG][k])||I18N.tr[k]||k;if(a.length)for(let i=0;i<a.length;i++)s=s.split('{'+i+'}').join(a[i]);return s}
 function applyLang(){
   document.documentElement.lang=LANG;
