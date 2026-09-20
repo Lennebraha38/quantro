@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" data-i18n-lang>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="48x48" href="img/favicon-48.png">
+<link rel="apple-touch-icon" sizes="180x180" href="img/icon-180.png">
+<meta name="theme-color" content="#020810">
+<meta name="robots" content="index, follow">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<script>
+window.__qc={};
+(function(){
+  try{window.__qc.c=JSON.parse(localStorage.getItem('qc_consent')||'null')||{}}catch(e){window.__qc.c={}}
+  if(window.__qc.c.a===true){
+    var s=document.createElement('script');s.async=true;
+    s.src='https://www.googletagmanager.com/gtag/js?id=G-HR4Z4E0JLK';
+    document.head.appendChild(s);
+  }
+})();
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  if(window.__qc.c.a===true){
+    gtag('js', new Date());
+    gtag('config', 'G-HR4Z4E0JLK');
+  }
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Syne:wght@700;800&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Syne:wght@700;800&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="style.css">
+<title>quantro-js · Quantum Circuit Simulator API — Documentation</title>
+<meta name="description" content="quantro-js — a clean-room, dependency-free quantum circuit simulator written in pure JavaScript. API reference, install guide and runnable Bell/GHZ examples with exact outputs.">
+<meta property="og:title" content="quantro-js · API Documentation">
+<meta property="og:description" content="Pure-JavaScript quantum circuit simulator — install, API reference and runnable Bell/GHZ examples. MIT, zero dependencies.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://quantro-1.vercel.app/docs.html">
+<meta property="og:image" content="https://quantro-1.vercel.app/img/og-quantro.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="quantro-js · API Documentation">
+<meta name="twitter:description" content="Dependency-free quantum circuit simulator for JavaScript: state-vector simulation, Bell/GHZ entanglement, seeded sampling.">
+<meta name="twitter:image" content="https://quantro-1.vercel.app/img/og-quantro.png">
+<link rel="canonical" href="https://quantro-1.vercel.app/docs.html">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareSourceCode",
+  "name": "quantro-js",
+  "applicationCategory": "DeveloperApplication / Simulation",
+  "description": "A clean-room, zero-dependency quantum circuit simulator written in pure JavaScript. State-vector simulation, H·X·Y·Z·RY gates, CX/CZ entanglement, Bell/GHZ state preparation, seeded sampling.",
+  "codeRepository": "https://github.com/Lennebraha38/quantro",
+  "downloadUrl": "https://www.npmjs.com/package/quantro-js",
+  "license": "https://opensource.org/licenses/MIT",
+  "operatingSystem": "Any (browser & Node.js)",
+  "programmingLanguage": "JavaScript",
+  "size": "single file (~8 KB)"
+}
+</script>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to content</a>
+
+<!-- ══ NAV ══ -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Q<span>U</span>ANTRO</a>
+    <ul class="nav-links">
+      <li><a href="docs.html">Docs</a></li>
+      <li><a href="hakkimizda.html" data-i18n="nav.about">Hakkımızda</a></li>
+      <li><a href="arastirma.html" data-i18n="nav.research">Araştırma</a></li>
+      <li><a href="simulasyon.html" data-i18n="nav.sim">Simülasyon</a></li>
+      <li><a href="blog.html" data-i18n="nav.blog">Blog</a></li>
+      <li><a href="quantro-lab.html" data-i18n="nav.lab">Lab ⚗</a></li>
+    </ul>
+    <button class="nb" id="langbtn" onclick="toggleLang()" style="background:none;cursor:pointer;font-family:var(--fm);font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--cyan);border:1px solid var(--cyanM);padding:10px 16px;transition:background .2s,color .2s" onmouseover="this.style.background='var(--cyan)';this.style.color='var(--void)'" onmouseout="this.style.background='none';this.style.color='var(--cyan)'">EN</button>
+    <a href="iletisim.html" class="nav-cta" data-i18n="nav.contact">İletişim</a>
+    <button class="nav-burger" id="burger" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="mob-nav" id="mobnav">
+  <a href="docs.html" class="ml">Docs</a>
+  <a href="hakkimizda.html" class="ml" data-i18n="nav.about">Hakkımızda</a>
+  <a href="arastirma.html" class="ml" data-i18n="nav.research">Araştırma</a>
+  <a href="simulasyon.html" class="ml" data-i18n="nav.sim">Simülasyon</a>
+  <a href="blog.html" class="ml" data-i18n="nav.blog">Blog</a>
+  <a href="quantro-lab.html" class="ml" data-i18n="nav.lab">Lab ⚗</a>
+  <a href="iletisim.html" class="ml" data-i18n="nav.contact">İletişim</a>
+  <button class="ml" onclick="toggleLang()" style="background:none;border:none;cursor:pointer;text-align:left;font-family:var(--fm);font-size:12px;letter-spacing:2.5px;text-transform:uppercase;color:var(--cyan);padding:14px 22px">EN</button>
+</div>
+<main id="main-content">
+<nav class="crumbs" aria-label="breadcrumb"><a href="index.html">Quantro</a><span class="csep">›</span><span aria-current="page">Docs</span></nav>
+<section class="page-head"><div class="container">
+  <div class="ph-eyebrow">quantro-js · API Reference</div>
+  <h1>Quantum Circuit Simulator <span style="color:var(--cyan)">for JavaScript</span></h1>
+  <p class="ph-sub">A clean-room, <strong>zero-dependency</strong> state-vector quantum circuit simulator, written in pure JavaScript. Runs in the browser via plain <code>&lt;script&gt;</code> or in Node.js via <code>require()</code>. MIT licensed.</p>
+  <p class="ph-sub"><a href="quantro-lab.html" style="color:var(--cyan)">→ Live interactive demo (Lab)</a> · <a href="https://www.npmjs.com/package/quantro-js" style="color:var(--cyan)" target="_blank" rel="noopener">npm</a> · <a href="https://github.com/Lennebraha38/quantro" style="color:var(--cyan)" target="_blank" rel="noopener">source</a></p>
+</div></section>
+
+<section class="docs" style="padding:60px 0">
+  <div class="container" style="max-width:880px">
+
+    <h2 class="sec-h2" style="text-align:left">Install</h2>
+    <pre><code>npm install quantro-js</code></pre>
+    <p class="sec-sub">&nbsp;— or load straight from unpkg in any page:</p>
+    <pre><code>&lt;script src="https://unpkg.com/quantro-js"&gt;&lt;/script&gt;</code></pre>
+
+    <h2 class="sec-h2" style="text-align:left">Quick start — a Bell pair</h2>
+    <p class="sec-sub">Two qubits, an H gate and a CNOT: that is entanglement. This is a real, reproducible run (seed <code>42</code>):</p>
+    <pre><code>const { QuantumCircuit, bellState, sampleDistribution } = require('quantro-js');
+
+const qc = new QuantumCircuit(2);
+bellState(qc);                     // |00&gt; + |11&gt;
+
+console.log(qc.probabilities());
+// [ 0.4999999999999999, 0, 0, 0.4999999999999999 ]
+
+const counts = sampleDistribution(qc, 1024, 42);
+console.log(counts);
+// { 0: 494, 3: 530 }            → measured half in |00&gt;, half in |11&gt;</code></pre>
+
+    <h2 class="sec-h2" style="text-align:left">GHZ three-qubit state</h2>
+    <p class="sec-sub">Gates chain, and every method returns the circuit:</p>
+    <pre><code>const qc = new QuantumCircuit(3);
+qc.h(0).cx(0, 1).cx(0, 2);         // GHZ state  (|000&gt; + |111&gt;) / √2
+
+console.log(qc.probabilities());
+// [ 0.4999999999999999, 0, 0, 0, 0, 0, 0, 0.4999999999999999 ]</code></pre>
+
+    <h2 class="sec-h2" style="text-align:left">Single measurement</h2>
+    <pre><code>const qc = new QuantumCircuit(1);
+qc.h(0);                            // superposition
+
+qc.measureAll(() =&gt; 0.1);           // → 0
+qc.measureAll(() =&gt; 0.9);           // → 1</code></pre>
+
+    <h2 class="sec-h2" style="text-align:left">API reference</h2>
+    <div style="overflow-x:auto">
+    <table style="width:100%;border-collapse:collapse;font-family:var(--fm);font-size:13px">
+      <thead><tr><th style="text-align:left;padding:10px;border-bottom:1px solid rgba(0,200,240,.3)">API</th><th style="text-align:left;padding:10px;border-bottom:1px solid rgba(0,200,240,.3)">Description</th></tr></thead>
+      <tbody>
+        <tr><td style="padding:8px;border-bottom:1px solid rgba(255,255,255,.06)"><code>new QuantumCircuit(n)</code></td><td style="padding:8px;border-bottom:1px solid rgba(255,255,255,.06)">n-qubit circuit (1 ≤ n ≤ 12, full 2ⁿ state vector)</td></tr>
+        <tr><td style="padding:8px;border-bottom:1px solid rgba(255,255,255,.06)"><code>.h(q) · .x(q) · .y(q) · .z(q)</code></td><td style="padding:8px;border-bottom:1px solid rgba(255,255,255,.06)">single-qubit gates (chainable)</td></tr>
+        <tr><td style="padding:8px;border-bottom:1px solid rgba(255,255,255,.06)"><code>.ry(theta, q)</code></td><td style="padding:8px;border-bottom:1px solid rgba(255,255,255,.06)">rotation around Y by <code>theta</code> radians</td></tr>
+        <tr><td style="padding:8px;border-bottom:1px solid rgba(255,255,255,.06)"><code>.cx(c, t) · .cz(c, t)</code></td><td style="padding:8px;border-bottom:1px solid rgba(255,255,255,.06)">controlled-X / controlled-Z (entanglement gates)</td></tr>
+        <tr><td style="padding:8px;border-bottom:1px solid rgba(255,255,255,.06)"><code>.probabilities()</code></td><td style="padding:8px;border-bottom:1px solid rgba(255,255,255,.06)">measurement probability distribution over the 2ⁿ basis states</td></tr>
+        <tr><td style="padding:8px;border-bottom:1px solid rgba(255,255,255,.06)"><code>.measureAll(rng)</code></td><td style="padding:8px;border-bottom:1px solid rgba(255,255,255,.06)">one sampled measurement (integer); <code>rng</code> = <code>() =&gt; [0,1)</code></td></tr>
+        <tr><td style="padding:8px;border-bottom:1px solid rgba(255,255,255,.06)"><code>bellState(qc)</code></td><td style="padding:8px;border-bottom:1px solid rgba(255,255,255,.06)">prepare |00&gt; + |11&gt; (Bell pair)</td></tr>
+        <tr><td style="padding:8px;border-bottom:1px solid rgba(255,255,255,.06)"><code>ghzState(qc, qubits)</code></td><td style="padding:8px;border-bottom:1px solid rgba(255,255,255,.06)">prepare |0…0&gt; + |1…1&gt; (GHZ)</td></tr>
+        <tr><td style="padding:8px;border-bottom:1px solid rgba(255,255,255,.06)"><code>sampleDistribution(qc, shots[, seed])</code></td><td style="padding:8px;border-bottom:1px solid rgba(255,255,255,.06)">sample counts; seeded → fully reproducible</td></tr>
+        <tr><td style="padding:8px;border-bottom:1px solid rgba(255,255,255,.06)"><code>mulberry32(seed)</code></td><td style="padding:8px;border-bottom:1px solid rgba(255,255,255,.06)">seeded PRNG generator</td></tr>
+        <tr><td style="padding:8px;border-bottom:1px solid rgba(255,255,255,.06)"><code>H · X · Y · Z · I2</code></td><td style="padding:8px;border-bottom:1px solid rgba(255,255,255,.06)">gate matrices (complex-array form)</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h2 class="sec-h2" style="text-align:left">Why it exists</h2>
+    <p class="sec-sub">quantro-js is the engine behind this site's <a href="quantro-lab.html" style="color:var(--cyan)">13 interactive tools</a>. It was written from scratch as a community critique of the assumption that "quantum computing needs big frameworks": the whole simulator fits in one MIT-licensed, dependency-free JavaScript file, and it is deliberately kept humble and inspectable so that anyone — student, developer, researcher — can read, run and extend it.</p>
+
+  </div>
+</section>
+</main>
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="footer-inner">
+    <a href="index.html" class="footer-logo">Q<span>U</span>ANTRO</a>
+    <span class="footer-copy">© <span id="fyear">2025</span> Quantro · R&amp;D Center</span>
+    <span class="footer-sys">SYS :: QTR-Ω-ACTIVE</span>
+    <span class="footer-sys"><a href="https://github.com/Lennebraha38/quantro/issues/new" target="_blank" rel="noopener" style="color:rgba(0,200,240,.7)">Report an issue / Suggest →</a></span>
+  </div>
+</footer>
+
+<button class="btt" id="btt" aria-label="Back to top" title="Back to top">↑</button>
+
+<script src="app.js"></script>
+</body>
+</html>
