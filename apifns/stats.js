@@ -5,6 +5,7 @@
 // ═══════════════════════════════════════════════════════════
 const GITHUB = 'Lennebraha38/quantro';
 const NPM = 'quantro-js';
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN || '';
 let cache = { at: 0, data: null };
 
 async function fetchJson(url, opts) {
@@ -23,7 +24,7 @@ async function collect() {
   };
   try {
     const g = await fetchJson(`https://api.github.com/repos/${GITHUB}`, {
-      headers: { 'User-Agent': 'quantro-health' },
+      headers: { 'User-Agent': 'quantro-health', ...(GITHUB_TOKEN ? { Authorization: `Bearer ${GITHUB_TOKEN}` } : {}) },
       signal: AbortSignal.timeout(5000)
     });
     out.github = { stars: g.stargazers_count || 0, forks: g.forks_count || 0, openIssues: g.open_issues_count || 0 };
