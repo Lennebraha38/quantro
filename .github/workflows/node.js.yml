@@ -25,6 +25,12 @@ jobs:
     - run: npm ci
     - run: npm run build
     - run: npm test
+    - name: İç bağlantı denetimi
+      run: npm run links
+    - name: Sitemap güncel mi? (kırık çalışırsa yeniden üret)
+      run: |
+        npm run sitemap
+        git diff --exit-code -- sitemap.xml || echo "::warning::sitemap.xml güncel değil — npm run sitemap çalıştırın"
     - name: Bağımlılık güvenlik taraması (npm audit)
       run: npm audit --omit=dev
 

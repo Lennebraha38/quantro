@@ -1,4 +1,4 @@
-const { supabaseFetch } = require('./_lib');
+const { supabaseFetch, supabaseAvailable } = require('./_lib');
 
 const esc = (s) => String(s == null ? '' : s).replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
 
@@ -9,26 +9,49 @@ module.exports = async function handler(req, res) {
   }
 
   const base = 'https://quantro-1.vercel.app';
+  let list = [];
+
+  // Backend çevrimdışıysa (ör. Supabase projesi duraklatıldı) 500 yerine
+  // içi sayfa (statik) yedekleriyle RSS üret: kullanıcı feed'i asla kırılmaz.
+  const up = await supabaseAvailable().catch(() => false);
+  if (up) {
+    try {
+      const r = await supabaseFetch('/rest/v1/blog_posts?published=eq.true&order=created_at.desc&limit=20');
+      const posts = r.ok ? await r.json() : [];
+      if (Array.isArray(posts)) list = posts;
+    } catch (e) { list = []; }
+  }
+  if (!list.length) {
+    try {
+      // blog-articles yedeklerini RSS'e çevir (tüm dillerden TR özet)
+      const fs = require('node:fs');
+      const path = require('node:path');
+      const dir = path.join(__dirname, '..', 'blog-articles');
+      const files = fs.existsSync(dir) ? fs.readdirSync(dir).filter((f) => f.endsWith('.tr.md')) : [];
+      list = files.map((f) => {
+        const raw = fs.readFileSync(path.join(dir, f), 'utf8');
+        const first = (raw.split('\n')[0] || '').replace(/^#\s+/, '');
+        const slug = f.replace(/\.tr\.md$/, '');
+        return { slug, title: first, summary: '', created_at: '2025-09-01' };
+      });
+    } catch (e) { list = []; }
+  }
+
+  const items = list.map((p) => {
+    const link = `${base}/blog.html#${encodeURIComponent(p.slug || '')}`;
+    const desc = esc((p.summary || p.content || '').slice(0, 280));
+    return [
+      '  <item>',
+      `    <title>${esc(p.title)}</title>`,
+      `    <link>${link}</link>`,
+      `    <guid isPermaLink="true">${link}</guid>`,
+      `    <pubDate>${new Date(p.created_at).toUTCString()}</pubDate>`,
+      `    <description>${desc || esc(p.title)}</description>`,
+      '  </item>'
+    ].join('\n');
+  }).join('\n');
 
   try {
-    const r = await supabaseFetch('/rest/v1/blog_posts?published=eq.true&order=created_at.desc&limit=20');
-    const posts = r.ok ? await r.json() : [];
-    const list = Array.isArray(posts) ? posts : [];
-
-    const items = list.map((p) => {
-      const link = `${base}/blog.html#${encodeURIComponent(p.slug || '')}`;
-      const desc = esc((p.summary || p.content || '').slice(0, 280));
-      return [
-        '  <item>',
-        `    <title>${esc(p.title)}</title>`,
-        `    <link>${link}</link>`,
-        `    <guid isPermaLink="true">${link}</guid>`,
-        `    <pubDate>${new Date(p.created_at).toUTCString()}</pubDate>`,
-        `    <description>${desc}</description>`,
-        '  </item>'
-      ].join('\n');
-    }).join('\n');
-
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>

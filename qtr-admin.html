@@ -14,6 +14,7 @@
 <script src="admin-i18n.js" defer></script>
 </head>
 <body>
+<a href="#panel" class="skip-link" data-admin-i18n-seo="skip">Panele Geç</a>
 <div class="bg"><div class="bg-grid"></div><div class="bg-neb"></div><div class="bg-neb2"></div></div>
 
 <!-- LOGIN -->
@@ -52,7 +53,7 @@
       </div>
     </aside>
 
-    <main class="panel-main">
+    <main class="panel-main" id="panel">
       <div class="topbar">
         <h1 data-admin-i18n="top.title">Yönetim <em>Paneli</em></h1>
         <div class="tb-date" id="tb-date"></div>
@@ -300,21 +301,25 @@ function updateStats(){
   document.getElementById('stat-com').textContent=state.comments.filter(c=>!c.is_approved).length;
 }
 
+function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+
 function rowPost(p){
+  const em=esc(p.cover_emoji||'⚛');
+  const id=esc(p.id);
   return `
     <div class="pi">
-      <span class="pi-emoji">${p.cover_emoji||'⚛'}</span>
+      <span class="pi-emoji">${em}</span>
       <div class="pi-info">
-        <div class="pi-title">${p.title}</div>
+        <div class="pi-title">${esc(p.title)}</div>
         <div class="pi-date">${new Date(p.created_at).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'})}</div>
       </div>
       <span class="pi-status ${p.published?'pub':'draft'}">${p.published?'Yayında':'Taslak'}</span>
       <div class="pi-actions">
-        <button class="act-btn" onclick="editPost('${p.id}')">Düzenle</button>
-        <button class="act-btn ${p.published?'toggle-draft':'toggle-pub'}" onclick="togglePub('${p.id}',${p.published})">
+        <button class="act-btn" onclick="editPost('${id}')">Düzenle</button>
+        <button class="act-btn ${p.published?'toggle-draft':'toggle-pub'}" onclick="togglePub('${id}',${p.published})">
           ${p.published?'Gizle':'Yayınla'}
         </button>
-        <button class="act-btn del" onclick="delPost('${p.id}')">Sil</button>
+        <button class="act-btn del" onclick="delPost('${id}')">Sil</button>
       </div>
     </div>`;
 }
@@ -337,15 +342,15 @@ function rowMsg(m){
     <div class="msg-item ${!m.is_read?'unread':''}">
       <div class="msg-header">
         <div>
-          <div class="msg-from">${m.name}</div>
-          <div class="msg-email">${m.email}</div>
+          <div class="msg-from">${esc(m.name)}</div>
+          <div class="msg-email">${esc(m.email)}</div>
         </div>
         <div class="msg-date">${new Date(m.created_at).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'})}</div>
       </div>
-      <div class="msg-body">${m.message}</div>
+      <div class="msg-body">${esc(m.message)}</div>
       <div class="msg-actions">
-        <button class="act-btn toggle-pub" onclick="markRead('${m.id}')">Okundu İşaretle</button>
-        <button class="act-btn del" onclick="delMsg('${m.id}')">Sil</button>
+        <button class="act-btn toggle-pub" onclick="markRead('${esc(m.id)}')">Okundu İşaretle</button>
+        <button class="act-btn del" onclick="delMsg('${esc(m.id)}')">Sil</button>
       </div>
     </div>`;
 }
@@ -362,11 +367,11 @@ function rowCom(c){
     <div class="msg-item ${!c.is_approved?'unread':''}">
       <div class="msg-header">
         <div>
-          <div class="msg-from">${c.name} <span class="msg-email">· ${c.post_slug}</span>${c.parent_id?'<span class="msg-email"> · ↪ Yanıt</span>':''}</div>
+          <div class="msg-from">${esc(c.name)} <span class="msg-email">· ${esc(c.post_slug)}</span>${c.parent_id?'<span class="msg-email"> · ↪ Yanıt</span>':''}</div>
         </div>
         <div class="msg-date">${new Date(c.created_at).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'})}</div>
       </div>
-      <div class="msg-body">${c.content}</div>
+      <div class="msg-body">${esc(c.content)}</div>
       <div class="msg-actions">
         <span class="pi-status ${c.is_approved?'pub':'draft'}" style="align-self:center">${c.is_approved?'Onaylı':'Bekliyor'}</span>
         ${c.is_approved?'':`<button class="act-btn toggle-pub" onclick="approveCom('${c.id}')">Onayla</button>`}

@@ -30,6 +30,27 @@ function supabaseFetch(path, opts = {}) {
   });
 }
 
+// ── Backend sağlık kontrolü (30s önbellek) ──
+// Supabase çevrimdışıyken API rotaları 500 yerine zarif degrade eder.
+let sbProbe = { state: 'unknown', at: 0 };
+const SB_PROBE_TTL = 30000;
+async function supabaseAvailable() {
+  if (!SB || !SERVICE) return false;
+  if (sbProbe.state !== 'unknown' && Date.now() - sbProbe.at < SB_PROBE_TTL) {
+    return sbProbe.state === 'up';
+  }
+  let ok = false;
+  try {
+    const res = await fetch(`${SB}/rest/v1/`, {
+      headers: { apikey: SERVICE, Authorization: `Bearer ${SERVICE}` },
+      signal: AbortSignal.timeout(4000)
+    });
+    ok = res.ok || res.status === 404; // tablo yoksa bile bağlantı canlıdır
+  } catch (e) { ok = false; }
+  sbProbe = { state: ok ? 'up' : 'down', at: Date.now() };
+  return ok;
+}
+
 function signToken(role) {
   const payload = Buffer.from(JSON.stringify({ role, exp: Date.now() + SESSION_TTL })).toString('base64url');
   const sig = crypto.createHmac('sha256', AUTH_SECRET).update(payload).digest('base64url');
@@ -110,6 +131,6 @@ function readJson(req) {
 
 module.exports = {
   SB, SERVICE, ADMIN_PASSWORD, AUTH_SECRET, SESSION_TTL,
-  supabaseFetch, signToken, verifyToken, safeEqual, rateLimiter,
-  requireAuth, clientIp, readJson, verifyAdminPassword
+  supabaseFetch, supabaseAvailable, signToken, verifyToken, safeEqual,
+  rateLimiter, requireAuth, clientIp, readJson, verifyAdminPassword
 };

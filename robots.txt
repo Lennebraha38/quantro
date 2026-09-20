@@ -1,7 +1,37 @@
+# Quantro — robots.txt
+# https://developers.google.com/search/docs/crawling-indexing/robots/intro
+
 User-agent: *
 Allow: /
 Disallow: /qtr-admin.html
 Disallow: /api/
 Disallow: /insta/
+
+# Yapay zekâ / büyük dil modeli tarayıcıları — içeriği indekslemelerine izin verilir.
+# İçerik, kaynaklarla doğrulanan teknik araştırma metinleridir.
+User-agent: GPTBot
+Allow: /
+Disallow: /qtr-admin.html
+Disallow: /api/
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /qtr-admin.html
+Disallow: /api/
+
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /qtr-admin.html
+Disallow: /api/
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /qtr-admin.html
+Disallow: /api/
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /qtr-admin.html
+Disallow: /api/
 
 Sitemap: https://quantro-1.vercel.app/sitemap.xml

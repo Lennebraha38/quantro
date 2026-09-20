@@ -27,6 +27,11 @@
       "source": "/blog son hali.html",
       "destination": "/blog.html",
       "permanent": true
+    },
+    {
+      "source": "/favicon.ico",
+      "destination": "/img/favicon-48.png",
+      "permanent": true
     }
   ],
   "rewrites": [

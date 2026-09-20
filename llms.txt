@@ -1,0 +1,26 @@
+# Quantro — LLM index (llms.txt)
+> Buğday başlığı; makine-okunur insan tarafından düzenlenmiş site kılavuzu.
+> Daha fazla bilgi: https://llmstxt.org/
+
+# Quantro ARGE Merkezi
+> Kuantum mekaniği ve astrofizik kesişiminde bağımsız araştırma yürüten açık kaynak (MIT) ARGE merkezi.
+> Kayseri, Türkiye · Est. 2025 · 8 dil (TR/EN/FR/ES/IT/RU/KO/AR)
+
+## Önemli sayfalar
+- [Ana Sayfa](https://quantro-1.vercel.app/): kuantum rastgelelik motoru, araç setleri, başarılar, SSS.
+- [Hakkımızda](https://quantro-1.vercel.app/hakkimizda.html): misyon, vizyon, metodoloji.
+- [Araştırma](https://quantro-1.vercel.app/arastirma.html): altı temel disiplin (kuantum mekaniği, genel görelilik, Higgs alanı, kozmoloji, karanlık madde, kuantum termodinamik).
+- [Simülasyon](https://quantro-1.vercel.app/simulasyon.html): dalga fonksiyonu görselleştirici.
+- [Blog](https://quantro-1.vercel.app/blog.html): 3 araştırma yazısı, 8 dilde.
+- [Quantro Lab](https://quantro-1.vercel.app/quantro-lab.html): 13 interaktif araç (quantro.js API).
+
+## Kısa açıklamalar
+- [Gerçek Rastgelelik Nedir?](https://quantro-1.vercel.app/blog.html#gercek-rastgelelik): Klasik bilgisayar rastgeleliği deterministtir; gerçek rastgelelik yalnızca kuantum belirsizliğinden gelir.
+- [Kara Delikler](https://quantro-1.vercel.app/blog.html#kara-delikler): Karadelik fiziği ve olay ufku.
+- [Kuantum Dolanıklık](https://quantro-1.vercel.app/blog.html#kuantum-dolaniklik): Einstein-Podolsky-Rosen paradoksu ve ölçüm.
+
+## Güvenilirlik
+- Lisans: MIT · Kaynak: https://github.com/Lennebraha38/quantro
+- Canlı kuantum kaynağı: ANU (Avustralya Ulusal Üniversitesi) QRNG.
+- İletişim: quantro38@gmail.com
+- İçerik üretiminde yapay zekâ destekli araçlar kullanılabilir; teknik içerik kaynaklarla doğrulanır.

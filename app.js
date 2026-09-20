@@ -1421,7 +1421,98 @@ const I18N={
 const LOCALE_MAP={tr:'tr-TR',en:'en-US',fr:'fr-FR',es:'es-ES',it:'it-IT',ru:'ru-RU',ko:'ko-KR',ar:'ar-SA'};
 const _u=(new URLSearchParams(location.search)).get('lang');
 let LANG=(_u&&I18N[_u])?_u:((localStorage.getItem('qlang')&&I18N[localStorage.getItem('qlang')])?localStorage.getItem('qlang'):'tr');
-function t(k,...a){let s=(I18N[LANG]&&I18N[LANG][k])||I18N.tr[k]||k;if(a.length)for(let i=0;i<a.length;i++)s=s.split('{'+i+'}').join(a[i]);return s}
+/* 100-puan sprint genişletmeleri: SSS · istatistikler · bülten · güven (kesintisiz çeviri bloğu) */
+const EXT={
+ tr:{
+  "faq.label":"Sık Sorulan Sorular","faq.h2a":"Merak","faq.h2b":"Edilenler",
+  "faq.q1":"Quantro nedir?","faq.a1":"Quantro; kuantum mekaniği ve astrofiziğin kesişiminde bağımsız araştırma yürüten bir ARGE merkezidir. Site; açık kaynak (MIT) araçlar, 8 dilde blog ve canlı kuantum rastgelelik motoru sunar.",
+  "faq.q2":"Kuantum rastgelelik motoru gerçek mi?","faq.a2":"Evet. API, Avustralya Ulusal Üniversitesi'nin (ANU) fiziksel kuantum kaynağına bağlanır; tahmin edilemeyen ölçüm belirsizliğinden gerçek rastgele bayt üretir.",
+  "faq.q3":"Araçlar ücretsiz mi?","faq.a3":"Evet; tüm araçlar ücretsiz ve MIT lisansıyla açık kaynaktır. Kuantum rastgelelik, devre simülatörü ve 13 interaktif modül içerir.",
+  "faq.q4":"Hangi diller destekleniyor?","faq.a4":"Arayüz ve blog sekiz dilde sunulur: TR, EN, FR, ES, IT, RU, KO ve AR.",
+  "stat.title":"Topluluk &amp; Kanıt","stat.loading":"Canlı göstergeler yükleniyor…","stat.off":"Canlı göstergeye şu an ulaşılamadı.","stat.stars":"GitHub Yıldızı","stat.forks":"Fork","stat.downloads":"Aylık İndirme (npm)","stat.blog":"Blog Yazısı",
+  "nl.title":"Bülten","nl.desc":"Araştırma güncellemelerinde ilk siz olun. Ödünsüz paylaşım; spam yok.","nl.ph":"E-posta adresiniz","nl.btn":"Abone Ol","nl.ok":"✓ Bülten listesine eklendiniz.","nl.processing":"Kaydediliyor…","nl.bad":"Geçerli bir e-posta adresi girin.","nl.err":"Abonelik işlenemedi, lütfen tekrar deneyin.",
+  "c.resp":"Yanıt süresi ortalama 48 saat — tüm mesajlar okunur ve değerlendirilir.",
+  "ft.ai":"İçerik üretiminde yapay zekâ destekli araçlar kullanılabilir; teknik içerik kaynaklarla doğrulanır."
+ },
+ en:{
+  "faq.label":"FAQ","faq.h2a":"Frequently","faq.h2b":"Asked",
+  "faq.q1":"What is Quantro?","faq.a1":"Quantro is an independent R&amp;D center at the intersection of quantum mechanics and astrophysics. It offers MIT-licensed tools, a blog in 8 languages and a live quantum randomness engine.",
+  "faq.q2":"Is the quantum randomness engine real?","faq.a2":"Yes. The API connects to the Australian National University's (ANU) physical quantum source, producing genuine random bytes from measurement uncertainty.",
+  "faq.q3":"Are the tools free?","faq.a3":"Yes; all tools are free and open-source (MIT): quantum randomness, circuit simulator and 13 interactive modules.",
+  "faq.q4":"Which languages are supported?","faq.a4":"The interface and blog are offered in 8 languages: TR, EN, FR, ES, IT, RU, KO and AR.",
+  "stat.title":"Community &amp; Proof","stat.loading":"Loading live stats…","stat.off":"Live stats unavailable right now.","stat.stars":"GitHub Stars","stat.forks":"Forks","stat.downloads":"Monthly Downloads (npm)","stat.blog":"Blog Posts",
+  "nl.title":"Newsletter","nl.desc":"Be first to research updates. No spam — unsubscribe anytime.","nl.ph":"Your email address","nl.btn":"Subscribe","nl.ok":"✓ You joined the newsletter list.","nl.processing":"Saving…","nl.bad":"Please enter a valid email address.","nl.err":"Could not process subscription, please try again.",
+  "c.resp":"Average response time is 48 hours — every message is read and evaluated.",
+  "ft.ai":"AI-assisted tools may be used in content production; technical content is verified against sources."
+ },
+ fr:{
+  "faq.label":"FAQ","faq.h2a":"Souvent","faq.h2b":"Demandé",
+  "faq.q1":"Qu'est-ce que Quantro ?","faq.a1":"Quantro est un centre de R&amp;D indépendant à la croisée de la mécanique quantique et de l'astrophysique : outils libres (MIT), blog en 8 langues et moteur quantique temps réel.",
+  "faq.q2":"Le moteur quantique est-il réel ?","faq.a2":"Oui. L'API se connecte à la source quantique physique de l'ANU, produisant des octets réellement aléatoires.",
+  "faq.q3":"Les outils sont-ils gratuits ?","faq.a3":"Oui, tous les outils sont gratuits et open-source (MIT) : hasard quantique, simulateur de circuits et 13 modules.",
+  "faq.q4":"Quelles langues ?","faq.a4":"Interface et blog disponibles en 8 langues : TR, EN, FR, ES, IT, RU, KO, AR.",
+  "stat.title":"Communauté &amp; Preuve","stat.loading":"Chargement…","stat.off":"Indicateurs indisponibles pour l'instant.","stat.stars":"Étoiles GitHub","stat.forks":"Forks","stat.downloads":"Téléchargements (npm)","stat.blog":"Articles",
+  "nl.title":"Newsletter","nl.desc":"Les mises à jour de recherche en avant-première, sans spam.","nl.ph":"Votre adresse e-mail","nl.btn":"S'abonner","nl.ok":"✓ Vous êtes inscrit.","nl.processing":"Enregistrement…","nl.bad":"Veuillez saisir un e-mail valide.","nl.err":"Abonnement impossible, réessayez.",
+  "c.resp":"Délai de réponse moyen : 48 h — chaque message est lu.",
+  "ft.ai":"Des outils d'IA peuvent aider la production de contenu ; le contenu technique est vérifié sur sources."
+ },
+ es:{
+  "faq.label":"Preguntas Frecuentes","faq.h2a":"Lo Más","faq.h2b":"Preguntado",
+  "faq.q1":"¿Qué es Quantro?","faq.a1":"Quantro es un centro de I+D independiente entre mecánica cuántica y astrofísica, con herramientas de código abierto (MIT), blog en 8 idiomas y un motor cuántico en vivo.",
+  "faq.q2":"¿El motor cuántico es real?","faq.a2":"Sí. La API se conecta a la fuente cuántica física de la ANU, generando bytes realmente aleatorios.",
+  "faq.q3":"¿Las herramientas son gratis?","faq.a3":"Sí, todas son gratuitas y de código abierto: aleatoriedad cuántica, simulador de circuitos y 13 módulos.",
+  "faq.q4":"¿Qué idiomas se admiten?","faq.a4":"Interfaz y blog en 8 idiomas: TR, EN, FR, ES, IT, RU, KO, AR.",
+  "stat.title":"Comunidad y Prueba","stat.loading":"Cargando…","stat.off":"Indicadores no disponibles.","stat.stars":"Estrellas GitHub","stat.forks":"Forks","stat.downloads":"Descargas (npm)","stat.blog":"Artículos",
+  "nl.title":"Boletín","nl.desc":"Novedades de investigación primero, sin spam.","nl.ph":"Tu correo electrónico","nl.btn":"Suscribirse","nl.ok":"✓ Suscrito al boletín.","nl.processing":"Guardando…","nl.bad":"Introduce un correo válido.","nl.err":"No se pudo procesar, inténtalo de nuevo.",
+  "c.resp":"Respuesta media en 48 h — cada mensaje se lee.",
+  "ft.ai":"Pueden usarse herramientas de IA en la producción de contenido; el contenido técnico se verifica con fuentes."
+ },
+ it:{
+  "faq.label":"FAQ","faq.h2a":"Domande","faq.h2b":"Frequenti",
+  "faq.q1":"Cos'è Quantro?","faq.a1":"Quantro è un centro di ricerca indipendente tra meccanica quantistica e astrofisica: strumenti open-source (MIT), blog in 8 lingue e un motore quantistico live.",
+  "faq.q2":"Il motore quantistico è reale?","faq.a2":"Sì. L'API si collega alla sorgente quantistica fisica dell'ANU, generando byte realmente casuali.",
+  "faq.q3":"Gli strumenti sono gratuiti?","faq.a3":"Sì, tutti gratuiti e open source: casualità quantistica, simulatore di circuiti e 13 moduli.",
+  "faq.q4":"Quali lingue?","faq.a4":"Interfaccia e blog in 8 lingue: TR, EN, FR, ES, IT, RU, KO, AR.",
+  "stat.title":"Comunità e Prova","stat.loading":"Caricamento…","stat.off":"Indicatori non disponibili.","stat.stars":"Stelle GitHub","stat.forks":"Fork","stat.downloads":"Download (npm)","stat.blog":"Articoli",
+  "nl.title":"Newsletter","nl.desc":"Aggiornamenti di ricerca in anteprima, senza spam.","nl.ph":"La tua email","nl.btn":"Iscriviti","nl.ok":"✓ Iscrizione completata.","nl.processing":"Salvataggio…","nl.bad":"Inserisci un'email valida.","nl.err":"Impossibile elaborare, riprova.",
+  "c.resp":"Risposta media in 48 ore — ogni messaggio viene letto.",
+  "ft.ai":"Possibile uso di strumenti IA nella produzione; i contenuti tecnici sono verificati su fonti."
+ },
+ ru:{
+  "faq.label":"Частые вопросы","faq.h2a":"Часто","faq.h2b":"Спрашивают",
+  "faq.q1":"Что такое Quantro?","faq.a1":"Quantro — независимый исследовательский центр на стыке квантовой механики и астрофизики: открытые инструменты (MIT), блог на 8 языках и живой квантовый генератор.",
+  "faq.q2":"Генератор случаен по-настоящему?","faq.a2":"Да. API подключается к физическому квантовому источнику ANU и выдаёт настоящие случайные байты.",
+  "faq.q3":"Инструменты бесплатны?","faq.a3":"Да, все бесплатны и открыты (MIT): квантовая случайность, симулятор схем и 13 модулей.",
+  "faq.q4":"Какие языки?","faq.a4":"Интерфейс и блог на 8 языках: TR, EN, FR, ES, IT, RU, KO, AR.",
+  "stat.title":"Сообщество и Доказательства","stat.loading":"Загрузка…","stat.off":"Индикаторы недоступны.","stat.stars":"Звёзды GitHub","stat.forks":"Форки","stat.downloads":"Загрузки (npm)","stat.blog":"Статьи",
+  "nl.title":"Рассылка","nl.desc":"Актуальные исследования первыми, без спама.","nl.ph":"Ваш e-mail","nl.btn":"Подписаться","nl.ok":"✓ Вы подписаны.","nl.processing":"Сохранение…","nl.bad":"Укажите корректный e-mail.","nl.err":"Не удалось обработать, попробуйте ещё раз.",
+  "c.resp":"Средний ответ — 48 часов; каждое сообщение читается.",
+  "ft.ai":"В создании контента могут использоваться ИИ-инструменты; технический контент проверяется по источникам."
+ },
+ ko:{
+  "faq.label":"자주 묻는 질문","faq.h2a":"자주","faq.h2b":"묻는",
+  "faq.q1":"Quantro란 무엇인가요?","faq.a1":"Quantro는 양자역학과 천체물리학을 잇는 독립 연구 센터로, 오픈소스(MIT) 도구, 8개 언어 블로그, 실시간 양자 난수 엔진을 제공합니다.",
+  "faq.q2":"양자 난수 생성은 진짜인가요?","faq.a2":"네. ANU의 물리적 양자 소스에 연결되어 측정 불확실성으로부터 진짜 난수를 생성합니다.",
+  "faq.q3":"도구는 무료인가요?","faq.a3":"네, 모두 무료이며 오픈소스입니다: 양자 난수, 회로 시뮬레이터, 13개 모듈.",
+  "faq.q4":"지원 언어는?","faq.a4":"인터페이스와 블로그: TR, EN, FR, ES, IT, RU, KO, AR 8개 언어.",
+  "stat.title":"커뮤니티와 증거","stat.loading":"불러오는 중…","stat.off":"현재 라이브 통계를 사용할 수 없습니다.","stat.stars":"GitHub 스타","stat.forks":"포크","stat.downloads":"다운로드 (npm)","stat.blog":"블로그 글",
+  "nl.title":"뉴스레터","nl.desc":"연구 소식을 가장 먼저 받아보세요. 스팸 없음.","nl.ph":"이메일 주소","nl.btn":"구독","nl.ok":"✓ 구독되었습니다.","nl.processing":"저장 중…","nl.bad":"올바른 이메일을 입력하세요.","nl.err":"처리할 수 없습니다. 다시 시도하세요.",
+  "c.resp":"평균 48시간 내 응답 — 모든 메시지를 읽습니다.",
+  "ft.ai":"콘텐츠 제작에 AI 도구가 사용될 수 있습니다. 기술 콘텐츠는 출처로 검증됩니다."
+ },
+ ar:{
+  "faq.label":"الأسئلة الشائعة","faq.h2a":"الأسئلة","faq.h2b":"الشائعة",
+  "faq.q1":"ما هو Quantro؟","faq.a1":"Quantro مركز أبحاث مستقل عند تقاطع ميكانيكا الكم والفيزياء الفلكية: أدوات مفتوحة المصدر (MIT)، مدونة بثماني لغات، ومولّد عشوائية كمّية حيّ.",
+  "faq.q2":"هل المولّد الكمّي حقيقي؟","faq.a2":"نعم، يتصل بمصدر ANU الكمّي الفيزيائي وينتج بايتات عشوائية حقيقية.",
+  "faq.q3":"هل الأدوات مجانية؟","faq.a3":"نعم، جميعها مجانية ومفتوحة المصدر: عشوائية كمّية، محاكي دوائر، و13 وحدة.",
+  "faq.q4":"ما اللغات المدعومة؟","faq.a4":"الواجهة والمدونة بثماني لغات: TR, EN, FR, ES, IT, RU, KO, AR.",
+  "stat.title":"المجتمع والإثبات","stat.loading":"جارٍ التحميل…","stat.off":"المؤشرات غير متاحة حالياً.","stat.stars":"نجوم GitHub","stat.forks":"التفريعات","stat.downloads":"التنزيلات (npm)","stat.blog":"المقالات",
+  "nl.title":"النشرة البريدية","nl.desc":"مستجدات الأبحاث أولاً، دون إزعاج.","nl.ph":"بريدك الإلكتروني","nl.btn":"اشترك","nl.ok":"✓ تم الاشتراك.","nl.processing":"جارٍ الحفظ…","nl.bad":"أدخل بريداً صحيحاً.","nl.err":"تعذّرت المعالجة، حاول مجدداً.",
+  "c.resp":"متوسط الرد 48 ساعة — تُقرأ كل الرسائل.",
+  "ft.ai":"قد تُستخدم أدوات الذكاء الاصطناعي في إنتاج المحتوى؛ يُتحقق من المحتوى التقني بالمصادر."
+ }
+};
+function t(k,...a){let s=(I18N[LANG]&&I18N[LANG][k])||(EXT[LANG]&&EXT[LANG][k])||I18N.tr[k]||k;if(a.length)for(let i=0;i<a.length;i++)s=s.split('{'+i+'}').join(a[i]);return s}
 function applyLang(){
   document.documentElement.lang=LANG;
   document.documentElement.dir=(LANG==='ar')?'rtl':'ltr';

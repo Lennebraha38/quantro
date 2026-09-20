@@ -3,6 +3,41 @@
 Tüm önemli değişiklikler bu dosyada not edilir. Format: [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/),
 sürüm: [SemVer](https://semver.org/).
 
+## 1.7.0 — 2026-09-20
+
+### Eklendi
+- **Blog statikleştirme** — `scripts/gen-blog.mjs` + üretilen `blog-static.js`
+  (3 yazı × 8 dil, `window.blogStatic`). Blog içeriği artık Supabase olmadan
+  kaynaktan; Supabase yalnızca yorum/beğeni/sayı geliştirmesi. `npm run blog:static`.
+- **API degrade toleransı** — `api/_lib.js` (`supabaseAvailable`), `api/feed.js`
+  (RSS, arka plan kapalıyken blog-articles'tan üretir, asla 500), yeni
+  `api/health.js` (canlılık), `api/stats.js` (GH + npm + blog sayacı), `api/newsletter.js`
+  (5/15 dk rate-limit, kalıcılıksız yuvalama). `sql/supabase-newsletter.sql`.
+- **Ayrı iletişim sayfası** `iletisim.html` — ContactPage/Organization/Breadcrumb
+  JSON-LD, 3 kanal (e-posta/GitHub/Instagram), label'li form, 48 saat yanıt notu;
+  tüm sayfalardaki `İletişim` nav'ı ona bağlandı.
+- **SEO/E-E-A-T/UX** — index: FAQPage JSON-LD + `#sss`, düzeltilmiş SearchAction
+  (`/blog.html?q={search_term_string}`), `#basari` istatistik widget'ı, bülten
+  formu (+`newsletter_subscribe` GA4), `c.resp` yanıt süresi, `ft.ai` AI ifşası,
+  `EXT` çeviri bloğu (SSS/istatistik/bülten). Blog: tek H1, skip-link, breadcrumb,
+  BlogPosting JSON-LD, kart/yanıt formunda label/aria, `?q=` arama + `blog_search`.
+- **Küresel CSS** — `css/base.css`: `.vh,.skip-link,.crumbs,.faq-*, .stat-*`
+  yardımcı sınıfları; alt sayfalara görünür breadcrumb + Organization/Breadcrumb
+  JSON-LD (hakkimizda/arastirma/simulasyon/lab/iletisim).
+- **Altyapı** — `robots.txt` AI botlarına açık, `llms.txt`, markalı `404.html`,
+  `/favicon.ico` redirect, `scripts/gen-sitemap.mjs` (deterministik lastmod),
+  `scripts/links.mjs` (kırık bağlantı denetimi; `npm run links`), CI adımları,
+  `.github/workflows/uptime.yml` (6 saatte bir canlılık + otomatik arıza kaydı).
+
+### Güvenlik
+- **qtr-admin.html XSS** — `esc()` kaçışı `rowPost`/`rowMsg`/`rowCom` içindeki tüm
+  kullanıcı içeriklerine + onclick id'lerine uygulandı; skip-link eklendi.
+
+### Değişti
+- `package.json` script'leri: `blog:static`, `sitemap`, `links`; `check` artık
+  build + test + links. `.env.local`dan Vercel OIDC token kaldırıldı (yerel kimlik
+  dışarıda tutulur).
+
 ## 1.6.0 — 2026-09-19
 
 ### Eklendi

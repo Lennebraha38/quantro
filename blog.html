@@ -43,6 +43,16 @@
   "publisher": { "@type": "Organization", "name": "Quantro ARGE Merkezi" }
 }
 </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Ana Sayfa", "item": "https://quantro-1.vercel.app/" },
+    { "@type": "ListItem", "position": 2, "name": "Quantro Blog", "item": "https://quantro-1.vercel.app/blog.html" }
+  ]
+}
+</script>
 <!-- Google Analytics (GA4) — yalnızca kullanıcı onayı sonrası yüklenir (KVKK) -->
 <script>
 window.__qc={};
@@ -67,10 +77,13 @@ window.__qc={};
 <noscript><link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@300;400;500&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet"></noscript>
 <link rel="stylesheet" href="css/base.css">
 <link rel="stylesheet" href="css/blog.css">
+<script src="blog-static.js" defer></script>
 <script src="blog-localize.js" defer></script>
 <script src="blog-i18n.js" defer></script>
 </head>
 <body>
+
+<a class="skip-link" href="#main-content" data-blog-i18n="skip">İçeriğe geç</a>
 
 <div class="bg"><div class="bg-stars"></div><div class="bg-grid"></div><div class="bg-neb"></div></div>
 
@@ -85,8 +98,13 @@ window.__qc={};
   </div>
 </nav>
 
+<main id="main-content">
+
 <!-- LIST VIEW -->
 <div class="view active" id="view-list">
+  <nav class="crumbs" aria-label="breadcrumb">
+    <a href="index.html" data-blog-i18n="bc.home">Ana Sayfa</a><span class="csep">›</span><span aria-current="page" data-blog-i18n="bc.cur">Blog</span>
+  </nav>
   <div class="blog-hero">
     <div class="blog-ey"><span data-blog-i18n="hero.ey">Quantro · Araştırma Blogu</span></div>
     <h1 class="blog-h1"><span data-blog-i18n="hero.h1a">ARAŞTIRMA</span><br><span class="o" data-blog-i18n="hero.h1b">BLOGU</span></h1>
@@ -109,9 +127,10 @@ window.__qc={};
     <button class="back-btn" onclick="showList()" data-blog-i18n="back">← Tüm Yazılar</button>
     <span class="pv-emoji" id="pv-emoji"></span>
     <div class="pv-tags" id="pv-tags"></div>
-    <h1 class="pv-title" id="pv-title"></h1>
+    <h2 class="pv-title" id="pv-title"></h2>
     <p class="pv-summary" id="pv-summary"></p>
     <div class="pv-meta">
+      <span id="pv-author"></span>
       <span id="pv-date"></span>
       <span id="pv-readtime"></span>
     </div>
@@ -134,12 +153,15 @@ window.__qc={};
       <div class="cm-list" id="cm-list"><div class="cm-empty" data-blog-i18n="cm.empty">Yorumlar yükleniyor…</div></div>
       <div class="cm-form">
         <div class="cm-form-head" data-blog-i18n="cm.form">Yorum Yap</div>
-        <div class="cm-row">
-          <input class="cm-input" id="cm-name" data-blog-i18n-ph="cm.name" placeholder="Adınız *" maxlength="80" autocomplete="name">
-          <input class="cm-input" id="cm-email" data-blog-i18n-ph="cm.email" placeholder="E-posta (isteğe bağlı)" maxlength="254" autocomplete="email">
-        </div>
-        <input class="cm-input hp" id="cm-website" tabindex="-1" autocomplete="off" aria-hidden="true">
-        <textarea class="cm-input cm-text" id="cm-content" data-blog-i18n-ph="cm.content" placeholder="Yorumunuz… *" maxlength="1200"></textarea>
+<div class="cm-row">
+        <label class="vh" for="cm-name" data-blog-i18n="cm.name">Adınız *</label>
+        <input class="cm-input" id="cm-name" data-blog-i18n-ph="cm.name" placeholder="Adınız *" maxlength="80" autocomplete="name">
+        <label class="vh" for="cm-email" data-blog-i18n="cm.email">E-posta (isteğe bağlı)</label>
+        <input class="cm-input" id="cm-email" data-blog-i18n-ph="cm.email" placeholder="E-posta (isteğe bağlı)" maxlength="254" autocomplete="email">
+      </div>
+      <input class="cm-input hp" id="cm-website" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <label class="vh" for="cm-content" data-blog-i18n="cm.content">Yorumunuz… *</label>
+      <textarea class="cm-input cm-text" id="cm-content" data-blog-i18n-ph="cm.content" placeholder="Yorumunuz… *" maxlength="1200"></textarea>
         <button class="cm-btn" id="cm-submit" onclick="submitComment()" data-blog-i18n="cm.submit">Gönder</button>
         <div class="cm-status" id="cm-status"></div>
       </div>
@@ -333,20 +355,41 @@ async function submitCardComment(slug){
 }
 
 async function fetchPosts(){
+  let data=null, rows=null;
+  /* 1) Statik yedek (blog-static.js) — backend çevrimdışı olsa bile çalışır */
+  if(window.blogStatic){
+    data=blogStatic.posts&&blogStatic.posts.length?blogStatic.posts:null;
+    rows=blogStatic.rows||null;
+  }
+  /* 2) Canlı Supabase (yayınlanmış güncel yazılar) */
   try{
-    const res=await fetch(`${SB_URL}/rest/v1/blog_posts?published=eq.true&order=created_at.desc`,{
-      headers:SBH
-    });
-    const data=await res.json();
-    allPosts=data||[];
-    await fetchTranslations();
-    renderPosts(allPosts);
-    renderFilters(allPosts);
-    fetchCounts();
-    const h=(location.hash||'').slice(1);
-    if(h&&allPosts.some(p=>p.slug===h))openPost(h);
-  }catch(e){
-    document.getElementById('posts-grid').innerHTML='<div class="loading">Yazılar yüklenemedi</div>';
+    const res=await fetch(`${SB_URL}/rest/v1/blog_posts?published=eq.true&order=created_at.desc`,{headers:SBH});
+    const json=await res.json();
+    if(Array.isArray(json)&&json.length)data=json;
+  }catch(e){}
+  /* 3) Çeviriler: statik satırlar varsa anında, yoksa sunucudan */
+  try{
+    if(rows&&rows.length){
+      i18nMap=(window.blogLocalize&&blogLocalize.buildIndex(rows))||{};
+    }else{
+      const fetched=await fetch(`${SB_URL}/rest/v1/blog_posts_i18n?select=slug,lang,title,summary,content`,{headers:SBH}).then(r=>r.json());
+      i18nMap=(window.blogLocalize&&blogLocalize.buildIndex(Array.isArray(fetched)?fetched:[]))||{};
+    }
+  }catch(e){if(!i18nMap)i18nMap={};i18nMap=i18nMap||{}}
+  if(!data||!data.length){
+    document.getElementById('posts-grid').innerHTML='<div class="loading">Henüz yazı yok</div>';return;
+  }
+  allPosts=data;
+  renderPosts(allPosts);
+  renderFilters(allPosts);
+  fetchCounts();
+  const h=(location.hash||'').slice(1);
+  if(h&&allPosts.some(p=>p.slug===h))openPost(h);
+  const q=(new URLSearchParams(location.search).get('q')||'').trim();
+  if(q&&document.getElementById('search-input')){
+    document.getElementById('search-input').value=q;
+    filterPosts('',null);
+    try{if(window.gtag)gtag('event','blog_search',{term:q})}catch(e){}
   }
 }
 
@@ -363,6 +406,7 @@ function renderPosts(posts){
       <div class="post-title">${p.title}</div>
       <div class="post-summary">${p.summary}</div>
       <div class="post-meta">
+        <span class="post-author">${escHtml(p.author||'Quantro Araştırma Ekibi')}</span>
         <span class="post-date">${fmtDate(p)}</span>
         <span class="post-read">${readTxt(p)} →</span>
       </div>
@@ -376,11 +420,11 @@ function renderPosts(posts){
         <div class="cm-form">
           <div class="cm-form-head">${window.blogT?blogT('cm.form'):'Yorum Yap'}</div>
           <div class="cm-row">
-            <input class="cm-input" id="cn-${s}" placeholder="${window.blogT?blogT('cm.name'):'Adınız *'}" maxlength="80" autocomplete="name">
-            <input class="cm-input" id="ce-${s}" placeholder="${window.blogT?blogT('cm.email'):'E-posta (isteğe bağlı)'}" maxlength="254" autocomplete="email">
+            <input class="cm-input" id="cn-${s}" placeholder="${window.blogT?blogT('cm.name'):'Adınız *'}" aria-label="${window.blogT?blogT('cm.name'):'Adınız *'}" maxlength="80" autocomplete="name">
+            <input class="cm-input" id="ce-${s}" placeholder="${window.blogT?blogT('cm.email'):'E-posta (isteğe bağlı)'}" aria-label="${window.blogT?blogT('cm.email'):'E-posta (isteğe bağlı)'}" maxlength="254" autocomplete="email">
           </div>
           <input class="cm-input hp" id="cw-${s}" tabindex="-1" autocomplete="off" aria-hidden="true">
-          <textarea class="cm-input cm-text" id="ct-${s}" placeholder="${window.blogT?blogT('cm.content'):'Yorumunuz… *'}" maxlength="1200"></textarea>
+          <textarea class="cm-input cm-text" id="ct-${s}" placeholder="${window.blogT?blogT('cm.content'):'Yorumunuz… *'}" aria-label="${window.blogT?blogT('cm.content'):'Yorumunuz… *'}" maxlength="1200"></textarea>
           <button class="cm-btn" onclick="submitCardComment('${s}')">${window.blogT?blogT('cm.submit'):'Gönder'}</button>
           <div class="cm-status" id="cs-${s}"></div>
         </div>
@@ -415,17 +459,46 @@ function filterPosts(tag,btn){
 
 /* OPEN POST */
 let currentSlug='';
+function injectArticleSchema(p){
+  const host=location.host||'quantro-1.vercel.app';
+  const url=location.origin+location.pathname+'#'+p.slug;
+  const author={name:(p&&(p.author||'Quantro Araştırma Ekibi')),url:(p&&(p.author_url||'https://github.com/quantro38'))};
+  const img=(p&&p.cover_emoji)
+    ?`https://${host}/img/og-quantro.png`
+    :`https://${host}/img/og-quantro.png`;
+  const el=document.createElement('script');
+  el.type='application/ld+json';
+  el.setAttribute('data-post','1');
+  document.querySelectorAll('script[data-post]').forEach(s=>s.remove());
+  el.textContent=JSON.stringify({
+    '@context':'https://schema.org',
+    '@type':'BlogPosting',
+    'mainEntityOfPage':{'@type':'WebPage','@id':url},
+    'headline':p.title,
+    'image':[img],
+    'datePublished':p.created_at||'2025-09-01',
+    'dateModified':p.created_at||'2025-09-01',
+    'author':{'@type':'Person',...author},
+    'publisher':{'@type':'Organization','name':'Quantro ARGE','logo':{'@type':'ImageObject','url':`https://${host}/img/favicon-48.png`}},
+    'inLanguage':(document.documentElement.lang||'tr')==='tr'?'tr-TR':'en'
+  });
+  document.head.appendChild(el);
+}
 function openPost(slug){
   const p=localizedPost(allPosts.find(x=>x.slug===slug));
   if(!p)return;
   try{if(window.gtag)gtag('event','blog_open',{post:slug,title:p.title})}catch(e){}
+  document.title=p.title+' — Quantro Blog';
   document.getElementById('pv-emoji').textContent=p.cover_emoji||'⚛';
-  document.getElementById('pv-tags').innerHTML=(p.tags||[]).map(t=>`<span class="ptag">${t}</span>`).join('');
+  document.getElementById('pv-tags').innerHTML=(p.tags||[]).map(t=>`<span class="ptag">${escHtml(t)}</span>`).join('');
   document.getElementById('pv-title').textContent=p.title;
   document.getElementById('pv-summary').textContent=p.summary;
+  const pva=document.getElementById('pv-author');
+  if(pva)pva.textContent=(p.author||'Quantro Araştırma Ekibi')+' •';
   document.getElementById('pv-date').textContent=fmtDate(p);
   document.getElementById('pv-readtime').textContent=readTxt(p);
   document.getElementById('pv-content').innerHTML=mdToHtml(p.content);
+  injectArticleSchema(p);
   document.getElementById('cm-status').textContent='';
   const pvN=document.getElementById('pv-cm-n');
   if(pvN)pvN.textContent=stats.comments[slug]||0;
@@ -530,11 +603,11 @@ function commentItemHTML(c,slug,isReply){
     </div>
     <div class="cm-reply-form" id="crf-${c.id}" style="display:none">
       <div class="cm-row">
-        <input class="cm-input" id="crn-${c.id}" placeholder="Adınız *" maxlength="80" autocomplete="name">
-        <input class="cm-input" id="cre-${c.id}" placeholder="E-posta (isteğe bağlı)" maxlength="254" autocomplete="email">
+        <input class="cm-input" id="crn-${c.id}" placeholder="Adınız *" aria-label="${window.blogT?blogT('cm.name'):'Adınız *'}" maxlength="80" autocomplete="name">
+        <input class="cm-input" id="cre-${c.id}" placeholder="E-posta (isteğe bağlı)" aria-label="${window.blogT?blogT('cm.email'):'E-posta (isteğe bağlı)'}" maxlength="254" autocomplete="email">
       </div>
       <input class="cm-input hp" id="crw-${c.id}" tabindex="-1" autocomplete="off" aria-hidden="true">
-      <textarea class="cm-input cm-text" id="crt-${c.id}" placeholder="Yanıtınız… *" maxlength="1200"></textarea>
+      <textarea class="cm-input cm-text" id="crt-${c.id}" placeholder="Yanıtınız… *" aria-label="${window.blogT?blogT('cm.content'):'Yorumunuz… *'}" maxlength="1200"></textarea>
       <button class="cm-btn" onclick="submitReply('${c.id}','${slug}',event)">Gönder</button>
       <div class="cm-status" id="crs-${c.id}"></div>
     </div>

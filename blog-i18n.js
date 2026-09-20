@@ -9,7 +9,8 @@
 
   var I18N = {
     tr: {
-      'nav.home': '← Ana Sayfa', 'hero.ey': 'Quantro · Araştırma Blogu',
+      'nav.home': '← Ana Sayfa', 'skip': 'İçeriğe geç', 'bc.home': 'Ana Sayfa', 'bc.cur': 'Blog',
+      'hero.ey': 'Quantro · Araştırma Blogu',
       'hero.h1a': 'ARAŞTIRMA', 'hero.h1b': 'BLOGU',
       'hero.sub': 'Kuantum mekaniği, astrofizik ve ileri araştırma yazıları.',
       'search.ph': 'Yazılarda ara... (başlık, özet, etiket)',
@@ -24,7 +25,8 @@
       'ft.tag': 'Araştırma Blogu', 'ft.copy': '© {0} Quantro ARGE · Kayseri, Türkiye'
     },
     en: {
-      'nav.home': '← Home', 'hero.ey': 'Quantro · Research Blog',
+      'nav.home': '← Home', 'skip': 'Skip to content', 'bc.home': 'Home', 'bc.cur': 'Blog',
+      'hero.ey': 'Quantro · Research Blog',
       'hero.h1a': 'RESEARCH', 'hero.h1b': 'BLOG',
       'hero.sub': 'Quantum mechanics, astrophysics and advanced research notes.',
       'search.ph': 'Search posts... (title, summary, tag)',
@@ -39,7 +41,8 @@
       'ft.tag': 'Research Blog', 'ft.copy': '© {0} Quantro ARGE · Kayseri, Türkiye'
     },
     fr: {
-      'nav.home': '← Accueil', 'hero.ey': 'Quantro · Blog de recherche',
+      'nav.home': '← Accueil', 'skip': 'Aller au contenu', 'bc.home': 'Accueil', 'bc.cur': 'Blog',
+      'hero.ey': 'Quantro · Blog de recherche',
       'hero.h1a': 'RECHERCHE', 'hero.h1b': 'BLOG',
       'hero.sub': 'Mécanique quantique, astrophysique et notes de recherche.',
       'search.ph': 'Rechercher... (titre, résumé, étiquette)',
@@ -54,7 +57,8 @@
       'ft.tag': 'Blog de recherche', 'ft.copy': '© {0} Quantro ARGE · Kayseri, Türkiye'
     },
     es: {
-      'nav.home': '← Inicio', 'hero.ey': 'Quantro · Blog de investigación',
+      'nav.home': '← Inicio', 'skip': 'Ir al contenido', 'bc.home': 'Inicio', 'bc.cur': 'Blog',
+      'hero.ey': 'Quantro · Blog de investigación',
       'hero.h1a': 'INVESTIGACIÓN', 'hero.h1b': 'BLOG',
       'hero.sub': 'Mecánica cuántica, astrofísica y notas de investigación.',
       'search.ph': 'Buscar... (título, resumen, etiqueta)',
@@ -69,7 +73,8 @@
       'ft.tag': 'Blog de investigación', 'ft.copy': '© {0} Quantro ARGE · Kayseri, Turquía'
     },
     it: {
-      'nav.home': '← Home', 'hero.ey': 'Quantro · Blog di ricerca',
+      'nav.home': '← Home', 'skip': 'Vai al contenuto', 'bc.home': 'Home', 'bc.cur': 'Blog',
+      'hero.ey': 'Quantro · Blog di ricerca',
       'hero.h1a': 'RICERCA', 'hero.h1b': 'BLOG',
       'hero.sub': 'Meccanica quantistica, astrofisica e note di ricerca.',
       'search.ph': 'Cerca... (titolo, sommario, etichetta)',
@@ -84,7 +89,8 @@
       'ft.tag': 'Blog di ricerca', 'ft.copy': '© {0} Quantro ARGE · Kayseri, Turchia'
     },
     ru: {
-      'nav.home': '← Главная', 'hero.ey': 'Quantro · Исследовательский блог',
+      'nav.home': '← Главная', 'skip': 'К содержанию', 'bc.home': 'Главная', 'bc.cur': 'Блог',
+      'hero.ey': 'Quantro · Исследовательский блог',
       'hero.h1a': 'ИССЛЕДОВАНИЯ', 'hero.h1b': 'БЛОГ',
       'hero.sub': 'Квантовая механика, астрофизика и научные заметки.',
       'search.ph': 'Поиск... (заголовок, описание, тег)',
@@ -99,7 +105,8 @@
       'ft.tag': 'Исследовательский блог', 'ft.copy': '© {0} Quantro ARGE · Кайсери, Турция'
     },
     ko: {
-      'nav.home': '← 홈', 'hero.ey': 'Quantro · 연구 블로그',
+      'nav.home': '← 홈', 'skip': '콘텐츠로 건너뛰기', 'bc.home': '홈', 'bc.cur': '블로그',
+      'hero.ey': 'Quantro · 연구 블로그',
       'hero.h1a': '연구', 'hero.h1b': '블로그',
       'hero.sub': '양자역학, 천체물리학과 첨단 연구 노트.',
       'search.ph': '게시물 검색... (제목, 요약, 태그)',
@@ -114,7 +121,8 @@
       'ft.tag': '연구 블로그', 'ft.copy': '© {0} Quantro ARGE · 카이세리, 튀르키예'
     },
     ar: {
-      'nav.home': '← الرئيسية', 'hero.ey': 'Quantro · مدونة الأبحاث',
+      'nav.home': '← الرئيسية', 'skip': 'تخطي إلى المحتوى', 'bc.home': 'الرئيسية', 'bc.cur': 'المدونة',
+      'hero.ey': 'Quantro · مدونة الأبحاث',
       'hero.h1a': 'البحوث', 'hero.h1b': 'المدونة',
       'hero.sub': 'ميكانيكا الكم، الفيزياء الفلكية وملاحظات بحثية.',
       'search.ph': 'بحث في المقالات... (العنوان، الملخص، الوسم)',

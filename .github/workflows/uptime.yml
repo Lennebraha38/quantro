@@ -1,0 +1,49 @@
+name: Uptime & Health
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'   # 6 saatte bir
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+jobs:
+  probe:
+    name: Canlılık denetimi
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ana sayfa
+        id: home
+        run: |
+          code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 https://quantro-1.vercel.app/)
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+          test "$code" = "200"
+      - name: Health API
+        id: health
+        run: |
+          body=$(curl -s --max-time 20 https://quantro-1.vercel.app/api/health)
+          echo "body=$body" >> "$GITHUB_OUTPUT"
+          echo "$body" | grep -q '"status"'
+      - name: RSS feed
+        id: feed
+        run: |
+          code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 https://quantro-1.vercel.app/feed.xml)
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+          test "$code" = "200"
+      - name: Arıza kaydını aç
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const lines = [];
+            if (steps.home.outcome === 'failure') lines.push('- Ana sayfa (`/`): ' + (steps.home.outputs.code || 'başarısız'));
+            if (steps.health.outcome === 'failure') lines.push('- Health API (`/api/health`): ' + (steps.health.outputs.body || 'yanıt yok'));
+            if (steps.feed.outcome === 'failure') lines.push('- RSS (`/feed.xml`): ' + (steps.feed.outputs.code || 'başarısız'));
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '⚠ Uptime: canlılık arızası tespit edildi',
+              body: 'Otomatik izleme bir arıza yakaladı:\n' + lines.join('\n'),
+              labels: ['uptime']
+            });

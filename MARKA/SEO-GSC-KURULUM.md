@@ -63,3 +63,25 @@ başlasın, description davetkar bitsin.
 
 `vercel.json` içindeki CSP/header'lar domain bağımsız çalışır (kaynak
 listeleri üçüncü parti CDN/Supabase), tek değişiklik canonical URL'lerdir.
+
+## 7) Güncelleme (2026-09-20)
+
+Yapıldı — aşağıdakiler GSC'ye gönderimden önce hazır:
+
+- **robots.txt**: tüm arama botları + AI botlarına açık
+  (GPTBot/ChatGPT-User/OAI-SearchBot/PerplexityBot/ClaudeBot); `qtr-admin`
+  ve `/api` hariç. AI botları statik blog girişlerine akar.
+- **llms.txt**: standart LLM keşif dosyası (sayfalar + blog dizini + AI ifşası).
+- **Sitemap üreteci**: `npm run sitemap` → `scripts/gen-sitemap.mjs`
+  (deterministik `lastmod` = son commit; 6 sayfa + 3 blog `#slug`, 8 dil hreflang).
+  CI'da güncellik uyarısı var: değişiklik sonrası yeniden üret.
+- **Ayrı iletişim sayfası** `iletisim.html` (ContactPage + Organization +
+  Breadcrumb JSON-LD) — iletişim artık çapa değil, dizine eklenebilir sayfa.
+- **Yapısal veri**: tüm alt sayfalarda görünür breadcrumb + BreadcrumbList +
+  Organization; blog yazılarında BlogPosting (yazar + tarih); index'te FAQPage
+  + düzeltilmiş SearchAction (`/blog.html?q={search_term_string}`).
+- **Durum**: 404 → markalı sayfa; `/favicon.ico` → `img/favicon-48.png`;
+  blog içeriği statik (Supabase'siz çalışır) — dizine alma sayfa hash'leri
+  (`/blog.html#slug`) üzerinden yapılır.
+- **Kalan**: GSC'ye URL Öneki mülkü + sitemap gönderimi (bakınız bölüm 5).
+  PSI API anahtarı (`PSI_API_KEY` secret) CI/perf içinde tanımlanmalı.
