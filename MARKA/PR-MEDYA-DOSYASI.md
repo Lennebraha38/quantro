@@ -7,7 +7,7 @@
 
 ## 1) Kanıt zinciri (kampanya öncesi hazır)
 
-- GitHub repo (MIT): `github.com/Lennebraha38/Quantro-Vercel-Project`
+- GitHub repo (MIT): `github.com/Lennebraha38/quantro`
 - npm: `quantro-js` (1.0.0)
 - Canlı demo: `https://quantro-1.vercel.app/quantro-lab.html`
 - ANU Qrng bağlantısı: gerçek fiziksel kaynak (api/anu.js)

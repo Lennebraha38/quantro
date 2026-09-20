@@ -28,11 +28,11 @@
   "sideEffects": false,
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Lennebraha38/Quantro-Vercel-Project.git"
+    "url": "git+https://github.com/Lennebraha38/quantro.git"
   },
   "homepage": "https://quantro-1.vercel.app",
   "bugs": {
-    "url": "https://github.com/Lennebraha38/Quantro-Vercel-Project/issues"
+    "url": "https://github.com/Lennebraha38/quantro/issues"
   },
   "engines": {
     "node": ">=0.12"

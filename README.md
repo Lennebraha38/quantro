@@ -9,8 +9,8 @@ bağımlılıksız (dependency-free) çalışır.
 [![Lisans MIT](https://img.shields.io/badge/license-MIT-00c8f0)](./LICENSE)
 [![Bağımlılık yok](https://img.shields.io/badge/dependencies-0-00c8f0)]()
 [![npm: quantro-js](https://img.shields.io/badge/npm-quantro--js-00c8f0)](https://www.npmjs.com/package/quantro-js)
-[![Test](https://img.shields.io/github/actions/workflow/status/Lennebraha38/Quantro-Vercel-Project/node.js.yml?branch=main&label=CI)](https://github.com/Lennebraha38/Quantro-Vercel-Project/actions)
-[![Stars](https://img.shields.io/github/stars/Lennebraha38/Quantro-Vercel-Project?style=social)]()
+[![Test](https://img.shields.io/github/actions/workflow/status/Lennebraha38/quantro/node.js.yml?branch=main&label=CI)](https://github.com/Lennebraha38/quantro/actions)
+[![Stars](https://img.shields.io/github/stars/Lennebraha38/quantro?style=social)]()
 
 ---
 
@@ -107,8 +107,8 @@ Gereksinim: **Node.js ≥ 18**. Runtime (site + `/api`) harici npm paketi içerm
 yalnızca test araçları devDependency'dir.
 
 ```bash
-git clone https://github.com/Lennebraha38/Quantro-Vercel-Project.git
-cd Quantro-Vercel-Project
+git clone https://github.com/Lennebraha38/quantro.git
+cd quantro
 npm ci                # lock'a göre kurulum
 npm run build         # bütünlük kontrolü (HTML referansları + vercel.json)
 npm test              # 44 birim testi (simülatör + API güvenliği + handler'lar + içerik-i18n)

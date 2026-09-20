@@ -1,6 +1,6 @@
 # Alan Adı · Kalıcı Marka Domaini
 
-Şu an: `quantro-1.vercel.app` (üretim), repo: `Lennebraha38/Quantro-Vercel-Project`.
+Şu an: `quantro-1.vercel.app` (üretim), repo: `Lennebraha38/quantro` (2026-09-20'de adı `Quantro-Vercel-Project`'ten `quantro`'ya değişti).
 Marka için kalıcı domain + temiz GitHub isim alanı şart.
 
 ## ✅ Ücretsiz adım (uygulandı): `quantro.is-a.dev`

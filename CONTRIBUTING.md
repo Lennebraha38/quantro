@@ -6,8 +6,8 @@ geçirildikten sonra pull request açabilirsin.
 ## Başlarken
 
 ```bash
-git clone https://github.com/Lennebraha38/Quantro-Vercel-Project.git
-cd Quantro-Vercel-Project
+git clone https://github.com/Lennebraha38/quantro.git
+cd quantro
 npm ci
 npm run build   # bütünlük kontrolü
 npm test        # birim testleri
