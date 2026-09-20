@@ -39,7 +39,6 @@ async function tog(n){
   if(!open){
     if(window.Q3D){const id={1:'qrng-3d',2:'crb3d',9:'bloch-canvas',10:'cat-canvas',13:'qw-canvas'}[n];if(id)Q3D.stop(id)}
     if(window._stop3d&&window._stop3d[n])try{window._stop3d[n]()}catch(e){}
-    if(window.Env3D)window.Env3D.release(n);
     return;
   }
   try{if(window.gtag)gtag('event','lab_tool_open',{tool:n})}catch(e){}
@@ -60,7 +59,6 @@ async function tog(n){
   if(n===13)qwStart();
   markRun(n);
   _hashSet(n);
-  if(window.Env3D){if(opening)window.Env3D.pulse();window.Env3D.focus(n)}
   QLab.bindExports();
 }
 /* ══ KART: spot ışığı · bilgi paneli · hızlı demo ══ */
@@ -736,32 +734,11 @@ document.addEventListener('keydown',e=>{
 window.addEventListener('hashchange',_fromHash);
 window.favToggle=favToggle;window.favFilterToggle=favFilterToggle;window.hudCopy=hudCopy;window.kbHelp=kbHelp;
 
-/* ══ HUD SYS · canlı FPS çipi ══ */
-function _initSys(){
-  for(let n=1;n<=13;n++){
-    const hud=document.querySelector('.tc'+n+' .ql-hud');
-    if(hud&&!hud.querySelector('.ql-sys')){
-      const s=document.createElement('span');s.className='ql-sys';s.id='qsys'+n;s.textContent='SYS · -- FPS';
-      hud.appendChild(s);
-    }
-  }
-  let _ft=performance.now(),_ff=0;
-  (function fps(){
-    _ff++;
-    const now=performance.now();
-    if(now-_ft>=600){
-      const v=Math.round(_ff*1000/(now-_ft));_ff=0;_ft=now;
-      document.querySelectorAll('.tool-body.open .ql-sys').forEach(el=>{el.textContent='SYS · '+v+' FPS'});
-    }
-    requestAnimationFrame(fps);
-  })();
-}
-
 /* ══ BOOT ══ */
 (function boot(){
   const saved=localStorage.getItem('qlang');
   LANG=(saved&&I18N[saved])?saved:'tr';
-  const go=()=>{_initSys();favApply();setTimeout(_fromHash,450)};
+  const go=()=>{favApply();setTimeout(_fromHash,450)};
   if(LANG==='tr'){applyLang();go();return}
   loadI18n(LANG).then(applyLang).then(go).catch(()=>{applyLang();go()});
 })();
