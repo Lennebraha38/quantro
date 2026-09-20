@@ -1,14 +1,18 @@
-const { supabaseFetch, supabaseAvailable } = require('./_lib');
+const { supabaseFetch, supabaseAvailable } = require("./_lib");
 
-const esc = (s) => String(s == null ? '' : s).replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+const esc = (s) =>
+  String(s == null ? "" : s).replace(
+    /[&<>]/g,
+    (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" })[c],
+  );
 
 module.exports = async function handler(req, res) {
-  if (req.method !== 'GET') {
-    res.status(405).json({ error: 'method' });
+  if (req.method !== "GET") {
+    res.status(405).json({ error: "method" });
     return;
   }
 
-  const base = 'https://quantro-1.vercel.app';
+  const base = "https://quantro-1.vercel.app";
   let list = [];
 
   // Backend çevrimdışıysa (ör. Supabase projesi duraklatıldı) 500 yerine
@@ -16,40 +20,50 @@ module.exports = async function handler(req, res) {
   const up = await supabaseAvailable().catch(() => false);
   if (up) {
     try {
-      const r = await supabaseFetch('/rest/v1/blog_posts?published=eq.true&order=created_at.desc&limit=20');
+      const r = await supabaseFetch(
+        "/rest/v1/blog_posts?published=eq.true&order=created_at.desc&limit=20",
+      );
       const posts = r.ok ? await r.json() : [];
       if (Array.isArray(posts)) list = posts;
-    } catch (e) { list = []; }
+    } catch (e) {
+      list = [];
+    }
   }
   if (!list.length) {
     try {
       // blog-articles yedeklerini RSS'e çevir (tüm dillerden TR özet)
-      const fs = require('node:fs');
-      const path = require('node:path');
-      const dir = path.join(__dirname, '..', 'blog-articles');
-      const files = fs.existsSync(dir) ? fs.readdirSync(dir).filter((f) => f.endsWith('.tr.md')) : [];
+      const fs = require("node:fs");
+      const path = require("node:path");
+      const dir = path.join(__dirname, "..", "blog-articles");
+      const files = fs.existsSync(dir)
+        ? fs.readdirSync(dir).filter((f) => f.endsWith(".tr.md"))
+        : [];
       list = files.map((f) => {
-        const raw = fs.readFileSync(path.join(dir, f), 'utf8');
-        const first = (raw.split('\n')[0] || '').replace(/^#\s+/, '');
-        const slug = f.replace(/\.tr\.md$/, '');
-        return { slug, title: first, summary: '', created_at: '2025-09-01' };
+        const raw = fs.readFileSync(path.join(dir, f), "utf8");
+        const first = (raw.split("\n")[0] || "").replace(/^#\s+/, "");
+        const slug = f.replace(/\.tr\.md$/, "");
+        return { slug, title: first, summary: "", created_at: "2025-09-01" };
       });
-    } catch (e) { list = []; }
+    } catch (e) {
+      list = [];
+    }
   }
 
-  const items = list.map((p) => {
-    const link = `${base}/blog.html#${encodeURIComponent(p.slug || '')}`;
-    const desc = esc((p.summary || p.content || '').slice(0, 280));
-    return [
-      '  <item>',
-      `    <title>${esc(p.title)}</title>`,
-      `    <link>${link}</link>`,
-      `    <guid isPermaLink="true">${link}</guid>`,
-      `    <pubDate>${new Date(p.created_at).toUTCString()}</pubDate>`,
-      `    <description>${desc || esc(p.title)}</description>`,
-      '  </item>'
-    ].join('\n');
-  }).join('\n');
+  const items = list
+    .map((p) => {
+      const link = `${base}/blog.html#${encodeURIComponent(p.slug || "")}`;
+      const desc = esc((p.summary || p.content || "").slice(0, 280));
+      return [
+        "  <item>",
+        `    <title>${esc(p.title)}</title>`,
+        `    <link>${link}</link>`,
+        `    <guid isPermaLink="true">${link}</guid>`,
+        `    <pubDate>${new Date(p.created_at).toUTCString()}</pubDate>`,
+        `    <description>${desc || esc(p.title)}</description>`,
+        "  </item>",
+      ].join("\n");
+    })
+    .join("\n");
 
   try {
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -65,8 +79,8 @@ ${items}
   </channel>
 </rss>`;
 
-    res.setHeader('Content-Type', 'application/rss+xml; charset=utf-8');
-    res.setHeader('Cache-Control', 'public, max-age=600');
+    res.setHeader("Content-Type", "application/rss+xml; charset=utf-8");
+    res.setHeader("Cache-Control", "public, max-age=600");
     res.status(200).send(xml);
   } catch (e) {
     res.status(500).json({ error: String((e && e.message) || e) });

@@ -38,20 +38,22 @@
 
   /* ── Matris yardımcıları (karmaşık) ────────────────────────────── */
   function matKron(A, B) {
-    var m1 = A.length, n1 = A[0].length;
-    var m2 = B.length, n2 = B[0].length;
+    var m1 = A.length,
+      n1 = A[0].length;
+    var m2 = B.length,
+      n2 = B[0].length;
     var R = [];
     for (var r1 = 0; r1 < m1 * m2; r1++) R.push(new Array(n1 * n2));
     for (var i = 0; i < m1; i++)
       for (var j = 0; j < n1; j++)
         for (var k = 0; k < m2; k++)
-          for (var l = 0; l < n2; l++)
-            R[i * m2 + k][j * n2 + l] = cMul(A[i][j], B[k][l]);
+          for (var l = 0; l < n2; l++) R[i * m2 + k][j * n2 + l] = cMul(A[i][j], B[k][l]);
     return R;
   }
 
   function matVec(M, v) {
-    var rows = M.length, cols = v.length;
+    var rows = M.length,
+      cols = v.length;
     var out = [];
     for (var r = 0; r < rows; r++) {
       var acc = cZero();
@@ -63,11 +65,26 @@
 
   /* ── Kapılar ───────────────────────────────────────────────────── */
   var invSqrt2 = 1 / Math.sqrt(2);
-  var H = [[c(invSqrt2), c(invSqrt2)], [c(invSqrt2), c(-invSqrt2)]];
-  var X = [[c(0), c(1)], [c(1), c(0)]];
-  var Y = [[c(0), c(0, -1)], [c(0, 1), c(0)]];
-  var Z = [[c(1), c(0)], [c(0), c(-1)]];
-  var I2 = [[c(1), c(0)], [c(0), c(1)]];
+  var H = [
+    [c(invSqrt2), c(invSqrt2)],
+    [c(invSqrt2), c(-invSqrt2)],
+  ];
+  var X = [
+    [c(0), c(1)],
+    [c(1), c(0)],
+  ];
+  var Y = [
+    [c(0), c(0, -1)],
+    [c(0, 1), c(0)],
+  ];
+  var Z = [
+    [c(1), c(0)],
+    [c(0), c(-1)],
+  ];
+  var I2 = [
+    [c(1), c(0)],
+    [c(0), c(1)],
+  ];
 
   /* ── Tek kübit ──────────────────────────────────────────────────── */
   function Qubit(a, b) {
@@ -100,13 +117,28 @@
     this.state = matVec(op, this.state);
     return this;
   };
-  QuantumCircuit.prototype.h = function (q) { return this.applySingle(H, q); };
-  QuantumCircuit.prototype.x = function (q) { return this.applySingle(X, q); };
-  QuantumCircuit.prototype.y = function (q) { return this.applySingle(Y, q); };
-  QuantumCircuit.prototype.z = function (q) { return this.applySingle(Z, q); };
+  QuantumCircuit.prototype.h = function (q) {
+    return this.applySingle(H, q);
+  };
+  QuantumCircuit.prototype.x = function (q) {
+    return this.applySingle(X, q);
+  };
+  QuantumCircuit.prototype.y = function (q) {
+    return this.applySingle(Y, q);
+  };
+  QuantumCircuit.prototype.z = function (q) {
+    return this.applySingle(Z, q);
+  };
   QuantumCircuit.prototype.ry = function (theta, q) {
-    var c0 = Math.cos(theta / 2), s0 = Math.sin(theta / 2);
-    return this.applySingle([[c(c0), c(-s0)], [c(s0), c(c0)]], q);
+    var c0 = Math.cos(theta / 2),
+      s0 = Math.sin(theta / 2);
+    return this.applySingle(
+      [
+        [c(c0), c(-s0)],
+        [c(s0), c(c0)],
+      ],
+      q,
+    );
   };
   QuantumCircuit.prototype.cx = function (control, target) {
     if (control === target) throw new Error("Kontrol ve hedef aynı olamaz");
@@ -174,7 +206,7 @@
     var a = seed >>> 0;
     return function () {
       a |= 0;
-      a = (a + 0x6D2B79F5) | 0;
+      a = (a + 0x6d2b79f5) | 0;
       var t = Math.imul(a ^ (a >>> 15), 1 | a);
       t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
       return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
@@ -217,14 +249,16 @@
       next();
       return counts;
     }
-    if (typeof Qrng !== 'undefined') {
+    if (typeof Qrng !== "undefined") {
       var p = new Promise(function (res) {
         var n = shots;
-        sample(res, function () { return Qrng.prob(); });
+        sample(res, function () {
+          return Qrng.prob();
+        });
       });
       return p;
     }
-    var rng = mulberry32((Date.now() >>> 0));
+    var rng = mulberry32(Date.now() >>> 0);
     var counts = {};
     for (var s = 0; s < shots; s++) {
       var key = circuit.measureAll(rng);
@@ -235,14 +269,18 @@
 
   var Quantro = {
     c: c,
-    H: H, X: X, Y: Y, Z: Z, I2: I2,
+    H: H,
+    X: X,
+    Y: Y,
+    Z: Z,
+    I2: I2,
     Qubit: Qubit,
     QuantumCircuit: QuantumCircuit,
     bellState: bellState,
     ghzState: ghzState,
     mulberry32: mulberry32,
     sampleDistribution: sampleDistribution,
-    sampleDistributionQ: sampleDistributionQ
+    sampleDistributionQ: sampleDistributionQ,
   };
 
   if (typeof module !== "undefined" && module.exports) module.exports = Quantro;

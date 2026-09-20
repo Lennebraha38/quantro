@@ -1,25 +1,60 @@
-const CACHE = 'quantro-v1.12.0';
-const SHELL = ['/index.html', '/hakkimizda.html', '/arastirma.html', '/simulasyon.html', '/blog.html', '/iletisim.html', '/quantro-lab.html', '/qtr-admin.html', '/quantro.js', '/lab-core.js', '/lab/lab3d.js', '/lab/tool-1.js', '/lab/tool-10.js', '/lab/tool-11.js', '/lab/tool-13.js', '/lab/tool-2.js', '/lab/tool-9.js', '/style.css', '/app.js', '/blog-static.js', '/blog-localize.js', '/blog-i18n.js', '/admin-i18n.js', '/manifest.webmanifest', '/css/base.css', '/css/blog.css', '/css/lab.css', '/css/admin.css'];
+const CACHE = "quantro-v1.12.0";
+const SHELL = [
+  "/index.html",
+  "/hakkimizda.html",
+  "/arastirma.html",
+  "/simulasyon.html",
+  "/blog.html",
+  "/iletisim.html",
+  "/quantro-lab.html",
+  "/qtr-admin.html",
+  "/quantro.js",
+  "/lab-core.js",
+  "/lab/lab3d.js",
+  "/lab/tool-1.js",
+  "/lab/tool-10.js",
+  "/lab/tool-11.js",
+  "/lab/tool-13.js",
+  "/lab/tool-2.js",
+  "/lab/tool-9.js",
+  "/style.css",
+  "/app.js",
+  "/blog-static.js",
+  "/blog-localize.js",
+  "/blog-i18n.js",
+  "/admin-i18n.js",
+  "/manifest.webmanifest",
+  "/css/base.css",
+  "/css/blog.css",
+  "/css/lab.css",
+  "/css/admin.css",
+];
 
-self.addEventListener('install', (e) => {
-  e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting()));
-});
-
-self.addEventListener('activate', (e) => {
+self.addEventListener("install", (e) => {
   e.waitUntil(
-    caches.keys()
-      .then((keys) => Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k))))
-      .then(() => self.clients.claim())
+    caches
+      .open(CACHE)
+      .then((c) => c.addAll(SHELL))
+      .then(() => self.skipWaiting()),
   );
 });
 
-self.addEventListener('fetch', (e) => {
+self.addEventListener("activate", (e) => {
+  e.waitUntil(
+    caches
+      .keys()
+      .then((keys) => Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k))))
+      .then(() => self.clients.claim()),
+  );
+});
+
+self.addEventListener("fetch", (e) => {
   const u = new URL(e.request.url);
   if (u.origin !== self.location.origin) return;
-  if (u.pathname.startsWith('/api/')) return;
-  if (e.request.method !== 'GET') return;
+  if (u.pathname.startsWith("/api/")) return;
+  if (e.request.method !== "GET") return;
 
-  const norm = u.pathname === '/' ? '/index.html' : u.pathname;
+  const norm = u.pathname === "/" ? "/index.html" : u.pathname;
   const isShell = SHELL.includes(norm);
 
   if (isShell) {
@@ -35,7 +70,7 @@ self.addEventListener('fetch', (e) => {
         } catch (err) {}
         const cached = await c.match(new Request(norm));
         return cached || fetch(e.request).catch(() => cached);
-      })
+      }),
     );
     return;
   }
@@ -48,9 +83,12 @@ self.addEventListener('fetch', (e) => {
         return r;
       })
       .catch(() =>
-        caches.match(e.request).then((hit) =>
-          hit || (e.request.mode === 'navigate' ? caches.match('/index.html') : undefined)
-        )
-      )
+        caches
+          .match(e.request)
+          .then(
+            (hit) =>
+              hit || (e.request.mode === "navigate" ? caches.match("/index.html") : undefined),
+          ),
+      ),
   );
 });

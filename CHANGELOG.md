@@ -3,6 +3,24 @@
 Tüm önemli değişiklikler bu dosyada not edilir. Format: [Keep a Changelog](https://keepachangelog.com/tr/1.1.0/),
 sürüm: [SemVer](https://semver.org/).
 
+## 1.7.1 — 2026-09-20
+
+### Eklenen
+- **ESLint** (flat config): düğüm/test tarafında sıkı kurallar; HTML içindeki
+  inline `<script>` gövdeleri için `npm run lint:html` (JSON-LD/importmap hariç).
+  Gerçek ölü kod temizlendi (`pathToFileURL` importu, `dropFirstRule`,
+  kullanılmayan döngü değişkeni). `no-unused-vars` düğüm/testte **hata**dır;
+  tarayıcıda klasik-script global sınırı nedeniyle bilinçli kapalı.
+- **Prettier 3** (`npm run format` / `format:check`) — tüm JS/CSS biçimlendi.
+- **API referans dokümanı** `docs/api.md` (README'e bağlandı).
+- **Elle üretim deploy** `.github/workflows/deploy.yml` (Actions'ta
+  workflow_dispatch; push üretim zaten Vercel Git entegrasyonuyla otomatik).
+- health/stats/newsletter için **10 birim test** (`test/api-extra.test.js`);
+  coverage job'ı artık push'ta da çalışır.
+
+### Değişen
+- `eslint` 10 → **9** (Node 18 CI uyumu); `playwright` 1.63; `prettier` 3.9.
+
 ## 1.7.0 — 2026-09-20
 
 ### Notlar (canlı durum)

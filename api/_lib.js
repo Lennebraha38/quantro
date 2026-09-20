@@ -1,16 +1,20 @@
-const crypto = require('crypto');
+const crypto = require("crypto");
 
 const SB = process.env.SUPABASE_URL;
 const SERVICE = process.env.SUPABASE_SERVICE_ROLE_KEY;
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
-const AUTH_SECRET = process.env.AUTH_SECRET || '';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "";
+const AUTH_SECRET = process.env.AUTH_SECRET || "";
 
 const SESSION_TTL = 2 * 60 * 60 * 1000; // 2 saat
 
 // ── Admin şifre doğrulama (scrypt, salt = AUTH_SECRET türevi) ──
 // Plaintext değer hiçbir yerde karşılaştırılmaz; yalnızca scrypt türevi
 // timing-safe karşılaştırılır. Beklenen anahtar boot'ta bir kez hesaplanır.
-const _pwSalt = crypto.createHash('sha256').update(AUTH_SECRET || 'quantro').digest('base64url').slice(0, 16);
+const _pwSalt = crypto
+  .createHash("sha256")
+  .update(AUTH_SECRET || "quantro")
+  .digest("base64url")
+  .slice(0, 16);
 const _expected = ADMIN_PASSWORD ? crypto.scryptSync(ADMIN_PASSWORD, _pwSalt, 32) : null;
 
 function verifyAdminPassword(candidate) {
@@ -24,46 +28,50 @@ function supabaseFetch(path, opts = {}) {
     headers: {
       apikey: SERVICE,
       Authorization: `Bearer ${SERVICE}`,
-      'Content-Type': 'application/json',
-      ...(opts.headers || {})
-    }
+      "Content-Type": "application/json",
+      ...(opts.headers || {}),
+    },
   });
 }
 
 // ── Backend sağlık kontrolü (30s önbellek) ──
 // Supabase çevrimdışıyken API rotaları 500 yerine zarif degrade eder.
-let sbProbe = { state: 'unknown', at: 0 };
+let sbProbe = { state: "unknown", at: 0 };
 const SB_PROBE_TTL = 30000;
 async function supabaseAvailable() {
   if (!SB || !SERVICE) return false;
-  if (sbProbe.state !== 'unknown' && Date.now() - sbProbe.at < SB_PROBE_TTL) {
-    return sbProbe.state === 'up';
+  if (sbProbe.state !== "unknown" && Date.now() - sbProbe.at < SB_PROBE_TTL) {
+    return sbProbe.state === "up";
   }
   let ok = false;
   try {
     const res = await fetch(`${SB}/rest/v1/`, {
       headers: { apikey: SERVICE, Authorization: `Bearer ${SERVICE}` },
-      signal: AbortSignal.timeout(4000)
+      signal: AbortSignal.timeout(4000),
     });
     ok = res.ok || res.status === 404; // tablo yoksa bile bağlantı canlıdır
-  } catch (e) { ok = false; }
-  sbProbe = { state: ok ? 'up' : 'down', at: Date.now() };
+  } catch (e) {
+    ok = false;
+  }
+  sbProbe = { state: ok ? "up" : "down", at: Date.now() };
   return ok;
 }
 
 function signToken(role) {
-  const payload = Buffer.from(JSON.stringify({ role, exp: Date.now() + SESSION_TTL })).toString('base64url');
-  const sig = crypto.createHmac('sha256', AUTH_SECRET).update(payload).digest('base64url');
+  const payload = Buffer.from(JSON.stringify({ role, exp: Date.now() + SESSION_TTL })).toString(
+    "base64url",
+  );
+  const sig = crypto.createHmac("sha256", AUTH_SECRET).update(payload).digest("base64url");
   return `${payload}.${sig}`;
 }
 
 function verifyToken(token) {
   try {
-    const parts = String(token || '').split('.');
+    const parts = String(token || "").split(".");
     if (parts.length !== 2) return null;
-    const expected = crypto.createHmac('sha256', AUTH_SECRET).update(parts[0]).digest('base64url');
+    const expected = crypto.createHmac("sha256", AUTH_SECRET).update(parts[0]).digest("base64url");
     if (!safeEqual(parts[1], expected)) return null;
-    const data = JSON.parse(Buffer.from(parts[0], 'base64url').toString());
+    const data = JSON.parse(Buffer.from(parts[0], "base64url").toString());
     if (!data.exp || data.exp < Date.now()) return null;
     return data;
   } catch (e) {
@@ -97,40 +105,60 @@ function rateLimiter(limit, windowMs) {
 
 function requireAuth(req, res) {
   if (!AUTH_SECRET) {
-    res.status(503).json({ error: 'AUTH_SECRET env tanimli degil' });
+    res.status(503).json({ error: "AUTH_SECRET env tanimli degil" });
     return null;
   }
-  const h = req.headers.authorization || '';
-  const token = h.startsWith('Bearer ') ? h.slice(7) : '';
+  const h = req.headers.authorization || "";
+  const token = h.startsWith("Bearer ") ? h.slice(7) : "";
   const sess = verifyToken(token);
-  if (!sess || sess.role !== 'admin') {
-    res.status(401).json({ error: 'unauthorized' });
+  if (!sess || sess.role !== "admin") {
+    res.status(401).json({ error: "unauthorized" });
     return null;
   }
   return sess;
 }
 
 function clientIp(req) {
-  const f = req.headers['x-forwarded-for'];
-  if (f) return String(f).split(',')[0].trim();
-  return req.socket && req.socket.remoteAddress || 'unknown';
+  const f = req.headers["x-forwarded-for"];
+  if (f) return String(f).split(",")[0].trim();
+  return (req.socket && req.socket.remoteAddress) || "unknown";
 }
 
 function readJson(req) {
   const b = req.body;
   if (b == null) return null;
-  if (typeof b === 'string') {
-    try { return JSON.parse(b); } catch (e) { return null; }
+  if (typeof b === "string") {
+    try {
+      return JSON.parse(b);
+    } catch (e) {
+      return null;
+    }
   }
   if (Buffer.isBuffer(b)) {
-    try { return JSON.parse(b.toString()); } catch (e) { return null; }
+    try {
+      return JSON.parse(b.toString());
+    } catch (e) {
+      return null;
+    }
   }
-  if (typeof b === 'object') return b;
+  if (typeof b === "object") return b;
   return null;
 }
 
 module.exports = {
-  SB, SERVICE, ADMIN_PASSWORD, AUTH_SECRET, SESSION_TTL,
-  supabaseFetch, supabaseAvailable, signToken, verifyToken, safeEqual,
-  rateLimiter, requireAuth, clientIp, readJson, verifyAdminPassword
+  SB,
+  SERVICE,
+  ADMIN_PASSWORD,
+  AUTH_SECRET,
+  SESSION_TTL,
+  supabaseFetch,
+  supabaseAvailable,
+  signToken,
+  verifyToken,
+  safeEqual,
+  rateLimiter,
+  requireAuth,
+  clientIp,
+  readJson,
+  verifyAdminPassword,
 };

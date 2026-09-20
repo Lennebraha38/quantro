@@ -1,5 +1,5 @@
-const { clientIp, rateLimiter } = require('./_lib');
-const ANU = 'https://qrng.anu.edu.au/API/jsonI.php';
+const { clientIp, rateLimiter } = require("./_lib");
+const ANU = "https://qrng.anu.edu.au/API/jsonI.php";
 
 const WINDOW = 45000;
 const perIp = rateLimiter(30, 60 * 1000);
@@ -8,19 +8,19 @@ let blockAt = 0;
 let off = 0;
 
 module.exports = async function handler(req, res) {
-  if (req.method !== 'GET') return res.status(405).json({ success: false, error: 'method' });
+  if (req.method !== "GET") return res.status(405).json({ success: false, error: "method" });
   const ip = clientIp(req);
-  if (!perIp(ip)) return res.status(429).json({ success: false, error: 'rate' });
+  if (!perIp(ip)) return res.status(429).json({ success: false, error: "rate" });
 
   const allowedOrigins = new Set([
-    'https://quantro-1.vercel.app',
-    'http://localhost:3000',
-    'http://localhost:5500',
-    'null'
+    "https://quantro-1.vercel.app",
+    "http://localhost:3000",
+    "http://localhost:5500",
+    "null",
   ]);
   const origin = req.headers.origin;
   if (origin && !allowedOrigins.has(origin)) {
-    return res.status(403).json({ success: false, error: 'forbidden-origin' });
+    return res.status(403).json({ success: false, error: "forbidden-origin" });
   }
 
   const raw = parseInt(req.query.length, 10);
@@ -28,19 +28,22 @@ module.exports = async function handler(req, res) {
   const now = Date.now();
   try {
     if (!block || now - blockAt > WINDOW || off + len > 1024) {
-      const r = await fetch(ANU + '?length=1024&type=uint8', { signal: AbortSignal.timeout(10000) });
-      if (!r.ok) throw new Error('ANU HTTP ' + r.status);
+      const r = await fetch(ANU + "?length=1024&type=uint8", {
+        signal: AbortSignal.timeout(10000),
+      });
+      if (!r.ok) throw new Error("ANU HTTP " + r.status);
       const j = await r.json();
-      if (!j.success || !Array.isArray(j.data) || j.data.length < 1024) throw new Error('ANU gecersiz yanit');
+      if (!j.success || !Array.isArray(j.data) || j.data.length < 1024)
+        throw new Error("ANU gecersiz yanit");
       block = j.data.slice();
       blockAt = now;
       off = 0;
     }
     const data = block.slice(off, off + len);
     off = (off + len) % 1024;
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Cache-Control', 'no-store');
-    res.json({ type: 'uint8', length: len, data: data, success: true, source: 'quantro-proxy' });
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Cache-Control", "no-store");
+    res.json({ type: "uint8", length: len, data: data, success: true, source: "quantro-proxy" });
   } catch (e) {
     res.status(502).json({ success: false, error: String((e && e.message) || e) });
   }

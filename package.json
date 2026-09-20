@@ -1,6 +1,6 @@
 {
   "name": "quantro",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "private": true,
   "description": "Quantro — Kuantum ve Astrofizik ARGE · statik site + Vercel serverless API",
   "keywords": [
@@ -19,11 +19,15 @@
     "test:coverage": "node scripts/coverage.mjs",
     "lint": "eslint .",
     "metrics:field": "node scripts/metrics.mjs",
+    "lint": "eslint .",
+    "lint:html": "node scripts/lint-html.mjs",
+    "format": "prettier --write \"**/*.{js,mjs,css}\"",
+    "format:check": "prettier --check \"**/*.{js,mjs,css}\"",
     "audit": "npm audit --omit=dev",
     "blog:static": "node scripts/gen-blog.mjs",
     "sitemap": "node scripts/gen-sitemap.mjs",
     "links": "node scripts/links.mjs",
-    "check": "npm run build && npm test && npm run links && npm run lint",
+    "check": "npm run build && npm test && npm run links && npm run lint && npm run lint:html && npm run format:check",
     "pkg:sync": "node tools/sync-pkg.mjs",
     "pkg:test": "node tools/sync-pkg.mjs && npm --prefix package/quantro test",
     "pkg:pack": "node tools/sync-pkg.mjs && npm --prefix package/quantro pack --dry-run"
@@ -34,6 +38,7 @@
   "devDependencies": {
     "eslint": "^9.39.5",
     "globals": "^17.12.0",
-    "playwright": "^1.62.1"
+    "playwright": "^1.62.1",
+    "prettier": "^3.9.8"
   }
 }

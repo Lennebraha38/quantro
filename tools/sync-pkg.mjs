@@ -22,6 +22,8 @@ copyFileSync(SRC, DST);
 const a = await sha(SRC);
 const b = await sha(DST);
 const ok = a === b;
-console.log(`sync ${a === b ? "OK" : "FAIL"} — quantro.js → package/quantro/quantro.js (${statSync(DST).size}B)`);
+console.log(
+  `sync ${a === b ? "OK" : "FAIL"} — quantro.js → package/quantro/quantro.js (${statSync(DST).size}B)`,
+);
 writeFileSync(path.join(ROOT, "package", "quantro", ".quantro-sha"), a + "\n");
 if (!ok) process.exit(1);

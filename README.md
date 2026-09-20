@@ -99,6 +99,8 @@ içinde 8 dilde tutulur.
 | `GET /api/feed` | RSS/feed |
 | `GET /api/anu` | ANU kuantum rastgelelik vekili (CORS aşımlı) |
 
+Detaylı istek/yanıt, hata kodları ve rate limitler: **[docs/api.md](docs/api.md)**.
+
 ---
 
 ## Başlangıç

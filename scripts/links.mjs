@@ -5,27 +5,27 @@
 // veri ve sunucusuz (/api → rewrite) rotaları yok sayar.
 //   node scripts/links.mjs   (kırık bağlantıda çıkış 1)
 // ═══════════════════════════════════════════════════════════
-import fs from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
-const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const SKIP_PREFIX = ['/api/', '/insta/'];
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const SKIP_PREFIX = ["/api/", "/insta/"];
 
-const htmlFiles = fs.readdirSync(ROOT).filter((f) => f.endsWith('.html'));
+const htmlFiles = fs.readdirSync(ROOT).filter((f) => f.endsWith(".html"));
 const missing = [];
 const checked = new Set();
 
 function resolveTarget(file, target) {
-  if (target.startsWith('#') || !target) return null;
+  if (target.startsWith("#") || !target) return null;
   const q = target.search(/[?#]/);
   const clean = q === -1 ? target : target.slice(0, q);
-  if (!clean || clean.startsWith('/')) return clean; // kök-izafi: dosya kökünde ara
+  if (!clean || clean.startsWith("/")) return clean; // kök-izafi: dosya kökünde ara
   return path.posix.normalize(path.posix.join(path.posix.dirname(file), clean));
 }
 
 for (const file of htmlFiles) {
-  const src = fs.readFileSync(path.join(ROOT, file), 'utf8');
+  const src = fs.readFileSync(path.join(ROOT, file), "utf8");
   const regex = /(?:href|src|poster)=["']([^"']+)["']/g;
   let m;
   while ((m = regex.exec(src)) !== null) {
@@ -37,7 +37,7 @@ for (const file of htmlFiles) {
     const key = target;
     if (checked.has(key)) continue;
     checked.add(key);
-    const fp = path.join(ROOT, key.replace(/^\//, ''));
+    const fp = path.join(ROOT, key.replace(/^\//, ""));
     if (!fs.existsSync(fp) || !fs.statSync(fp).isFile()) {
       missing.push(`${file} → ${raw}`);
     }
@@ -45,8 +45,10 @@ for (const file of htmlFiles) {
 }
 
 if (missing.length) {
-  console.error('KIRIK BAĞLANTILAR:');
-  for (const l of missing) console.error('  ' + l);
+  console.error("KIRIK BAĞLANTILAR:");
+  for (const l of missing) console.error("  " + l);
   process.exit(1);
 }
-console.log(`Bağlantı denetimi OK (${checked.size} benzersiz yerel hedef, ${htmlFiles.length} html)`);
+console.log(
+  `Bağlantı denetimi OK (${checked.size} benzersiz yerel hedef, ${htmlFiles.length} html)`,
+);
