@@ -10,11 +10,12 @@ sürüm: [SemVer](https://semver.org/).
   (`SUPABASE_SERVICE_ROLE_KEY` vb.) ile backend tam aktif: `/api/health` → `ok`,
   RSS yazıları backend'den, yorum/beğeni/iletişim canlı.
 - `GITHUB_TOKEN` env eklendi — `/api/stats` özel repoyu auth ile okuyor.
+- **Repo artık public** (`Lennebraha38/quantro`) — yıldız/fork sayacı gerçek veri;
+  `perf.yml` `PSI_API_KEY` yokken atlanacak şekilde dayanıklılaştırıldı.
 - `blog-articles/` üretime dahil (lambda yedekleri + `X-Robots-Tag: noindex`).
-- **Kalan (kullanıcı)**: `sql/supabase-newsletter.sql`'i dashboard SQL editor'de
-  çalıştırıp `newsletters` tablosunu oluştur (şu an bellek kuyruğu + `persisted:false`);
-  npm `quantro-js` yayını (indirme sayacı); repo'yu public yapmak istersen yıldız/fork
-  artar.
+- **Kalan (kullanıcı kimliği gerektirir)**: `sql/supabase-newsletter.sql`'i
+  dashboard SQL editor'de çalıştırıp `newsletters` tablosunu oluştur (şu an bellek
+  kuyruğu + `persisted:false`); npm `quantro-js` yayını (`npm login` + publish).
 
 ### Eklendi
 - **Blog statikleştirme** — `scripts/gen-blog.mjs` + üretilen `blog-static.js`
