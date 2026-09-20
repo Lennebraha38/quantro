@@ -37,6 +37,10 @@ sürüm: [SemVer](https://semver.org/).
 - `package.json` script'leri: `blog:static`, `sitemap`, `links`; `check` artık
   build + test + links. `.env.local`dan Vercel OIDC token kaldırıldı (yerel kimlik
   dışarıda tutulur).
+- **Hobby 12 fonskiyon sınırı** — `health`/`stats`/`newsletter` uçları
+  `apifns/` altına taşındı ve `api/[...path].js` catch-all yönlendirici üzerinden
+  servis ediliyor (fonksiyon sayısı 12 altına indi); diğer API'ler değişmedi.
+- `sw.js` shell: `/iletisim.html` + `/blog-static.js` eklendi, `quantro-v1.12.0`.
 
 ## 1.6.0 — 2026-09-19
 

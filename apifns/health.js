@@ -2,7 +2,7 @@
 // Quantro · /api/health — hizmet sağlık raporu (uptime robotu/kullanıcı)
 // Supabase çevrimdışıyken 200 + degraded:true döner (site ayaktadır).
 // ═══════════════════════════════════════════════════════════
-const { supabaseAvailable } = require('./_lib');
+const { supabaseAvailable } = require('../api/_lib');
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'GET') return res.status(405).json({ error: 'method' });

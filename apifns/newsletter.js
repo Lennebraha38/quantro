@@ -4,7 +4,7 @@
 // tutulur ve `persisted:false` işaretlenir; backend kurulunca tabloya
 // geçer. SQL şema: sql/supabase-newsletter.sql
 // ═══════════════════════════════════════════════════════════
-const { supabaseAvailable, supabaseFetch, clientIp, rateLimiter, readJson } = require('./_lib');
+const { supabaseAvailable, supabaseFetch, clientIp, rateLimiter, readJson } = require('../api/_lib');
 
 const perIp = rateLimiter(5, 15 * 60 * 1000);
 const pending = new Map();
