@@ -33,8 +33,15 @@ async function collect() {
     const n = await fetchJson(`https://api.npmjs.org/downloads/point/last-month/${NPM}`, {
       signal: AbortSignal.timeout(5000)
     });
-    out.npm = { downloadsLastMonth: n.downloads || 0 };
-  } catch (e) { out.npm = null; }
+    out.npm = { downloadsLastMonth: n.downloads || 0, version: '' };
+  } catch (e) {
+    // İndirme API'si yeni yayınlarda birkaç saate kadar geriden gelir;
+    // registry'den canlı sürümü al (widget indirme sayısını 0 gösterir).
+    try {
+      const meta = await fetchJson(`https://registry.npmjs.org/${NPM}`, { signal: AbortSignal.timeout(5000) });
+      out.npm = { downloadsLastMonth: 0, version: (meta['dist-tags'] && meta['dist-tags'].latest) || '' };
+    } catch (e2) { out.npm = null; }
+  }
   try {
     const fs = require('node:fs');
     const path = require('node:path');
