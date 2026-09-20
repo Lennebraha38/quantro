@@ -9,8 +9,8 @@ tools/
 test/
 .github/
 
-# Blog içerik kaynakları (Supabase'ten servis edilir)
-blog-articles/
+# Blog içerik kaynakları (artık hem RSS yedeği hem istatistik için lambda'ya gerekli)
+# blog-articles/
 
 # Bağımlılıklar / yerel
 node_modules/

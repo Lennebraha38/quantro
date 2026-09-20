@@ -15,6 +15,13 @@
       "headers": [
         { "key": "Content-Disposition", "value": "attachment" }
       ]
+    },
+    {
+      "source": "/blog-articles/(.*)",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex" },
+        { "key": "Cache-Control", "value": "public, max-age=86400" }
+      ]
     }
   ],
   "redirects": [
