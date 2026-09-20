@@ -13,9 +13,12 @@ sürüm: [SemVer](https://semver.org/).
 - **Repo artık public** (`Lennebraha38/quantro`) — yıldız/fork sayacı gerçek veri;
   `perf.yml` `PSI_API_KEY` yokken atlanacak şekilde dayanıklılaştırıldı.
 - `blog-articles/` üretime dahil (lambda yedekleri + `X-Robots-Tag: noindex`).
-- **Kalan (kullanıcı kimliği gerektirir)**: `sql/supabase-newsletter.sql`'i
-  dashboard SQL editor'de çalıştırıp `newsletters` tablosunu oluştur (şu an bellek
-  kuyruğu + `persisted:false`); npm `quantro-js` yayını (`npm login` + publish).
+- **npm paketi yayında** — `quantro-js@1.0.0` npm registry'de (`dist-tags.latest`),
+  stats objesi gerçek paket verisini gösteriyor (indirme sayacı npm tarafından
+  gecikmeli dolar; registry yedeği canlı sürümü gösterir).
+- **Kalan (kullanıcı)**: `sql/supabase-newsletter.sql`'i sentinel dashboard SQL
+  editor'de çalıştırıp `newsletters` tablosunu oluştur (şu an bellek kuyruğu +
+  `persisted:false`).
 
 ### Eklendi
 - **Blog statikleştirme** — `scripts/gen-blog.mjs` + üretilen `blog-static.js`
