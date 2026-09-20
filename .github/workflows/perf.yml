@@ -4,17 +4,6 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '17 3 * * *'   # her gece
-  push:
-    branches: [main]
-    paths:
-      - 'index.html'
-      - 'blog.html'
-      - 'style.css'
-      - 'app.js'
-      - 'blog-*.js'
-      - 'admin-i18n.js'
-      - 'sw.js'
-      - 'manifest.webmanifest'
 
 permissions:
   contents: read
