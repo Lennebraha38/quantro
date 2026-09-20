@@ -1,0 +1,23 @@
+# Elle üretim deploy — Actions'ta "Run workflow" ile adım adım.
+# NOT: push→main zaten Vercel Git entegrasyonuyla OTOMATİK deploy eder
+# (deployment'da src: git). Bu akış, örneğin bekleyen sırayı atlayıp
+# o anki revizyonu anında üretime almak içindir.
+name: Deploy Prod (manual)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22.x
+        cache: 'npm'
+    - run: npm ci
+    - name: Vercel production deploy
+      run: npx vercel deploy --prod --yes --token "$VERCEL_TOKEN"
+      env:
+        VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}

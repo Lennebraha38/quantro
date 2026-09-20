@@ -14,15 +14,16 @@
   "license": "MIT",
   "scripts": {
     "build": "node scripts/build.mjs",
-    "test": "node --test test/quantro.test.js test/_lib.test.js test/api-handlers.test.js test/localize.test.js",
+    "test": "node --test test/quantro.test.js test/_lib.test.js test/api-handlers.test.js test/api-extra.test.js test/localize.test.js",
     "test:e2e": "node --test test/e2e.test.js",
     "test:coverage": "node scripts/coverage.mjs",
+    "lint": "eslint .",
     "metrics:field": "node scripts/metrics.mjs",
     "audit": "npm audit --omit=dev",
     "blog:static": "node scripts/gen-blog.mjs",
     "sitemap": "node scripts/gen-sitemap.mjs",
     "links": "node scripts/links.mjs",
-    "check": "npm run build && npm test && npm run links",
+    "check": "npm run build && npm test && npm run links && npm run lint",
     "pkg:sync": "node tools/sync-pkg.mjs",
     "pkg:test": "node tools/sync-pkg.mjs && npm --prefix package/quantro test",
     "pkg:pack": "node tools/sync-pkg.mjs && npm --prefix package/quantro pack --dry-run"
@@ -31,6 +32,8 @@
     "node": ">=18"
   },
   "devDependencies": {
+    "eslint": "^10.11.0",
+    "globals": "^17.12.0",
     "playwright": "^1.62.1"
   }
 }

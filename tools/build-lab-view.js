@@ -115,7 +115,7 @@ const labView =
 
 /* ── 7. Insert into index.html ── */
 // remove previously-inserted blocks (idempotent)
-out = idx.replace(/<!-- ══ LAB VIEW CSS \(scoped #lab-view\) ══ -->\n<style>[\s\S]*?<\/style>\n/g, '');
+let out = idx.replace(/<!-- ══ LAB VIEW CSS \(scoped #lab-view\) ══ -->\n<style>[\s\S]*?<\/style>\n/g, '');
 out = out.replace(/<!-- ══ LAB VIEW \(quantro-lab\.html entegre\) ══ -->\n<div id="lab-view"[\s\S]*?\n<\/div>\n\n/g, '');
 
 // CSS into <head> before </head>

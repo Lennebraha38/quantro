@@ -9,6 +9,7 @@ node_modules/
 !.env.example
 *.local
 .vercel/
+!.vercel/project.json
 
 # Build / logs
 dist/

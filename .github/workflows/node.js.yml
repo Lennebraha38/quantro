@@ -25,6 +25,8 @@ jobs:
     - run: npm ci
     - run: npm run build
     - run: npm test
+    - name: Statik kod denetimi (ESLint)
+      run: npm run lint
     - name: İç bağlantı denetimi
       run: npm run links
     - name: Sitemap güncel mi? (kırık çalışırsa yeniden üret)
