@@ -3,6 +3,22 @@
 Şu an: `quantro-1.vercel.app` (üretim), repo: `Lennebraha38/Quantro-Vercel-Project`.
 Marka için kalıcı domain + temiz GitHub isim alanı şart.
 
+## ✅ Ücretsiz adım (uygulandı): `quantro.is-a.dev`
+
+| Öğe | Değer |
+|---|---|
+| Alan adı | `quantro.is-a.dev` (ücretsiz geliştirici subdomain) |
+| Kayıt | `is-a.dev/register` PR **#53178** → https://github.com/is-a-dev/register/pull/53178 |
+| DNS | CNAME → `quantro-1.vercel.app` |
+| Vercel | projeye eklendi (`verified:false` — PR merge olunca yayınlanır, dakikalar içinde TLS verilir) |
+
+PR merge sonrası: `quantro.is-a.dev` anasayfayı sunar. İsteğe bağlı ileride:
+- `quantro-1.vercel.app` → `quantro.is-a.dev` kalıcı redirect (Vercel dashboard → Domains → Redirect).
+- hreflang/canonical/OG URL'leri `quantro.is-a.dev`'e taşı (aşağıdaki swap listesi).
+- Yedek ücretsiz: `quantro.js.org` (js.org — JS projesi olduğu için yüksek itibar).
+
+---
+
 ## 1) Alan adı seçenekleri
 
 | Domain | Yıllık (yaklaşık) | Neden | Risk |
