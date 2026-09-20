@@ -522,6 +522,68 @@ input[type=number]{-moz-appearance:textfield}
 .tool-card:hover .tb-badge.first{box-shadow:0 0 16px rgba(0,240,160,.18)}
 .tool-card:hover .tb-badge.new{box-shadow:0 0 16px rgba(240,192,64,.18)}
 
+/* ═════════════════════════════════════════════════════════
+   DERİN ALAN KONSOLU · v3
+   env3d Three.js sahnesi + holografik cam araç içi tasarım
+   ═════════════════════════════════════════════════════════ */
+#env3d{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0;
+  background:radial-gradient(120% 90% at 50% -10%,#071226 0%,#02060e 48%,#010308 100%)}
+body{background:#01040b}
+.navbar,.hero,.tools,footer{position:relative;z-index:1}
+.tools{padding-bottom:84px}
+
+/* ── ARAÇ GÖVDESİ · derin cam panel + holo köşeler ── */
+.tool-body{padding:26px 30px 30px;position:relative;
+  background:linear-gradient(168deg,color-mix(in srgb,var(--ac,#00c8f0) 9%,rgba(3,9,22,.82)) 0%,rgba(1,5,14,.95) 58%,rgba(0,2,8,.97) 100%);
+  backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05),inset 0 0 90px color-mix(in srgb,var(--ac,#00c8f0) 7%,transparent),0 28px 80px rgba(0,0,0,.5);
+  border:none;overflow:hidden;border-radius:0 0 20px 20px}
+.tool-body.open{
+  background:
+    linear-gradient(168deg,color-mix(in srgb,var(--ac,#00c8f0) 9%,rgba(3,9,22,.82)) 0%,rgba(1,5,14,.95) 58%,rgba(0,2,8,.97) 100%),
+    radial-gradient(110% 105% at 50% 0%,transparent,rgba(0,0,0,.38) 80%),
+    linear-gradient(color-mix(in srgb,var(--ac,#00c8f0) 70%,transparent),color-mix(in srgb,var(--ac,#00c8f0) 70%,transparent)) 16px 16px/26px 2px,
+    linear-gradient(color-mix(in srgb,var(--ac,#00c8f0) 70%,transparent),color-mix(in srgb,var(--ac,#00c8f0) 70%,transparent)) 16px 16px/2px 26px,
+    linear-gradient(color-mix(in srgb,var(--ac,#00c8f0) 70%,transparent),color-mix(in srgb,var(--ac,#00c8f0) 70%,transparent)) calc(100% - 42px) 16px/26px 2px,
+    linear-gradient(color-mix(in srgb,var(--ac,#00c8f0) 70%,transparent),color-mix(in srgb,var(--ac,#00c8f0) 70%,transparent)) calc(100% - 18px) 16px/2px 26px,
+    linear-gradient(color-mix(in srgb,var(--ac,#00c8f0) 70%,transparent),color-mix(in srgb,var(--ac,#00c8f0) 70%,transparent)) 16px calc(100% - 18px)/26px 2px,
+    linear-gradient(color-mix(in srgb,var(--ac,#00c8f0) 70%,transparent),color-mix(in srgb,var(--ac,#00c8f0) 70%,transparent)) 16px calc(100% - 42px)/2px 26px,
+    linear-gradient(color-mix(in srgb,var(--ac,#00c8f0) 70%,transparent),color-mix(in srgb,var(--ac,#00c8f0) 70%,transparent)) calc(100% - 42px) calc(100% - 42px)/26px 2px,
+    linear-gradient(color-mix(in srgb,var(--ac,#00c8f0) 70%,transparent),color-mix(in srgb,var(--ac,#00c8f0) 70%,transparent)) calc(100% - 18px) calc(100% - 18px)/2px 26px;
+  background-repeat:no-repeat;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.07),inset 0 0 140px color-mix(in srgb,var(--ac,#00c8f0) 12%,transparent),0 34px 90px rgba(0,0,0,.55)}
+.tool-body::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;pointer-events:none;z-index:2;opacity:0;transition:opacity .5s;
+  background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--ac,#00c8f0) 85%,transparent) 55%,transparent)}
+.tool-body.open::after{opacity:.9}
+.tool-body.open::before{background:repeating-linear-gradient(to bottom,color-mix(in srgb,var(--ac,#00c8f0) 5%,transparent) 0 1px,transparent 1px 3px);opacity:.5}
+
+/* ── HUD · konsol çipleri ── */
+.ql-hud{gap:8px;margin:0 0 24px;padding:2px 0 16px;
+  border-bottom:1px solid color-mix(in srgb,var(--ac,#00c8f0) 22%,transparent)}
+.ql-tag{border-color:color-mix(in srgb,var(--ac,#00c8f0) 46%,transparent);background:color-mix(in srgb,var(--ac,#00c8f0) 9%,transparent)}
+.ql-sys{display:inline-flex;align-items:center;gap:6px;font-size:8.5px;letter-spacing:1.4px;color:#6f86a6;
+  border:1px dashed rgba(255,255,255,.16);border-radius:40px;padding:4px 11px;text-transform:uppercase;white-space:nowrap}
+.ql-sys::before{content:'';width:5px;height:5px;border-radius:50%;background:#6f86a6;box-shadow:0 0 6px #6f86a6}
+
+/* ── PARAMETRE / KONTROL PANELLERİ ── */
+.param-item{background:linear-gradient(165deg,color-mix(in srgb,var(--ac,#00c8f0) 6%,rgba(9,17,32,.5)),rgba(2,7,16,.72));
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.param-item:hover{border-color:color-mix(in srgb,var(--ac,#00c8f0) 48%,transparent);
+  box-shadow:0 10px 34px rgba(0,0,0,.4),0 0 0 1px color-mix(in srgb,var(--ac,#00c8f0) 14%,transparent)}
+.qlbl{font-size:9px;letter-spacing:2.2px;text-transform:uppercase;color:#7d93b3;white-space:nowrap}
+.qin{background:rgba(3,10,22,.62)}
+select.qin,select[id^="ds-"]{background:rgba(3,10,22,.62);color:var(--muted)}
+.qstats,.qhist,.qbars,.tele-log,.qkd-log,.cat-log{background:rgba(1,6,15,.62);border:1px solid color-mix(in srgb,var(--ac,#00c8f0) 12%,rgba(255,255,255,.05))}
+.tool-body ::-webkit-scrollbar-thumb{background:color-mix(in srgb,var(--ac,#00c8f0) 42%,rgba(255,255,255,.1));border-radius:3px}
+
+/* ── AKTİF BUTONLAR · araç rengine kilitli ── */
+.btn-p{--bico:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Cpath%20fill='black'%20d='M13%202%204%2014h7l-1%208%209-12h-7z'/%3E%3C/svg%3E")}
+.btn-p{background:linear-gradient(180deg,color-mix(in srgb,var(--ac,#00c8f0) 32%,rgba(2,14,30,.6)),rgba(1,8,18,.92));
+  border-color:color-mix(in srgb,var(--ac,#00c8f0) 48%,transparent)}
+.btn-p:hover{border-color:var(--ac,#00c8f0);box-shadow:0 10px 30px color-mix(in srgb,var(--ac,#00c8f0) 24%,transparent)}
+.btn:hover{border-color:color-mix(in srgb,var(--ac,#00c8f0) 55%,transparent)}
+.ds-btns .btn,.qv-ctrl .btn,.circ-area .btn{border-color:color-mix(in srgb,var(--ac,#00c8f0) 38%,transparent)}
+
 /* ── HAREKET AZALTMA ── */
 @media(prefers-reduced-motion:reduce){
   .tool-body.open>*{animation:none}
