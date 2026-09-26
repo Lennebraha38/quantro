@@ -14,8 +14,8 @@
 }
 :root {
   --void: #020810;
-  --deep: #07111f;
-  --surface: #0d1f35;
+  --deep: rgba(7, 17, 31, 0.72);
+  --surface: rgba(13, 31, 53, 0.66);
   --subtle: #1e3248;
   --cyan: #00c8f0;
   --cyanD: rgba(0, 200, 240, 0.12);
@@ -33,9 +33,12 @@
 html {
   scroll-behavior: smooth;
   overflow-x: hidden;
+  /* Sayfa zemini burada kalır; gövde saydam olunca
+     akış alanı canvas'ı görünür olur */
+  background: var(--void);
 }
 body {
-  background: var(--void);
+  background: transparent;
   color: var(--text);
   font-family: var(--fb);
   overflow-x: hidden;
@@ -324,5 +327,27 @@ body {
   *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.1ms !important;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ENTROPY ARKA PLAN (ortak kabuk)
+   Akış alanı canvas'ı sayfa zemini; bölüm yüzeyleri yarı
+   saydam olduğu için alan bütün sayfada görünür.
+   ══════════════════════════════════════════════════════════════ */
+#entropy-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  display: block;
+}
+.no-entropy,
+.no-entropy body {
+  background: var(--void);
+}
+@media (prefers-reduced-motion: reduce) {
+  #entropy-bg {
+    display: none;
   }
 }

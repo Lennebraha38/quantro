@@ -13,8 +13,8 @@
 
 :root {
   --void: #020810;
-  --deep: #07111f;
-  --surface: #0d1f35;
+  --deep: rgba(7, 17, 31, 0.72);
+  --surface: rgba(13, 31, 53, 0.66);
   --subtle: #1e3248;
   --cyan: #00c8f0;
   --cyanM: rgba(0, 200, 240, 0.35);
@@ -28,9 +28,10 @@
 
 html {
   scroll-behavior: smooth;
+  background: var(--void);
 }
 body {
-  background: var(--void);
+  background: transparent;
   color: var(--text);
   font-family: var(--fb);
   font-weight: 400;
@@ -2596,4 +2597,34 @@ footer {
 .sec-h2 br,
 .contact-h2 br {
   display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #entropy-bg {
+    display: none;
+  }
+}
+
+/* Bölüm yüzeyleri yarı saydam -> akış alanı her yerde görünür.
+   --deep/--surface yalnızca background decl. içinde kullanılıyor;
+   --void dokunulmadı (buton metni rengi olarak da kullanılıyor). */
+:root {
+  --deep: rgba(7, 17, 31, 0.72);
+  --surface: rgba(13, 31, 53, 0.66);
+}
+/* --void ile boyanan yüzeyler de hafif saydamlaşsın */
+.domains,
+.method,
+.founder,
+.cg-item {
+  background: rgba(2, 8, 16, 0.72);
+}
+/* Kartların okunabilirliği için yüzeyin üstüne ince bir perde */
+.about,
+.domains,
+.method,
+.founder,
+.cg-item {
+  -webkit-backdrop-filter: saturate(115%);
+  backdrop-filter: saturate(115%);
 }
