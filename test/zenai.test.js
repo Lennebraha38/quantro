@@ -62,10 +62,10 @@ test("mesaj ZENAI'ye iletilir ve JSON döner (canlı ağ)", async () => {
   }
 });
 
-test("IP başına hız sınırı (6/dk → sonraki 429)", async () => {
+test("IP başına hız sınırı (15/dk → sonraki 429)", async () => {
   const myIp = "10.9.9.9";
   let last;
-  for (let i = 0; i < 7; i++) {
+  for (let i = 0; i < 16; i++) {
     const res = mkRes();
     await zenai(mkReq(JSON.stringify({ soru: "kısa soru" }), myIp), res);
     last = res;

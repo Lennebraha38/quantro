@@ -34,6 +34,10 @@ background:rgba(255,255,255,.05);color:#e8f6fb;font-size:13.5px;font-family:inhe
 background:rgba(0,200,240,.18);color:var(--cyan,#00c8f0);cursor:pointer;font-size:14px}
 #qtr-chat button.send:disabled{opacity:.45;cursor:default}
 #qtr-chat .qtr-note{padding:6px 12px 0;font-size:10.5px;color:rgba(232,246,251,.4);text-align:center}
+#qtr-chat .qtr-think{font-style:italic;color:rgba(0,200,240,.85);font-size:12.5px}
+#qtr-chat .qtr-again{margin-top:6px;padding:5px 10px;border-radius:8px;border:1px solid rgba(0,200,240,.4);
+background:rgba(0,200,240,.12);color:var(--cyan,#00c8f0);cursor:pointer;font-size:12px}
+#qtr-chat .qtr-again:hover{background:rgba(0,200,240,.22)}
 @media (max-width:480px){#qtr-chat .qtr-win{width:calc(100vw - 24px);height:min(70vh,520px)}}`;
 
   const st = document.createElement("style");
@@ -65,7 +69,6 @@ background:rgba(0,200,240,.18);color:var(--cyan,#00c8f0);cursor:pointer;font-siz
   const input = root.querySelector("#qtr-input");
   const send = root.querySelector("button.send");
   const btn = root.querySelector(".qtr-btn");
-  let busy = false;
   const history = [];
 
   function add(who, text) {
@@ -74,6 +77,29 @@ background:rgba(0,200,240,.18);color:var(--cyan,#00c8f0);cursor:pointer;font-siz
     d.textContent = text;
     log.appendChild(d);
     log.scrollTop = log.scrollHeight;
+    return d;
+  }
+
+  // Bekleme göstergesi: ZENAI 4 beyinle düşünüyor (2-20 sn). Sabit "…"
+  // yerine akan nokta + geçen süre gösterilir, kullanıcı sabırsızlanmaz.
+  function addThinking() {
+    const d = document.createElement("div");
+    d.className = "qtr-m qtr-bot qtr-think";
+    d.textContent = "düşünüyor";
+    log.appendChild(d);
+    log.scrollTop = log.scrollHeight;
+    let t = 0;
+    const dots = setInterval(() => {
+      t++;
+      d.textContent = "düşünüyor" + ".".repeat(t % 4) + "  " + t + " sn";
+      log.scrollTop = log.scrollHeight;
+    }, 1000);
+    return {
+      el: d,
+      done() {
+        clearInterval(dots);
+      },
+    };
   }
 
   add(
@@ -93,33 +119,73 @@ background:rgba(0,200,240,.18);color:var(--cyan,#00c8f0);cursor:pointer;font-siz
     if (e.key === "Escape" && root.classList.contains("open")) toggle(false);
   });
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const soru = input.value.trim();
-    if (!soru || busy) return;
+  // İstekler sırayla gönderilir; kullanıcı bekleme sırasında yeni soru
+  // yazabilir, kuyruğa alınır (ZENAI sıralı düşünür).
+  const kuyruk = [];
+  let istekYapiliyor = false;
+
+  async function istekleriIsle() {
+    if (istekYapiliyor) return;
+    istekYapiliyor = true;
+    while (kuyruk.length) {
+      const soru = kuyruk.shift();
+      await soruyuGonder(soru);
+    }
+    istekYapiliyor = false;
+  }
+
+  async function soruyuGonder(soru) {
     add("me", soru);
     history.push({ role: "user", content: soru });
-    input.value = "";
-    busy = true;
-    send.disabled = true;
-    add("bot", "…");
-    const pending = log.lastElementChild;
+    const think = addThinking();
     try {
       const r = await fetch("api/zenai", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ soru, history: history.slice(-6) }),
+        body: JSON.stringify({ soru }),
       });
       const d = await r.json().catch(() => ({}));
-      pending.textContent = d.cevap || d.error || "Yanıt alınamadı.";
-      history.push({ role: "assistant", content: pending.textContent });
+      think.done();
+      if (d.cevap) {
+        think.el.textContent = d.cevap;
+        history.push({ role: "assistant", content: d.cevap });
+      } else {
+        think.el.innerHTML =
+          "<em>" +
+          (d.error || "Yanıt alınamadı.") +
+          '</em><br><button type="button" class="qtr-again">tekrar dene</button>';
+        const again = think.el.querySelector(".qtr-again");
+        if (again)
+          again.addEventListener("click", () => {
+            think.el.remove();
+            kuyruk.push(soru);
+            istekleriIsle();
+          });
+      }
     } catch {
-      pending.textContent = "Bağlantı kurulamadı.";
+      think.done();
+      think.el.innerHTML = "<em>Bağlantı kurulamadı.</em>";
     } finally {
-      busy = false;
-      send.disabled = false;
       log.scrollTop = log.scrollHeight;
-      input.focus();
     }
+  }
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const soru = input.value.trim();
+    if (!soru) return;
+    input.value = "";
+    kuyruk.push(soru);
+    const btn2 = send;
+    if (!kuyruk.length) btn2.disabled = false;
+    istekleriIsle();
+    setTimeout(() => {
+      if (!istekYapiliyor) send.disabled = false;
+    }, 50);
   });
+  // Kuyrukta bekleyen varsa gönder düğmesi pasif kalır (çift gönderim yok)
+  function durumGuncelle() {
+    send.disabled = kuyruk.length > 0;
+  }
+  setInterval(durumGuncelle, 400);
 })();

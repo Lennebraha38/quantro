@@ -14,7 +14,7 @@ const ZENAI = process.env.ZENAI_URL || "https://zenai-two.vercel.app";
 const MODEL = process.env.ZENAI_MODEL || "zenai";
 const MAX_BYTES = 16 * 1024;
 const WINDOW_MS = 60_000;
-const MAX_PER_WINDOW = 6;
+const MAX_PER_WINDOW = 15;
 
 // Quantro hakkında temel bilgi. ZENAI genel bir asistan; bu bağlam
 // olmadan "Quantro"yu 1990'ların bir bulmaca oyunu sanabiliyor.
@@ -56,6 +56,8 @@ function json(res, code, body) {
   res.end(JSON.stringify(body));
 }
 
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
 async function readBody(req) {
   const chunks = [];
   let size = 0;
@@ -94,28 +96,63 @@ module.exports = async function zenai(req, res) {
   }
   if (!soru) return json(res, 400, { error: "Boş mesaj." });
 
-  try {
-    // Origin başlığı gönderilmiyor: ZENAI'nin CORS allowlist'i
-    // tarayıcı kökenlerine açık, sunucudan çağrıya izin veriyor.
-    const r = await fetch(`${ZENAI}/api/chat`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: MODEL,
-        messages: [
-          { role: "system", content: BAGLAM },
-          { role: "user", content: soru },
-        ],
-      }),
-      signal: AbortSignal.timeout(45_000),
-    });
-    const data = await r.json().catch(() => null);
-    const cevap = data && typeof data.content === "string" ? data.content : "";
-    if (!cevap) {
-      return json(res, 502, { error: "ZENAI şu anda yanıt veremedi." });
+  // ZENAI 4 beyinle düşündüğü için yanıt 5-20 sn sürebilir; tek seferde
+  // denemek yerine kısa aralıklarla 3 kez deniyoruz (üstel bekleme).
+  let sonHata = "";
+  for (let deneme = 1; deneme <= 3; deneme++) {
+    try {
+      // Origin başlığı gönderilmiyor: ZENAI'nin CORS allowlist'i
+      // tarayıcı közenlerine açık, sunucudan çağrıya izin veriyor.
+      const r = await fetch(`${ZENAI}/api/chat`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: MODEL,
+          messages: [
+            { role: "system", content: BAGLAM },
+            { role: "user", content: soru },
+          ],
+        }),
+        signal: AbortSignal.timeout(25_000),
+      });
+
+      if (r.status === 429) {
+        // ZENAI kendi hız sınırına takıldı — kısa bekle, sonra dene.
+        sonHata = "ZENAI şu anda yoğun.";
+        await sleep(1200 * deneme);
+        continue;
+      }
+
+      const data = await r.json().catch(() => null);
+      // Yanıt alanı zaman zaman "content" yerine "message"/"reply" gelir;
+      // hangisi varsa onu kullan, yoksa yeniden dene.
+      const cevap =
+        data && typeof data === "object"
+          ? [data.content, data.message, data.reply, data.text, data.answer].find(
+              (v) => typeof v === "string" && v.trim().length > 0,
+            ) || ""
+          : "";
+
+      if (cevap) {
+        return json(res, 200, {
+          cevap,
+          at: new Date().toISOString(),
+          deneme,
+        });
+      }
+
+      sonHata = "boş yanıt";
+      if (deneme < 3) await sleep(800 * deneme);
+    } catch (e) {
+      sonHata = "zaman aşımı";
+      if (deneme < 3) await sleep(800 * deneme);
     }
-    return json(res, 200, { cevap, at: new Date().toISOString() });
-  } catch (e) {
-    return json(res, 504, { error: "ZENAI'ye ulaşılamadı (zaman aşımı)." });
   }
+
+  // 3 deneme de başarısız: kullanıcıya anlaşılır mesaj + yeniden dene önerisi
+  return json(res, 502, {
+    error:
+      "ZENAI şu anda yanıt veremedi (3 deneme sonunda). Biraz sonra tekrar dene ya da sorunu değiştir.",
+    sebep: sonHata,
+  });
 };
