@@ -1343,8 +1343,8 @@ section {
 /* ══ Back to top ══ */
 .btt {
   position: fixed;
-  right: 22px;
-  bottom: 24px;
+  right: 16px;
+  bottom: 94px;
   z-index: 90;
   width: 46px;
   height: 46px;
@@ -1377,7 +1377,7 @@ section {
 @media (max-width: 540px) {
   .btt {
     right: 16px;
-    bottom: 16px;
+    bottom: 92px;
     width: 42px;
     height: 42px;
   }
