@@ -16,6 +16,20 @@ const MAX_BYTES = 16 * 1024;
 const WINDOW_MS = 60_000;
 const MAX_PER_WINDOW = 6;
 
+// Quantro hakkında temel bilgi. ZENAI genel bir asistan; bu bağlam
+// olmadan "Quantro"yu 1990'ların bir bulmaca oyunu sanabiliyor.
+const BAGLAM =
+  "Bağlam: Bu, quantro-1.vercel.app sitesinin müşteri hizmeti asistanısın. " +
+  "Quantro = Türkçe bir kuantum hesaplama simülatörü sitesidir (araştırma merkezi projesi). " +
+  "quantro-js: bağımlılıksız tek dosyalık JS kuantum simülasyon kütüphanesi " +
+  "(QuantumCircuit, Qubit, bellState, ghzState, H/X/Y/Z/RY/CX/CZ kapıları, " +
+  "probabilities(), measureAll(), sampleDistribution, mulberry32). " +
+  "Sitede 13 etkileşimli araç var (Bell testi, kendi kuantum devreni kur, " +
+  "kuantum zorluğu, rakip kuantum bilgisayar, stokastik karşılaştırma vb.). " +
+  "Kuantum fiziği sorularında da (kuantum bilgisayarlar, süperpozisyon, dolanma, " +
+  "dekoherans, gerçek kuantum donanımı) yardımcı olabilirsin. " +
+  "Cevaplarını kısa ve anlaşılır Türkçe/İngilizce ver.";
+
 const buckets = new Map();
 
 function rateLimited(ip) {
@@ -89,10 +103,8 @@ module.exports = async function zenai(req, res) {
       body: JSON.stringify({
         model: MODEL,
         messages: [
-          {
-            role: "user",
-            content: soru,
-          },
+          { role: "system", content: BAGLAM },
+          { role: "user", content: soru },
         ],
       }),
       signal: AbortSignal.timeout(45_000),
