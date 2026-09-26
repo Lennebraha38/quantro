@@ -1955,18 +1955,26 @@ applyLang();
   const burger = document.getElementById("burger"),
     mobnav = document.getElementById("mobnav");
   if (burger && mobnav) {
-    burger.addEventListener("click", () => {
-      const o = mobnav.classList.toggle("open");
-      burger.setAttribute("aria-expanded", o);
-      document.body.style.overflow = o ? "hidden" : "";
+    const setMenu = (open) => {
+      mobnav.classList.toggle("open", open);
+      burger.setAttribute("aria-expanded", open ? "true" : "false");
+      document.body.style.overflow = open ? "hidden" : "";
+      if (open) {
+        const first = mobnav.querySelector("a, button");
+        if (first) first.focus();
+      } else {
+        burger.focus();
+      }
+    };
+    burger.addEventListener("click", () => setMenu(!mobnav.classList.contains("open")));
+    const closeBtn = document.getElementById("mnclose");
+    if (closeBtn) closeBtn.addEventListener("click", () => setMenu(false));
+    document
+      .querySelectorAll(".ml")
+      .forEach((l) => l.addEventListener("click", () => setMenu(false)));
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && mobnav.classList.contains("open")) setMenu(false);
     });
-    document.querySelectorAll(".ml").forEach((l) =>
-      l.addEventListener("click", () => {
-        mobnav.classList.remove("open");
-        burger.setAttribute("aria-expanded", false);
-        document.body.style.overflow = "";
-      }),
-    );
   }
   const obs = new IntersectionObserver(
     (entries) => {
