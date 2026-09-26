@@ -346,8 +346,5 @@ body {
 .no-entropy body {
   background: var(--void);
 }
-@media (prefers-reduced-motion: reduce) {
-  #entropy-bg {
-    display: none;
-  }
-}
+/* reduced-motion: gizleme yok — JS tek bir statik kare cizer,
+   yani nebula gorunur ama HAREKET ETMEZ. */
