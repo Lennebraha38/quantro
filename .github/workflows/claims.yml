@@ -42,7 +42,18 @@ jobs:
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add data/claims-evidence.json
             git commit -m "chore(claims): kanıtları yeniden doğrula"
-            git push
+            # Bot ile insan push'u çakışırsa non-fast-forward reddi alıyorduk
+            # (insanın commit'leri sessizce kayboluyordu). Rebase sonrası
+            # tekrar deniyoruz.
+            for deneme in 1 2 3; do
+              if git pull --rebase --autostash origin main && git push origin HEAD:main; then
+                echo "Kanıt güncellendi → Vercel redeploy tetiklendi."
+                exit 0
+              fi
+              echo "Push çakıştı, $deneme. deneme yapılıyor…"
+              sleep 5
+            done
+            echo "::warning::Kanıt güncellenemedi (push çakışması). Sonraki çalışmada denenecek."
           fi
       - name: Bir kanıt yanlışlandıysa uyar
         run: |
