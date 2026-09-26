@@ -5,7 +5,7 @@
     {
       "id": "ilk-01",
       "baslik": "İlk Türkçe, açık kaynak (MIT) lisanslı çok araçlı kuantum + astrofizik araç seti",
-      "kapsam": "Türkçe arayüz + MIT lisansı + 13 etkileşimli araç; bu 13 aracın içinde astrofizik araçları bulunması.",
+      "kapsam": "Doğrulanabilen kısım: Türkçe arayüz, MIT lisansı, 13 etkileşimli araç ve bu 13 aracın içinde 3 doğrudan astrofizik aracı (Evren Yaşı, Kara Delik Fizik, Kozmik Doppler).",
       "kanitlar": [
         {
           "tur": "npm",
@@ -36,7 +36,7 @@
     {
       "id": "ilk-02",
       "baslik": "İlk Türkçe canlı kuantum rastgelelik motoru — ANU'nun fiziksel kuantum kaynağına bağlanır",
-      "kapsam": "Tarayıcıdan gelen kuantum rastgeleliği isteklerinin bir kısmı ANU'nun fiziksel kuantum kaynağına canlı ulaşır.",
+      "kapsam": "Doğrulanabilen kısım: tarayıcıdan gelen kuantum rastgeleliği isteklerinin bir kısmı ANU'nun fiziksel kuantum kaynağına canlı ulaşır (proxy + doğrudan uç nokta ile doğrulanabilir).",
       "kanitlar": [
         {
           "tur": "canli-api",
@@ -61,7 +61,7 @@
     {
       "id": "ilk-03",
       "baslik": "İlk 8 dilli kuantum araç seti ve blog",
-      "kapsam": "Arayüz ve blog 8 dilde sunulur: TR / EN / FR / ES / IT / RU / KO / AR.",
+      "kapsam": "Doğrulanabilen kısım: arayüz ve blog 8 dilde sunulur (TR/EN/FR/ES/IT/RU/KO/AR) ve her dilde tüm metinler çevrilidir (8/8 dil tam).",
       "kanitlar": [
         {
           "tur": "kaynak",
@@ -77,5 +77,11 @@
         }
       ]
     }
+  ],
+  "_uyari": "ÖNEMLİ: Buradaki kanıtlar iddiaların DAYANDIĞI OLGULARI doğrular (lisans, tarih, araç sayısı, canlı kaynak, dil kapsamı). 'İlk' ÖNCELİĞİNİ hiçbir kurum resmen tescil etmez ve bu dosya onu kanıtlamaz. Amaç: iddiayı denetlenebilir kılmak, sahte belge üretmek değil.",
+  "kapsam_disi": [
+    "Doğrulanabilen: paketin MIT lisansı ve yayın tarihi, deponun oluşturma tarihi, 13 araç ve 3 astrofizik aracı, ANU'ya canlı bağlantı, 8 dilde tam çeviri, bağımsız arşiv kaydı.",
+    "DOĞRULANAMAYAN: 'Türkiye'de ilk' önceliğinin resmen tescili. Kimse 'daha önce kimse yapmadı' diye belge düzenlemez. Rakip bir erken tarihli kanıt getirirse bu iddia geçersiz sayılmalıdır.",
+    "Bu dosya bilinçli olarak 'ilk' kelimesinin kendisini kanıtlamaz; yalnızca onun dayandığı olguları denetler."
   ]
 }

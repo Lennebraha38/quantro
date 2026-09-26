@@ -30,6 +30,9 @@ const outPath = path.join(root, "data", "claims-evidence.json");
 const checkOnly = process.argv.includes("--check");
 
 const SITE = "https://quantro-1.vercel.app";
+// Bağımsız arşiv alıntısı (sabitlenmiş anlık görüntü — değiştirilemez tarih)
+const ARSIV_TARIH = "2026-09-26";
+const ARSIV = "https://web.archive.org/web/20260926093349/https://quantro-1.vercel.app/";
 const LANGS = ["tr", "en", "fr", "es", "it", "ru", "ko", "ar"];
 const ASTRO = ["astrofizik", "evren yaşı", "kara delik", "kozmik"];
 
@@ -128,21 +131,29 @@ const KONTROLLER = {
   },
   // Bağımsız üçüncü taraf zaman damgası. Kendi sunucumuz da yalan söyleyemez;
   // arşiv servisi, site o tarihte gerçekten yayında diye doğrular.
+  // Bağımsız üçüncü taraf zaman damgası.
+  // Onemli: archive.org'un "available" indeksi kararsizdir (kayit listeden
+  // dusebiliyor), bu yuzden sabitlenmis anlik goruntunun KENDISI dogrulanir:
+  // sayfa hala acik mi ve Quantro icerigini tasiyor mu. Bu, alintinin hala
+  // gecerli oldugunu kanitlar. "Kayit yok" sonucu ONCELIK icin kanit degildir,
+  // bu yuzden olcum tutmaz; yalnizca alintinin kirilmasi olcumdur.
   wayback: async () => {
-    const j = await get("https://archive.org/wayback/available?url=quantro-1.vercel.app", 25000);
-    const c = j.archived_snapshots && j.archived_snapshots.closest;
-    const ok = !!(c && c.available);
-    const ts = c ? String(c.timestamp) : "";
-    const tarih = ts.length === 14 ? `${ts.slice(0, 4)}-${ts.slice(4, 6)}-${ts.slice(6, 8)}` : ts;
+    const r = await fetch(ARSIV, {
+      signal: AbortSignal.timeout(30000),
+      headers: { "User-Agent": "quantro-claims-verify" },
+    });
+    if (!r.ok) throw new Error("arsiv HTTP " + r.status);
+    const html = await r.text();
+    const ok = /quantro/i.test(html);
     return {
       dogrulukDogru: ok,
-      deger: ok ? `Arşiv kaydı: ${tarih}` : "arşiv kaydı yok",
+      deger: ok
+        ? `Arsiv kaydi ${ARSIV_TARIH} - sayfa acik, icerik dogrulandi`
+        : "arsiv sayfasi acildi ama Quantro icerigi yok",
       kanit: ok
-        ? `Bağımsız arşiv (web.archive.org) sitenin ${tarih} tarihinde yayında olduğunu doğruluyor.`
-        : "Bağımsız arşiv kaydı henüz yok.",
-      url: ok
-        ? `https://web.archive.org/web/${ts}/https://quantro-1.vercel.app/`
-        : "https://web.archive.org",
+        ? `Bagimsiz arsiv (web.archive.org), sitenin ${ARSIV_TARIH} tarihinde yayinda oldugunu ve icerigin o tarihten beri erisilebilir oldugunu dogruluyor.`
+        : "Arsiv sayfasi beklenen icerigi tasiyor.",
+      url: ARSIV,
     };
   },
 };

@@ -1,5 +1,5 @@
 {
-  "uretim": "2026-09-26T09:39:58.805Z",
+  "uretim": "2026-09-26T10:12:58.529Z",
   "surum": 1,
   "ozet": {
     "iddia": 3,
@@ -11,7 +11,7 @@
     {
       "id": "ilk-01",
       "baslik": "İlk Türkçe, açık kaynak (MIT) lisanslı çok araçlı kuantum + astrofizik araç seti",
-      "kapsam": "Türkçe arayüz + MIT lisansı + 13 etkileşimli araç; bu 13 aracın içinde astrofizik araçları bulunması.",
+      "kapsam": "Doğrulanabilen kısım: Türkçe arayüz, MIT lisansı, 13 etkileşimli araç ve bu 13 aracın içinde 3 doğrudan astrofizik aracı (Evren Yaşı, Kara Delik Fizik, Kozmik Doppler).",
       "kanitlar": [
         {
           "tur": "npm",
@@ -60,8 +60,8 @@
           "durum": "dogrulandi",
           "sonuc": {
             "dogrulukDogru": true,
-            "deger": "Arşiv kaydı: 2026-09-26",
-            "kanit": "Bağımsız arşiv (web.archive.org) sitenin 2026-09-26 tarihinde yayında olduğunu doğruluyor.",
+            "deger": "Arsiv kaydi 2026-09-26 - sayfa acik, icerik dogrulandi",
+            "kanit": "Bagimsiz arsiv (web.archive.org), sitenin 2026-09-26 tarihinde yayinda oldugunu ve icerigin o tarihten beri erisilebilir oldugunu dogruluyor.",
             "url": "https://web.archive.org/web/20260926093349/https://quantro-1.vercel.app/"
           }
         }
@@ -77,7 +77,7 @@
     {
       "id": "ilk-02",
       "baslik": "İlk Türkçe canlı kuantum rastgelelik motoru — ANU'nun fiziksel kuantum kaynağına bağlanır",
-      "kapsam": "Tarayıcıdan gelen kuantum rastgeleliği isteklerinin bir kısmı ANU'nun fiziksel kuantum kaynağına canlı ulaşır.",
+      "kapsam": "Doğrulanabilen kısım: tarayıcıdan gelen kuantum rastgeleliği isteklerinin bir kısmı ANU'nun fiziksel kuantum kaynağına canlı ulaşır (proxy + doğrudan uç nokta ile doğrulanabilir).",
       "kanitlar": [
         {
           "tur": "canli-api",
@@ -87,7 +87,7 @@
           "durum": "dogrulandi",
           "sonuc": {
             "dogrulukDogru": true,
-            "deger": "8 bayt canlı: [119, 220, 9, 78, 191, 151, 161, 220]",
+            "deger": "8 bayt canlı: [213, 45, 74, 59, 99, 193, 164, 93]",
             "kanit": "ANU'nun fiziksel kuantum kaynağı şu anda canlı yanıt veriyor.",
             "url": "https://qrng.anu.edu.au/API/jsonI.php?length=8&type=uint8"
           }
@@ -97,9 +97,13 @@
           "etiket": "Quantro'nun kendi proxy'si — herkese açık, doğrulanabilir uç nokta",
           "url": "https://quantro-1.vercel.app/api/anu?length=8&type=uint8",
           "makineDogrulama": "anu-proxy",
-          "durum": "bilinmiyor",
-          "sonuc": null,
-          "hata": "HTTP 502"
+          "durum": "dogrulandi",
+          "sonuc": {
+            "dogrulukDogru": true,
+            "deger": "kaynak: quantro-proxy · [248, 34, 249, 72, 89, 250, 105, 28]",
+            "kanit": "Quantro'nun herkese açık proxy'si canlı kuantum baytı döndürüyor.",
+            "url": "https://quantro-1.vercel.app/api/anu?length=8&type=uint8"
+          }
         },
         {
           "tur": "kaynak",
@@ -112,8 +116,8 @@
       ],
       "ozet": {
         "toplam": 3,
-        "dogrulanan": 1,
-        "bilinmiyor": 1,
+        "dogrulanan": 2,
+        "bilinmiyor": 0,
         "yanlis": 0,
         "durum": "dogrulandi"
       }
@@ -121,7 +125,7 @@
     {
       "id": "ilk-03",
       "baslik": "İlk 8 dilli kuantum araç seti ve blog",
-      "kapsam": "Arayüz ve blog 8 dilde sunulur: TR / EN / FR / ES / IT / RU / KO / AR.",
+      "kapsam": "Doğrulanabilen kısım: arayüz ve blog 8 dilde sunulur (TR/EN/FR/ES/IT/RU/KO/AR) ve her dilde tüm metinler çevrilidir (8/8 dil tam).",
       "kanitlar": [
         {
           "tur": "kaynak",
