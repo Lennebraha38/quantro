@@ -1,5 +1,5 @@
 {
-  "uretim": "2026-09-26T09:39:14.842Z",
+  "uretim": "2026-09-26T09:39:58.805Z",
   "surum": 1,
   "ozet": {
     "iddia": 3,
@@ -84,22 +84,22 @@
           "etiket": "ANU QRNG canlı yanıt (resmi kaynak)",
           "url": "https://qrng.anu.edu.au/API/jsonI.php?length=8&type=uint8",
           "makineDogrulama": "anu-live",
-          "durum": "bilinmiyor",
-          "sonuc": null,
-          "hata": "HTTP 500"
+          "durum": "dogrulandi",
+          "sonuc": {
+            "dogrulukDogru": true,
+            "deger": "8 bayt canlı: [119, 220, 9, 78, 191, 151, 161, 220]",
+            "kanit": "ANU'nun fiziksel kuantum kaynağı şu anda canlı yanıt veriyor.",
+            "url": "https://qrng.anu.edu.au/API/jsonI.php?length=8&type=uint8"
+          }
         },
         {
           "tur": "canli-api",
           "etiket": "Quantro'nun kendi proxy'si — herkese açık, doğrulanabilir uç nokta",
           "url": "https://quantro-1.vercel.app/api/anu?length=8&type=uint8",
           "makineDogrulama": "anu-proxy",
-          "durum": "dogrulandi",
-          "sonuc": {
-            "dogrulukDogru": true,
-            "deger": "kaynak: quantro-proxy · [26, 215, 153, 206, 236, 105, 216, 159]",
-            "kanit": "Quantro'nun herkese açık proxy'si canlı kuantum baytı döndürüyor.",
-            "url": "https://quantro-1.vercel.app/api/anu?length=8&type=uint8"
-          }
+          "durum": "bilinmiyor",
+          "sonuc": null,
+          "hata": "HTTP 502"
         },
         {
           "tur": "kaynak",
