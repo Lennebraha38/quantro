@@ -36,7 +36,7 @@ const BAGLAM =
 // cevaplar site gerçeklerini (kendi kaynaklarımızdan) döndürür.
 const HAZIR = [
   {
-    k: ["quantro nedir", "quantro ne", "bu site", "site ne", "quantro ne yapıyor"],
+    k: ["quantro nedir", "quantro ne yapıyor", "quantro ne"],
     c:
       "**Quantro**, tarayıcıda çalışan bir kuantum hesaplama simülatörü ve araştırma projesidir. " +
       "Kendi kuantum devrelerini kurup çalıştırabileceğin 13 etkileşimli araç sunar: " +
@@ -45,7 +45,7 @@ const HAZIR = [
       "Hepsi tek dosyalık, bağımlılıksız **quantro-js** kütüphanesi üzerinde çalışır.",
   },
   {
-    k: ["kaç araç", "araç sayısı", "neler var", "hangi araçlar"],
+    k: ["kaç araç", "araç sayısı", "neler var", "hangi araçlar", "kaç modül"],
     c:
       "Sitede **13 etkileşimli araç** var. Başlıcaları: Bell testi, kendi kuantum devreni kur, " +
       "kuantum bilgisayar zorluğu, klasik karşılaştırma, kuantum rastgelelik, ölçüm ve " +
@@ -60,6 +60,22 @@ const HAZIR = [
       "`mulberry32` (tohumlu PRNG). Tam dokümantasyon docs.html sayfasında; MIT lisanslıdır.",
   },
   {
+    k: ["ilkler", "ilklerimiz", "türkiye'de ilk", "ilk mi", "doğru mu"],
+    c:
+      "**Doğrulanmış olan kısım:**\n" +
+      "• 13 aracın 3'ü doğrudan astrofizik — Evren Yaşı, Kara Delik Fizik " +
+      "Simülatörü, Kozmik Doppler Kayması. Yani kuantum + astrofizik tanımı gerçek.\n" +
+      "• Kuantum rastgelelik aracı gerçekten ANU'nun (Avustralya) fiziksel " +
+      "kuantum kaynağına canlı bağlanır; ANU erişilemezse NIST'e, o da " +
+      "olmazsa Web Crypto'ya düşer.\n" +
+      "• Arayüz ve blog 8 dilde: TR / EN / FR / ES / IT / RU / KO / AR " +
+      "(her dilde 205/205 metin çevrili).\n\n" +
+      '**Dikkkatli olunması gereken kısım:** "Türkiye\'de ilk" ifadesi teknik ' +
+      "bir doğrulama değil, pazarlama iddiasıdır; bağımsız bir kaynakla " +
+      "kanıtlanamaz. Ölçülebilir olan ilkler değil, doğrulanabilir olan " +
+      "teknik özelliklerdir.",
+  },
+  {
     k: ["kuantum nedir", "kuantum bilgisayar", "süperpozisyon", "dolanma", "kuantum fiziği"],
     c:
       "**Kuantum bilgisayar**, bilgiyi süperpozisyon ve dolanma gibi kuantum durumlarında " +
@@ -71,10 +87,23 @@ const HAZIR = [
   },
 ];
 
+// Hazır cevaplar YALNIZCA kısa, doğrudan bilgi soruları için kullanılır.
+// Uzun/niyetli sorularda ("bu sitedeki ilkler doğru mu?") ZENAI'nin
+// cevabı kesilmesin diye devreye girmez — daha önce "bu sitede" ifadesi
+// yakalayıp gerçek soruyu yanıtsız bırakıyordu.
+const HAZIR_MAX_SORU = 60;
+
 function hazirCevap(soru) {
-  const s = soru.toLocaleLowerCase("tr");
-  for (const { k, c } of HAZIR) if (k.some((x) => s.includes(x))) return c;
-  return null;
+  const s = soru.toLocaleLowerCase("tr").trim();
+  if (s.length > HAZIR_MAX_SORU) return null;
+  // En uzun (en spesifik) anahtar eşleşmesi kazanır.
+  let enIyi = null;
+  for (const { k, c } of HAZIR) {
+    for (const x of k) {
+      if (s.includes(x) && (!enIyi || x.length > enIyi.uzunluk)) enIyi = { uzunluk: x.length, c };
+    }
+  }
+  return enIyi ? enIyi.c : null;
 }
 
 const buckets = new Map();
