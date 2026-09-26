@@ -148,6 +148,19 @@ async function readBody(req) {
   return Buffer.concat(chunks).toString("utf8");
 }
 
+// ZENAI'ye giden istek. Testlerde __injectFetch ile değiştirilebilir;
+// üretimde her zaman gerçek global fetch kullanılır. Böylece retry
+// mantığı ve hız sınırı ağa çıkmadan, deterministik olarak test edilir
+// (canlı API kararsız olduğu için testler onun üzerine kurulamaz).
+let fetchImpl = (...a) => globalThis.fetch(...a);
+function __injectFetch(fn) {
+  const eski = fetchImpl;
+  fetchImpl = fn || ((...a) => globalThis.fetch(...a));
+  return () => {
+    fetchImpl = eski;
+  };
+}
+
 module.exports = async function zenai(req, res) {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
@@ -182,7 +195,7 @@ module.exports = async function zenai(req, res) {
     try {
       // Origin başlığı gönderilmiyor: ZENAI'nin CORS allowlist'i
       // tarayıcı közenlerine açık, sunucudan çağrıya izin veriyor.
-      const r = await fetch(`${ZENAI}/api/chat`, {
+      const r = await fetchImpl(`${ZENAI}/api/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -262,3 +275,6 @@ module.exports = async function zenai(req, res) {
     sebep: sonHata,
   });
 };
+
+// Test kancası (yalnızca testlerde kullanılır): deterministik retry testleri.
+module.exports.__injectFetch = __injectFetch;
