@@ -1,6 +1,7 @@
 import { chromium } from "playwright";
 
 const BASE = "https://quantro-1.vercel.app";
+/* Kapsamli sayfalar: blog + lab daha once hataliydi, index hero + iletisim buton */
 const PAGES = ["index.html", "blog.html", "quantro-lab.html", "iletisim.html"];
 const b = await chromium.launch();
 let fail = 0;
