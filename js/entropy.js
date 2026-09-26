@@ -26,13 +26,14 @@
     fov: 75,
     dist: 5,
     depth: 1.2,
-    size: 2.15,
+    size: 7,
     parallax: 0.22,
     hue: 200,
     hueVar: 20,
     dprMax: 2,
-    maxCount: 16000,
-    minCount: 3800,
+    baseCount: 18000,
+    maxCount: 44000,
+    minCount: 4000,
   };
 
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -93,6 +94,7 @@
     "uniform float uSize;",
     "uniform float uDpr;",
     "uniform float uMotion;",
+    "uniform float uIntensity;",
     "varying vec3 vColor;",
     "varying float vBright;",
     "vec3 flow(vec3 p, float t) {",
@@ -134,6 +136,12 @@
     "precision mediump float;",
     "varying vec3 vColor;",
     "varying float vBright;",
+    /* Fragment shader her uniform'u AYRIca bildirmek zorunda.
+       Bu satiri onceki asamada unuttuk: uIntensity yalnizca vertex
+       shader'da bildirilmis, fragment'ta kullanilip derlenemeyince
+       startNebula() null donuyor, canvas WebGL'e bagli kaldigi icin
+       getContext("2d") de null donuyor -> hic cizim yok. */
+    "uniform float uIntensity;",
     "void main() {",
     "  vec2 uv = gl_PointCoord - vec2(0.5);",
     "  float d = length(uv);",
@@ -141,7 +149,13 @@
     "  float x = 1.0 - d * 2.0;",
     "  float halo = x * x;",
     "  float core = x * x * x * x * x * x;",
-    "  vec3 c = vColor * (halo * 0.42 + core * 1.55) * vBright;",
+    /* POZLAMA: additive harmalamada toplam 1.0'i ASLA asmamali.
+       Onceki degerler: halo*0.42 + core*1.55 = 1.97 tepe -> tek
+       bir parcacik cokusu bile beyaza saturate oluyordu; akis alani
+       zamanla kumulendikce buyuyen beyaz lekeler "beyaz ekran"
+       olarak gorunuyordu. Simdi tepe 0.50: bir parcacik tek basina
+       beyaz YAPAMAZ, yalnizca gercekten yogun cekirdekler parlak. */
+    "  vec3 c = vColor * (halo * 0.26 + core * 0.24) * vBright * uIntensity;",
     "  gl_FragColor = vec4(c, 1.0);",
     "}",
   ].join("\n");
@@ -207,9 +221,11 @@
     gl.useProgram(prog);
 
     var U = {};
-    ["uProj", "uView", "uTime", "uMouse", "uSize", "uDpr", "uMotion"].forEach(function (n) {
-      U[n] = gl.getUniformLocation(prog, n);
-    });
+    ["uProj", "uView", "uTime", "uMouse", "uSize", "uDpr", "uMotion", "uIntensity"].forEach(
+      function (n) {
+        U[n] = gl.getUniformLocation(prog, n);
+      },
+    );
     var A = {
       o: gl.getAttribLocation(prog, "aOrigin"),
       c: gl.getAttribLocation(prog, "aColor"),
@@ -239,14 +255,13 @@
       var nearZ = CFG.dist - CFG.depth;
       var halfH = nearZ * Math.tan((CFG.fov * Math.PI) / 360);
       var halfW = halfH * (W / H);
-      var n = Math.round(
-        Math.max(
-          CFG.minCount,
-          Math.min(CFG.maxCount, (canvas.width * canvas.height) / (dpr > 1 ? 620 : 420)),
-        ),
-      );
-      if (coarse) n = Math.round(n * 0.45);
-      count = Math.max(1400, n);
+      /* Dpr ile ölçekli: nokta çapı zaten uSize*uDpr ile büyüyor,
+         parça sayısı da dpr ile artarsa retina ekranda da aynı
+         kapsama (ve aynı parlaklık) korunur. Yoksa retina
+         cihazlarda alan belirgin şekilde seyrelir. */
+      var n = Math.round(CFG.baseCount * dpr);
+      if (coarse) n = Math.round(n * 0.5);
+      count = Math.max(1400, Math.min(CFG.maxCount, Math.max(CFG.minCount, n)));
 
       var org = new Float32Array(count * 3),
         col = new Float32Array(count * 3),
@@ -277,7 +292,40 @@
       gl.uniformMatrix4fv(U.uView, false, view);
       gl.uniform1f(U.uDpr, dpr);
       gl.uniform1f(U.uSize, CFG.size);
+      gl.uniform1f(U.uIntensity, intensity);
       draw(reduce ? 4.2 : performance.now() / 1000);
+    }
+
+    /* Otomatik pozlama. Additive harmalama GPU'ya gore degisir
+       (parcacik sayisi, ekran boyutu, DPR, toplama) ve kume lenme
+       zamanla ustune biner. Bu yuzden gercek parlaklik periyodik
+       olarak OKUNUR: 24x24 merkez orn. readPixels, cizimden hemen
+       sonra ayni karede yapilir (preserveDrawingBuffer gerekmez).
+       Ortalama cok parlaksa uIntensity kisar -> beyaza doygunluk
+       (beyaz ekran) imkansiz hale gelir. */
+    var intensity = 1.0;
+    var probe = new Uint8Array(24 * 24 * 4);
+    var lastProbe = 0;
+    function autoExpose() {
+      if (performance.now() - lastProbe < 2400) return;
+      lastProbe = performance.now();
+      var x0 = Math.max(0, (canvas.width >> 1) - 12);
+      var y0 = Math.max(0, (canvas.height >> 1) - 12);
+      try {
+        gl.readPixels(x0, y0, 24, 24, gl.RGBA, gl.UNSIGNED_BYTE, probe);
+      } catch (e) {
+        return;
+      }
+      var s = 0;
+      for (var i = 0; i < probe.length; i += 4) {
+        s += 0.2126 * probe[i] + 0.7152 * probe[i + 1] + 0.0722 * probe[i + 2];
+      }
+      var mean = s / (24 * 24) / 255;
+      var prev = intensity;
+      /* ust sinir: doygunlasma. alt sinir: alan kaybolmasin */
+      if (mean > 0.42) intensity = Math.max(0.28, intensity * 0.72);
+      else if (mean < 0.045) intensity = Math.min(1.0, intensity * 1.12);
+      if (intensity !== prev) gl.uniform1f(U.uIntensity, intensity);
     }
 
     function draw(t) {
@@ -286,6 +334,7 @@
       gl.uniform1f(U.uMotion, reduce ? 0.55 : 1.0);
       gl.clear(gl.COLOR_BUFFER_BIT);
       gl.drawArrays(gl.POINTS, 0, count);
+      autoExpose();
     }
 
     var t0 = performance.now(),
@@ -438,6 +487,16 @@
      ══════════════════════════════════════════════════════════ */
   function boot() {
     var mode = startNebula();
+    /* startNebula() null donerse canvas bir WebGL context'ine
+       baglanmis olabilir (shader derleme hatasi, link hatasi).
+       Boyle bir canvas'tan getContext("2d") NULL doner ve yedek de
+       calisamaz. Bu yuzden yedekten once her zaman TAZE bir canvas
+       koyuyoruz. */
+    if (!mode) {
+      if (canvas.parentNode) canvas.parentNode.removeChild(canvas);
+      canvas = makeCanvas();
+      host.appendChild(canvas);
+    }
     window.__quantroEntropy = {
       mode: mode ? mode.mode : "2d-fallback",
       count: mode

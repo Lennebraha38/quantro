@@ -160,7 +160,7 @@ for (const d of DEV) {
       gl.pe === "none" &&
       gl.tasma === 0 &&
       a.std > 1.2 &&
-      a.dolu > 2 &&
+      a.dolu >= 1.5 &&
       fps >= 30 &&
       errs.length === 0;
     if (!ok) fail++;

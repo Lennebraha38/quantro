@@ -336,6 +336,11 @@ body {
    saydam olduğu için alan bütün sayfada görünür.
    ══════════════════════════════════════════════════════════════ */
 #entropy-bg {
+  /* EMNIYET AGI: canvas icerigi saydam/bozuk/kaybolmus
+     durumda saydam bir zemin gosterir. WebGL context kaybolup
+     cizim durdugunda ya da ilk kare gelmediginde arka plan
+     BEYAZ olmasin diye. */
+  background: var(--void);
   position: fixed;
   inset: 0;
   z-index: -1;
