@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kuantum Sözlüğü ve Türkiye Ekosistemi · Quantro</title>
+    <meta
+      name="description"
+      content="Türkçe kuantum bilişim terim sözlüğü (TR-EN) ve Türkiye kuantum ekosistem haritası. Açık kaynak, MIT lisanslı."
+    />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" type="image/png" sizes="48x48" href="img/favicon-48.png" />
+  </head>
+  <body>
+    <main class="sayfa">
+      <nav class="ust-cubuk">
+        <a href="index.html">← Quantro</a>
+      </nav>
+
+      <h1>Kuantum Sözlüğü &amp; Türkiye Ekosistemi</h1>
+      <p class="giris">
+        İki kayıt defteri. Biri dilin kaydı, diğeri alanın. İkisi de elle
+        yazılmış, tarihleri doğrulanabilir ve ilk kez burada toplanmış
+        hâlde sunuluyor.
+      </p>
+
+      <!-- ═══ Sözlük ═══ -->
+      <section class="blok">
+        <h2><span class="ikon">📖</span> Türkçe Kuantum Terim Sözlüğü</h2>
+        <p class="not">
+          <strong id="sozluk-sayi">—</strong> terim · Türkçe–İngilizce ikili ·
+          arama yaz, anında filtrelenir.
+        </p>
+        <input
+          id="sozluk-ara"
+          class="arama"
+          type="search"
+          placeholder="Ara: kübit, dolanıklık, hata düzeltme…"
+          autocomplete="off"
+          aria-label="Sözlükte ara"
+        />
+        <div class="filtreler" id="sozluk-kategori" role="group" aria-label="Kategoriye göre filtrele"></div>
+        <ul class="sozluk" id="sozluk-liste"></ul>
+        <p class="bos" id="sozluk-bos" hidden>Eşleşen terim yok. Farklı bir kelime dene.</p>
+      </section>
+
+      <!-- ═══ Ekosistem ═══ -->
+      <section class="blok">
+        <h2><span class="ikon">🇹🇷</span> Türkiye Kuantum Ekosistemi</h2>
+        <p class="not">
+          Alanda bulunabilen aktörler. <strong>“İlk” iddiamızın rakip kaydıdır,
+          onay değildir.</strong> Tarihi bilinmeyenler boş bırakılmamış, açıkça
+          <em>bilinmiyor</em> yazılmıştır.
+        </p>
+        <div class="filtreler" id="eko-kategori" role="group" aria-label="Kategoriye göre filtrele"></div>
+        <ul class="ekosistem" id="eko-liste"></ul>
+        <p class="uyari-kutu">
+          <strong>Bu liste eksiksiz değildir.</strong> Bilinçli olarak yalnızca
+          doğrulanabilen aktörler yazıldı. Kapsam dışı kalanlar için kaynak
+          <a href="https://github.com/Lennebraha38/quantro/blob/main/data/prior-art.json"
+            >önceki-art kayıt defteri</a
+          >'dir.
+        </p>
+      </section>
+    </main>
+
+    <script>
+      (function () {
+        const $ = (s) => document.querySelector(s);
+        const esc = (s) =>
+          String(s == null ? "" : s).replace(
+            /[&<>"]/g,
+            (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c],
+          );
+
+        fetch("data/bilim.json", { cache: "no-store" })
+          .then((r) => r.json())
+          .then(d => {
+            /* ── Sözlük ── */
+            const sozluk = d.sozluk || [];
+            const sayi = $("#sozluk-sayi");
+            if (sayi) sayi.textContent = sozluk.length;
+            const cats = [...new Set(sozluk.map((t) => t.k))].sort();
+            const aktif = { s: new Set() };
+            const liste = $("#sozluk-liste");
+            const bos = $("#sozluk-bos");
+            const ara = $("#sozluk-ara");
+
+            const ciz = () => {
+              const q = (ara.value || "").trim().toLocaleLowerCase("tr");
+              const goster = sozluk
+                .filter((t) => !aktif.s.size || aktif.s.has(t.k))
+                .filter(
+                  (t) =>
+                    !q ||
+                    t.tr.toLocaleLowerCase("tr").includes(q) ||
+                    t.en.toLocaleLowerCase("en").includes(q) ||
+                    (t.a || "").toLocaleLowerCase("tr").includes(q),
+                )
+                .sort((a, b) => a.tr.localeCompare(b.tr, "tr"));
+              liste.innerHTML = goster
+                .map(
+                  (t) =>
+                    '<li class="terim"><details><summary><span class="tr">' +
+                    esc(t.tr) +
+                    '</span><span class="en">' +
+                    esc(t.en) +
+                    '<span class="etiket">' +
+                    esc(t.k) +
+                    "</span></span></summary><p>" +
+                    esc(t.a) +
+                    "</p></details></li>",
+                )
+                .join("");
+              if (bos) bos.hidden = goster.length > 0;
+            };
+
+            const filt = (kutu, cats, aktifSet) => {
+              kutu.innerHTML =
+                '<button type="button" data-k="*" aria-pressed="true">Tümü</button>' +
+                cats
+                  .map(
+                    (k) =>
+                      '<button type="button" data-k="' +
+                      esc(k) +
+                      '" aria-pressed="false">' +
+                      esc(k) +
+                      "</button>",
+                  )
+                  .join("");
+              kutu.addEventListener("click", (e) => {
+                const b = e.target.closest("button[data-k]");
+                if (!b) return;
+                const k = b.dataset.k;
+                if (k === "*") aktifSet.clear();
+                else if (aktifSet.has(k)) aktifSet.delete(k);
+                else aktifSet.add(k);
+                for (const x of kutu.querySelectorAll("button")) {
+                  x.setAttribute(
+                    "aria-pressed",
+                    x.dataset.k === "*" ? aktifSet.size === 0 : aktifSet.has(x.dataset.k) ? "1" : "0",
+                  );
+                }
+                ciz();
+              });
+            };
+            filt($("#sozluk-kategori"), cats, aktif.s);
+            if (ara) ara.addEventListener("input", ciz);
+            ciz();
+
+            /* ── Ekosistem ── */
+            const eko = d.ekosistem || {};
+            const kayitlar = eko.kayitlar || [];
+            const adlar = eko.kategoriler || {};
+            const eAktif = new Set();
+            const eListe = $("#eko-liste");
+            const eCiz = () => {
+              const goster = kayitlar
+                .filter((r) => !eAktif.size || eAktif.has(r.k))
+                .sort((a, b) => (a.yil || 9999) - (b.yil || 9999));
+              eListe.innerHTML = goster
+                .map((r) => {
+                  const yil = r.yil ? r.yil : '<span class="yil-bilinmez" title="Tarih doğrulanamadı">bilinmiyor</span>';
+                  return (
+                    '<li class="aktör"><div class="aktör-bas"><span class="yil">' +
+                    yil +
+                    '</span><span class="kategori">' +
+                    esc(adlar[r.k] || r.k) +
+                    '</span>' +
+                    (r.sehir && r.sehir !== "—" ? '<span class="sehir">📍' + esc(r.sehir) + "</span>" : "") +
+                    "</div>" +
+                    '<a class="aktör-ad" href="' +
+                    esc(r.url) +
+                    '" target="_blank" rel="noopener">' +
+                    esc(r.ad) +
+                    "</a>" +
+                    "<p>" +
+                    esc(r.ne) +
+                    "</p>" +
+                    (r.tarihNotu ? '<p class="tarih-not">' + esc(r.tarihNotu) + "</p>" : "") +
+                    "</li>"
+                  );
+                })
+                .join("");
+            };
+            const eKutu = $("#eko-kategori");
+            const eCats = [...new Set(kayitlar.map((r) => r.k))];
+            eKutu.innerHTML =
+              '<button type="button" data-k="*" aria-pressed="true">Tümü</button>' +
+              eCats
+                .map(
+                  (k) =>
+                    '<button type="button" data-k="' +
+                    esc(k) +
+                    '" aria-pressed="false">' +
+                    esc(adlar[k] || k) +
+                    "</button>",
+                )
+                .join("");
+            eKutu.addEventListener("click", (e) => {
+              const b = e.target.closest("button[data-k]");
+              if (!b) return;
+              const k = b.dataset.k;
+              if (k === "*") eAktif.clear();
+              else if (eAktif.has(k)) eAktif.delete(k);
+              else eAktif.add(k);
+              for (const x of eKutu.querySelectorAll("button")) {
+                x.setAttribute(
+                  "aria-pressed",
+                  x.dataset.k === "*" ? eAktif.size === 0 : eAktif.has(x.dataset.k) ? "1" : "0",
+                );
+              }
+              eCiz();
+            });
+            eCiz();
+          })
+          .catch(() => {
+            const l = $("#sozluk-liste");
+            if (l) l.innerHTML = '<li class="terim"><p>Veri yüklenemedi.</p></li>';
+          });
+      })();
+    </script>
+  </body>
+</html>
