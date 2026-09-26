@@ -149,6 +149,12 @@ background:rgba(0,200,240,.12);color:var(--cyan,#00c8f0);cursor:pointer;font-siz
       if (d.cevap) {
         think.el.textContent = d.cevap;
         history.push({ role: "assistant", content: d.cevap });
+        if (d.kaynak === "hazir") {
+          const n = document.createElement("div");
+          n.style.cssText = "font-size:10.5px;color:rgba(232,246,251,.45);margin-top:4px";
+          n.textContent = d.not || "";
+          think.el.appendChild(n);
+        }
       } else {
         think.el.innerHTML =
           "<em>" +

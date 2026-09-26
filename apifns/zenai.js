@@ -30,6 +30,53 @@ const BAGLAM =
   "dekoherans, gerçek kuantum donanımı) yardımcı olabilirsin. " +
   "Cevaplarını kısa ve anlaşılır Türkçe/İngilizce ver.";
 
+// Quantro hakkında sorulabilecek sık sorulara hazır, kaynaklı yanıt.
+// ZENAI'nin sağlayıcısı ara sıra HTTP 500 veriyor (uzun/karmaşık
+// sorularda); o an kullanıcı "yanıt veremedi" görüyordu. Bu yedek
+// cevaplar site gerçeklerini (kendi kaynaklarımızdan) döndürür.
+const HAZIR = [
+  {
+    k: ["quantro nedir", "quantro ne", "bu site", "site ne", "quantro ne yapıyor"],
+    c:
+      "**Quantro**, tarayıcıda çalışan bir kuantum hesaplama simülatörü ve araştırma projesidir. " +
+      "Kendi kuantum devrelerini kurup çalıştırabileceğin 13 etkileşimli araç sunar: " +
+      "Bell testi, kendi kuantum devreni kur, kuantum zorluğu karşılaştırması, " +
+      "stokastik (klasik) karşılaştırma ve daha fazlası. " +
+      "Hepsi tek dosyalık, bağımlılıksız **quantro-js** kütüphanesi üzerinde çalışır.",
+  },
+  {
+    k: ["kaç araç", "araç sayısı", "neler var", "hangi araçlar"],
+    c:
+      "Sitede **13 etkileşimli araç** var. Başlıcaları: Bell testi, kendi kuantum devreni kur, " +
+      "kuantum bilgisayar zorluğu, klasik karşılaştırma, kuantum rastgelelik, ölçüm ve " +
+      "devre görselleştirme araçları. Tamamını ana sayfadaki lab bölümünden deneyebilirsin.",
+  },
+  {
+    k: ["quantro-js", "kütüphane", "api", "sdk", "npm"],
+    c:
+      "**quantro-js** bağımlılıksız, tek dosyalık bir JavaScript kuantum simülasyon kütüphanesidir. " +
+      "Temel API: `QuantumCircuit`, `Qubit`, H/X/Y/Z/RY kapıları, CX/CZ (dolanma), " +
+      "`probabilities()`, `measureAll()`, `bellState()`, `ghzState()`, `sampleDistribution()` ve " +
+      "`mulberry32` (tohumlu PRNG). Tam dokümantasyon docs.html sayfasında; MIT lisanslıdır.",
+  },
+  {
+    k: ["kuantum nedir", "kuantum bilgisayar", "süperpozisyon", "dolanma", "kuantum fiziği"],
+    c:
+      "**Kuantum bilgisayar**, bilgiyi süperpozisyon ve dolanma gibi kuantum durumlarında " +
+      "işleyen makinedir. Klasik bilgisayarlar 0/1 üzerinden çalışırken kuantum işlemcileri " +
+      "olasılık genlikleriyle çalışır. Sitedeki gerçek kuantum donanımı (D-Wave, IBM, IonQ) " +
+      "kıyaslamasını yaptığın *rakip kuantum bilgisayar* aracı bu farkları somut gösterir. " +
+      "Süperpozisyon = birden çok durumun ağırlıklı toplamı; dolanma = parçacıkların " +
+      "uzaklıktan bağımlı durumları. Ayrıntılı anlatım istersen sor, kuantum fiziği erişimine de sahibim.",
+  },
+];
+
+function hazirCevap(soru) {
+  const s = soru.toLocaleLowerCase("tr");
+  for (const { k, c } of HAZIR) if (k.some((x) => s.includes(x))) return c;
+  return null;
+}
+
 const buckets = new Map();
 
 function rateLimited(ip) {
@@ -118,8 +165,16 @@ module.exports = async function zenai(req, res) {
 
       if (r.status === 429) {
         // ZENAI kendi hız sınırına takıldı — kısa bekle, sonra dene.
-        sonHata = "ZENAI şu anda yoğun.";
-        await sleep(1200 * deneme);
+        sonHata = "yoğunluk";
+        if (deneme < 3) await sleep(1500 * deneme);
+        continue;
+      }
+
+      if (r.status >= 500) {
+        // ZENAI'nin model sağlayıcısı geçici hata veriyor (HTTP 500).
+        // Uzun sorularda sık olur; daha uzun bekleyip yeniden deniyoruz.
+        sonHata = `geçici hata (${r.status})`;
+        if (deneme < 3) await sleep(2500 * deneme);
         continue;
       }
 
@@ -141,18 +196,37 @@ module.exports = async function zenai(req, res) {
         });
       }
 
+      // 400 gibi kalıcı hataların sebebini yüzeye taşı (şeffaflık).
+      if (r.status >= 400 && r.status < 500) {
+        return json(res, 502, {
+          error: "ZENAI bu soruyu şu anda işleyemedi. Soruyu biraz sadeleştirip tekrar dene.",
+          sebep: data && data.error ? String(data.error).slice(0, 120) : `HTTP ${r.status}`,
+        });
+      }
+
       sonHata = "boş yanıt";
-      if (deneme < 3) await sleep(800 * deneme);
+      if (deneme < 3) await sleep(1200 * deneme);
     } catch (e) {
       sonHata = "zaman aşımı";
-      if (deneme < 3) await sleep(800 * deneme);
+      if (deneme < 3) await sleep(1500 * deneme);
     }
   }
 
-  // 3 deneme de başarısız: kullanıcıya anlaşılır mesaj + yeniden dene önerisi
+  // 3 deneme de başarısız: önce site gerçeklerinden hazır cevap dene,
+  // o da yoksa anlaşılır hata mesajı ver.
+  const hazir = hazirCevap(soru);
+  if (hazir) {
+    return json(res, 200, {
+      cevap: hazir,
+      at: new Date().toISOString(),
+      kaynak: "hazir",
+      not: "ZENAI'ye şu an ulaşılamadı; bu site bilgisinden hazırlandı.",
+    });
+  }
+
   return json(res, 502, {
     error:
-      "ZENAI şu anda yanıt veremedi (3 deneme sonunda). Biraz sonra tekrar dene ya da sorunu değiştir.",
+      "ZENAI şu anda yanıt veremedi (3 deneme sonunda). Biraz sonra tekrar dene ya da sorunu sadeleştir.",
     sebep: sonHata,
   });
 };
