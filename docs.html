@@ -163,9 +163,33 @@ qc.measureAll(() =&gt; 0.9);           // → 1</code></pre>
     <h2 class="sec-h2" style="text-align:left">Why it exists</h2>
     <p class="sec-sub">quantro-js is the engine behind this site's <a href="quantro-lab.html" style="color:var(--cyan)">13 interactive tools</a>. It was written from scratch as a community critique of the assumption that "quantum computing needs big frameworks": the whole simulator fits in one MIT-licensed, dependency-free JavaScript file, and it is deliberately kept humble and inspectable so that anyone — student, developer, researcher — can read, run and extend it.</p>
 
+    <h2 class="sec-h2" style="text-align:left">Companion project: ZENAI (4 brains)</h2>
+    <p class="sec-sub">The same author maintains <a href="https://github.com/Lennebraha38/ZENAI" target="_blank" rel="noopener" style="color:var(--cyan)">ZENAI</a> — a Turkish, local-first AI assistant built on a two-tier brain setup (a local Ollama 7B/14B code model + a cloud "mega brain"), with a four-brain deliberation layer: majority vote, a 12-criteria jury referee, verification, and self-correction. The badge below tracks its repository automatically, so what you see always reflects the latest upstream commit.</p>
+    <p style="margin:14px 0 0">
+      <a href="https://github.com/Lennebraha38/ZENAI/commits/main" target="_blank" rel="noopener" style="display:inline-block;padding:7px 14px;border:1px solid rgba(0,200,240,.35);border-radius:8px;font-family:var(--mono);font-size:13px;color:var(--cyan);text-decoration:none;background:rgba(0,200,240,.06)">ZENAI · <span id="zenai-sha" title="latest commit on main">…</span></a>
+      <span class="sec-sub" style="display:inline-block;margin-left:10px" id="zenai-date"></span>
+    </p>
+
   </div>
 </section>
 </main>
+<script>
+  // ZENAI rozeti — data/zenai.json build'de (scripts/zenai-sync.mjs) güncel
+  // tutulur; site her yüklemede en güncel SHA'yı gösterir.
+  (async function () {
+    try {
+      const r = await fetch("data/zenai.json", { cache: "no-store" });
+      if (!r.ok) return;
+      const z = await r.json();
+      const sha = document.getElementById("zenai-sha");
+      const dt = document.getElementById("zenai-date");
+      if (sha) sha.textContent = z.sha;
+      if (dt) dt.textContent = "last upstream commit: " + String(z.date || "").slice(0, 10);
+    } catch {
+      /* rozet sessizce atlanır */
+    }
+  })();
+</script>
 <!-- ══ FOOTER ══ -->
 <footer>
   <div class="footer-inner">

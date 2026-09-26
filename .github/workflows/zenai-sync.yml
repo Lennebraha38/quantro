@@ -1,0 +1,44 @@
+name: ZENAI Senkron
+
+# Lennebraha38/ZENAI deposunda yeni commit oldukça data/zenai.json
+# güncellenir → otomatik commit → Vercel yeniden dağıtır → rozet tazelenir.
+on:
+  schedule:
+    - cron: '41 4 * * *'   # her gece 04:41
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: zenai-sync
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: ZENAI son commit'ini çek
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/zenai-sync.mjs
+      - name: Değişiklik varsa commit + push (yeniden deploy tetikler)
+        run: |
+          if git diff --quiet -- data/zenai.json; then
+            echo "ZENAI senkron — değişiklik yok."
+          else
+            git config user.name  "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add data/zenai.json
+            git commit -m "chore(zenai): rozet commit'ini güncelle (${SHA:-auto})"
+            git push
+            echo "Rozet güncellendi → Vercel redeploy tetiklendi."
+          fi
+      - name: Doğrulama (json geçerli mi)
+        run: node -e "const z=require('./data/zenai.json');if(!/^[0-9a-f]{7,40}$/.test(z.sha))process.exit(1);console.log('zenai.json geçerli:',z.sha)"
