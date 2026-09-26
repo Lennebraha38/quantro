@@ -38,14 +38,30 @@ async function collect() {
   } catch (e) {
     out.github = null;
   }
+  let downloads = null;
   try {
     const n = await fetchJson(`https://api.npmjs.org/downloads/point/last-month/${NPM}`, {
       signal: AbortSignal.timeout(5000),
     });
-    out.npm = { downloadsLastMonth: n.downloads || 0, version: "" };
+    downloads = typeof n.downloads === "number" ? n.downloads : 0;
   } catch (e) {
     // İndirme API'si yeni yayınlarda birkaç saate kadar geriden gelir;
-    // registry'den canlı sürümü al (widget indirme sayısını 0 gösterir).
+    // aşağıdaki registry yedeği indirmeyi 0'a düşürür.
+  }
+  if (downloads !== null) {
+    // Sürümü da registry'den al (indirme API'si sürüm döndürmez).
+    try {
+      const meta = await fetchJson(`https://registry.npmjs.org/${NPM}`, {
+        signal: AbortSignal.timeout(5000),
+      });
+      out.npm = {
+        downloadsLastMonth: downloads,
+        version: (meta["dist-tags"] && meta["dist-tags"].latest) || "",
+      };
+    } catch (e) {
+      out.npm = { downloadsLastMonth: downloads, version: "" };
+    }
+  } else {
     try {
       const meta = await fetchJson(`https://registry.npmjs.org/${NPM}`, {
         signal: AbortSignal.timeout(5000),
