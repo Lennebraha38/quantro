@@ -109,12 +109,24 @@ if (window.THREE && document.getElementById("hero-canvas")) {
       _lh = null;
     }
     _lhLost = false;
-    const renderer = new THREE.WebGLRenderer({
-      canvas,
-      antialias: true,
-      alpha: false,
-      powerPreference: "low-power",
-    });
+    let renderer;
+    try {
+      renderer = new THREE.WebGLRenderer({
+        canvas,
+        antialias: true,
+        alpha: false,
+        powerPreference: "low-power",
+      });
+    } catch (e) {
+      // WebGL bağlamı oluşturulamadı (eski cihaz, bellek sınırı, kısıtlı GPU).
+      // Sayfayı bozmak yerine 3B katmanı sessizce kapat, CSS arka plan kalsın.
+      _lhLost = true;
+      canvas.style.display = "none";
+      try {
+        document.documentElement.classList.add("no-webgl");
+      } catch (e2) {}
+      return;
+    }
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor(0x020810, 1);

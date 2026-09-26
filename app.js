@@ -1952,11 +1952,6 @@ applyLang();
 
 /* ══ NAV + MOBILE MENU + REVEAL ══ */
 (function () {
-  const nav = document.getElementById("nav");
-  if (nav)
-    window.addEventListener("scroll", () => nav.classList.toggle("scrolled", scrollY > 60), {
-      passive: true,
-    });
   const burger = document.getElementById("burger"),
     mobnav = document.getElementById("mobnav");
   if (burger && mobnav) {

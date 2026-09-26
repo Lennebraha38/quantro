@@ -9,6 +9,7 @@
   inset: 0;
   z-index: 0;
   pointer-events: none;
+  overflow: hidden;
 }
 .bg-stars {
   position: absolute;
@@ -1105,4 +1106,34 @@ footer {
   .cm-item.cm-reply {
     margin-left: 12px;
   }
+}
+
+/* ═══ Mobil: dekoratif nebula 500px idi, 375px ekranda taşıyordu ═══ */
+@media (max-width: 768px) {
+  .bg-neb {
+    width: 260px;
+    height: 260px;
+    top: -60px;
+    right: -60px;
+    filter: blur(40px);
+  }
+}
+
+/* ═══ Dokunma hedefleri: filtre etiketleri 58x26 idi ═══ */
+.ftag {
+  min-height: 44px;
+  padding: 10px 18px;
+}
+
+/* ═══ Dokunma hedefleri: blog logo (21px) ve footer logosu (17px) ═══ */
+.nl,
+.fl {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+.aktör-ad {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
 }

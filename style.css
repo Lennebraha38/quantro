@@ -75,23 +75,13 @@ body {
 /* ══════════════════════════════════════
    NAVIGATION
    ══════════════════════════════════════ */
-nav {
-  position: fixed;
+#nav {
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
   z-index: 100;
   padding: 28px 0;
-  transition:
-    background 0.4s,
-    padding 0.4s;
-}
-nav.scrolled {
-  background: rgba(2, 8, 16, 0.88);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  padding: 16px 0;
-  border-bottom: 1px solid rgba(0, 200, 240, 0.07);
 }
 .nav-inner {
   display: flex;
@@ -156,6 +146,11 @@ nav.scrolled {
   border: none;
   cursor: pointer;
   padding: 4px;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
 }
 .nav-burger span {
   display: block;
@@ -1843,7 +1838,7 @@ footer {
 /* ══════════════════════════════════════
    RESPONSIVE
    ══════════════════════════════════════ */
-@media (max-width: 900px) {
+@media (max-width: 1100px) {
   .nav-links,
   .nav-cta {
     display: none;
@@ -1969,44 +1964,279 @@ footer {
 /* ═════════════════════════════════════════════════════════
    BILIM SAYFASI · Kuantum Sözlüğü + Türkiye Ekosistemi
    ═════════════════════════════════════════════════════════ */
-.sayfa{max-width:860px;margin:0 auto;padding:2rem 1.25rem 5rem;line-height:1.65}
-.ust-cubuk{margin-bottom:2rem;font-size:.95rem}
-.ust-cubuk a{color:var(--accent,#7dd3fc);text-decoration:none}
-.ust-cubuk a:hover{text-decoration:underline}
-.sayfa h1{font-size:clamp(1.7rem,4.5vw,2.6rem);margin:0 0 .6rem;letter-spacing:-.02em}
-.giris{color:#9fb0c4;margin:0 0 3rem;max-width:60ch}
-.blok{margin-bottom:4rem}
-.blok h2{font-size:1.35rem;margin:0 0 .4rem;display:flex;align-items:center;gap:.5rem}
-.not{color:#8fa3b8;font-size:.9rem;margin:0 0 1.1rem}
-.arama{width:100%;padding:.8rem 1rem;border-radius:12px;border:1px solid #24344a;background:#0d1522;color:#e6edf5;font-size:1rem;font-family:inherit}
-.arama:focus{outline:2px solid var(--accent,#7dd3fc);outline-offset:2px}
-.filtreler{display:flex;flex-wrap:wrap;gap:.4rem;margin:1rem 0}
-.filtreler button{padding:.3rem .7rem;border-radius:999px;border:1px solid #24344a;background:#0d1522;color:#9fb0c4;font-size:.8rem;cursor:pointer;font-family:inherit}
-.filtreler button:hover{border-color:#3d567a;color:#e6edf5}
-.filtreler button[aria-pressed="true"]{background:var(--accent,#7dd3fc);border-color:var(--accent,#7dd3fc);color:#0a0f18;font-weight:600}
-.sozluk{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:.4rem}
-.terim details{border:1px solid #1b2739;border-radius:12px;background:#0b121d;overflow:hidden}
-.terim summary{cursor:pointer;padding:.75rem 1rem;display:flex;flex-wrap:wrap;align-items:baseline;gap:.6rem;list-style:none}
-.terim summary::-webkit-details-marker{display:none}
-.terim summary::before{content:"▸";color:#4a6a8f;font-size:.8rem;transition:transform .15s}
-.terim details[open] summary::before{transform:rotate(90deg)}
-.terim .tr{font-weight:600;color:#e6edf5}
-.terim .en{color:#7dd3fc;font-size:.9rem;display:flex;align-items:center;gap:.5rem}
-.terim .etiket{font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;color:#6b8299;border:1px solid #24344a;border-radius:999px;padding:.1rem .45rem}
-.terim details p{margin:0;padding:0 1rem 1rem 2rem;color:#9fb0c4;font-size:.9rem}
-.bos{color:#6b8299;font-style:italic;margin-top:1rem}
-.ekosistem{list-style:none;padding:0;margin:0;display:grid;gap:.8rem;grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
-.aktör{border:1px solid #1b2739;border-radius:14px;background:#0b121d;padding:1rem;display:flex;flex-direction:column;gap:.4rem}
-.aktör-bas{display:flex;flex-wrap:wrap;gap:.4rem;align-items:center;font-size:.72rem}
-.aktör .yil{font-weight:700;color:#7dd3fc}
-.yil-bilinmez{color:#e0a458;font-style:italic;font-weight:400}
-.aktör .kategori{color:#6b8299;border:1px solid #24344a;border-radius:999px;padding:.1rem .5rem}
-.aktör .sehir{color:#6b8299}
-.aktör-ad{font-weight:600;color:#e6edf5;text-decoration:none;font-size:1rem}
-.aktör-ad:hover{color:#7dd3fc;text-decoration:underline}
-.aktör p{margin:0;color:#9fb0c4;font-size:.87rem}
-.aktör .tarih-not{font-size:.75rem;color:#e0a458;border-top:1px dashed #24344a;padding-top:.4rem;margin-top:.2rem}
-.uyari-kutu{margin-top:1.2rem;padding:.9rem 1rem;border-left:3px solid #e0a458;background:#131a10;border-radius:0 10px 10px 0;color:#9fb0c4;font-size:.85rem}
-.uyari-kutu strong{color:#e0a458}
-.uyari-kutu a{color:#7dd3fc}
-@media (max-width:600px){.ekosistem{grid-template-columns:1fr}.sayfa{padding-top:1.2rem}}
+.sayfa {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 5rem;
+  line-height: 1.65;
+}
+.ust-cubuk {
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
+}
+.ust-cubuk a {
+  color: var(--accent, #7dd3fc);
+  text-decoration: none;
+}
+.ust-cubuk a:hover {
+  text-decoration: underline;
+}
+.sayfa h1 {
+  font-size: clamp(1.7rem, 4.5vw, 2.6rem);
+  margin: 0 0 0.6rem;
+  letter-spacing: -0.02em;
+}
+.giris {
+  color: #9fb0c4;
+  margin: 0 0 3rem;
+  max-width: 60ch;
+}
+.blok {
+  margin-bottom: 4rem;
+}
+.blok h2 {
+  font-size: 1.35rem;
+  margin: 0 0 0.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.not {
+  color: #8fa3b8;
+  font-size: 0.9rem;
+  margin: 0 0 1.1rem;
+}
+.arama {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border-radius: 12px;
+  border: 1px solid #24344a;
+  background: #0d1522;
+  color: #e6edf5;
+  font-size: 1rem;
+  font-family: inherit;
+}
+.arama:focus {
+  outline: 2px solid var(--accent, #7dd3fc);
+  outline-offset: 2px;
+}
+.filtreler {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 1rem 0;
+}
+.filtreler button {
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid #24344a;
+  background: #0d1522;
+  color: #9fb0c4;
+  font-size: 0.8rem;
+  cursor: pointer;
+  font-family: inherit;
+}
+.filtreler button:hover {
+  border-color: #3d567a;
+  color: #e6edf5;
+}
+.filtreler button[aria-pressed="true"] {
+  background: var(--accent, #7dd3fc);
+  border-color: var(--accent, #7dd3fc);
+  color: #0a0f18;
+  font-weight: 600;
+}
+.sozluk {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.terim details {
+  border: 1px solid #1b2739;
+  border-radius: 12px;
+  background: #0b121d;
+  overflow: hidden;
+}
+.terim summary {
+  cursor: pointer;
+  padding: 0.75rem 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.6rem;
+  list-style: none;
+}
+.terim summary::-webkit-details-marker {
+  display: none;
+}
+.terim summary::before {
+  content: "▸";
+  color: #4a6a8f;
+  font-size: 0.8rem;
+  transition: transform 0.15s;
+}
+.terim details[open] summary::before {
+  transform: rotate(90deg);
+}
+.terim .tr {
+  font-weight: 600;
+  color: #e6edf5;
+}
+.terim .en {
+  color: #7dd3fc;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.terim .etiket {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #6b8299;
+  border: 1px solid #24344a;
+  border-radius: 999px;
+  padding: 0.1rem 0.45rem;
+}
+.terim details p {
+  margin: 0;
+  padding: 0 1rem 1rem 2rem;
+  color: #9fb0c4;
+  font-size: 0.9rem;
+}
+.bos {
+  color: #6b8299;
+  font-style: italic;
+  margin-top: 1rem;
+}
+.ekosistem {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.8rem;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+.aktör {
+  border: 1px solid #1b2739;
+  border-radius: 14px;
+  background: #0b121d;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.aktör-bas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+  font-size: 0.72rem;
+}
+.aktör .yil {
+  font-weight: 700;
+  color: #7dd3fc;
+}
+.yil-bilinmez {
+  color: #e0a458;
+  font-style: italic;
+  font-weight: 400;
+}
+.aktör .kategori {
+  color: #6b8299;
+  border: 1px solid #24344a;
+  border-radius: 999px;
+  padding: 0.1rem 0.5rem;
+}
+.aktör .sehir {
+  color: #6b8299;
+}
+.aktör-ad {
+  font-weight: 600;
+  color: #e6edf5;
+  text-decoration: none;
+  font-size: 1rem;
+}
+.aktör-ad:hover {
+  color: #7dd3fc;
+  text-decoration: underline;
+}
+.aktör p {
+  margin: 0;
+  color: #9fb0c4;
+  font-size: 0.87rem;
+}
+.aktör .tarih-not {
+  font-size: 0.75rem;
+  color: #e0a458;
+  border-top: 1px dashed #24344a;
+  padding-top: 0.4rem;
+  margin-top: 0.2rem;
+}
+.uyari-kutu {
+  margin-top: 1.2rem;
+  padding: 0.9rem 1rem;
+  border-left: 3px solid #e0a458;
+  background: #131a10;
+  border-radius: 0 10px 10px 0;
+  color: #9fb0c4;
+  font-size: 0.85rem;
+}
+.uyari-kutu strong {
+  color: #e0a458;
+}
+.uyari-kutu a {
+  color: #7dd3fc;
+}
+@media (max-width: 600px) {
+  .ekosistem {
+    grid-template-columns: 1fr;
+  }
+  .sayfa {
+    padding-top: 1.2rem;
+  }
+}
+
+/* ══════════════════════════════════════
+   DOKUNMA HEDEFLERİ (en az 44px)
+   Playwright denetimi: 30x23 burger, 24px footer logo, 16px değer
+   linkleri dokunulamayacak kadar küçüktü.
+   ══════════════════════════════════════ */
+.footer-logo {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+.contact-email,
+.cg-val {
+  display: inline-block;
+  padding: 12px 0;
+}
+
+/* ═══ Dokunma hedefleri II: logo, kırıntı bağlantıları, bilim filtreleri ═══ */
+.nav-logo {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+.filtreler button {
+  min-height: 44px;
+  padding: 0 1rem;
+  display: inline-flex;
+  align-items: center;
+}
+/* Atom halkası iPhone SE'de 3px taşıyordu */
+.atom-stage,
+.about-visual {
+  overflow: hidden;
+}
+
+/* ═══ Dokunma hedefleri III: kalan gerçek kontroller ═══ */
+/* Footer hata bildir bağlantısı 13px yüksekliğindeydi */
+.footer-sys a {
+  display: inline-block;
+  padding: 12px 0;
+}
