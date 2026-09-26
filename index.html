@@ -474,19 +474,6 @@
               </p>
             </div>
           </div>
-          <div class="ach-proof reveal" id="ach-proof">
-            <div class="ach-proof-h">
-              <span data-i18n="ach.proof.h">Bu iddialar kanıtlıdır</span>
-              <span class="ach-proof-stamp" id="ach-stamp">…</span>
-            </div>
-            <p class="ach-proof-sub" data-i18n="ach.proof.sub">
-              Aşağıdaki kanıtlar her gece otomatik olarak yeniden doğrulanır. Doğrulanamayan iddia
-              buradan düşer.
-            </p>
-            <ul class="ach-proof-list" id="ach-list">
-              <li data-i18n="ach.proof.load">Kanıtlar yükleniyor…</li>
-            </ul>
-          </div>
           <div class="stat-widget" id="stat-widget" style="margin-top: 56px">
             <div class="sec-label" style="opacity: 0.8">
               <span data-i18n="stat.title">Topluluk &amp; Kanıt</span>
@@ -821,80 +808,6 @@
 
     <button class="btt" id="btt" aria-label="Başa dön" title="Başa dön">↑</button>
 
-    <!-- ══ İlklerimiz — kanıt listesi (otomatik yenilenir) ══ -->
-    <script>
-      (function () {
-        const list = document.getElementById("ach-list");
-        const stamp = document.getElementById("ach-stamp");
-        if (!list) return;
-        const tt = (k) => {
-          try {
-            return window.t ? window.t(k) : k;
-          } catch (e) {
-            return k;
-          }
-        };
-        const esc = (s) =>
-          String(s == null ? "" : s).replace(
-            /[&<>"]/g,
-            (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c],
-          );
-        const isaret = { dogrulandi: "✓", DOGRULANMADI: "✗", bilinmiyor: "?", manuel: "•" };
-        fetch("data/claims-evidence.json", { cache: "no-store" })
-          .then((r) => r.json())
-          .then((d) => {
-            const satirlar = [];
-            (d.iddaialar || []).forEach((id) => {
-              (id.kanitlar || []).forEach((k) => {
-                const kisa = (k.sonuc && k.sonuc.kanit) || k.etiket || "";
-                const deger = k.sonuc && k.sonuc.deger ? k.sonuc.deger : k.etiket;
-                satirlar.push(
-                  '<li class="ach-ev" data-durum="' +
-                    esc(k.durum) +
-                    '">' +
-                    '<span class="ach-ev-i">' +
-                    isaret[k.durum] ||
-                    "•" +
-                      "</span>" +
-                      '<div class="ach-ev-b">' +
-                      '<div class="ach-ev-t">' +
-                      esc(kisa) +
-                      "</div>" +
-                      '<p class="ach-ev-k">' +
-                      esc(deger) +
-                      "</p>" +
-                      (k.sonuc && k.sonuc.url
-                        ? '<a class="ach-ev-v" href="' +
-                          esc(k.sonuc.url) +
-                          '" target="_blank" rel="noopener">' +
-                          esc(k.sonuc.url.replace(/^https?:\/\//, "").slice(0, 58)) +
-                          "</a>"
-                        : "") +
-                      "</div></li>",
-                );
-              });
-            });
-            list.innerHTML = satirlar.join("");
-            if (stamp) {
-              const o = d.ozet || {};
-              const ok = o.yanlis === 0 && o.dogrulanan > 0;
-              stamp.setAttribute("data-ok", ok ? "1" : "0");
-              stamp.textContent =
-                tt("ach.proof.stamp")
-                  .replace("{d}", o.dogrulanan || 0)
-                  .replace("{t}", o.iddia || 0) +
-                " · " +
-                new Date(d.uretim).toLocaleDateString("tr-TR");
-            }
-          })
-          .catch(() => {
-            list.innerHTML =
-              '<li class="ach-ev" data-durum="bilinmiyor"><span class="ach-ev-i">?</span><div class="ach-ev-b"><div class="ach-ev-t">' +
-              esc(tt("ach.proof.fail")) +
-              "</div></div></li>";
-          });
-      })();
-    </script>
     <script src="app.js"></script>
     <script src="js/chat-widget.js" defer></script>
 
