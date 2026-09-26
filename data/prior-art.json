@@ -1,0 +1,98 @@
+{
+  "_aciklama": "Önceki-art (prior art) kayıt defteri. 'İlk' iddialarının karşısına 'daha önce kimse yapmadı' anlamına gelen bir kaydın olup olmadığını gösterir. Buradaki rakipler GÖRÜNÜR şekilde listelenir; gizlenmez. Amaç pazarlama değil, iddianın sınırını çizmek ve rakibin varsa gizlemeden göstermektir.",
+  "surum": 1,
+  "tarama": {
+    "tarih": "2026-09-26",
+    "yontem": [
+      "GitHub arama API'si, tarih sınırlı: quantro deposundan ÖNCE oluşturulmuş ('created:<2026-07-01') Türkçe/kuantum projeleri",
+      "Web araması: Türkiye kuantum eğitimi platformları, Türkçe kuantum simülatör araç setleri, çok dilli kuantum platformları",
+      "Bilinen Türk kuantum ekosistemi aktörleri: QTurkey, Quantum4Edu, TÜBİTAK Kuantum Platformu, Quantan Atlas"
+    ],
+    "sinir": "Bu tarama SAYILAN bir çalışma kaydıdır, kanıt DEĞİL. Arama motorları her şeyi indekslemez; akademik projeler web'de olmayabilir. Bulunmamak yokluk kanıtı değildir. Bu yüzden sonuç 'iddia doğrulandı' değil, 'şu anda bilinen rakip şu' şeklinde raporlanır.",
+    "referansTarih": "2026-07-01"
+  },
+  "kombinasyon": {
+    "aciklama": "Aşağıdaki rakip hiçbirinde bu YEDİ özelliğin TAMAMINI bir arada bulunamadı. 'İlk' iddiası yalnızca bu bileşimin tamamı için savunulabilir.",
+    "ozellikler": [
+      "Türkçe arayüz",
+      "MIT lisansı",
+      "Tarayıcıda çalışan tek dosya JS (derleme/kurulum yok)",
+      "13 etkileşimli araç",
+      "Bu 13 araç içinde 3 doğrudan astrofizik aracı",
+      "Canlı ANU fiziksel kuantum kaynağı bağlantısı",
+      "8 dilin tamamında arayüz + blog (çeviri boşluğu yok)"
+    ]
+  },
+  "rakipler": [
+    {
+      "ad": "Türkiye'nin ilk kuantum bilgisayarı QuanT",
+      "url": "https://kuantum.ssb.gov.tr/etkinlikler/turkiyenin-ilk-kuantum-bilgisayari-quant-tanitildi",
+      "tarih": "2024-11-21",
+      "ne": "TOBB ETÜ öncülüğünde, SSB desteğiyle 5 kübitlik süperiletken kuantum bilgisayarı. Donanım.",
+      "celisir": false,
+      "gerekce": "Donanım; yazılım araç seti değil. Ancak Türkiye kuantum alanında 'ilk' üstünlüğünü zaten başkasının taşıdığını gösterir."
+    },
+    {
+      "ad": "QTurkey (kuantumturkiye.org)",
+      "url": "https://kuantumturkiye.org/hakkimizda/",
+      "tarih": "2019-01-01",
+      "tarihNotu": "LinkedIn 'Founded Year 2019'; sitedeki 'Hakkımızda' sayfası 2020-04-21",
+      "ne": "Türkiye kuantum iletişim ve işbirliği ağı; atölyeler, akademi, dergi, Türkçe popüler bilim içeriği.",
+      "celisir": false,
+      "gerekce": "Kendi etkileşimli araç seti yok; Qiskit/Cirq/QuTiP gibi dış simülatörleri listeliyor. 'İlk Türkçe kuantum platformu' geniş okumasını çürütür ama bileşimin hiçbirini karşılamaz."
+    },
+    {
+      "ad": "Quantum4Edu (Özyeğin + Boğaziçi, TÜBİTAK 1001)",
+      "url": "https://quantum4edu.ozyegin.edu.tr/",
+      "tarih": "2025-02-20",
+      "tarihNotu": "Duyuru 2025-02-20; ilk online eğitim 2025-11-19",
+      "ne": "Öğretmenlere yönelik 10 haftalık online kuantum eğitimi + deney simülasyonları sayfası. 'Türkiye'deki ilk kapsamlı kuantum bilimi eğitimi projesi'.",
+      "celisir": false,
+      "gerekce": "Eğitim programı; açık kaynak MIT tarayıcı araç seti değil. 'Deney simülasyonları' sayfası var ama yazılım dağıtımı/araç seti niteliğini doğrulamadım. En güçlü 'ilk' iddiası bu projenin."
+    },
+    {
+      "ad": "dedztbh/KuantumCircuitSim",
+      "url": "https://github.com/dedztbh/KuantumCircuitSim",
+      "tarih": "2020-09-22",
+      "ne": "MIT lisanslı kuantum devre simülatörü ve analizör (Kotlin, 186 KB).",
+      "celisir": false,
+      "gerekce": "Tek araç, kütüphane/CLI; web arayüzü ve Türkçe lokalizasyon yok. Ama 'ilk MIT lisanslı kuantum simülatörü' iddiasını kesin olarak çürütür."
+    },
+    {
+      "ad": "KamileGULER/TR-Quantum",
+      "url": "https://github.com/KamileGULER/TR-Quantum",
+      "tarih": "2025-08-27",
+      "ne": "Türkçe kuantum bilişim kaynağı: temel kavramlar, algoritmalar, uygulama örnekleri (Jupyter). 19 yıldız, 7 fork.",
+      "celisir": false,
+      "gerekce": "Lisanssız notebook koleksiyonu; web aracı seti değil. Quantro deposundan ~10 ay önce olduğu için Türkçe kuantum içeriği alanında en eski tespit edilen çalışma."
+    },
+    {
+      "ad": "ONMARTECH/quanta-sdk",
+      "url": "https://github.com/ONMARTECH/quanta-sdk",
+      "tarih": "2026-03-06",
+      "ne": "Türkçe dokümantasyonlu kuantum SDK'sı: 14 MCP aracı, 571 test, 8/8 kuantum benchmark, çoklu simülatör backend'i (statevector/MPS/stabilizer).",
+      "celisir": false,
+      "gerekce": "Python kütüphane/SDK; tarayıcıda çalışan web aracı seti değil, lisans NOASSERTION (MIT olduğu doğrulanamadı), astrofizik aracı yok. Quantro'dan ~4 ay önce: 'çok araçlı Türkçe kuantum yazılımı' okumasına EN YAKIN rakip."
+    },
+    {
+      "ad": "Quantan Atlas",
+      "url": "https://quantanatlas.com/",
+      "tarih": null,
+      "tarihNotu": "TARİH DOĞRULANAMADI — oluşturma/yayın tarihi bulunamadı. Bilinçli olarak null bırakıldı; tahmin edilmedi.",
+      "ne": "Türkçe kuantum bilgisayar/fizik/algoritma sitesi. 120 kütüphane, 39 algoritma, 21 fizik sayfası; Qiskit/Cirq/PennyLane rehberleri; 'Canlı demo' listesindeki ~10 sayfada tarayıcıda devre simülasyonu. Ayrıca Qubyt Studio IDE ve Bilvian/Archovian/Hexovian/ReactVitae/Holodepth/Byteomi kanalları.",
+      "celisir": false,
+      "gerekce": "İÇERİK/rehber sitesi ağırlıklı; canlı simülasyon yalnızca ~10 sayfada, kalan sayfalarda terminal/SVG referans görseli. Açık kaynak lisansı, 8 dilli i18n ve astrofizik aracı doğrulanamadı. EN YAKIN WEB RAKİBİ ve EN YÜKSEK RİSKLİ ADAY — manuel inceleme gerekir.",
+      "risk": "yuksek",
+      "manuelIncelemeGerekli": true
+    }
+  ],
+  "sonuc": {
+    "genisOkumaCevrultulenler": [
+      "ilk Türkçe kuantum platformu/site → QTurkey (2019) ve Quantan Atlas",
+      "ilk Türkiye kuantum projesi → QuanT (2024), Quantum4Edu (2025)",
+      "ilk MIT lisanslı kuantum simülatörü → KuantumCircuitSim (2020)",
+      "ilk çok araçlı Türkçe kuantum yazılımı → quanta-sdk (2026-03)"
+    ],
+    "darOkumaSavunulabilir": "Yalnızca 'kombinasyon.ozellikler' listesindeki yedi özelliğin tamamı bir arada için. Bu da 'tarihi tescil edilmiş bir ilk' değil, 'şu tarihe kadar yapılmış bir şey bulunamadı, işte tarama kaydı' anlamına gelir."
+  }
+}

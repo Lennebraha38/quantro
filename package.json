@@ -26,13 +26,15 @@
     "blog:static": "node scripts/gen-blog.mjs",
     "sitemap": "node scripts/gen-sitemap.mjs",
     "links": "node scripts/links.mjs",
-    "check": "npm run lint && npm run lint:html && npm run format:check && npm run build && npm test",
+    "check": "npm run lint && npm run lint:html && npm run format:check && npm run build && npm test && node scripts/prior-art-scan.mjs --check",
     "pkg:sync": "node tools/sync-pkg.mjs",
     "pkg:test": "node tools/sync-pkg.mjs && npm --prefix package/quantro test",
     "pkg:pack": "node tools/sync-pkg.mjs && npm --prefix package/quantro pack --dry-run",
     "claims": "node scripts/verify-claims.mjs",
     "claims:check": "node scripts/verify-claims.mjs --check",
-    "test:live": "QUANTRO_LIVE_TEST=1 node --test test/zenai.test.js"
+    "test:live": "QUANTRO_LIVE_TEST=1 node --test test/zenai.test.js",
+    "prior-art": "node scripts/prior-art-scan.mjs",
+    "prior-art:check": "node scripts/prior-art-scan.mjs --check"
   },
   "engines": {
     "node": ">=18"

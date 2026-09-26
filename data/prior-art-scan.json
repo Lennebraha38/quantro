@@ -1,0 +1,91 @@
+{
+  "uretim": "2026-09-26T10:24:05.574Z",
+  "referansTarih": "2026-07-01",
+  "kayitliRakip": 7,
+  "celirenRakip": 0,
+  "yeniAday": 9,
+  "yeniAdaylar": [
+    {
+      "depo": "msesma/Kuantum",
+      "olusturma": "2018-09-16",
+      "lisans": "YOK",
+      "dil": "Kotlin",
+      "yildiz": 3,
+      "aciklama": "IBM Quantum experience access from Android",
+      "sorgu": "kuantum"
+    },
+    {
+      "depo": "mkarakoc/Kuantum_Fizigi",
+      "olusturma": "2018-09-27",
+      "lisans": "GPL-3.0",
+      "dil": "Jupyter Notebook",
+      "yildiz": 4,
+      "aciklama": "Kuantum Fiziği Ders Notları",
+      "sorgu": "kuantum"
+    },
+    {
+      "depo": "togtim-aws/KTHack2020-Neural-Qubits",
+      "olusturma": "2020-10-11",
+      "lisans": "YOK",
+      "dil": "Jupyter Notebook",
+      "yildiz": 1,
+      "aciklama": "KTHack2020 - KUANTUM PROGRAMLAMA HACKATHONU ",
+      "sorgu": "kuantum"
+    },
+    {
+      "depo": "WhiteSymmetry/Kntm",
+      "olusturma": "2022-07-17",
+      "lisans": "YOK",
+      "dil": "bilinmiyor",
+      "yildiz": 2,
+      "aciklama": "Kuantum",
+      "sorgu": "kuantum"
+    },
+    {
+      "depo": "MegIv/Bilangan-Kuantum",
+      "olusturma": "2024-09-30",
+      "lisans": "MIT",
+      "dil": "Python",
+      "yildiz": 0,
+      "aciklama": "Menentukan sebuah bilangan kuantum dari unsur tabel periodik dan nomor atom-nya",
+      "sorgu": "kuantum"
+    },
+    {
+      "depo": "WanSatya-Quantum-Industries/quantum-sim",
+      "olusturma": "2024-11-23",
+      "lisans": "MIT",
+      "dil": "Python",
+      "yildiz": 1,
+      "aciklama": "Simulator komputasi kuantum dengan visualisasi interaktif dan analisis mendalam, dibuat menggunakan Python dan Qiskit.",
+      "sorgu": "kuantum simülatör"
+    },
+    {
+      "depo": "raihannafisz/DataShield",
+      "olusturma": "2025-05-09",
+      "lisans": "YOK",
+      "dil": "Python",
+      "yildiz": 7,
+      "aciklama": "DataShield merupakan aplikasi eksperimental yang mengintegrasikan konsep kriptografi kuantum untuk melindungi data digit",
+      "sorgu": "kuantum"
+    },
+    {
+      "depo": "BRIN-Q/mekanika-kuantum",
+      "olusturma": "2026-02-20",
+      "lisans": "YOK",
+      "dil": "Jupyter Notebook",
+      "yildiz": 9,
+      "aciklama": "Serial Mekanika Kuantum Minimalis 2.0",
+      "sorgu": "kuantum"
+    },
+    {
+      "depo": "BRIN-Q/qm",
+      "olusturma": "2026-05-18",
+      "lisans": "YOK",
+      "dil": "Jupyter Notebook",
+      "yildiz": 0,
+      "aciklama": "Mekanika Kuantum Minimalis 2.0 (Online Book Version)",
+      "sorgu": "kuantum"
+    }
+  ],
+  "ozet": "7 rakip kayitli, 0 tanesi iddiayi celiriyor. Bilesimdeki yedi ozelligin tamami tek bir rakipte bulunamadi; bu \"ilk\" degil, \"bu tarihe kadar bulunamadi\" iddiasidir."
+}
