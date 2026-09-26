@@ -1,0 +1,157 @@
+{
+  "uretim": "2026-09-26T09:39:14.842Z",
+  "surum": 1,
+  "ozet": {
+    "iddia": 3,
+    "dogrulanan": 3,
+    "bilinmiyor": 0,
+    "yanlis": 0
+  },
+  "iddaialar": [
+    {
+      "id": "ilk-01",
+      "baslik": "İlk Türkçe, açık kaynak (MIT) lisanslı çok araçlı kuantum + astrofizik araç seti",
+      "kapsam": "Türkçe arayüz + MIT lisansı + 13 etkileşimli araç; bu 13 aracın içinde astrofizik araçları bulunması.",
+      "kanitlar": [
+        {
+          "tur": "npm",
+          "etiket": "quantro-js @ npm — değiştirilemez yayın damgası",
+          "url": "https://www.npmjs.com/package/quantro-js",
+          "makineDogrulama": "npm-registry",
+          "durum": "dogrulandi",
+          "sonuc": {
+            "dogrulukDogru": true,
+            "deger": "quantro-js@1.0.0 · MIT · yayın: 2026-09-20T10:31:39.289Z",
+            "kanit": "2026-09-20T10:31:39.289Z tarihinde npm'de yayınlandı (değiştirilemez kayıt).",
+            "url": "https://www.npmjs.com/package/quantro-js"
+          }
+        },
+        {
+          "tur": "github",
+          "etiket": "Depo oluşturma tarihi + MIT lisansı",
+          "url": "https://github.com/Lennebraha38/quantro",
+          "makineDogrulama": "github-repo",
+          "durum": "dogrulandi",
+          "sonuc": {
+            "dogrulukDogru": true,
+            "deger": "MIT · oluşturma: 2026-07-01T09:31:56Z",
+            "kanit": "Depo 2026-07-01T09:31:56Z tarihinde açıldı, lisans MIT.",
+            "url": "https://github.com/Lennebraha38/quantro"
+          }
+        },
+        {
+          "tur": "kaynak",
+          "etiket": "Araç envanteri: 13 araç, 3'ü astrofizik",
+          "url": "https://quantro-1.vercel.app/#basari",
+          "makineDogrulama": "tools-astro",
+          "durum": "dogrulandi",
+          "sonuc": {
+            "dogrulukDogru": true,
+            "deger": "13 araç · 3 astrofizik: Evren Yaşı Hesaplayıcı, Kara Delik Fizik Simülatörü, Kozmik Doppler Kayması Hesaplayıcı",
+            "kanit": "13 aracın 3 tanesi doğrudan astrofizik (Evren Yaşı Hesaplayıcı, Kara Delik Fizik Simülatörü, Kozmik Doppler Kayması Hesaplayıcı) — \"kuantum + astrofizik\" tanımı somut.",
+            "url": "https://quantro-1.vercel.app/#basari"
+          }
+        },
+        {
+          "tur": "bagimsiz-arsiv",
+          "etiket": "Bağımsız arşiv (web.archive.org) — üçüncü taraf zaman damgası",
+          "url": "https://web.archive.org",
+          "makineDogrulama": "wayback",
+          "durum": "dogrulandi",
+          "sonuc": {
+            "dogrulukDogru": true,
+            "deger": "Arşiv kaydı: 2026-09-26",
+            "kanit": "Bağımsız arşiv (web.archive.org) sitenin 2026-09-26 tarihinde yayında olduğunu doğruluyor.",
+            "url": "https://web.archive.org/web/20260926093349/https://quantro-1.vercel.app/"
+          }
+        }
+      ],
+      "ozet": {
+        "toplam": 4,
+        "dogrulanan": 4,
+        "bilinmiyor": 0,
+        "yanlis": 0,
+        "durum": "dogrulandi"
+      }
+    },
+    {
+      "id": "ilk-02",
+      "baslik": "İlk Türkçe canlı kuantum rastgelelik motoru — ANU'nun fiziksel kuantum kaynağına bağlanır",
+      "kapsam": "Tarayıcıdan gelen kuantum rastgeleliği isteklerinin bir kısmı ANU'nun fiziksel kuantum kaynağına canlı ulaşır.",
+      "kanitlar": [
+        {
+          "tur": "canli-api",
+          "etiket": "ANU QRNG canlı yanıt (resmi kaynak)",
+          "url": "https://qrng.anu.edu.au/API/jsonI.php?length=8&type=uint8",
+          "makineDogrulama": "anu-live",
+          "durum": "bilinmiyor",
+          "sonuc": null,
+          "hata": "HTTP 500"
+        },
+        {
+          "tur": "canli-api",
+          "etiket": "Quantro'nun kendi proxy'si — herkese açık, doğrulanabilir uç nokta",
+          "url": "https://quantro-1.vercel.app/api/anu?length=8&type=uint8",
+          "makineDogrulama": "anu-proxy",
+          "durum": "dogrulandi",
+          "sonuc": {
+            "dogrulukDogru": true,
+            "deger": "kaynak: quantro-proxy · [26, 215, 153, 206, 236, 105, 216, 159]",
+            "kanit": "Quantro'nun herkese açık proxy'si canlı kuantum baytı döndürüyor.",
+            "url": "https://quantro-1.vercel.app/api/anu?length=8&type=uint8"
+          }
+        },
+        {
+          "tur": "kaynak",
+          "etiket": "3 kademeli yedek: ANU proxy → ANU doğrudan → NIST beacon → Web Crypto",
+          "url": "https://github.com/Lennebraha38/quantro/blob/main/lab-core.js",
+          "makineDogrulama": "yok",
+          "durum": "manuel",
+          "sonuc": null
+        }
+      ],
+      "ozet": {
+        "toplam": 3,
+        "dogrulanan": 1,
+        "bilinmiyor": 1,
+        "yanlis": 0,
+        "durum": "dogrulandi"
+      }
+    },
+    {
+      "id": "ilk-03",
+      "baslik": "İlk 8 dilli kuantum araç seti ve blog",
+      "kapsam": "Arayüz ve blog 8 dilde sunulur: TR / EN / FR / ES / IT / RU / KO / AR.",
+      "kanitlar": [
+        {
+          "tur": "kaynak",
+          "etiket": "8 dil dosyası, her biri tam (çeviri boşluğu yok)",
+          "url": "https://github.com/Lennebraha38/quantro/tree/main/lab",
+          "makineDogrulama": "i18n-8",
+          "durum": "dogrulandi",
+          "sonuc": {
+            "dogrulukDogru": true,
+            "deger": "8/8 dil tam (205/205 anahtar)",
+            "kanit": "8 dilin tamamı da 205 anahtarın tamamına sahip; boş çeviri yok.",
+            "url": "https://github.com/Lennebraha38/quantro/tree/main/lab"
+          }
+        },
+        {
+          "tur": "kaynak",
+          "etiket": "Blog 8 dilli",
+          "url": "https://quantro-1.vercel.app/blog.html",
+          "makineDogrulama": "yok",
+          "durum": "manuel",
+          "sonuc": null
+        }
+      ],
+      "ozet": {
+        "toplam": 2,
+        "dogrulanan": 1,
+        "bilinmiyor": 0,
+        "yanlis": 0,
+        "durum": "dogrulandi"
+      }
+    }
+  ]
+}

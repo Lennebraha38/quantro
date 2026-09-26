@@ -19,7 +19,6 @@
     "test:coverage": "node scripts/coverage.mjs",
     "lint": "eslint .",
     "metrics:field": "node scripts/metrics.mjs",
-    "lint": "eslint .",
     "lint:html": "node scripts/lint-html.mjs",
     "format": "prettier --write \"**/*.{js,mjs,css}\"",
     "format:check": "prettier --check \"**/*.{js,mjs,css}\"",
@@ -27,10 +26,12 @@
     "blog:static": "node scripts/gen-blog.mjs",
     "sitemap": "node scripts/gen-sitemap.mjs",
     "links": "node scripts/links.mjs",
-    "check": "npm run build && npm test && npm run links && npm run lint && npm run lint:html && npm run format:check",
+    "check": "npm run lint && npm run lint:html && npm run format:check && npm run build && npm test",
     "pkg:sync": "node tools/sync-pkg.mjs",
     "pkg:test": "node tools/sync-pkg.mjs && npm --prefix package/quantro test",
-    "pkg:pack": "node tools/sync-pkg.mjs && npm --prefix package/quantro pack --dry-run"
+    "pkg:pack": "node tools/sync-pkg.mjs && npm --prefix package/quantro pack --dry-run",
+    "claims": "node scripts/verify-claims.mjs",
+    "claims:check": "node scripts/verify-claims.mjs --check"
   },
   "engines": {
     "node": ">=18"

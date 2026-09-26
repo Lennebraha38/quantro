@@ -1595,6 +1595,122 @@ section {
   }
 }
 
+/* ══ İLK'LER KANIT PANELİ ══════════════════════════════════
+   "İlk" iddialarının altında tıklanabilir, otomatik yenilen
+   kanıt listesi. Kimse "gerçekten ilk mi?" diye sorduğunda
+   cevap site üzerinde okunabilir. */
+.ach-proof {
+  margin-top: 26px;
+  padding: 22px 24px;
+  border: 1px solid rgba(0, 200, 240, 0.16);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(0, 200, 240, 0.05), rgba(0, 200, 240, 0.01));
+}
+.ach-proof-h {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-family: var(--fm);
+  font-size: 13px;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--cyan);
+}
+.ach-proof-stamp {
+  font-size: 11px;
+  letter-spacing: 0.6px;
+  color: rgba(232, 246, 251, 0.55);
+  text-transform: none;
+  white-space: nowrap;
+}
+.ach-proof-stamp[data-ok="1"] {
+  color: #4ade80;
+}
+.ach-proof-stamp[data-ok="0"] {
+  color: #f87171;
+}
+.ach-proof-sub {
+  margin: 8px 0 14px;
+  font-size: 13.5px;
+  line-height: 1.6;
+  font-weight: 300;
+  color: rgba(232, 246, 251, 0.6);
+}
+.ach-proof-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+.ach-ev {
+  display: grid;
+  grid-template-columns: 22px 1fr;
+  gap: 10px;
+  align-items: start;
+  padding-top: 10px;
+  border-top: 1px solid rgba(232, 246, 251, 0.07);
+}
+.ach-ev:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+.ach-ev-i {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #4ade80;
+}
+.ach-ev[data-durum="DOGRULANMADI"] .ach-ev-i {
+  color: #f87171;
+}
+.ach-ev[data-durum="bilinmiyor"] .ach-ev-i,
+.ach-ev[data-durum="manuel"] .ach-ev-i {
+  color: #fbbf24;
+}
+.ach-ev-b {
+  min-width: 0;
+}
+.ach-ev-t {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.45;
+}
+.ach-ev-k {
+  margin: 3px 0 0;
+  font-size: 12.5px;
+  font-weight: 300;
+  line-height: 1.55;
+  color: rgba(232, 246, 251, 0.62);
+}
+.ach-ev-v {
+  display: inline-block;
+  margin-top: 5px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 200, 240, 0.22);
+  background: rgba(0, 200, 240, 0.08);
+  font-family: var(--fm);
+  font-size: 11px;
+  color: var(--cyan);
+  text-decoration: none;
+  word-break: break-word;
+}
+.ach-ev-v:hover {
+  background: rgba(0, 200, 240, 0.18);
+}
+@media (max-width: 900px) {
+  .ach-proof {
+    padding: 18px 16px;
+  }
+  .ach-proof-h {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+}
+
 /* ══════════════════════════════════════
    FOOTER
    ══════════════════════════════════════ */

@@ -1,0 +1,81 @@
+{
+  "_aciklama": "Quantro 'ilkler' iddialarının kanıt kayıt defteri. Her iddia dar (kanıtlanabilir) kapsamlı yazılmıştır ve kanıtları scripts/verify-claims.mjs tarafından otomatik doğrulanır. Uydurma iddia yoktur: kanıtı tutmayan iddia otomatik olarak 'dogrulanamadi' durumuna düşer.",
+  "surum": 1,
+  "iddaialar": [
+    {
+      "id": "ilk-01",
+      "baslik": "İlk Türkçe, açık kaynak (MIT) lisanslı çok araçlı kuantum + astrofizik araç seti",
+      "kapsam": "Türkçe arayüz + MIT lisansı + 13 etkileşimli araç; bu 13 aracın içinde astrofizik araçları bulunması.",
+      "kanitlar": [
+        {
+          "tur": "npm",
+          "etiket": "quantro-js @ npm — değiştirilemez yayın damgası",
+          "url": "https://www.npmjs.com/package/quantro-js",
+          "makineDogrulama": "npm-registry"
+        },
+        {
+          "tur": "github",
+          "etiket": "Depo oluşturma tarihi + MIT lisansı",
+          "url": "https://github.com/Lennebraha38/quantro",
+          "makineDogrulama": "github-repo"
+        },
+        {
+          "tur": "kaynak",
+          "etiket": "Araç envanteri: 13 araç, 3'ü astrofizik",
+          "url": "https://quantro-1.vercel.app/#basari",
+          "makineDogrulama": "tools-astro"
+        },
+        {
+          "tur": "bagimsiz-arsiv",
+          "etiket": "Bağımsız arşiv (web.archive.org) — üçüncü taraf zaman damgası",
+          "url": "https://web.archive.org",
+          "makineDogrulama": "wayback"
+        }
+      ]
+    },
+    {
+      "id": "ilk-02",
+      "baslik": "İlk Türkçe canlı kuantum rastgelelik motoru — ANU'nun fiziksel kuantum kaynağına bağlanır",
+      "kapsam": "Tarayıcıdan gelen kuantum rastgeleliği isteklerinin bir kısmı ANU'nun fiziksel kuantum kaynağına canlı ulaşır.",
+      "kanitlar": [
+        {
+          "tur": "canli-api",
+          "etiket": "ANU QRNG canlı yanıt (resmi kaynak)",
+          "url": "https://qrng.anu.edu.au/API/jsonI.php?length=8&type=uint8",
+          "makineDogrulama": "anu-live"
+        },
+        {
+          "tur": "canli-api",
+          "etiket": "Quantro'nun kendi proxy'si — herkese açık, doğrulanabilir uç nokta",
+          "url": "https://quantro-1.vercel.app/api/anu?length=8&type=uint8",
+          "makineDogrulama": "anu-proxy"
+        },
+        {
+          "tur": "kaynak",
+          "etiket": "3 kademeli yedek: ANU proxy → ANU doğrudan → NIST beacon → Web Crypto",
+          "url": "https://github.com/Lennebraha38/quantro/blob/main/lab-core.js",
+          "makineDogrulama": "yok"
+        }
+      ]
+    },
+    {
+      "id": "ilk-03",
+      "baslik": "İlk 8 dilli kuantum araç seti ve blog",
+      "kapsam": "Arayüz ve blog 8 dilde sunulur: TR / EN / FR / ES / IT / RU / KO / AR.",
+      "kanitlar": [
+        {
+          "tur": "kaynak",
+          "etiket": "8 dil dosyası, her biri tam (çeviri boşluğu yok)",
+          "url": "https://github.com/Lennebraha38/quantro/tree/main/lab",
+          "makineDogrulama": "i18n-8"
+        },
+        {
+          "tur": "kaynak",
+          "etiket": "Blog 8 dilli",
+          "url": "https://quantro-1.vercel.app/blog.html",
+          "makineDogrulama": "yok"
+        }
+      ]
+    }
+  ]
+}

@@ -165,6 +165,12 @@ const I18N = {
     "ach.label": "Başarılar",
     "ach.h2a": "Türkiye'de",
     "ach.h2b": "İlklerimiz",
+    "ach.proof.h": "Bu iddialar kanıtlıdır",
+    "ach.proof.sub":
+      "Aşağıdaki kanıtlar her gece otomatik yeniden doğrulanır. Doğrulanamayan iddia buradan düşer.",
+    "ach.proof.stamp": "{d}/{t} iddia kanıtlı",
+    "ach.proof.load": "Kanıtlar yükleniyor…",
+    "ach.proof.fail": "Kanıt listesi yüklenemedi.",
     "ach.1": "İlk Türkçe, açık kaynak (MIT) lisanslı çok araçlı kuantum + astrofizik araç seti.",
     "ach.2":
       "İlk Türkçe canlı kuantum rastgelelik motoru — ANU'nun fiziksel kuantum kaynağına bağlanır.",
@@ -362,6 +368,12 @@ const I18N = {
     "ach.label": "Achievements",
     "ach.h2a": "First",
     "ach.h2b": "in Türkiye",
+    "ach.proof.h": "These claims are evidenced",
+    "ach.proof.sub":
+      "The evidence below is re-verified automatically every night. A claim that cannot be verified drops off this list.",
+    "ach.proof.stamp": "{d}/{t} claims evidenced",
+    "ach.proof.load": "Loading evidence…",
+    "ach.proof.fail": "Could not load the evidence list.",
     "ach.1":
       "First Turkish, open-source (MIT) licensed, multi-tool quantum + astrophysics toolkit.",
     "ach.2":
@@ -563,6 +575,12 @@ const I18N = {
     "ach.label": "Réalisations",
     "ach.h2a": "Première",
     "ach.h2b": "en Turquie",
+    "ach.proof.h": "Ces affirmations sont prouvées",
+    "ach.proof.sub":
+      "Les preuves ci-dessous sont re-vérifiées automatiquement chaque nuit. Une affirmation non vérifiable disparaît de cette liste.",
+    "ach.proof.stamp": "{d}/{t} affirmations prouvées",
+    "ach.proof.load": "Chargement des preuves…",
+    "ach.proof.fail": "Liste des preuves impossible à charger.",
     "ach.1":
       "Première boîte à outils turque open source (licence MIT) multi-outils : quantique + astrophysique.",
     "ach.2":
@@ -766,6 +784,12 @@ const I18N = {
     "ach.label": "Logros",
     "ach.h2a": "Primera",
     "ach.h2b": "en Turquía",
+    "ach.proof.h": "Estas afirmaciones están demostradas",
+    "ach.proof.sub":
+      "Las pruebas de abajo se vuelven a verificar automáticamente cada noche. Una afirmación no verificable desaparece de esta lista.",
+    "ach.proof.stamp": "{d}/{t} afirmaciones demostradas",
+    "ach.proof.load": "Cargando pruebas…",
+    "ach.proof.fail": "No se pudo cargar la liste de pruebas.",
     "ach.1": "Primer kit turco de código abierto (MIT) multiherramienta de cuántica + astrofísica.",
     "ach.2":
       "Primer motor turco de aleatoriedad cuántica en vivo — conectado a la fuente cuántica física de la ANU.",
@@ -966,6 +990,12 @@ const I18N = {
     "ach.label": "Traguardi",
     "ach.h2a": "Prima",
     "ach.h2b": "in Turchia",
+    "ach.proof.h": "Queste affermazioni sono documentate",
+    "ach.proof.sub":
+      "Le prove qui sotto vengono riverificate ogni notte in automatico. Un'affermazione non verificabile scompare da questo elenco.",
+    "ach.proof.stamp": "{d}/{t} affermazioni documentate",
+    "ach.proof.load": "Caricamento prove…",
+    "ach.proof.fail": "Impossibile caricare l'elenco delle prove.",
     "ach.1": "Primo kit turco open source (MIT) multi-strumento quantistico + astrofisico.",
     "ach.2":
       "Primo motore turco di casualità quantistica dal vivo — collegato alla sorgente quantistica fisica dell'ANU.",
@@ -1164,6 +1194,12 @@ const I18N = {
     "ach.label": "Достижения",
     "ach.h2a": "Первый",
     "ach.h2b": "в Турции",
+    "ach.proof.h": "Эти утверждения подтверждены",
+    "ach.proof.sub":
+      "Приведённые ниже доказательства автоматически перепроверяются каждую ночь. Непроверяемое утверждение исчезает из этого списка.",
+    "ach.proof.stamp": "подтверждено {d}/{t}",
+    "ach.proof.load": "Загрузка доказательств…",
+    "ach.proof.fail": "Не удалось загрузить список доказательств.",
     "ach.1":
       "Первый турецкий набор с открытым исходным кодом (MIT) с несколькими инструментами: квантовый + астрофизический.",
     "ach.2":
@@ -1355,6 +1391,12 @@ const I18N = {
     "ach.label": "업적",
     "ach.h2a": "터키",
     "ach.h2b": "최초",
+    "ach.proof.h": "이 주장은 근거가 있습니다",
+    "ach.proof.sub":
+      "아래 근거는 매일 밤 자동으로 재검증됩니다. 검증할 수 없는 주장은 이 목록에서 사라집니다.",
+    "ach.proof.stamp": "{d}/{t}개 주장 확인",
+    "ach.proof.load": "근거 불러오는 중…",
+    "ach.proof.fail": "근거 목록을 불러오지 못했습니다.",
     "ach.1": "터키 최초의 오픈소스(MIT) 다중 도구 양자 + 천체물리 툴킷.",
     "ach.2": "터키 최초의 실시간 양자 난수 엔진 — ANU의 실제 물리 양자 소스에 연결됩니다.",
     "ach.3": "최초의 8개국어 양자 툴킷 및 블로그 (TR / EN / FR / ES / IT / RU / KO / AR).",
@@ -1541,6 +1583,12 @@ const I18N = {
     "ach.label": "الإنجازات",
     "ach.h2a": "الأول",
     "ach.h2b": "في تركيا",
+    "ach.proof.h": "هذه الادعاءات مدعومة بأدلة",
+    "ach.proof.sub":
+      "يُعاد التحقق من الأدلة أدناه تلقائيًا كل ليلة. أي ادعاء لا يمكن التحقق منه يُزال من هذه القائمة.",
+    "ach.proof.stamp": "{d}/{t} ادعاء مدعوم",
+    "ach.proof.load": "جارٍ تحميل الأدلة…",
+    "ach.proof.fail": "تعذّر تحميل قائمة الأدلة.",
     "ach.1": "أول مجموعة أدوات تركية مفتوحة المصدر (MIT) متعددة الأدوات في الكم والفيزياء الفلكية.",
     "ach.2": "أول محرك تركي للعشوائية الكمية الحية — متصل بالمصدر الكمي الفيزيائي لـ ANU.",
     "ach.3": "أول مجموعة أدوات ومدونة كمية بـ 8 لغات (TR / EN / FR / ES / IT / RU / KO / AR).",

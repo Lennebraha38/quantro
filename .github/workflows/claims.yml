@@ -1,0 +1,52 @@
+name: İlklerimiz Kanıt Doğrulama
+
+# "Türkiye'de ilklerimiz" iddialarının kanıtlarını otomatik doğrular.
+# ANU çökerse / npm kaydı kaybolursa / bir dil eksik kalırsa iddia
+# düşer ve site kendi reklamını kendi denetler.
+on:
+  schedule:
+    - cron: "23 5 * * *" # her gece 05:23
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - data/claims.json
+      - scripts/verify-claims.mjs
+      - lab/i18n-*.js
+      - lab-core.js
+
+permissions:
+  contents: write
+
+concurrency:
+  group: claims-verify
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Kanıtları doğrula (ağ + kaynak)
+        run: node scripts/verify-claims.mjs
+      - name: Kanıt değiştiyse commit (yeniden deploy tetikler)
+        run: |
+          if git diff --quiet -- data/claims-evidence.json; then
+            echo "Kanıtlar güncel — değişiklik yok."
+          else
+            git config user.name  "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add data/claims-evidence.json
+            git commit -m "chore(claims): kanıtları yeniden doğrula"
+            git push
+          fi
+      - name: Bir kanıt yanlışlandıysa uyar
+        run: |
+          node -e '
+          const j=require("./data/claims-evidence.json");
+          const kotu=j.iddaialar.filter(i=>i.ozet.durum==="DOGRULANMADI");
+          if(!kotu.length){console.log("Tüm ilk iddiaları kanıtlı ✓");}
+          else{kotu.forEach(i=>console.error("KANIT YANLIŞLANDI:",i.id,i.baslik));process.exit(1);}'

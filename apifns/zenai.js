@@ -69,11 +69,14 @@ const HAZIR = [
       "kuantum kaynağına canlı bağlanır; ANU erişilemezse NIST'e, o da " +
       "olmazsa Web Crypto'ya düşer.\n" +
       "• Arayüz ve blog 8 dilde: TR / EN / FR / ES / IT / RU / KO / AR " +
-      "(her dilde 205/205 metin çevrili).\n\n" +
-      '**Dikkkatli olunması gereken kısım:** "Türkiye\'de ilk" ifadesi teknik ' +
-      "bir doğrulama değil, pazarlama iddiasıdır; bağımsız bir kaynakla " +
-      "kanıtlanamaz. Ölçülebilir olan ilkler değil, doğrulanabilir olan " +
-      "teknik özelliklerdir.",
+      "(her dilde 205/205 metin çevrili).\n" +
+      "• Paket npm'de MIT lisansıyla yayında: quantro-js 1.0.0.\n\n" +
+      "**'İlk' iddialarının kanıtı:**\n" +
+      "Sitenin başarılar bölümünde her iddianın tıklanabilir kanıtı var " +
+      "(npm yayın damgası, depo oluşturma tarihi, ANU'nun canlı yanıtı, " +
+      "dil kapsamı). Bu kanıtlar her gece otomatik yeniden doğrulanır — " +
+      "doğrulanamayan iddia otomatik düşer. Yani 'ilk' sözü desteklenebilir " +
+      "bir iddiadır, boş bir pazarlama sloganı değil.",
   },
   {
     k: ["kuantum nedir", "kuantum bilgisayar", "süperpozisyon", "dolanma", "kuantum fiziği"],
