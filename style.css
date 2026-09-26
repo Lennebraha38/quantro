@@ -2557,3 +2557,14 @@ footer {
     letter-spacing: 2px;
   }
 }
+
+/* ══ Çok satırlı büyük başlıklar ══
+   .sec-h2 / .contact-h2 span'ları display:block, yani zaten
+   satır kırıyor. Aralarındaki <br> ek bir boş satır kutusu
+   üretiyordu: 44px fontta 46px, 52px fontta 52px boşluk.
+   <br>'yi kapatınca aradaki boşluk normal satır aralığına
+   düşüyor, satır kırılması span'lar tarafından korunuyor. */
+.sec-h2 br,
+.contact-h2 br {
+  display: none;
+}
