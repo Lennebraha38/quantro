@@ -193,20 +193,29 @@ test("IP başına hız sınırı (15/dk → sonraki 429)", async () => {
   }
 });
 
-/* ═══ Canlı duman testi (ağa çıkar; upstream kararsız olabilir) ══
-   Tek canlı test. ZENAI ara sıra HTTP 500 döndüğü için yalnızca
-   "sistem çökmedi"yi doğrular; içerik doğruluğunu iddia etmez. */
+/* ═══ Canlı duman testi (varsayılan suite'te YOK) ══════════════
+   Bu test GERÇEK ZENAI'ye gider. ZENAI kendi sağlayıcısından ara sıra
+   HTTP 500 döndürdüğü için kararsızdır; bu da Node 20 CI job'ını
+   düşürüyordu. Üretim kalitesi bir üçüncü taraf servisin çalışma
+   saatine bağlı olmamalı: canlı test artık yalnızca açıkça istenince
+   (QUANTRO_LIVE_TEST=1) veya gece CI'da çalışır. */
 
-test("canlı: uç nokta yanıt verir (içerik doğrulanmaz)", async () => {
-  const res = mkRes();
-  await zenai(mkReq(JSON.stringify({ soru: "Bell çifti nedir? Tek cümle." }), ip()), res);
-  assert.ok([200, 429, 502, 504].includes(res.statusCode), `beklenmeyen kod: ${res.statusCode}`);
-  assert.match(res.headers["Content-Type"], /application\/json/);
-  const d = JSON.parse(res.body);
-  assert.ok(d.cevap || d.error, "ya cevap ya hata dönmeli");
-  if (res.statusCode === 200) {
-    assert.equal(typeof d.cevap, "string");
-    assert.ok(d.cevap.length > 0, "cevap boş olmamalı");
-    assert.equal(res.headers["Cache-Control"], "no-store");
-  }
-});
+const CANLI = process.env.QUANTRO_LIVE_TEST === "1";
+
+test(
+  "canlı: uç nokta yanıt verir (içerik doğrulanmaz)",
+  { skip: CANLI ? false : "canlı ağ testi — QUANTRO_LIVE_TEST=1 ile çalışır" },
+  async () => {
+    const res = mkRes();
+    await zenai(mkReq(JSON.stringify({ soru: "Bell çifti nedir? Tek cümle." }), ip()), res);
+    assert.ok([200, 429, 502, 504].includes(res.statusCode), `beklenmeyen kod: ${res.statusCode}`);
+    assert.match(res.headers["Content-Type"], /application\/json/);
+    const d = JSON.parse(res.body);
+    assert.ok(d.cevap || d.error, "ya cevap ya hata dönmeli");
+    if (res.statusCode === 200) {
+      assert.equal(typeof d.cevap, "string");
+      assert.ok(d.cevap.length > 0, "cevap boş olmamalı");
+      assert.equal(res.headers["Cache-Control"], "no-store");
+    }
+  },
+);

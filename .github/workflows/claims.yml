@@ -30,6 +30,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - run: npm ci
       - name: Kanıtları doğrula (ağ + kaynak)
         run: node scripts/verify-claims.mjs
       - name: Kanıt değiştiyse commit (yeniden deploy tetikler)
@@ -50,3 +51,9 @@ jobs:
           const kotu=j.iddaialar.filter(i=>i.ozet.durum==="DOGRULANMADI");
           if(!kotu.length){console.log("Tüm ilk iddiaları kanıtlı ✓");}
           else{kotu.forEach(i=>console.error("KANIT YANLIŞLANDI:",i.id,i.baslik));process.exit(1);}'
+      - name: Canlı ZENAI duman testi (bilgi amaçlı, bloklamaz)
+        # ZENAI'nin sağlayıcısı ara sıra HTTP 500 döndürüyor; bu yüzden
+        # varsayılan suite'te yok ve burada da bloklamıyor. Sadece
+        # "sistem çökmedi" bilgisini bırakır.
+        continue-on-error: true
+        run: npm run test:live

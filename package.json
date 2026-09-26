@@ -31,7 +31,8 @@
     "pkg:test": "node tools/sync-pkg.mjs && npm --prefix package/quantro test",
     "pkg:pack": "node tools/sync-pkg.mjs && npm --prefix package/quantro pack --dry-run",
     "claims": "node scripts/verify-claims.mjs",
-    "claims:check": "node scripts/verify-claims.mjs --check"
+    "claims:check": "node scripts/verify-claims.mjs --check",
+    "test:live": "QUANTRO_LIVE_TEST=1 node --test test/zenai.test.js"
   },
   "engines": {
     "node": ">=18"
