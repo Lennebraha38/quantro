@@ -8,8 +8,9 @@
 const health = require("../apifns/health.js");
 const stats = require("../apifns/stats.js");
 const newsletter = require("../apifns/newsletter.js");
+const zenai = require("../apifns/zenai.js");
 
-const ROUTES = { health, stats, newsletter };
+const ROUTES = { health, stats, newsletter, zenai };
 
 module.exports = async function handler(req, res) {
   const seg = (req.url.split("?")[0].split("/")[2] || "").replace(/\.json$/, "").toLowerCase();
