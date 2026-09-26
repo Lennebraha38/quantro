@@ -181,36 +181,11 @@
           <li><a href="quantro-lab.html" data-i18n="nav.lab">Lab ⚗</a></li>
           <li><a href="docs.html">Docs</a></li>
         </ul>
-        <button
-          class="nb"
-          id="langbtn"
-          onclick="toggleLang()"
-          style="
-            background: none;
-            cursor: pointer;
-            font-family: var(--fm);
-            font-size: 10px;
-            letter-spacing: 2.5px;
-            text-transform: uppercase;
-            color: var(--cyan);
-            border: 1px solid var(--cyanM);
-            padding: 10px 16px;
-            transition:
-              background 0.2s,
-              color 0.2s;
-          "
-          onmouseover="
-            this.style.background = 'var(--cyan)';
-            this.style.color = 'var(--void)';
-          "
-          onmouseout="
-            this.style.background = 'none';
-            this.style.color = 'var(--cyan)';
-          "
-        >
-          EN
-        </button>
-        <a href="iletisim.html" class="nav-cta" data-i18n="nav.contact">İletişim</a>
+        <div class="tubelight" id="tubelight">
+          <span class="tubelight-glow" id="tlglow" aria-hidden="true"></span>
+          <button class="nb" id="langbtn" onclick="toggleLang()">EN</button>
+          <a href="iletisim.html" class="nav-cta" data-i18n="nav.contact">İletişim</a>
+        </div>
         <button class="nav-burger" id="burger" aria-label="Menü" aria-expanded="false">
           <span></span><span></span><span></span>
         </button>
