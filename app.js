@@ -9,6 +9,8 @@ const I18N = {
     "qc.info": "Ayrıntılar",
     skip: "İçeriğe Geç",
     "nav.about": "Hakkımızda",
+    "nav.science": "Sözlük",
+    "nav.docs": "Docs",
     "nav.research": "Araştırma",
     "nav.method": "Metodoloji",
     "nav.blog": "Blog",
@@ -213,6 +215,8 @@ const I18N = {
     "qc.info": "Details",
     skip: "Skip to Content",
     "nav.about": "About Us",
+    "nav.science": "Glossary",
+    "nav.docs": "Docs",
     "nav.research": "Research",
     "nav.method": "Methodology",
     "nav.blog": "Blog",
@@ -417,6 +421,8 @@ const I18N = {
     "qc.info": "Détails",
     skip: "Aller au contenu",
     "nav.about": "À propos",
+    "nav.science": "Lexique",
+    "nav.docs": "Docs",
     "nav.research": "Recherche",
     "nav.method": "Méthodologie",
     "nav.blog": "Blog",
@@ -627,6 +633,8 @@ const I18N = {
     "qc.info": "Detalles",
     skip: "Ir al Contenido",
     "nav.about": "Nosotros",
+    "nav.science": "Glosario",
+    "nav.docs": "Docs",
     "nav.research": "Investigación",
     "nav.method": "Metodología",
     "nav.blog": "Blog",
@@ -835,6 +843,8 @@ const I18N = {
     "qc.info": "Dettagli",
     skip: "Vai al Contenuto",
     "nav.about": "Chi Siamo",
+    "nav.science": "Glossario",
+    "nav.docs": "Docs",
     "nav.research": "Ricerca",
     "nav.method": "Metodologia",
     "nav.blog": "Blog",
@@ -1042,6 +1052,8 @@ const I18N = {
     "qc.info": "Подробнее",
     skip: "Перейти к содержанию",
     "nav.about": "О нас",
+    "nav.science": "Глоссарий",
+    "nav.docs": "Docs",
     "nav.research": "Исследования",
     "nav.method": "Методология",
     "nav.blog": "Блог",
@@ -1248,6 +1260,8 @@ const I18N = {
     "qc.info": "자세히",
     skip: "본문으로 건너뛰기",
     "nav.about": "소개",
+    "nav.science": "용어집",
+    "nav.docs": "Docs",
     "nav.research": "연구",
     "nav.method": "방법론",
     "nav.blog": "블로그",
@@ -1442,6 +1456,8 @@ const I18N = {
     "qc.info": "التفاصيل",
     skip: "تخطى إلى المحتوى",
     "nav.about": "من نحن",
+    "nav.science": "معجم",
+    "nav.docs": "Docs",
     "nav.research": "البحوث",
     "nav.method": "المنهجية",
     "nav.blog": "المدونة",
@@ -1925,13 +1941,17 @@ function applyLang() {
   document.documentElement.dir = LANG === "ar" ? "rtl" : "ltr";
   const btn = document.getElementById("langbtn");
   if (btn) btn.textContent = LANG === "tr" ? "TR" : LANG.toUpperCase();
-  const mb = document.querySelector(".ml");
-  if (mb) mb.textContent = LANG === "tr" ? "TR" : LANG.toUpperCase();
   document.querySelectorAll("[data-i18n]").forEach((el) => {
     el.innerHTML = t(el.dataset.i18n);
   });
   document.querySelectorAll("[data-i18n-ph]").forEach((el) => {
     el.placeholder = t(el.dataset.i18nPh);
+  });
+  document.querySelectorAll("[data-i18n-text]").forEach((el) => {
+    el.textContent = t(el.dataset.i18nText);
+  });
+  document.querySelectorAll("[data-lang-toggle]").forEach((el) => {
+    el.textContent = LANG === "tr" ? "TR" : LANG.toUpperCase();
   });
   const qc = document.getElementById("qc-banner");
   if (qc) {
@@ -1952,28 +1972,83 @@ applyLang();
 
 /* ══ NAV + MOBILE MENU + REVEAL ══ */
 (function () {
-  const burger = document.getElementById("burger"),
-    mobnav = document.getElementById("mobnav");
-  if (burger && mobnav) {
-    const setMenu = (open) => {
-      mobnav.classList.toggle("open", open);
-      burger.setAttribute("aria-expanded", open ? "true" : "false");
-      document.body.style.overflow = open ? "hidden" : "";
-      if (open) {
-        const first = mobnav.querySelector("a, button");
-        if (first) first.focus();
+  const burger = document.getElementById("burger");
+  if (burger) {
+    /* ── Dairesel menü: tek kaynaktan (js/nav-data.js) üretilir ── */
+    const NAV = window.QUANTRO_NAV || [];
+    const ring = document.createElement("div");
+    ring.className = "radial";
+    ring.id = "radial";
+    ring.setAttribute("role", "dialog");
+    ring.setAttribute("aria-modal", "true");
+    ring.setAttribute("aria-label", "Site menüsü");
+    const N = NAV.length;
+    NAV.forEach((it, n) => {
+      const a = (360 / N) * n - 90;
+      const el = document.createElement("a");
+      el.className = "ri";
+      el.href = it.href;
+      el.style.setProperty("--a", a + "deg");
+      el.style.setProperty("--i", n);
+      el.setAttribute("aria-label", it.t2 || it.t);
+      const ic = document.createElement("i");
+      ic.textContent = it.i;
+      const lb = document.createElement("span");
+      lb.textContent = it.t;
+      if (it.k) lb.dataset.i18nText = it.k;
+      el.append(ic, lb);
+      ring.appendChild(el);
+    });
+    const core = document.createElement("button");
+    core.className = "radial-core";
+    core.setAttribute("aria-label", "Menüyü kapat");
+    core.innerHTML =
+      '<svg viewBox="0 0 24 24"><path d="M18.3 5.7 12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7 2.9 18.3 9.2 12 2.9 5.7 4.3 4.3l6.3 6.3 6.3-6.3z"/></svg>';
+    const holder = document.createElement("div");
+    holder.className = "radial-ring";
+    holder.append(core);
+    const hint = document.createElement("p");
+    hint.className = "radial-hint";
+    hint.textContent = "Kapatmak için ESC veya ortadaki düğme";
+    const bar = document.createElement("div");
+    bar.className = "radial-bar";
+    const home = document.createElement("a");
+    home.className = "rb";
+    home.href = "index.html";
+    home.textContent = "← Ana Sayfa";
+    const lang = document.createElement("button");
+    lang.className = "rb";
+    lang.dataset.langToggle = "1";
+    lang.setAttribute("aria-label", "Dili değiştir");
+    lang.textContent = "TR";
+    bar.append(home, lang);
+    ring.append(holder, hint, bar);
+    document.body.appendChild(ring);
+
+    let open = false;
+    const setMenu = (on) => {
+      open = on;
+      ring.classList.toggle("open", on);
+      burger.setAttribute("aria-expanded", on ? "true" : "false");
+      document.body.style.overflow = on ? "hidden" : "";
+      if (on) {
+        const f = ring.querySelector(".ri");
+        if (f) f.focus();
       } else {
         burger.focus();
       }
     };
-    burger.addEventListener("click", () => setMenu(!mobnav.classList.contains("open")));
-    const closeBtn = document.getElementById("mnclose");
-    if (closeBtn) closeBtn.addEventListener("click", () => setMenu(false));
-    document
-      .querySelectorAll(".ml")
-      .forEach((l) => l.addEventListener("click", () => setMenu(false)));
+    burger.addEventListener("click", () => setMenu(!open));
+    core.addEventListener("click", () => setMenu(false));
+    lang.addEventListener("click", () => {
+      toggleLang();
+      setMenu(false);
+    });
+    ring.addEventListener("click", (e) => {
+      if (e.target === ring) setMenu(false);
+    });
     document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && mobnav.classList.contains("open")) setMenu(false);
+      if (e.key === "Escape" && open) setMenu(false);
     });
   }
   const obs = new IntersectionObserver(
