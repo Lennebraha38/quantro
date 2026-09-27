@@ -20,6 +20,7 @@ for (const pg of PAGES) {
   const page = await ctx.newPage();
   const bad = [];
   const seen = new Set();
+  const info = new Set();
 
   page.on("response", (r) => {
     const s = r.status();
@@ -41,7 +42,21 @@ for (const pg of PAGES) {
     }
   });
   page.on("console", (m) => {
-    if (m.type() === "error") bad.push(`CONSOLE ${m.text()}`);
+    /* "Failed to load resource" satirlari response dinleyicisinin
+       karsiligi vardir; orasi zaten durum + URL ile daha kesin
+       kaydeder (ve /api/*'i eler). Burada tekrar saymak ayni hatayi
+       iki kez bildirir. */
+    if (m.type() !== "error") return;
+    if (/Failed to load resource/i.test(m.text())) return;
+    /* GPU'suz ortamda (headless CI, sandbox) Three.js WebGL
+       baglamasi acamaz. Bu KOD hatasi degil: sayfa 2D'ye dusup
+       duzgun ciziliyor (verify-nebula bunu olcuyor). Gercek bir
+       regresyonda sayfa yine de bos kalirdi. */
+    if (/Error creating WebGL context/i.test(m.text())) {
+      info.add("WebGL baglamasi acilamadi (GPU yok) — 2D yedege dusuldu");
+      return;
+    }
+    bad.push(`CONSOLE ${m.text()}`);
   });
 
   await page.goto(`http://localhost:${PORT}/${pg}`, { waitUntil: "load" });
@@ -53,6 +68,7 @@ for (const pg of PAGES) {
     for (const b of bad) console.log(`       ${b}`);
   } else {
     console.log(`GECTI  ${pg} — tum istekler 2xx/3xx`);
+    for (const i of info) console.log(`       ℹ ${i}`);
   }
   await ctx.close();
 }
