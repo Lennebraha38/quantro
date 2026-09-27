@@ -1,9 +1,9 @@
 {
   "repo": "Lennebraha38/ZENAI",
   "branch": "main",
-  "sha": "4deccc6",
-  "full": "4deccc63fdf050cc866385ffe40e4369875207c4",
-  "date": "2026-09-19T16:19:33Z",
-  "msg": "test: yuk testi (eszamanli SSE, ag yok) + build-time secret taramasi CI'",
+  "sha": "f399bf5",
+  "full": "f399bf550713d713f8ca6d751f5298fa3920ac26",
+  "date": "2026-09-27T10:03:53Z",
+  "msg": "sidebar: gizli menüye geri açma butonu + mobil overlay",
   "url": "https://github.com/Lennebraha38/ZENAI"
 }
