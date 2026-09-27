@@ -3,9 +3,9 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   unit:
@@ -16,59 +16,67 @@ jobs:
         node-version: [18.x, 20.x, 22.x]
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run build
-    - run: npm test
-    - name: Statik kod denetimi (ESLint)
-      run: npm run lint
-    - name: Inline script denetimi (HTML)
-      run: npm run lint:html
-    - name: Biçim denetimi (Prettier)
-      run: npm run format:check
-    - name: İç bağlantı denetimi
-      run: npm run links
-    - name: Sitemap güncel mi? (kırık çalışırsa yeniden üret)
-      run: |
-        npm run sitemap
-        git diff --exit-code -- sitemap.xml || echo "::warning::sitemap.xml güncel değil — npm run sitemap çalıştırın"
-    - name: Bağımlılık güvenlik taraması (npm audit)
-      run: npm audit --omit=dev
+      - uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+      - run: npm ci
+      - run: npm run build
+      - run: npm test
+      - name: Statik kod denetimi (ESLint)
+        run: npm run lint
+      - name: Inline script denetimi (HTML)
+        run: npm run lint:html
+      - name: Biçim denetimi (Prettier)
+        run: npm run format:check
+      - name: İç bağlantı denetimi
+        run: npm run links
+      - name: GLSL uniform/varying tutarlılığı
+        run: npm run test:glsl
+      - name: Nebula pozlama (beyaz ekran) matematiği
+        run: npm run test:exposure
+      - name: Sitemap güncel mi? (kırık çalışırsa yeniden üret)
+        run: |
+          npm run sitemap
+          git diff --exit-code -- sitemap.xml || echo "::warning::sitemap.xml güncel değil — npm run sitemap çalıştırın"
+      - name: Bağımlılık güvenlik taraması (npm audit)
+        run: npm audit --omit=dev
 
   coverage:
     name: Kapsam (Node 22)
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: 22.x
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run test:coverage
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: "npm"
+      - run: npm ci
+      - run: npm run test:coverage
 
   e2e:
     name: E2E (Playwright · Chromium)
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: 22.x
-        cache: 'npm'
-    - run: npm ci
-    - run: npx playwright install --with-deps chromium
-    - name: E2E smoke + CSP doğrulaması
-      run: npm run test:e2e
-    - name: E2E raporu (screenshot arşiv)
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: playwright-testlog
-        path: test-results/
-        if-no-files-found: ignore
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: "npm"
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: E2E smoke + CSP doğrulaması
+        run: npm run test:e2e
+      - name: Sayfa istekleri (kırık varlık / 404 denetimi)
+        run: npm run test:requests
+      - name: Arka plan görünürlüğü (beyaz ekran regresyonu)
+        run: npm run test:nebula
+      - name: E2E raporu (screenshot arşiv)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-testlog
+          path: test-results/
+          if-no-files-found: ignore
