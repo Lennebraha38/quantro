@@ -123,6 +123,11 @@ for (const d of DEV) {
       };
     });
 
+    /* Isinma: sprite pişirme, ilk cizim ve ilk GC bu pencerede
+       olsaydi FPS olcumu kararsiz sonuc veriyordu (ayni kodla
+       sayfa sayfa 23 - 48 oluyordu). */
+    await page.waitForTimeout(700);
+
     const fps = await page.evaluate(
       () =>
         new Promise((res) => {

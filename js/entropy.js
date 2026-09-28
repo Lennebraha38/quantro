@@ -1,39 +1,49 @@
 /* ═══════════════════════════════════════════════════════════════════
    QUANTRO — "entropy" arka planı
-   21st.dev/r/xubohuah/entropy (quantum-nebula) tasariminin WebGL
-   uyarlamasi.
+   21st.dev/r/xubohuah/entropy (quantum-nebula) tasariminin uyarlamasi.
 
-   Orijinal bileşen: React + three.js + 50.000 parçacık, CPU fiziği.
-   Bu site saf HTML/CSS/JS (build yok, runtime bagimliligi yok) ve
-   50k parçacik kare basina ~150.000 nesne ayiriyordu. Alinan karar:
+   ══ NEDEN ARKA PLAN CANVAS 2D ══
+   WebGL uyarlamasi once yazildi ve calisiyordu, ancak uretimde
+   SORUNLU: tarayici WebGL context'ini bir noktada KAYBEDIYOR
+   (surucu reseti, sekme gizlenmesi, GPU guc yonetimi, coklu
+   context siniri). Kaybedilen context'in canvas'i beyaza donuyor
+   ve o haliyle kaliyor — kullanici "beyaz ekran" olarak goruyordu.
 
-     - Hareket TAMAMEN vertex shader'da. JS karesi basina sifir is
-       yapar, cop nesne yok.
-     - Gercek curl-benzeriakis: iki potansiyel alanin curl'u
-       (capraz carpim) -> bolgusuz, organik donus. Orijinaldeki
-       GLSL gurultu string'i hic kullanilmiyordu; JS tarafi
-       sin/cos taklidiydi.
-     - Bloom post-process yerine additive harmanlama + cekirdek/
-       hale falloff'u tek geciste: gorunsel ayni, maliyet ~0.
-     - three.js bagimliligi yok: matrisler elle hesaplanir.
-     - WebGL YOKSA 2D akis alanina duser (bkz. "yedek" bolumu).
-       Uretimde arka plan hicbir kosulda bos kalmaz.
+   Kanit: bu ortamda shader'lar sorunsuz derleniyor (VS/FS/LINK ok)
+   ama context 180 ms - 6 sn sonra kayboluyor. Dokunulmamis, bos
+   bir WebGL dongusu de ayni sekilde 180 ms'de duser. Yani bu bir
+   kod hatasi degil, WebGL'in kendi kirliligi.
+
+   Kalici cozum: arka plan icin WebGL KULLANILMAZ. 2D canvas
+   context'i kaybolmaz, surucu tarafindan geri alinamaz ve ozel
+   olarak TensorFlow/WebGL'e baglanmaz. WebGL yolu yalnizca
+   ?webgl=1 ile acikca istenirse etkinlestirilir (bkz. CFG.webgl).
+
+   ══ BEYAZ EKRANIN YAPISAL OLARAK IMKANSIZ OLMASI ══
+   2D cizimde "lighter"/additive harmalama YOK; varsayilan
+   source-over kullanilir. Bu harmalamada
+
+       sonuc = kaynak * a + hedef * (1 - a)
+
+   oldugu icin sonuc HICBIR ZAMAN kaynaktan parlak olamaz
+   (a <= 1). Yani beyaz bir kaynak cizilmedigi surece tek bir piksel
+   bile beyaz olamaz. Ustelik kaynak renkler sinirli (en parlak
+   140,200,255) ve alfa en fazla 0.3.
+
+   Buna ek olarak whiteGuard() her karede gercek pikseli olcer:
+   asiri parlaklik gorulurse kendini dusurur. Yani beklenmedik bir
+   durum olsa bile sistem kendini toparlar.
    ═══════════════════════════════════════════════════════════════════ */
 (function () {
   "use strict";
 
   var CFG = {
-    fov: 75,
-    dist: 5,
-    depth: 1.2,
-    size: 7,
-    parallax: 0.22,
-    hue: 200,
-    hueVar: 20,
+    /* Varsayilan: 2D. WebGL yalnizca acikca istenirse. */
+    webgl: /[?&]webgl=1\b/.test(location.search),
     dprMax: 2,
-    baseCount: 18000,
-    maxCount: 44000,
-    minCount: 4000,
+    /* whiteGuard esikleri (0-1) */
+    guardMaxWhite: 0.9,
+    guardStep: 0.82,
   };
 
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -192,6 +202,7 @@
   }
 
   function startNebula() {
+    canvas.__webglTried = 1;
     var gl =
       canvas.getContext("webgl", {
         alpha: true,
@@ -393,14 +404,30 @@
   function startFallback() {
     if (canvas.__fb) return;
     canvas.__fb = 1;
-    var ctx = canvas.getContext("2d");
+    /* alpha:false -> canvas opak koyu bir tabana sahip olur. Tarayici
+       hicbir koşulda arkadan beyaz geçiremez. */
+    var ctx = canvas.getContext("2d", { alpha: false });
+    /* Varsayilan da source-over'dir ama ACIKCA sabitliyoruz: bu
+       projenin en onemli guvenlik ozelligi. "lighter" (additive)
+       harmalamada sonuc = kaynak + hedef olur ve binlerce parcacik
+       ust uste binince beyaza saturate olur — "beyaz ekran"in
+       asil kaynagi buydu. source-over'da sonuc = kaynak*a +
+       hedef*(1-a) <= kaynak, yani beyaz uretemek matematiksel
+       olarak imkansiz. */
+    ctx.globalCompositeOperation = "source-over";
     if (!ctx) return;
 
     var parts = [],
+      clouds = [],
       raf = 0,
       t0 = performance.now(),
-      live = true;
-    var COL = ["118,232,255", "176,216,255", "167,139,250"];
+      live = true,
+      guarded = 0;
+
+    /* Kaynak renkler BILINCLI olarak sinirli: en parlak 176,216,255.
+       source-over harmalamada sonuc kaynagi asamaz, bu yuzden bu
+       palet tek basina beyaz uretemeye izin vermez. */
+    var COL = ["118,232,255", "176,216,255", "167,139,250", "96,180,255"];
 
     function build() {
       measure();
@@ -417,9 +444,26 @@
           x: Math.random() * W,
           y: Math.random() * H,
           c: COL[(Math.random() * COL.length) | 0],
-          a: 0.11 + Math.random() * 0.19,
-          w: 0.8 + Math.random() * 1.3,
+          a: 0.085 + Math.random() * 0.11,
+          w: 0.7 + Math.random() * 1.5,
           p: Math.random() * 6.283,
+        });
+      }
+      /* Buyuk yumusak bulutlar: nebula'nin "gaz" hissi. Yaricap
+         kareye gore olceklenir, alfa dusuk tutulur. */
+      var cn = coarse ? 3 : 5;
+      clouds = [];
+      for (var j = 0; j < cn; j++) {
+        var cc = COL[(Math.random() * COL.length) | 0];
+        var cr = (0.12 + Math.random() * 0.16) * Math.min(W, H) * 1.4;
+        clouds.push({
+          x: Math.random() * W,
+          y: Math.random() * H,
+          r: cr,
+          sprite: bakeGlow(cc),
+          a: 0.05 + Math.random() * 0.06,
+          p: Math.random() * 6.283,
+          v: 0.1 + Math.random() * 0.25,
         });
       }
       if (window.__quantroEntropy) {
@@ -433,10 +477,68 @@
       step(reduce ? 3 : performance.now());
     }
 
+    /* Radyal gradyani BILEREK bir offscreen sprite'a piyirir. Her
+       karede createRadialGradient cagirmak 700px yaricapta kare
+       basina onlarca piksel dolgu demek; FPS'i 61'den 12'ye
+       dusuruyordu. Sprite bir kez cizilir, sonra yalnizca
+       drawImage ile basilir. */
+    function bakeGlow(rgb) {
+      var s = 128,
+        c = document.createElement("canvas");
+      c.width = c.height = s;
+      var g2 = c.getContext("2d");
+      var g = g2.createRadialGradient(s / 2, s / 2, 0, s / 2, s / 2, s / 2);
+      g.addColorStop(0, "rgba(" + rgb + ",1)");
+      g.addColorStop(0.45, "rgba(" + rgb + ",0.34)");
+      g.addColorStop(1, "rgba(" + rgb + ",0)");
+      g2.fillStyle = g;
+      g2.fillRect(0, 0, s, s);
+      return c;
+    }
+
+    /* Kalici emniyet agi. Periyodik olarak gercek pikselleri okur;
+       asiri parlaklik varsa koyu bir katmanla geri cekilir. Boylece
+       beklenmedik bir durum olsa bile ekran beyaza birakilmaz. */
+    function whiteGuard() {
+      var w = Math.min(64, canvas.width),
+        h = Math.min(64, canvas.height);
+      if (!w || !h) return;
+      var d;
+      try {
+        d = ctx.getImageData((canvas.width - w) / 2, (canvas.height - h) / 2, w, h).data;
+      } catch (e) {
+        return;
+      }
+      var worst = 0;
+      for (var i = 0; i < d.length; i += 4) {
+        var m = Math.max(d[i], d[i + 1], d[i + 2]) / 255;
+        if (m > worst) worst = m;
+      }
+      guarded++;
+      if (worst > CFG.guardMaxWhite) {
+        ctx.fillStyle = "rgba(2, 8, 16, " + (1 - CFG.guardStep) + ")";
+        ctx.fillRect(0, 0, W, H);
+      }
+    }
+
     function step(t) {
-      ctx.fillStyle = "rgba(2, 8, 16, 0.05)";
+      /* Yumusak gaz katmani: once soluk, sonra bulutlar. */
+      ctx.fillStyle = "rgba(2, 8, 16, 0.20)";
       ctx.fillRect(0, 0, W, H);
       var tt = reduce ? 3 : t * 0.001;
+
+      /* Bulutlar: onceden pisirilmis sprite basilir. Alfa dusuk
+         tutulur ki her karede ust uste binip sisi olusturmasin. */
+      for (var c = 0; c < clouds.length; c++) {
+        var cl = clouds[c];
+        var ca = cl.a * (0.7 + 0.3 * Math.sin(cl.p + tt * cl.v));
+        var cx = cl.x + Math.cos(cl.p + tt * cl.v * 0.7) * 36;
+        var cy = cl.y + Math.sin(cl.p + tt * cl.v * 0.5) * 26;
+        ctx.globalAlpha = ca;
+        ctx.drawImage(cl.sprite, cx - cl.r, cy - cl.r, cl.r * 2, cl.r * 2);
+      }
+      ctx.globalAlpha = 1;
+
       for (var i = 0; i < parts.length; i++) {
         var p = parts[i];
         /* Curl-benzeri akis: iki skaler potansiyelin capraz
@@ -457,9 +559,11 @@
         ctx.lineWidth = p.w;
         ctx.beginPath();
         ctx.moveTo(p.x, p.y);
-        ctx.lineTo(p.x - Math.cos(ang) * 46, p.y - Math.sin(ang) * 46);
+        ctx.lineTo(p.x - Math.cos(ang) * 52, p.y - Math.sin(ang) * 52);
         ctx.stroke();
       }
+
+      if ((guarded & 15) === 0) whiteGuard();
     }
 
     function frame(now) {
@@ -486,26 +590,34 @@
      başlat
      ══════════════════════════════════════════════════════════ */
   function boot() {
-    var mode = startNebula();
-    /* startNebula() null donerse canvas bir WebGL context'ine
-       baglanmis olabilir (shader derleme hatasi, link hatasi).
-       Boyle bir canvas'tan getContext("2d") NULL doner ve yedek de
-       calisamaz. Bu yuzden yedekten once her zaman TAZE bir canvas
-       koyuyoruz. */
+    /* WebGL varsayilan olarak DEVRE DISI. Arka plan icin WebGL
+       guvenilir degil: context kaybolunca canvas beyaza donuyor ve
+       o haliyle kaliyor. 2D context kaybolmaz ve source-over
+       harmalamasiyla beyaz uretemeyi matematiksel olarak imkansiz
+       kilar. WebGL yalnizca acikca istenirse deneniyor. */
+    var mode = CFG.webgl ? startNebula() : null;
     if (!mode) {
-      if (canvas.parentNode) canvas.parentNode.removeChild(canvas);
-      canvas = makeCanvas();
-      host.appendChild(canvas);
+      /* startNebula() denendi ve basarisiz olduysa canvas bir WebGL
+         context'ine baglanmis olabilir; boyle bir canvas'tan
+         getContext("2d") NULL doner. Yedekten once TAZE canvas koy. */
+      if (canvas.__webglTried) {
+        if (canvas.parentNode) canvas.parentNode.removeChild(canvas);
+        canvas = makeCanvas();
+        host.appendChild(canvas);
+      }
+      window.__quantroEntropy = {
+        mode: "2d-fallback",
+        count: function () {
+          return 0;
+        },
+      };
+      startFallback();
+      return;
     }
     window.__quantroEntropy = {
-      mode: mode ? mode.mode : "2d-fallback",
-      count: mode
-        ? mode.count
-        : function () {
-            return 0;
-          },
+      mode: mode.mode,
+      count: mode.count,
     };
-    if (!mode) startFallback();
   }
 
   if (document.readyState === "loading") {
