@@ -1,9 +1,9 @@
 {
   "repo": "Lennebraha38/ZENAI",
   "branch": "main",
-  "sha": "f399bf5",
-  "full": "f399bf550713d713f8ca6d751f5298fa3920ac26",
-  "date": "2026-09-27T10:03:53Z",
-  "msg": "sidebar: gizli menüye geri açma butonu + mobil overlay",
+  "sha": "80601f5",
+  "full": "80601f5100a221b26ccbef1d3639fb0e1f2b3d3a",
+  "date": "2026-09-27T17:54:48Z",
+  "msg": "Abonelik deposunu Vercel Blob'a tasi (Upstash bagimliligi kalkti)",
   "url": "https://github.com/Lennebraha38/ZENAI"
 }
