@@ -1,5 +1,5 @@
 {
-  "uretim": "2026-10-08T12:06:36.108Z",
+  "uretim": "2026-10-09T11:58:29.976Z",
   "surum": 1,
   "ozet": {
     "iddia": 3,
@@ -31,9 +31,13 @@
           "etiket": "Depo oluşturma tarihi + MIT lisansı",
           "url": "https://github.com/Lennebraha38/quantro",
           "makineDogrulama": "github-repo",
-          "durum": "bilinmiyor",
-          "sonuc": null,
-          "hata": "HTTP 403"
+          "durum": "dogrulandi",
+          "sonuc": {
+            "dogrulukDogru": true,
+            "deger": "MIT · oluşturma: 2026-07-01T09:31:56Z",
+            "kanit": "Depo 2026-07-01T09:31:56Z tarihinde açıldı, lisans MIT.",
+            "url": "https://github.com/Lennebraha38/quantro"
+          }
         },
         {
           "tur": "kaynak",
@@ -64,8 +68,8 @@
       ],
       "ozet": {
         "toplam": 4,
-        "dogrulanan": 3,
-        "bilinmiyor": 1,
+        "dogrulanan": 4,
+        "bilinmiyor": 0,
         "yanlis": 0,
         "durum": "dogrulandi"
       }
@@ -83,7 +87,7 @@
           "durum": "dogrulandi",
           "sonuc": {
             "dogrulukDogru": true,
-            "deger": "8 bayt canlı: [199, 159, 169, 209, 44, 58, 75, 169]",
+            "deger": "8 bayt canlı: [188, 213, 182, 71, 135, 16, 23, 106]",
             "kanit": "ANU'nun fiziksel kuantum kaynağı şu anda canlı yanıt veriyor.",
             "url": "https://qrng.anu.edu.au/API/jsonI.php?length=8&type=uint8"
           }
@@ -96,7 +100,7 @@
           "durum": "dogrulandi",
           "sonuc": {
             "dogrulukDogru": true,
-            "deger": "kaynak: quantro-proxy · [11, 39, 21, 126, 232, 11, 223, 202]",
+            "deger": "kaynak: quantro-proxy · [146, 38, 229, 135, 104, 42, 133, 235]",
             "kanit": "Quantro'nun herkese açık proxy'si canlı kuantum baytı döndürüyor.",
             "url": "https://quantro-1.vercel.app/api/anu?length=8&type=uint8"
           }
