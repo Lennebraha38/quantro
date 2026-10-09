@@ -27,6 +27,7 @@ const PAGES = [
   { file: "simulasyon.html", prio: "0.7", freq: "monthly" },
   { file: "blog.html", prio: "0.9", freq: "weekly" },
   { file: "quantro-lab.html", prio: "0.8", freq: "monthly" },
+  { file: "quantro-grid.html", prio: "0.8", freq: "weekly" },
 ];
 
 function langLinks(locPath) {

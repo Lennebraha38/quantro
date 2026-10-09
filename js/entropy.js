@@ -422,7 +422,8 @@
       raf = 0,
       t0 = performance.now(),
       live = true,
-      guarded = 0;
+      guarded = 0,
+      sonCizim = 0;
 
     /* Kaynak renkler BILINCLI olarak sinirli: en parlak 176,216,255.
        source-over harmalamada sonuc kaynagi asamaz, bu yuzden bu
@@ -569,7 +570,15 @@
     function frame(now) {
       if (!live) return;
       raf = requestAnimationFrame(frame);
-      if (!document.hidden) step((now - t0) / 1000);
+      if (document.hidden) return;
+      /* Kare hizini ~30 FPS ile sinirla. Yavas kayan bir nebula
+         60 FPS'e ihtiyac duymaz; boylece canvas yarim maliyetle
+         calisir ve sayfadaki CSS animasyonlarina (ornegin
+         hakkimizda'daki 8 yorunge animasyonu) yer birakilir.
+         Dusuk uclu cihazlarda olcum farki buyuktu. */
+      if (now - sonCizim < 32) return;
+      sonCizim = now;
+      step((now - t0) / 1000);
     }
     /* reduced-motion: dongu HIC kurulmaz. Sadece build() icinde
        tek bir kare cizilir. Daha once dongu calisiyordu; tt sabit

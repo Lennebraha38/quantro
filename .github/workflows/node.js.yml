@@ -73,7 +73,9 @@ jobs:
         run: npm run test:requests
       - name: Arka plan görünürlüğü (beyaz ekran regresyonu)
         run: npm run test:nebula
-      - name: E2E raporu (screenshot arşiv)
+    - name: Beyaz ekran soak testi (gerçek piksel okuması)
+      run: npm run test:no-white
+    - name: E2E raporu (screenshot arşiv)
         if: always()
         uses: actions/upload-artifact@v4
         with:

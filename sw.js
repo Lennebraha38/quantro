@@ -1,4 +1,4 @@
-const CACHE = "quantro-v1.12.0";
+const CACHE = "quantro-v1.13.0";
 const SHELL = [
   "/index.html",
   "/hakkimizda.html",
@@ -7,8 +7,13 @@ const SHELL = [
   "/blog.html",
   "/iletisim.html",
   "/quantro-lab.html",
+  "/quantro-grid.html",
   "/qtr-admin.html",
   "/quantro.js",
+  "/js/grid-i18n.js",
+  "/js/grid-client.js",
+  "/js/grid-worker.js",
+  "/data/grid/experiment.json",
   "/lab-core.js",
   "/lab/lab3d.js",
   "/lab/tool-1.js",

@@ -28,7 +28,9 @@ for (const pg of PAGES) {
     }
     return {
       cvYok: !cv,
-      pos: cs && cs.position, z: cs && cs.zIndex, pe: cs && cs.pointerEvents,
+      pos: cs && cs.position,
+      z: cs && cs.zIndex,
+      pe: cs && cs.pointerEvents,
       bodyBg: getComputedStyle(document.body).backgroundColor,
       litPiksel: nonEmpty,
       tasma: document.documentElement.scrollWidth - document.documentElement.clientWidth,
@@ -39,17 +41,30 @@ for (const pg of PAGES) {
   const cta = page.locator("a.btn, .hero-cta, .nav-pill-cta, button").first();
   let tiklandi = null;
   if (await cta.count()) {
-    try { await cta.click({ timeout: 4000 }); tiklandi = "evet"; }
-    catch { tiklandi = "HAYIR - tiklama engellendi"; }
+    try {
+      await cta.click({ timeout: 4000 });
+      tiklandi = "evet";
+    } catch {
+      tiklandi = "HAYIR - tiklama engellendi";
+    }
   }
 
-  const ok = !r.cvYok && r.pos === "fixed" && r.z === "-1" && r.pe === "none" &&
-    /rgba\(0, 0, 0, 0\)|transparent/.test(r.bodyBg) && (r.litPiksel ?? 0) > 50 &&
-    r.tasma === 0 && tiklandi === "evet" && errs.length === 0;
+  const ok =
+    !r.cvYok &&
+    r.pos === "fixed" &&
+    r.z === "-1" &&
+    r.pe === "none" &&
+    /rgba\(0, 0, 0, 0\)|transparent/.test(r.bodyBg) &&
+    (r.litPiksel ?? 0) > 50 &&
+    r.tasma === 0 &&
+    tiklandi === "evet" &&
+    errs.length === 0;
   if (!ok) fail++;
 
   console.log(`${ok ? "GECTI " : "KALDI "} ${pg.padEnd(17)} pos=${r.pos} z=${r.z} pe=${r.pe}`);
-  console.log(`        body=${r.bodyBg} | lit piksel=${r.litPiksel} | tasma=${r.tasma}px | tiklama=${tiklandi} | hata=${errs.length}`);
+  console.log(
+    `        body=${r.bodyBg} | lit piksel=${r.litPiksel} | tasma=${r.tasma}px | tiklama=${tiklandi} | hata=${errs.length}`,
+  );
   if (errs.length) console.log("        " + errs.slice(0, 2).join(" | "));
   await page.close();
 }

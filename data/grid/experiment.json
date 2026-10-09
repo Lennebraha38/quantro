@@ -1,0 +1,20 @@
+{
+  "id": "ry-interference-v1",
+  "version": 1,
+  "title": "Kuantum Girisim Monte Carlo Deneyi",
+  "qubits": 2,
+  "shotsPerUnit": 4096,
+  "thetaRange": [0, 6.283185307179586],
+  "circuit": "H(0) · RY(theta, 0) · CX(0,1)",
+  "truth": {
+    "P(00)": "(1 - sin(theta)) / 2",
+    "P(11)": "(1 + sin(theta)) / 2",
+    "P(01)": "0",
+    "P(10)": "0"
+  },
+  "verify": "Her is birimi (theta, seed) ciftinden birebir yeniden uretilir: ayni motor (quantro.js) + ayni mulberry32 tohumu ayni histogrami verir. Sunucu istemcinin gonderdigi sayilari yeniden hesaplayip karsilastirir; tutmayan katki reddedilir.",
+  "value": "Binlerce tarayicidan gelen bagimsiz Monte Carlo ornekleri birlestiginde (1 ± sin theta)/2 girisim egrisi ampirik olarak yeniden kurulur; sonuc acik veri seti olarak yayimlanir.",
+  "disclaimer": "Bu bir DAGITIK HESAPLAMA ve ACIK VERI demosudur; gercek bir fiziksel deney veya hizlandirici degildir. Amac: tarayici tabanli, dogrulanabilir Monte Carlo orneklemesinin olcegini ve seffafligini gostermek. Dolaniklik ve girisim burada simulasyondur.",
+  "license": "MIT",
+  "openData": true
+}

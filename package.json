@@ -29,8 +29,8 @@
     "test:glsl": "node scripts/verify-glsl.mjs",
     "test:exposure": "node scripts/verify-exposure.mjs",
     "test:nebula": "node scripts/verify-nebula.mjs",
-    "test:requests": "node scripts/verify-requests.mjs index.html hakkimizda.html blog.html quantro-lab.html iletisim.html 404.html qtr-admin.html bilim.html basarilar.html",
-    "check": "npm run lint && npm run lint:html && npm run format:check && npm run build && npm test && npm run test:glsl && node scripts/prior-art-scan.mjs --check",
+    "test:requests": "node scripts/verify-requests.mjs index.html hakkimizda.html blog.html quantro-lab.html iletisim.html 404.html qtr-admin.html bilim.html basarilar.html quantro-grid.html",
+    "check": "npm run lint && npm run lint:html && npm run format:check && npm run build && npm test && npm run test:grid && npm run test:glsl && node scripts/prior-art-scan.mjs --check",
     "pkg:sync": "node tools/sync-pkg.mjs",
     "pkg:test": "node tools/sync-pkg.mjs && npm --prefix package/quantro test",
     "pkg:pack": "node tools/sync-pkg.mjs && npm --prefix package/quantro pack --dry-run",
@@ -38,7 +38,10 @@
     "claims:check": "node scripts/verify-claims.mjs --check",
     "test:live": "QUANTRO_LIVE_TEST=1 node --test test/zenai.test.js",
     "prior-art": "node scripts/prior-art-scan.mjs",
-    "prior-art:check": "node scripts/prior-art-scan.mjs --check"
+    "prior-art:check": "node scripts/prior-art-scan.mjs --check",
+    "test:no-white": "node scripts/verify-no-white.mjs",
+    "test:no-white:live": "CANLI=1 node scripts/verify-no-white.mjs",
+    "test:grid": "node scripts/verify-grid.mjs"
   },
   "engines": {
     "node": ">=18"
