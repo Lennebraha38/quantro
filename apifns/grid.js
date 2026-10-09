@@ -86,11 +86,9 @@ async function dbInsert(row) {
 }
 
 async function dbStats() {
-  const sumRes = await supabaseFetch("/rest/v1/grid_results?select=shots.sum()");
-  if (!sumRes.ok) throw new Error("sum " + sumRes.status);
-  const sumJson = await sumRes.json();
-  const shots = (sumJson && sumJson[0] && sumJson[0].sum) || 0;
-
+  /* Not: bu projede PostgREST toplama fonksiyonlari kapali
+     (?select=shots.sum() → PGRST123 "aggregate functions is not allowed").
+     Bu yuzden toplami JS tarafinda yapiyoruz. */
   const cntRes = await supabaseFetch("/rest/v1/grid_results?select=id", {
     headers: { Prefer: "count=exact", Range: "0-0" },
   });
@@ -110,6 +108,8 @@ async function dbStats() {
     `/rest/v1/grid_results?select=theta,counts,shots&order=created_at.desc&limit=20000`,
   );
   const rows = rowsRes.ok ? await rowsRes.json() : [];
+  let shots = 0;
+  for (const r of rows) shots += Number(r.shots) || 0;
   return { shots, units, nodes, rows };
 }
 
