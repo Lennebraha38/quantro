@@ -355,7 +355,7 @@ module.exports = async function handler(req, res) {
       out.shots = be.shots;
       out.units = be.units;
     }
-    res.setHeader("Cache-Control", "public, max-age=30");
+    res.setHeader("Cache-Control", "public, s-maxage=5, stale-while-revalidate=25, max-age=0");
     return res.json({
       experiment: expId,
       shots: out.shots,
@@ -397,7 +397,7 @@ module.exports = async function handler(req, res) {
         })
         .slice(0, limit);
     }
-    res.setHeader("Cache-Control", "public, max-age=60");
+    res.setHeader("Cache-Control", "public, s-maxage=15, stale-while-revalidate=45, max-age=0");
     return res.json({ leaderboard: rows, source: source });
   }
 
