@@ -9,7 +9,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const TOKEN = process.env.SUPABASE_ACCESS_TOKEN;
 const URL_ENV = process.env.SUPABASE_URL || "";
 const REF = (URL_ENV.match(/https:\/\/([a-z0-9]+)\.supabase\.co/) || [])[1];
-const SQL_FILE = path.join(ROOT, "supabase-grid.sql");
+const SQL_FILE = path.join(ROOT, process.argv[2] || "supabase-grid.sql");
 
 if (!TOKEN || !TOKEN.startsWith("sbp_")) {
   console.error("HATA: SUPABASE_ACCESS_TOKEN (sbp_...) gerekli.");

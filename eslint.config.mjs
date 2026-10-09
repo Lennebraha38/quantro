@@ -37,10 +37,30 @@ export default [
   },
   {
     files: ["{api,apifns,scripts,tools,test}/**/*.mjs"],
+    ignores: ["scripts/**"], // scripts Playwright ile tarayıcı kodu çalıştırır → ayrı blok
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: "module",
       globals: { ...globals.node },
+    },
+    rules: {
+      "no-undef": "error",
+      "no-dupe-keys": "error",
+      "no-dupe-class-members": "error",
+      "no-redeclare": "error",
+      "no-constant-condition": "error",
+      "no-unreachable": "error",
+      "no-unused-vars": ["error", { vars: "all", args: "none", caughtErrors: "none" }],
+    },
+  },
+  {
+    // scripts/*.mjs: Playwright page.evaluate() gövdeleri tarayıcı API'leri
+    // kullanır (test/** ile aynı gerekçe). Node + browser global'leri birlikte.
+    files: ["scripts/**/*.mjs"],
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: "module",
+      globals: { ...globals.node, ...globals.browser },
     },
     rules: {
       "no-undef": "error",

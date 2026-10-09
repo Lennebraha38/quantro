@@ -65,8 +65,6 @@ for (const d of DV) {
 
   const open = await page.evaluate(() => {
     const m = document.querySelector("#mobnav");
-    const cs = getComputedStyle(m);
-    const r = m.getBoundingClientRect();
     const items = [...m.querySelectorAll("a.ml, button.ml")];
     const de = document.documentElement;
     const last = items[items.length - 1].getBoundingClientRect();

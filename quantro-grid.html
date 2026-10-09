@@ -45,9 +45,16 @@
   "name": "Quantro GRID — Kuantum Girişim Monte Carlo veri seti",
   "description": "Tarayıcı tabanlı dağıtık Monte Carlo örneklemesiyle üretilen, doğrulanabilir kuantum girişim dağılımı. Açık veri, MIT.",
   "url": "https://quantro-1.vercel.app/quantro-grid.html",
-  "license": "https://opensource.org/licenses/MIT",
-  "creator": { "@type": "Organization", "name": "Quantro ARGE Merkezi", "url": "https://quantro-1.vercel.app/" },
-  "isAccessibleForFree": true
+  "version": "2",
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "isAccessibleForFree": true,
+  "variableMeasured": ["theta", "counts", "shots", "experiment"],
+  "distribution": {
+    "@type": "DataDownload",
+    "encodingFormat": "text/csv",
+    "contentUrl": "https://quantro-1.vercel.app/api/grid?op=export&format=csv"
+  },
+  "creator": { "@type": "Organization", "name": "Quantro ARGE Merkezi", "url": "https://quantro-1.vercel.app/" }
 }
 </script>
 <style>
@@ -76,6 +83,21 @@
   .g-note{font-size:.86rem;color:#8aa9b6;line-height:1.6}
   .g-disc{border-left:3px solid #f5b23c;background:rgba(245,178,60,.06);padding:12px 16px;border-radius:0 10px 10px 0;font-size:.88rem;color:#e9d6b3;margin-top:16px}
   .g-disc strong{color:#f5c97a}
+  .g-id{font-family:"JetBrains Mono",monospace;font-size:.82rem;color:#8fd8ee;margin-top:12px}
+  .g-id b{color:#f5b23c}
+  .g-badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+  .g-badge{font-size:.76rem;padding:5px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.14);color:#7f9aa6;background:rgba(255,255,255,.03)}
+  .g-badge.on{color:#04121c;background:linear-gradient(120deg,#38e1ff,#9fe8b6);border-color:transparent;font-weight:600}
+  .g-lb{list-style:none;margin:8px 0 0;padding:0}
+  .g-lb li{display:flex;align-items:center;gap:12px;padding:9px 12px;border-bottom:1px solid rgba(255,255,255,.06);font-size:.9rem}
+  .g-lb-rk{width:24px;color:#7fb6c7;font-family:"JetBrains Mono",monospace}
+  .g-lb code{color:#eafcff;font-family:"JetBrains Mono",monospace}
+  .g-lb-v{margin-left:auto;color:#f5b23c;font-family:"JetBrains Mono",monospace}
+  .g-lb-empty{color:#8aa9b6;padding:9px 12px;list-style:none}
+  .g-dict{width:100%;border-collapse:collapse;margin-top:10px;font-size:.85rem}
+  .g-dict td{padding:7px 10px;border-bottom:1px solid rgba(255,255,255,.06);color:#c9e6f0;vertical-align:top}
+  .g-dict td:first-child{color:#8fd8ee;font-family:"JetBrains Mono",monospace;white-space:nowrap}
+  .g-cite{font-family:"JetBrains Mono",monospace;font-size:.8rem;color:#bfe6f2;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:12px;margin-top:12px;overflow-x:auto}
 </style>
 </head>
 <body>
@@ -129,8 +151,11 @@
       <button class="g-btn primary" id="g-join" data-gi18n="join">Katıl — düğüm ol</button>
       <button class="g-btn ghost" id="g-next" data-gi18n="leave">Durdur</button>
       <button class="g-btn ghost" id="g-download" data-gi18n="download">Veriyi indir</button>
+      <button class="g-btn ghost" id="g-csv" data-gi18n="downloadCsv">CSV indir</button>
+      <button class="g-btn ghost" id="g-share" data-gi18n="shareCard">Katkı kartını indir</button>
     </div>
     <p class="g-status" id="g-status" role="status" aria-live="polite"></p>
+    <p class="g-id"><span data-gi18n="nodeLabel">Düğümün</span>: <b id="g-node">—</b> · <span data-gi18n="currentExp">Geçerli deney</span>: <b id="g-exp"></b></p>
   </div>
 
   <div class="g-panel">
@@ -140,6 +165,8 @@
       <div class="g-stat"><b id="g-nodes">0</b><span data-gi18n="statNodes">katkı veren düğüm</span></div>
     </div>
     <p class="g-you"><span data-gi18n="youStats">Senin katkın</span>: <b id="g-you-units">0</b> · <b id="g-you-shots">0</b></p>
+    <p class="g-you"><span data-gi18n="lifetime">Kalıcı katkın</span>: <b id="g-life-units">0</b> · <b id="g-life-shots">0</b></p>
+    <div class="g-badges" id="g-badges" aria-label="rozetyer"></div>
   </div>
 
   <div class="g-panel">
@@ -150,6 +177,11 @@
       <span><i style="background:#f5b23c"></i><span data-gi18n="chartEmpirical">GRID ampirik</span></span>
     </div>
     <p class="g-note" style="margin-top:10px" data-gi18n="verifyDesc"></p>
+  </div>
+
+  <div class="g-panel">
+    <h2 style="margin:.1em 0 .4em" data-gi18n="lbTitle">En çok katkı veren düğümler</h2>
+    <ul class="g-lb" id="g-lb"><li class="g-lb-empty" data-gi18n="lbEmpty">Henüz veri yok</li></ul>
   </div>
 
   <div class="g-panel">
@@ -164,6 +196,20 @@
   <div class="g-panel">
     <h2 style="margin:.1em 0 .5em" data-gi18n="dataTitle">Açık veri + açık kaynak</h2>
     <p class="g-note" data-gi18n="dataDesc"></p>
+    <p class="g-note">Dataset sürümü: <b>v2</b> · Lisans: <b>MIT</b> (kod) · <b>CC BY 4.0</b> (veri) · API: <code>/api/grid?op=export&amp;format=csv</code></p>
+    <table class="g-dict" aria-label="Veri sözlüğü">
+      <tbody>
+        <tr><td>unit_id</td><td>İş biriminin tekil kimliği (UUID).</td></tr>
+        <tr><td>experiment</td><td>Deney kimliği (örn. ry-interference-v1, rx-split-v1).</td></tr>
+        <tr><td>theta</td><td>Devre parametresi, radyan [0, 2π).</td></tr>
+        <tr><td>seed</td><td>Deterministik örnekleme tohumu (mulberry32).</td></tr>
+        <tr><td>shots</td><td>İş birimi başına örneklem sayısı (4096).</td></tr>
+        <tr><td>counts</td><td>Histogram; 2 kübit için [c00,c01,c10,c11].</td></tr>
+        <tr><td>created_at</td><td>Kaydın yazıldığı UTC zaman damgası.</td></tr>
+        <tr><td>gizlilik</td><td>ip_hash ve node_id pseudonimdir; ham veri dışa aktarımında yer almaz.</td></tr>
+      </tbody>
+    </table>
+    <p class="g-cite">Atıf / Citation: Quantro ARGE Merkezi (2026). <i>Quantro GRID — distributed verifiable quantum Monte Carlo dataset</i> (v2). https://quantro-1.vercel.app/quantro-grid.html</p>
     <div class="g-disc">
       <strong data-gi18n="discLabel">Dürüst etiket</strong>
       <span data-gi18n="discText"></span>

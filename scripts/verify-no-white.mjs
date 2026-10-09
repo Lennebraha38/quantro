@@ -18,7 +18,14 @@ import { chromium } from "playwright";
 
 const PAGES = process.argv.slice(2).length
   ? process.argv.slice(2)
-  : ["index.html", "hakkimizda.html", "blog.html", "quantro-lab.html", "iletisim.html"];
+  : [
+      "index.html",
+      "hakkimizda.html",
+      "blog.html",
+      "quantro-lab.html",
+      "iletisim.html",
+      "quantro-grid.html",
+    ];
 const SECONDS = Number(process.env.SOAK_SECONDS || 45);
 /* CANLI=1 ile yerel sunucu yerine production adresi denetlenir. */
 const CANLI = process.env.CANLI === "1";

@@ -1,0 +1,52 @@
+{
+  "version": 2,
+  "shotsPerUnit": 4096,
+  "thetaRange": [0, 6.283185307179586],
+  "license": "MIT",
+  "openData": true,
+  "primary": "ry-interference-v1",
+  "items": [
+    {
+      "id": "ry-interference-v1",
+      "kind": "ry-cx",
+      "version": 1,
+      "title": "Kuantum Girişim Monte Carlo Deneyi",
+      "qubits": 2,
+      "circuit": "H(0) · RY(θ,0) · CX(0,1)",
+      "primary": true,
+      "truth": {
+        "P(00)": "(1 - sin θ) / 2",
+        "P(11)": "(1 + sin θ) / 2",
+        "P(01)": "0",
+        "P(10)": "0"
+      }
+    },
+    {
+      "id": "bell-ry-v1",
+      "kind": "bell-ry",
+      "version": 1,
+      "title": "Çan Durumu + Döndürme Monte Carlo Deneyi",
+      "qubits": 2,
+      "circuit": "H(0) · CX(0,1) · RY(θ,1)",
+      "truth": {
+        "P(00)": "cos²(θ/2) / 2",
+        "P(11)": "cos²(θ/2) / 2",
+        "P(01)": "sin²(θ/2) / 2",
+        "P(10)": "sin²(θ/2) / 2"
+      }
+    }
+  ],
+  "verify": "Her iş birimi (deney, theta, seed) üçlüsünden birebir yeniden üretilir: aynı motor (quantro.js) + aynı mulberry32 tohumu aynı histogramı verir. Sunucu istemcinin gönderdiği sayıları yeniden hesaplayıp karşılaştırır; tutmayan katkı reddedilir (409).",
+  "value": "Binlerce tarayıcıdan gelen bağımsız Monte Carlo örnekleri birleştiğinde teorik girişim eğrisi ampirik olarak yeniden kurulur; sonuç kimliksiz, açık veri seti olarak yayımlanır.",
+  "disclaimer": "Bu bir DAĞITIK HESAPLAMA ve AÇIK VERİ demosudur; gerçek bir fiziksel deney veya hızlandırıcı değildir. Amaç: tarayıcı tabanlı, doğrulanabilir Monte Carlo örneklemesinin ölçeğini ve şeffaflığını göstermek. Dolanıklık ve girişim burada simülasyondur.",
+  "dataDictionary": {
+    "unit_id": "Bir iş biriminin tekil kimliği (UUID).",
+    "experiment": "Deney kimliği (örn. ry-interference-v1).",
+    "theta": "Devre parametresi, radyan cinsinden [0, 2π).",
+    "seed": "Deterministik örnekleme tohumu (mulberry32).",
+    "shots": "İş birimi başına örneklem sayısı.",
+    "counts": "Ölçüm sonucu histogramı; 2 kübit için 4 elemanlı dizi [c00,c01,c10,c11].",
+    "created_at": "Kaydın sunucuya yazıldığı UTC zaman damgası.",
+    "privacy": "ip_hash ve node_id pseudonimdir, ham veri dışa aktarımında yer almaz."
+  }
+}

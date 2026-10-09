@@ -25,6 +25,8 @@ jobs:
       - run: npm ci
       - run: npm run build
       - run: npm test
+      - name: GRID doğrulama (determinizm + uçlar + açık veri)
+        run: npm run test:grid
       - name: Statik kod denetimi (ESLint)
         run: npm run lint
       - name: Inline script denetimi (HTML)
@@ -73,9 +75,9 @@ jobs:
         run: npm run test:requests
       - name: Arka plan görünürlüğü (beyaz ekran regresyonu)
         run: npm run test:nebula
-    - name: Beyaz ekran soak testi (gerçek piksel okuması)
-      run: npm run test:no-white
-    - name: E2E raporu (screenshot arşiv)
+      - name: Beyaz ekran soak testi (gerçek piksel okuması)
+        run: npm run test:no-white
+      - name: E2E raporu (screenshot arşiv)
         if: always()
         uses: actions/upload-artifact@v4
         with:

@@ -16,11 +16,18 @@ self.onmessage = function (e) {
     var shots = Math.max(1, Math.min(65536, d.shots | 0));
     var theta = Number(d.theta) || 0;
     var seed = (d.seed | 0) >>> 0;
+    var kind = d.kind || d.experiment || "ry-cx";
 
     var qc = new Quantro.QuantumCircuit(2);
-    qc.h(0);
-    qc.ry(theta, 0);
-    qc.cx(0, 1);
+    if (kind === "bell-ry") {
+      qc.h(0);
+      qc.cx(0, 1);
+      qc.ry(theta, 1);
+    } else {
+      qc.h(0);
+      qc.ry(theta, 0);
+      qc.cx(0, 1);
+    }
 
     var t0 = Date.now();
     var counts = Quantro.sampleDistribution(qc, shots, seed);

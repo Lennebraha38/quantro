@@ -50,7 +50,6 @@ for (let f = 0; f < 26; f++) {
   );
   await page.waitForTimeout(30);
 }
-const core = { x: 720, y: 450 };
 console.log("KADEMELI ACIILIS (her ogenin merkeze uzakligi, 30ms aralikla):");
 [0, 2, 4, 6, 9, 13, 20, 25].forEach((f) => {
   if (f >= frames.length) return;
@@ -75,7 +74,7 @@ const tr = await page.evaluate(() =>
 );
 await page.evaluate(() => {
   document.getElementById("radial").classList.remove("open");
-  toggleLang();
+  window.toggleLang();
 });
 await page.waitForTimeout(300);
 await page.evaluate(() => {
