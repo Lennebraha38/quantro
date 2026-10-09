@@ -343,7 +343,7 @@
             lifeAdd(d.shots);
             setStatus(t("stOk"));
             renderStats();
-            if (session.units % 8 === 0) {
+            if (session.units === 1 || session.units % 8 === 0) {
               loadStats();
               loadLeaderboard();
             }
