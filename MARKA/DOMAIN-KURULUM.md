@@ -3,30 +3,37 @@
 Şu an: `quantro-1.vercel.app` (üretim), repo: `Lennebraha38/quantro` (2026-09-20'de adı `Quantro-Vercel-Project`'ten `quantro`'ya değişti).
 Marka için kalıcı domain + temiz GitHub isim alanı şart.
 
-## ✅ Ücretsiz adım (uygulandı): `quantro.is-a.dev`
+## ❌ Ücretsiz adım (REDDEDİLDİ): `quantro.is-a.dev`
 
-| Öğe | Değer |
-|---|---|
-| Alan adı | `quantro.is-a.dev` (ücretsiz geliştirici subdomain) |
-| Kayıt | `is-a.dev/register` PR **#53178** → https://github.com/is-a-dev/register/pull/53178 |
-| DNS | CNAME → `quantro-1.vercel.app` |
-| Vercel | projeye eklendi (`verified:false` — PR merge olunca yayınlanır, dakikalar içinde TLS verilir) |
+| Öğe     | Değer                                                                                               |
+| ------- | --------------------------------------------------------------------------------------------------- |
+| Başvuru | `is-a.dev/register` PR **#53259** → https://github.com/is-a-dev/register/pull/53259                 |
+| Durum   | **Kapalı / merge edilmedi** (2026-09-22)                                                            |
+| Gerekçe | is-a.dev kuralı: _kök_ subdomainler yazılım geliştirmeyle ilgili olmalı; site bu ölçütü karşılamadı |
 
-PR merge sonrası: `quantro.is-a.dev` anasayfayı sunar. İsteğe bağlı ileride:
-- `quantro-1.vercel.app` → `quantro.is-a.dev` kalıcı redirect (Vercel dashboard → Domains → Redirect).
-- hreflang/canonical/OG URL'leri `quantro.is-a.dev`'e taşı (aşağıdaki swap listesi).
-- Yedek ücretsiz: `quantro.js.org` (js.org — JS projesi olduğu için yüksek itibar).
+`quantro.is-a.dev` **aktif değildir.** Üretim adresi hâlâ `quantro-1.vercel.app`.
+(Not: Bu başvuru, reddedilmeden önce #53178 olarak açılmış olabilir; kapanan PR #53259'dır.)
+
+Yeniden başvuru seçenekleri:
+
+- **İç içe subdomain** (kök olmadığı için içerik sınırı yok): örn. `quantro.app.is-a.dev`
+  — yeni bir PR gerekir ve yine bakımcı onayına tabidir.
+- **js.org:** `quantro.js.org` (statik JS projeleri için; bu site uygun) — PR ile alınır.
+- Ücretli kalıcı domain: aşağıdaki 1. bölümdeki seçenekler.
+
+> Aşağıdaki "domain swap" kontrol listesi, herhangi bir kalıcı domain
+> (ücretli veya iç içe subdomain) alınırsa geçerlidir.
 
 ---
 
 ## 1) Alan adı seçenekleri
 
-| Domain | Yıllık (yaklaşık) | Neden | Risk |
-|---|---|---|---|
-| `quantro.dev` | ~40–50 $ | en kısa, developer/jskitibi | .dev alalı çok, dolu olabilir |
-| `quantro.tech` | ~10–15 $ | teknoloji markası için doğal | .tech daha az "premium" algı |
-| `quantro.com.tr` | ~50-60 $ (tr alanı teyitli firmadan) | lokal TR güveni | TR kayıtta evrak, .com.tr'ler OG |
-| `getquantro.com` | ~10 $ | envanter açık | uzun, "get" ön eki |
+| Domain           | Yıllık (yaklaşık)                    | Neden                        | Risk                             |
+| ---------------- | ------------------------------------ | ---------------------------- | -------------------------------- |
+| `quantro.dev`    | ~40–50 $                             | en kısa, developer/jskitibi  | .dev alalı çok, dolu olabilir    |
+| `quantro.tech`   | ~10–15 $                             | teknoloji markası için doğal | .tech daha az "premium" algı     |
+| `quantro.com.tr` | ~50-60 $ (tr alanı teyitli firmadan) | lokal TR güveni              | TR kayıtta evrak, .com.tr'ler OG |
+| `getquantro.com` | ~10 $                                | envanter açık                | uzun, "get" ön eki               |
 
 **Öneri:** `quantro.dev` boşsa al (marka+SEO). Değilse `quantro.tech`.
 Kayıtçı önerileri: Vercel'in kendi DNS'iyle uyumlu olması için **Namecheap /

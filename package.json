@@ -41,7 +41,9 @@
     "prior-art:check": "node scripts/prior-art-scan.mjs --check",
     "test:no-white": "node scripts/verify-no-white.mjs",
     "test:no-white:live": "CANLI=1 node scripts/verify-no-white.mjs",
-    "test:grid": "node scripts/verify-grid.mjs"
+    "test:grid": "node scripts/verify-grid.mjs",
+    "test:grid:browser": "node scripts/verify-grid-browser.mjs",
+    "test:grid:browser:webkit": "BROWSER=webkit node scripts/verify-grid-browser.mjs"
   },
   "engines": {
     "node": ">=18"
