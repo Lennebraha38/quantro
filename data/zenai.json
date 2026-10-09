@@ -1,9 +1,9 @@
 {
   "repo": "Lennebraha38/ZENAI",
   "branch": "main",
-  "sha": "45c3cd9",
-  "full": "45c3cd90c075afb52c05dfa8b0e065d7718df430",
-  "date": "2026-09-28T17:51:35Z",
-  "msg": "KURULUM: OpenRouter gorsel bakiyesi durumu ve 402 yaniti aciklamasi",
+  "sha": "f1ac7b3",
+  "full": "f1ac7b3689fbd31fd33981d676b7ac828c6d9df5",
+  "date": "2026-10-08T20:10:57Z",
+  "msg": "auth: kayıt limiti (e-posta+IP), append-only sayac düzeltmesi, yazma doğ",
   "url": "https://github.com/Lennebraha38/ZENAI"
 }
