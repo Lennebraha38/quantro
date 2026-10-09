@@ -99,13 +99,13 @@ console.log("\n── 2. Devre fizigi ──");
 console.log("\n── 3. Deney tanimi (/experiment) ──");
 {
   const res = mockRes();
-  const req = mockReq("GET", "/api/grid/experiment");
+  const req = mockReq("GET", "/api/grid?op=experiment");
   await handler(req, res);
   ozel(res.statusCode === 200, "GET /experiment → 200", String(res.statusCode));
   ozel(res.payload.id === EXPERIMENT.id, "deney kimligi eslesiyor", res.payload.id);
   ozel(res.payload.qubits === 2 && res.payload.shotsPerUnit === 4096, "parametreler tutarli");
   const res2 = mockRes();
-  await handler(mockReq("POST", "/api/grid/experiment"), res2);
+  await handler(mockReq("POST", "/api/grid?op=experiment"), res2);
   ozel(res2.statusCode === 405, "POST /experiment → 405");
 }
 
@@ -113,7 +113,7 @@ console.log("\n── 4. Is birimi (/unit) ──");
 let unit;
 {
   const res = mockRes();
-  await handler(mockReq("POST", "/api/grid/unit"), res);
+  await handler(mockReq("POST", "/api/grid?op=unit"), res);
   ozel(res.statusCode === 200, "POST /unit → 200", String(res.statusCode));
   unit = res.payload;
   ozel(typeof unit.unitId === "string" && unit.unitId.length > 8, "unitId uretildi");
@@ -131,7 +131,7 @@ console.log("\n── 5. Dogru sonuc kabul (/result) ──");
   const counts = countsFor(unit.theta, unit.seed, unit.shots);
   const res = mockRes();
   await handler(
-    mockReq("POST", "/api/grid/result", {
+    mockReq("POST", "/api/grid?op=result", {
       unitId: unit.unitId,
       theta: unit.theta,
       seed: unit.seed,
@@ -150,7 +150,7 @@ console.log("\n── 6. Yanlis sonuc reddi (/result) ──");
 {
   const res = mockRes();
   await handler(
-    mockReq("POST", "/api/grid/result", {
+    mockReq("POST", "/api/grid?op=result", {
       unitId: "sahte-unit",
       theta: unit.theta,
       seed: unit.seed,
@@ -162,7 +162,7 @@ console.log("\n── 6. Yanlis sonuc reddi (/result) ──");
   ozel(res.payload && res.payload.error === "verify-failed", "verify-failed hatasi");
   const res2 = mockRes();
   await handler(
-    mockReq("POST", "/api/grid/result", { unitId: "", theta: 1, seed: 1, counts: {} }),
+    mockReq("POST", "/api/grid?op=result", { unitId: "", theta: 1, seed: 1, counts: {} }),
     res2,
   );
   ozel(res2.statusCode === 400, "bos unitId → 400", String(res2.statusCode));
@@ -171,7 +171,7 @@ console.log("\n── 6. Yanlis sonuc reddi (/result) ──");
 console.log("\n── 7. Istatistik ve acik veri ──");
 {
   const res = mockRes();
-  await handler(mockReq("GET", "/api/grid/stats"), res);
+  await handler(mockReq("GET", "/api/grid?op=stats"), res);
   ozel(res.statusCode === 200, "GET /stats → 200", String(res.statusCode));
   ozel(
     Array.isArray(res.payload.bins) && res.payload.bins.length === 48,
@@ -185,11 +185,11 @@ console.log("\n── 7. Istatistik ve acik veri ──");
   );
 
   const res2 = mockRes();
-  await handler(mockReq("GET", "/api/grid/data"), res2);
+  await handler(mockReq("GET", "/api/grid?op=data"), res2);
   ozel(res2.statusCode === 200 && Array.isArray(res2.payload.bins), "GET /data → 200 acik veri");
 
   const res3 = mockRes();
-  await handler(mockReq("GET", "/api/grid/yok"), res3);
+  await handler(mockReq("GET", "/api/grid?op=yok"), res3);
   ozel(res3.statusCode === 404, "bilinmeyen op → 404", String(res3.statusCode));
 }
 

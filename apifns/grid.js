@@ -154,8 +154,18 @@ function memBinned() {
 
 module.exports = async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
+  /* Vercel bu projede api/[...path].js catch-all'unu YALNIZCA tek yol
+     segmenti icin calistiriyor (cok segmentli /api/grid/x platform 404
+     donduruyor). Bu yuzden op'u once ?op= sorgusundan, yoksa yolun
+     3. parcasindan (yerel test) okuyoruz. */
   const parts = (req.url.split("?")[0] || "").split("/").filter(Boolean);
-  const op = parts[2] || "stats"; // /api/grid/<op>
+  let op = "";
+  try {
+    op = new URLSearchParams(req.url.split("?")[1] || "").get("op") || "";
+  } catch (e) {
+    op = "";
+  }
+  if (!op) op = parts[2] || "stats";
 
   /* ── Deney tanimi ────────────────────────────────────────────── */
   if (op === "experiment") {

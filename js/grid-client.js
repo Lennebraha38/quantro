@@ -127,7 +127,7 @@
 
   /* ── Veri akisi ────────────────────────────────────────────── */
   function api(path, opts) {
-    return fetch("/api/grid/" + path, opts)
+    return fetch("/api/grid?op=" + path, opts)
       .then(function (r) {
         return r.text().then(function (txt) {
           var j = null;
