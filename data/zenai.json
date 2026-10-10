@@ -1,9 +1,9 @@
 {
   "repo": "Lennebraha38/ZENAI",
   "branch": "main",
-  "sha": "f1ac7b3",
-  "full": "f1ac7b3689fbd31fd33981d676b7ac828c6d9df5",
-  "date": "2026-10-08T20:10:57Z",
-  "msg": "auth: kayıt limiti (e-posta+IP), append-only sayac düzeltmesi, yazma doğ",
+  "sha": "7b7ffed",
+  "full": "7b7ffed3ea3a61623f58785301fe2c9dbd563468",
+  "date": "2026-10-09T12:24:32Z",
+  "msg": "feat(ui): shadcn/tailwind+ts setup, add Toggle + SignIn1, integrate Reac",
   "url": "https://github.com/Lennebraha38/ZENAI"
 }
