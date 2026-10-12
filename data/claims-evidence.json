@@ -1,5 +1,5 @@
 {
-  "uretim": "2026-10-11T11:28:26.388Z",
+  "uretim": "2026-10-12T13:18:35.184Z",
   "surum": 1,
   "ozet": {
     "iddia": 3,
@@ -87,7 +87,7 @@
           "durum": "dogrulandi",
           "sonuc": {
             "dogrulukDogru": true,
-            "deger": "8 bayt canlı: [162, 143, 233, 67, 56, 89, 46, 60]",
+            "deger": "8 bayt canlı: [199, 248, 11, 131, 242, 248, 42, 179]",
             "kanit": "ANU'nun fiziksel kuantum kaynağı şu anda canlı yanıt veriyor.",
             "url": "https://qrng.anu.edu.au/API/jsonI.php?length=8&type=uint8"
           }
@@ -100,7 +100,7 @@
           "durum": "dogrulandi",
           "sonuc": {
             "dogrulukDogru": true,
-            "deger": "kaynak: quantro-proxy · [223, 111, 213, 143, 226, 242, 65, 171]",
+            "deger": "kaynak: quantro-proxy · [139, 114, 53, 16, 94, 100, 46, 144]",
             "kanit": "Quantro'nun herkese açık proxy'si canlı kuantum baytı döndürüyor.",
             "url": "https://quantro-1.vercel.app/api/anu?length=8&type=uint8"
           }
