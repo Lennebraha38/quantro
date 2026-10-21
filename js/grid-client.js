@@ -227,7 +227,7 @@
     g.lineTo(pad, h - pad);
     g.lineTo(w - 8, h - pad);
     g.stroke();
-    g.strokeStyle = "#38e1ff";
+    g.strokeStyle = "#5ba89c";
     g.lineWidth = 2;
     g.beginPath();
     for (var th = 0; th <= Math.PI * 2 + 1e-9; th += Math.PI / 90) {
@@ -238,7 +238,7 @@
     }
     g.stroke();
     if (stats && stats.bins && !stats.__mixed) {
-      g.fillStyle = "#f5b23c";
+      g.fillStyle = "#d4a853";
       stats.bins.forEach(function (b) {
         if (!b.shots) return;
         g.beginPath();

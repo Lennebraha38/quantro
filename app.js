@@ -109,7 +109,7 @@ const I18N = {
     "m4.t": "Sonuçların Sentezi",
     "m4.d":
       "Bulgular mevcut literatürle karşılaştırılır, tutarsızlıklar irdelenir ve özgün katkı netleştirilir.",
-    "m.panel": "// Temel Denklemler",
+    "m.panel": "§ Temel Denklemler",
     "m.eq.sch": "— Schrödinger Denklemi",
     "m.eq.ein": "— Einstein Alan Denklemi",
     "m.eq.heis": "— Heisenberg Belirsizlik",
@@ -316,7 +316,7 @@ const I18N = {
     "m4.t": "Synthesis of Results",
     "m4.d":
       "Findings are compared with existing literature, inconsistencies are examined and the original contribution is clarified.",
-    "m.panel": "// Core Equations",
+    "m.panel": "§ Core Equations",
     "m.eq.sch": "— Schrödinger Equation",
     "m.eq.ein": "— Einstein Field Equation",
     "m.eq.heis": "— Heisenberg Uncertainty",
@@ -526,7 +526,7 @@ const I18N = {
     "m4.t": "Synthèse des Résultats",
     "m4.d":
       "Les résultats sont comparés à la littérature existante, les incohérences sont examinées et la contribution originale est précisée.",
-    "m.panel": "// Équations Fondamentales",
+    "m.panel": "§ Équations Fondamentales",
     "m.eq.sch": "— Équation de Schrödinger",
     "m.eq.ein": "— Équation du Champ d'Einstein",
     "m.eq.heis": "— Incertitude de Heisenberg",
@@ -739,7 +739,7 @@ const I18N = {
     "m4.t": "Síntesis de Resultados",
     "m4.d":
       "Los hallazgos se comparan con la literatura existente, se examinan las inconsistencias y se clarifica la contribución original.",
-    "m.panel": "// Ecuaciones Fundamentales",
+    "m.panel": "§ Ecuaciones Fundamentales",
     "m.eq.sch": "— Ecuación de Schrödinger",
     "m.eq.ein": "— Ecuación de Campo de Einstein",
     "m.eq.heis": "— Incertidumbre de Heisenberg",
@@ -949,7 +949,7 @@ const I18N = {
     "m4.t": "Sintesi dei Risultati",
     "m4.d":
       "I risultati vengono confrontati con la letteratura esistente, si esaminano le incoerenze e si chiarisce il contributo originale.",
-    "m.panel": "// Equazioni Fondamentali",
+    "m.panel": "§ Equazioni Fondamentali",
     "m.eq.sch": "— Equazione di Schrödinger",
     "m.eq.ein": "— Equazione di Campo di Einstein",
     "m.eq.heis": "— Indeterminazione di Heisenberg",
@@ -1158,7 +1158,7 @@ const I18N = {
     "m4.t": "Синтез результатов",
     "m4.d":
       "Результаты сравниваются с существующей литературой, анализируются противоречия и уточняется оригинальный вклад.",
-    "m.panel": "// Основные уравнения",
+    "m.panel": "§ Основные уравнения",
     "m.eq.sch": "— Уравнение Шрёдингера",
     "m.eq.ein": "— Уравнение поля Эйнштейна",
     "m.eq.heis": "— Принцип неопределённости Гейзенберга",
@@ -1360,7 +1360,7 @@ const I18N = {
     "m3.d": "닫힌 형태의 해를 찾고, 해석적 접근이 부족할 때 수치 시뮬레이션이 투입됩니다.",
     "m4.t": "결과 종합",
     "m4.d": "결과는 기존 문헌과 비교되고, 불일치가 검토되며, 독창적 기여가 명확해집니다.",
-    "m.panel": "// 핵심 방정식",
+    "m.panel": "§ 핵심 방정식",
     "m.eq.sch": "— 슈뢰딩거 방정식",
     "m.eq.ein": "— 아인슈타인 장 방정식",
     "m.eq.heis": "— 하이젠베르크 불확정성",
@@ -1556,7 +1556,7 @@ const I18N = {
     "m3.d": "تُبحث الحلول المغلقة؛ وعندما لا يكفي النهج التحليلي، تدخل المحاكاة العددية.",
     "m4.t": "توليف النتائج",
     "m4.d": "تُقارن النتائج بالأدبيات الموجودة، وتُفحص التناقضات، ويتضح الإسهام الأصيل.",
-    "m.panel": "// المعادلات الأساسية",
+    "m.panel": "§ المعادلات الأساسية",
     "m.eq.sch": "— معادلة شرودنغر",
     "m.eq.ein": "— معادلة حقل أينشتاين",
     "m.eq.heis": "— عدم يقين هايزنبرغ",

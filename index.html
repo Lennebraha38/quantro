@@ -7,7 +7,7 @@
       name="description"
       content="Quantro — Kuantum Mekaniği ve Astrofizik alanında ileri araştırmalar yürüten bağımsız ARGE merkezi."
     />
-    <meta name="theme-color" content="#020810" />
+    <meta name="theme-color" content="#0b0c0e" />
     <meta property="og:title" content="Quantro · ARGE Merkezi" />
     <meta
       property="og:description"
@@ -148,14 +148,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Syne:wght@700;800&family=JetBrains+Mono:wght@300;400&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,400&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap"
       rel="stylesheet"
       media="print"
       onload="this.media = 'all'"
     />
     <noscript
       ><link
-        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Syne:wght@700;800&family=JetBrains+Mono:wght@300;400&display=swap"
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,400&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap"
         rel="stylesheet"
     /></noscript>
     <link rel="manifest" href="manifest.webmanifest" />
@@ -220,9 +220,9 @@
         <div class="hud hud-br" aria-hidden="true"></div>
 
         <div class="badge badge-tl" aria-hidden="true">
-          SYS :: QTR-Ω-ACTIVE<br />
-          FIELD :: HIGGS ψ(x,t)<br />
-          MODE :: GW-INTERFERENCE
+          ARŞİV :: QTR-2026 · MONOGRAFİ<br />
+          ALAN :: HİGGS ψ(x,t)<br />
+          GÖZLEM :: GİRİŞİM PLAKASI I
         </div>
         <div class="badge badge-tr" aria-hidden="true" id="live-hud">
           AMP :: 3.80 · ω=0.380 rad/s
@@ -363,9 +363,7 @@
                 style="
                   font-family: var(--fd);
                   font-size: clamp(28px, 4vw, 48px);
-                  font-weight: 800;
-                  letter-spacing: -1px;
-                  text-transform: uppercase;
+                  font-weight: 400; letter-spacing: -0.02em; text-transform: none;
                   color: var(--text);
                   line-height: 1;
                 "
@@ -376,7 +374,7 @@
                 style="
                   font-size: 14px;
                   font-weight: 300;
-                  color: rgba(232, 237, 245, 0.4);
+                  color: var(--muted);
                   margin-top: 12px;
                   line-height: 1.7;
                   max-width: 420px;
@@ -500,9 +498,7 @@
                 style="
                   font-family: var(--fd);
                   font-size: clamp(28px, 4vw, 48px);
-                  font-weight: 800;
-                  letter-spacing: -1px;
-                  text-transform: uppercase;
+                  font-weight: 400; letter-spacing: -0.02em; text-transform: none;
                   color: var(--text);
                   line-height: 1;
                 "
@@ -515,7 +511,7 @@
                 style="
                   font-size: 14px;
                   font-weight: 300;
-                  color: rgba(232, 237, 245, 0.4);
+                  color: var(--muted);
                   margin-top: 12px;
                   line-height: 1.7;
                   max-width: 420px;
@@ -633,7 +629,7 @@
               margin-top: 56px;
               border: 1px solid rgba(0, 200, 240, 0.15);
               background: var(--deep);
-              border-radius: 8px;
+              border-radius: 2px;
               padding: 28px 30px;
               max-width: 640px;
               margin-left: auto;
@@ -657,7 +653,7 @@
               style="
                 font-size: 14px;
                 font-weight: 300;
-                color: rgba(232, 237, 245, 0.55);
+                color: var(--muted);
                 line-height: 1.7;
                 margin: 0 0 16px;
               "
@@ -731,7 +727,7 @@
           >İçerik üretiminde yapay zekâ destekli araçlar kullanılabilir; teknik içerik kaynaklarla
           doğrulanır.</span
         >
-        <span class="footer-sys">SYS :: QTR-Ω-ACTIVE</span>
+        <span class="footer-sys">ARŞİV :: QTR-2026 · MONOGRAFİ</span>
         <span class="footer-sys"
           ><a
             href="https://github.com/quantro38/quantro/issues/new"
@@ -871,7 +867,7 @@
         const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setClearColor(0x020810, 1);
+        renderer.setClearColor(0x0b0c0e, 1);
 
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(
@@ -882,7 +878,7 @@
         );
         camera.position.set(0, 18, 44);
         camera.lookAt(0, 0, 0);
-        scene.fog = new THREE.FogExp2(0x020810, 0.017);
+        scene.fog = new THREE.FogExp2(0x0b0c0e, 0.017);
 
         /* ── Gravitational wave mesh ── */
         const SEGS = 190,
@@ -906,7 +902,7 @@
         const fGeo = new THREE.PlaneGeometry(SIZE, SIZE, SEGS, SEGS);
         fGeo.rotateX(-Math.PI / 2);
         const fMat = new THREE.MeshBasicMaterial({
-          color: 0x001520,
+          color: 0x121418,
           transparent: true,
           opacity: 0.65,
           side: THREE.DoubleSide,
@@ -927,17 +923,17 @@
           pP[i3 + 2] = (Math.random() - 0.5) * 150;
           const b = Math.random();
           if (b > 0.72) {
-            pC[i3] = 0;
-            pC[i3 + 1] = 0.78;
-            pC[i3 + 2] = 0.94;
+            pC[i3] = 0.83;
+            pC[i3 + 1] = 0.66;
+            pC[i3 + 2] = 0.33;
           } else if (b > 0.44) {
-            pC[i3] = 0.28;
-            pC[i3 + 1] = 0.15;
-            pC[i3 + 2] = 0.7;
+            pC[i3] = 0.36;
+            pC[i3 + 1] = 0.66;
+            pC[i3 + 2] = 0.61;
           } else {
-            pC[i3] = 0.85;
-            pC[i3 + 1] = 0.92;
-            pC[i3 + 2] = 1;
+            pC[i3] = 0.93;
+            pC[i3 + 1] = 0.9;
+            pC[i3 + 2] = 0.85;
           }
         }
         pG.setAttribute("position", new THREE.BufferAttribute(pP, 3));
@@ -954,7 +950,7 @@
         /* ── Central Higgs glow sphere ── */
         const sGeo = new THREE.SphereGeometry(1.3, 32, 32);
         const sMat = new THREE.MeshBasicMaterial({
-          color: 0x00c8f0,
+          color: 0xd4a853,
           transparent: true,
           opacity: 0.85,
         });
@@ -963,7 +959,7 @@
 
         const rGeo = new THREE.RingGeometry(2, 3.6, 64);
         const rMat = new THREE.MeshBasicMaterial({
-          color: 0x00c8f0,
+          color: 0xd4a853,
           transparent: true,
           opacity: 0.07,
           side: THREE.DoubleSide,
@@ -1021,9 +1017,9 @@
         }
 
         /* ── Color lerp ── */
-        const cCyan = new THREE.Color(0x00c8f0);
-        const cPurp = new THREE.Color(0x5020a0);
-        const cDeep = new THREE.Color(0x001224);
+        const cCyan = new THREE.Color(0xd4a853);
+        const cPurp = new THREE.Color(0x4a7a72);
+        const cDeep = new THREE.Color(0x14161a);
         const tmp = new THREE.Color();
         const posW = geo.attributes.position;
         const posF = fGeo.attributes.position;
@@ -1108,7 +1104,7 @@
         if (!c) return;
         if (on)
           c.style.background =
-            "radial-gradient(120% 90% at 50% 38%,#0a1a3a 0%,#04101f 55%,#01060c 100%)";
+            "radial-gradient(120% 90% at 50% 38%,#1a1814 0%,#111215 55%,#0b0c0e 100%)";
         else c.style.background = "";
       }
       function threeWatch() {

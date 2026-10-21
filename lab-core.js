@@ -129,7 +129,7 @@ if (window.THREE && document.getElementById("hero-canvas")) {
     }
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setClearColor(0x020810, 1);
+    renderer.setClearColor(0x0b0c0e, 1);
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
       55,
@@ -139,7 +139,7 @@ if (window.THREE && document.getElementById("hero-canvas")) {
     );
     camera.position.set(0, 16, 40);
     camera.lookAt(0, 0, 0);
-    scene.fog = new THREE.FogExp2(0x020810, 0.018);
+    scene.fog = new THREE.FogExp2(0x0b0c0e, 0.018);
 
     const SEGS = 120,
       SIZE = 80;
@@ -161,7 +161,7 @@ if (window.THREE && document.getElementById("hero-canvas")) {
     const fMesh = new THREE.Mesh(
       fGeo,
       new THREE.MeshBasicMaterial({
-        color: 0x001520,
+        color: 0x121418,
         transparent: true,
         opacity: 0.6,
         side: THREE.DoubleSide,
@@ -182,17 +182,17 @@ if (window.THREE && document.getElementById("hero-canvas")) {
       pP[i3 + 2] = (Math.random() - 0.5) * 130;
       const b = Math.random();
       if (b > 0.7) {
-        pC[i3] = 0;
-        pC[i3 + 1] = 0.78;
-        pC[i3 + 2] = 0.94;
+        pC[i3] = 0.83;
+        pC[i3 + 1] = 0.66;
+        pC[i3 + 2] = 0.33;
       } else if (b > 0.4) {
-        pC[i3] = 0.28;
-        pC[i3 + 1] = 0.15;
-        pC[i3 + 2] = 0.7;
+        pC[i3] = 0.36;
+        pC[i3 + 1] = 0.66;
+        pC[i3 + 2] = 0.61;
       } else {
-        pC[i3] = 0.85;
-        pC[i3 + 1] = 0.92;
-        pC[i3 + 2] = 1;
+        pC[i3] = 0.93;
+        pC[i3 + 1] = 0.9;
+        pC[i3 + 2] = 0.85;
       }
     }
     pG.setAttribute("position", new THREE.BufferAttribute(pP, 3));
@@ -211,13 +211,13 @@ if (window.THREE && document.getElementById("hero-canvas")) {
 
     const sph = new THREE.Mesh(
       new THREE.SphereGeometry(1.2, 24, 24),
-      new THREE.MeshBasicMaterial({ color: 0x00c8f0, transparent: true, opacity: 0.85 }),
+      new THREE.MeshBasicMaterial({ color: 0xd4a853, transparent: true, opacity: 0.85 }),
     );
     scene.add(sph);
 
-    const cC = new THREE.Color(0x00c8f0),
-      pC2 = new THREE.Color(0x5020a0),
-      dC = new THREE.Color(0x001224),
+    const cC = new THREE.Color(0xd4a853),
+      pC2 = new THREE.Color(0x4a7a72),
+      dC = new THREE.Color(0x14161a),
       tmp = new THREE.Color();
     const posW = geo.attributes.position,
       posF = fGeo.attributes.position,

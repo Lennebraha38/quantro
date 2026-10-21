@@ -6,13 +6,13 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="48x48" href="img/favicon-48.png">
 <link rel="apple-touch-icon" sizes="180x180" href="img/icon-180.png">
-<meta name="theme-color" content="#020810">
+<meta name="theme-color" content="#0b0c0e">
 <meta name="robots" content="index, follow">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Syne:wght@700;800&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,400&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="css/base.css">
 <link rel="stylesheet" href="style.css">
 <title>Quantro GRID — Tarayıcında Dağıtık Kuantum Deneyi</title>
@@ -58,46 +58,51 @@
 }
 </script>
 <style>
-  .grid-wrap{max-width:1080px;margin:0 auto;padding:0 22px 90px}
-  .g-panel{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:22px 22px 20px;margin:22px 0}
-  .g-cta{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:6px 0 2px}
-  .g-btn{appearance:none;cursor:pointer;font:inherit;font-weight:600;border-radius:11px;padding:12px 20px;border:1px solid rgba(56,225,255,.45);background:rgba(56,225,255,.08);color:#dffaff;transition:transform .15s,background .2s}
-  .g-btn:hover{transform:translateY(-1px);background:rgba(56,225,255,.16)}
-  .g-btn.primary{background:linear-gradient(120deg,#38e1ff,#7b6cff);color:#04121c;border-color:transparent}
-  .g-btn[data-running]{background:rgba(245,178,60,.16);border-color:rgba(245,178,60,.5);color:#ffe6b8}
-  .g-btn.ghost{background:transparent;border-color:rgba(255,255,255,.18);color:#cfe9f2}
-  .g-status{min-height:1.4em;margin-top:10px;font-size:.9rem;color:#8fd8ee;font-family:"JetBrains Mono",monospace}
-  .g-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:6px}
-  @media(max-width:640px){.g-stats{grid-template-columns:1fr}}
-  .g-stat{background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.07);border-radius:13px;padding:16px}
-  .g-stat b{display:block;font-family:"Syne",sans-serif;font-size:1.7rem;color:#eafcff;line-height:1.1}
-  .g-stat span{font-size:.78rem;letter-spacing:.04em;text-transform:uppercase;color:#7fb6c7}
-  .g-you{margin-top:16px;font-size:.92rem;color:#bfe6f2}
-  .g-you b{color:#f5b23c;font-family:"JetBrains Mono",monospace}
-  #g-chart{width:100%;height:260px;display:block;border-radius:12px;background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.06)}
-  .g-legend{display:flex;gap:20px;flex-wrap:wrap;margin-top:12px;font-size:.85rem;color:#a9d3e0}
-  .g-legend i{display:inline-block;width:22px;height:3px;border-radius:2px;vertical-align:middle;margin-right:7px}
-  .g-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .grid-wrap{max-width:1280px;margin:0 auto;padding:24px 40px 100px}
+  .g-panel{background:var(--deep);border:1px solid var(--hairline);border-radius:0;padding:32px;margin:24px 0}
+  .g-panel h2{font-family:var(--fd);font-weight:400;font-size:28px;color:var(--text);letter-spacing:-0.01em}
+  .g-cta{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:14px 0 6px}
+  .g-btn{appearance:none;cursor:pointer;font-family:var(--fm);font-size:10.5px;letter-spacing:1.8px;text-transform:uppercase;font-weight:500;border-radius:2px;padding:13px 22px;border:1px solid var(--hairline-strong);background:rgba(212,168,83,.08);color:var(--cyan);transition:transform .15s,background .2s,color .2s}
+  .g-btn:hover{transform:translateY(-1px);background:var(--cyan);color:var(--void)}
+  .g-btn.primary{background:var(--cyan);color:var(--void);border-color:var(--cyan)}
+  .g-btn.primary:hover{background:#e2b866}
+  .g-btn[data-running]{background:rgba(104,184,142,.16);border-color:var(--green);color:var(--green)}
+  .g-btn.ghost{background:transparent;border-color:var(--hairline);color:var(--text)}
+  .g-btn.ghost:hover{border-color:var(--cyan);color:var(--cyan);background:transparent}
+  .g-status{min-height:1.4em;margin-top:12px;font-size:12px;color:var(--cyan);font-family:var(--fm)}
+  .g-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:8px;border:1px solid var(--hairline)}
+  @media(max-width:640px){.g-stats{grid-template-columns:1fr}.grid-wrap{padding:16px 20px 80px}}
+  .g-stat{background:rgba(11,12,14,.6);border-right:1px solid var(--hairline);padding:24px}
+  .g-stat:last-child{border-right:none}
+  .g-stat b{display:block;font-family:var(--fd);font-weight:400;font-size:36px;color:var(--cyan);line-height:1.1;font-variant-numeric:tabular-nums}
+  .g-stat span{font-family:var(--fm);font-size:10px;letter-spacing:1.8px;text-transform:uppercase;color:var(--muted)}
+  .g-you{margin-top:16px;font-size:14px;color:var(--muted)}
+  .g-you b{color:var(--cyan);font-family:var(--fm);font-weight:500}
+  #g-chart{width:100%;height:260px;display:block;border-radius:0;background:rgba(11,12,14,.75);border:1px solid var(--hairline)}
+  .g-legend{display:flex;gap:24px;flex-wrap:wrap;margin-top:14px;font-family:var(--fm);font-size:11px;color:var(--muted)}
+  .g-legend i{display:inline-block;width:22px;height:2px;vertical-align:middle;margin-right:8px}
+  .g-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--hairline)}
   @media(max-width:760px){.g-steps{grid-template-columns:1fr}}
-  .g-step{background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.07);border-radius:13px;padding:16px;font-size:.92rem;color:#c9e6f0}
-  .g-note{font-size:.86rem;color:#8aa9b6;line-height:1.6}
-  .g-disc{border-left:3px solid #f5b23c;background:rgba(245,178,60,.06);padding:12px 16px;border-radius:0 10px 10px 0;font-size:.88rem;color:#e9d6b3;margin-top:16px}
-  .g-disc strong{color:#f5c97a}
-  .g-id{font-family:"JetBrains Mono",monospace;font-size:.82rem;color:#8fd8ee;margin-top:12px}
-  .g-id b{color:#f5b23c}
-  .g-badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
-  .g-badge{font-size:.76rem;padding:5px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.14);color:#7f9aa6;background:rgba(255,255,255,.03)}
-  .g-badge.on{color:#04121c;background:linear-gradient(120deg,#38e1ff,#9fe8b6);border-color:transparent;font-weight:600}
-  .g-lb{list-style:none;margin:8px 0 0;padding:0}
-  .g-lb li{display:flex;align-items:center;gap:12px;padding:9px 12px;border-bottom:1px solid rgba(255,255,255,.06);font-size:.9rem}
-  .g-lb-rk{width:24px;color:#7fb6c7;font-family:"JetBrains Mono",monospace}
-  .g-lb code{color:#eafcff;font-family:"JetBrains Mono",monospace}
-  .g-lb-v{margin-left:auto;color:#f5b23c;font-family:"JetBrains Mono",monospace}
-  .g-lb-empty{color:#8aa9b6;padding:9px 12px;list-style:none}
-  .g-dict{width:100%;border-collapse:collapse;margin-top:10px;font-size:.85rem}
-  .g-dict td{padding:7px 10px;border-bottom:1px solid rgba(255,255,255,.06);color:#c9e6f0;vertical-align:top}
-  .g-dict td:first-child{color:#8fd8ee;font-family:"JetBrains Mono",monospace;white-space:nowrap}
-  .g-cite{font-family:"JetBrains Mono",monospace;font-size:.8rem;color:#bfe6f2;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:12px;margin-top:12px;overflow-x:auto}
+  .g-step{background:rgba(11,12,14,.55);border-right:1px solid var(--hairline);padding:22px;font-size:14px;color:var(--muted);line-height:1.75}
+  .g-step:last-child{border-right:none}
+  .g-note{font-size:14.5px;color:var(--muted);line-height:1.75}
+  .g-disc{border-left:2px solid var(--cyan);background:rgba(212,168,83,.04);padding:16px 20px;border-radius:0;font-size:14px;color:var(--muted);margin-top:18px}
+  .g-disc strong{color:var(--text)}
+  .g-id{font-family:var(--fm);font-size:11.5px;color:var(--muted);margin-top:14px}
+  .g-id b{color:var(--cyan)}
+  .g-badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .g-badge{font-family:var(--fm);font-size:10px;letter-spacing:1.2px;text-transform:uppercase;padding:5px 12px;border-radius:2px;border:1px solid var(--hairline);color:var(--muted);background:rgba(11,12,14,.5)}
+  .g-badge.on{color:var(--void);background:var(--cyan);border-color:var(--cyan);font-weight:500}
+  .g-lb{list-style:none;margin:8px 0 0;padding:0;border-top:1px solid var(--hairline)}
+  .g-lb li{display:flex;align-items:center;gap:12px;padding:12px;border-bottom:1px solid var(--hairline);font-size:13.5px}
+  .g-lb-rk{width:28px;color:var(--muted);font-family:var(--fm)}
+  .g-lb code{color:var(--text);font-family:var(--fm)}
+  .g-lb-v{margin-left:auto;color:var(--cyan);font-family:var(--fm)}
+  .g-lb-empty{color:var(--muted);padding:12px;list-style:none;font-family:var(--fm);font-size:12px}
+  .g-dict{width:100%;border-collapse:collapse;margin-top:14px;font-size:13.5px;border-top:1px solid var(--hairline)}
+  .g-dict td{padding:10px 12px;border-bottom:1px solid var(--hairline);color:var(--muted);vertical-align:top}
+  .g-dict td:first-child{color:var(--cyan);font-family:var(--fm);white-space:nowrap}
+  .g-cite{font-family:var(--fm);font-size:12px;color:var(--text);background:rgba(11,12,14,.75);border:1px solid var(--hairline);border-left:2px solid var(--cyan);border-radius:0;padding:16px;margin-top:16px;overflow-x:auto}
 </style>
 </head>
 <body>
@@ -173,8 +178,8 @@
     <h2 style="margin:.1em 0 .6em" data-gi18n="chartTitle">Girişim eğrisi (açık veri)</h2>
     <canvas id="g-chart" role="img" aria-label="Kuantum girişim eğrisi: teori ve GRID ampirik verisi"></canvas>
     <div class="g-legend">
-      <span><i style="background:#38e1ff"></i><span data-gi18n="chartTheory">Teori (1 − sinθ)/2</span></span>
-      <span><i style="background:#f5b23c"></i><span data-gi18n="chartEmpirical">GRID ampirik</span></span>
+      <span><i style="background:#5ba89c"></i><span data-gi18n="chartTheory">Teori (1 − sinθ)/2</span></span>
+      <span><i style="background:#d4a853"></i><span data-gi18n="chartEmpirical">GRID ampirik</span></span>
     </div>
     <p class="g-note" style="margin-top:10px" data-gi18n="verifyDesc"></p>
   </div>

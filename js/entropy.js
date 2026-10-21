@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════════════════
    QUANTRO — "entropy" arka planı
-   21st.dev/r/xubohuah/entropy (quantum-nebula) tasariminin uyarlamasi.
+   Gözlemevi Faz Uzayı & Usturlap Yörünge Akış Alanı (Archival Observatory Edition).
 
    ══ NEDEN ARKA PLAN CANVAS 2D ══
    WebGL uyarlamasi once yazildi ve calisiyordu, ancak uretimde
@@ -40,7 +40,17 @@
   var CFG = {
     /* Varsayilan: 2D. WebGL yalnizca acikca istenirse. */
     webgl: /[?&]webgl=1\b/.test(location.search),
+    fov: 75,
+    dist: 5,
+    depth: 1.2,
+    size: 5,
+    parallax: 0.22,
+    hue: 40,
+    hueVar: 18,
     dprMax: 2,
+    baseCount: 14000,
+    maxCount: 36000,
+    minCount: 4000,
     /* whiteGuard esikleri (0-1) */
     guardMaxWhite: 0.9,
     guardStep: 0.82,
@@ -428,7 +438,7 @@
     /* Kaynak renkler BILINCLI olarak sinirli: en parlak 176,216,255.
        source-over harmalamada sonuc kaynagi asamaz, bu yuzden bu
        palet tek basina beyaz uretemeye izin vermez. */
-    var COL = ["118,232,255", "176,216,255", "167,139,250", "96,180,255"];
+    var COL = ["212,168,83", "226,184,102", "91,168,156", "196,138,92"];
 
     function build() {
       measure();
@@ -473,7 +483,7 @@
           return parts.length;
         };
       }
-      ctx.fillStyle = "#020810";
+      ctx.fillStyle = "#0b0c0e";
       ctx.fillRect(0, 0, W, H);
       step(reduce ? 3 : performance.now());
     }
@@ -517,14 +527,14 @@
       }
       guarded++;
       if (worst > CFG.guardMaxWhite) {
-        ctx.fillStyle = "rgba(2, 8, 16, " + (1 - CFG.guardStep) + ")";
+        ctx.fillStyle = "rgba(11, 12, 14, " + (1 - CFG.guardStep) + ")";
         ctx.fillRect(0, 0, W, H);
       }
     }
 
     function step(t) {
       /* Yumusak gaz katmani: once soluk, sonra bulutlar. */
-      ctx.fillStyle = "rgba(2, 8, 16, 0.20)";
+      ctx.fillStyle = "rgba(11, 12, 14, 0.20)";
       ctx.fillRect(0, 0, W, H);
       var tt = reduce ? 3 : t * 0.001;
 

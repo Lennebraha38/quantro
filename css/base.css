@@ -1,10 +1,11 @@
-/* ═══════════════════════════════════════════════════
-   QUANTRO · DESIGN BASE
-   Tüm sayfaların ortak temeli: reset, tasarım token'ları,
-   body, scrollbar, focus ve KVKK çerez onayı.
-   Sayfaya özel stiller ayrı dosyalardadır:
-   style.css (ana site) · css/blog.css · css/lab.css · css/admin.css
-   ═══════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════════
+   QUANTRO · ARCHIVAL MONOGRAPH & OBSERVATORY DESIGN SYSTEM (BASE)
+   Felsefe: Siberpunk/Neon "AI Slop" klişelerinden arındırılmış;
+   Bell Labs, Perimeter Institute, CERN Courier ve klasik bilimsel
+   monografilerden ilham alan derin, zamansız ve özgün mimari.
+   ═══════════════════════════════════════════════════════════════════ */
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,400&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap");
+
 *,
 *::before,
 *::after {
@@ -12,40 +13,70 @@
   margin: 0;
   padding: 0;
 }
+
 :root {
-  --void: #020810;
-  --deep: rgba(7, 17, 31, 0.72);
-  --surface: rgba(13, 31, 53, 0.66);
-  --subtle: #1e3248;
-  --cyan: #00c8f0;
-  --cyanD: rgba(0, 200, 240, 0.12);
-  --cyanM: rgba(0, 200, 240, 0.35);
-  --text: #e8edf5;
-  --muted: #7a93a8;
-  --red: #ff4466;
-  --green: #00f0a0;
-  --gold: #f0c040;
-  --purple: #a060ff;
-  --fd: "Syne", sans-serif;
-  --fb: "Space Grotesk", sans-serif;
-  --fm: "JetBrains Mono", monospace;
+  /* Sıcak Karbon Obsidyen & Arşivsel Parşömen / Usturlap Pirinci Paleti */
+  --void: #0b0c0e;
+  --deep: rgba(18, 20, 24, 0.88);
+  --surface: rgba(25, 28, 34, 0.84);
+  --subtle: #2b2f37;
+
+  /* Birincil Vurgu: Usturlap Pirinci (geriye dönük uyumluluk için --cyan takma adıyla) */
+  --cyan: #d4a853;
+  --cyanD: rgba(212, 168, 83, 0.12);
+  --cyanM: rgba(212, 168, 83, 0.34);
+  --accent: #d4a853;
+  --verdigris: #5ba89c;
+
+  /* Metin & Mürekkep Tonları */
+  --text: #ece7dd;
+  --muted: #9e988c;
+
+  /* Yardımcı Mineral Vurgular */
+  --red: #d46556;
+  --green: #68b88e;
+  --gold: #e2b866;
+  --purple: #b87b56;
+
+  /* Mimari Çizgiler */
+  --hairline: rgba(236, 231, 221, 0.11);
+  --hairline-strong: rgba(212, 168, 83, 0.36);
+
+  /* Zamansız Monografi Tipografi Üçlüsü */
+  --fd: "Newsreader", "Cormorant Garamond", Georgia, serif;
+  --fb: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --fm: "IBM Plex Mono", "Courier New", monospace;
 }
+
 html {
   scroll-behavior: smooth;
   overflow-x: hidden;
-  /* Sayfa zemini burada kalır; gövde saydam olunca
-     akış alanı canvas'ı görünür olur */
   background: var(--void);
+  font-size: 16px;
 }
+
 body {
   background: transparent;
   color: var(--text);
   font-family: var(--fb);
+  font-weight: 400;
+  line-height: 1.7;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings:
+    "kern" 1,
+    "liga" 1;
 }
+
+::selection {
+  background: rgba(212, 168, 83, 0.24);
+  color: var(--text);
+}
+
 ::-webkit-scrollbar {
-  width: 3px;
+  width: 4px;
+  height: 4px;
 }
 ::-webkit-scrollbar-track {
   background: var(--void);
@@ -53,20 +84,21 @@ body {
 ::-webkit-scrollbar-thumb {
   background: var(--cyanM);
 }
+
 :focus-visible {
-  outline: 2px solid var(--cyan);
+  outline: 1.5px solid var(--cyan);
   outline-offset: 3px;
 }
 
-/* ══ Cookie Consent (KVKK) — tek kaynak ══ */
+/* ══ Cookie Consent (KVKK) — Arşivsel Bildirim Şeridi ══ */
 .qc-cookie {
   position: fixed;
   left: 0;
   right: 0;
   bottom: 0;
   z-index: 9999;
-  background: rgba(4, 10, 20, 0.97);
-  border-top: 1px solid rgba(0, 200, 240, 0.25);
+  background: rgba(11, 12, 14, 0.97);
+  border-top: 1px solid var(--hairline-strong);
   padding: 18px 24px;
   display: none;
 }
@@ -74,7 +106,7 @@ body {
   display: block;
 }
 .qc-inner {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
   display: flex;
   gap: 24px;
@@ -85,13 +117,15 @@ body {
 .qc-text {
   flex: 1 1 480px;
   font-family: var(--fb);
-  font-size: 13px;
-  line-height: 1.6;
+  font-size: 13.5px;
+  line-height: 1.65;
   color: var(--muted);
 }
 .qc-text strong {
   color: var(--text);
   font-family: var(--fd);
+  font-weight: 500;
+  font-size: 15px;
 }
 .qc-btns {
   display: flex;
@@ -103,23 +137,31 @@ body {
   cursor: pointer;
   font-family: var(--fm);
   font-size: 11px;
-  letter-spacing: 2px;
+  letter-spacing: 1.8px;
   text-transform: uppercase;
-  padding: 12px 22px;
-  transition: opacity 0.2s;
-}
-.qc-btn:hover {
-  opacity: 0.8;
+  padding: 11px 22px;
+  border-radius: 2px;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    border-color 0.2s;
 }
 .qc-accept {
   background: var(--cyan);
-  color: #020810;
-  font-weight: 700;
+  color: var(--void);
+  font-weight: 500;
+}
+.qc-accept:hover {
+  background: #e2b866;
 }
 .qc-reject {
   background: transparent;
   color: var(--muted);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid var(--hairline);
+}
+.qc-reject:hover {
+  border-color: var(--text);
+  color: var(--text);
 }
 .qc-link {
   color: var(--cyan);
@@ -127,7 +169,7 @@ body {
   margin-left: 6px;
 }
 
-/* ══ Global yardımcılar (100-puan sprint) ══ */
+/* ══ Erişilebilirlik & Katalog Yardımcıları ══ */
 .vh {
   position: absolute !important;
   width: 1px;
@@ -153,34 +195,36 @@ body {
   text-transform: uppercase;
   padding: 12px 22px;
   text-decoration: none;
-  font-weight: 700;
+  font-weight: 500;
   transition: top 0.2s;
 }
 .skip-link:focus {
   top: 16px;
 }
+
+/* ══ Katalog Yolu (Breadcrumbs) ══ */
 .crumbs {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 10px;
   align-items: center;
   font-family: var(--fm);
-  font-size: 10px;
-  letter-spacing: 2px;
+  font-size: 10.5px;
+  letter-spacing: 1.8px;
   text-transform: uppercase;
   color: var(--muted);
   max-width: 1200px;
-  margin: 110px auto 0;
-  padding: 0 40px;
+  margin: 102px auto 0;
+  padding: 0 48px;
 }
 .crumbs a {
   color: var(--cyan);
   text-decoration: none;
-  transition: opacity 0.2s;
-  padding: 14px 0;
+  transition: color 0.2s;
+  padding: 12px 0;
 }
 .crumbs a:hover {
-  opacity: 0.75;
+  color: var(--text);
 }
 .crumbs [aria-current="page"] {
   color: var(--text);
@@ -189,37 +233,40 @@ body {
   color: var(--cyanM);
 }
 
-/* SSS (FAQ) + istatistik + yanıt süresi */
+/* ══ SSS (FAQ) — Editöryal Dizin Kayıtları ══ */
 .faq-list {
   display: grid;
-  gap: 10px;
-  max-width: 860px;
+  gap: 0;
+  max-width: 880px;
   margin: 0 auto;
+  border-top: 1px solid var(--hairline);
 }
 .faq-item {
-  background: var(--deep);
-  border: 1px solid rgba(0, 200, 240, 0.1);
-  border-radius: 8px;
+  background: transparent;
+  border-bottom: 1px solid var(--hairline);
+  border-radius: 0;
   overflow: hidden;
-  transition: border-color 0.2s;
+  transition: background 0.25s;
+}
+.faq-item:hover {
+  background: rgba(236, 231, 221, 0.02);
 }
 .faq-item[open] {
-  border-color: rgba(0, 200, 240, 0.35);
+  background: rgba(212, 168, 83, 0.035);
 }
 .faq-item summary {
   font-family: var(--fd);
-  font-size: 15px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
   color: var(--text);
-  padding: 20px 26px;
+  padding: 24px 16px;
   cursor: pointer;
   list-style: none;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 16px;
 }
 .faq-item summary::-webkit-details-marker {
   display: none;
@@ -229,49 +276,59 @@ body {
   font-family: var(--fm);
   color: var(--cyan);
   font-size: 18px;
-  transition: transform 0.2s;
+  font-weight: 300;
+  transition: transform 0.25s ease;
 }
 .faq-item[open] summary::after {
   transform: rotate(45deg);
 }
 .faq-item p {
-  font-size: 13.5px;
-  font-weight: 300;
+  font-size: 14.5px;
+  font-weight: 400;
   line-height: 1.8;
-  color: rgba(232, 237, 245, 0.66);
-  padding: 0 26px 22px;
+  color: var(--muted);
+  padding: 0 16px 24px;
+  max-width: 68ch;
 }
+
+/* ══ İstatistik Cetveli (Topluluk & Kanıt) ══ */
 .stat-widget {
-  text-align: center;
+  text-align: left;
 }
 .stat-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 12px;
-  max-width: 760px;
-  margin: 28px auto 0;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0;
+  max-width: 1200px;
+  margin: 28px 0 0;
+  border: 1px solid var(--hairline);
+  background: var(--deep);
 }
 .stat-card {
-  background: var(--deep);
-  border: 1px solid rgba(0, 200, 240, 0.14);
-  border-radius: 8px;
-  padding: 26px 18px;
+  background: transparent;
+  border-right: 1px solid var(--hairline);
+  border-radius: 0;
+  padding: 32px 28px;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  align-items: center;
+  align-items: flex-start;
+}
+.stat-card:last-child {
+  border-right: none;
 }
 .stat-v {
   font-family: var(--fd);
-  font-size: 34px;
-  font-weight: 800;
+  font-size: 38px;
+  font-weight: 500;
   color: var(--cyan);
   line-height: 1;
+  font-variant-numeric: tabular-nums;
 }
 .stat-l {
   font-family: var(--fm);
-  font-size: 9px;
-  letter-spacing: 2px;
+  font-size: 10px;
+  letter-spacing: 1.8px;
   text-transform: uppercase;
   color: var(--muted);
 }
@@ -281,17 +338,18 @@ body {
   font-family: var(--fm);
   letter-spacing: 1px;
 }
+
 .c-resp {
   font-family: var(--fm);
-  font-size: 10px;
-  letter-spacing: 1px;
+  font-size: 11px;
+  letter-spacing: 0.8px;
   color: var(--muted);
-  margin: 10px 0 24px;
-  border-left: 2px solid var(--cyanM);
-  padding-left: 12px;
+  margin: 14px 0 28px;
+  border-left: 2px solid var(--cyan);
+  padding-left: 14px;
 }
 .ft-ai {
-  opacity: 0.55;
+  opacity: 0.72;
 }
 .pv-author,
 .post-author {
@@ -301,23 +359,27 @@ body {
 
 @media (max-width: 900px) {
   .crumbs {
-    margin-top: 96px;
-    padding-left: 20px;
-    padding-right: 20px;
+    margin-top: 88px;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+  .stat-card {
+    border-right: none;
+    border-bottom: 1px solid var(--hairline);
   }
 }
 @media (max-width: 520px) {
   .crumbs {
     gap: 6px;
-    font-size: 9px;
-    letter-spacing: 1.5px;
+    font-size: 9.5px;
+    letter-spacing: 1.4px;
   }
   .faq-item summary {
-    padding: 16px 18px;
-    font-size: 13px;
+    padding: 18px 8px;
+    font-size: 17px;
   }
   .faq-item p {
-    padding: 0 18px 18px;
+    padding: 0 8px 18px;
   }
 }
 
@@ -331,15 +393,9 @@ body {
 }
 
 /* ══════════════════════════════════════════════════════════════
-   ENTROPY ARKA PLAN (ortak kabuk)
-   Akış alanı canvas'ı sayfa zemini; bölüm yüzeyleri yarı
-   saydam olduğu için alan bütün sayfada görünür.
+   GÖZLEMEVİ FAZ ALANI ARKA PLANI (#entropy-bg)
    ══════════════════════════════════════════════════════════════ */
 #entropy-bg {
-  /* EMNIYET AGI: canvas icerigi saydam/bozuk/kaybolmus
-     durumda saydam bir zemin gosterir. WebGL context kaybolup
-     cizim durdugunda ya da ilk kare gelmediginde arka plan
-     BEYAZ olmasin diye. */
   background: var(--void);
   position: fixed;
   inset: 0;
@@ -351,5 +407,3 @@ body {
 .no-entropy body {
   background: var(--void);
 }
-/* reduced-motion: gizleme yok — JS tek bir statik kare cizer,
-   yani nebula gorunur ama HAREKET ETMEZ. */
