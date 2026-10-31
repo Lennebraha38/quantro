@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "quantro"
+version = "1.0.0"
+description = "Quantro: Open-source quantum computing simulation and astrophysics toolkit"
+readme = "python/README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [
+    { name = "Faruk Hilmi AKPINAR", email = "quantro38@gmail.com" }
+]
+keywords = [
+    "quantum", "quantum-computing", "astrophysics", "simulation",
+    "qrng", "bb84", "qiskit", "bloch-sphere", "quantum-circuit"
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Topic :: Security :: Cryptography"
+]
+
+[project.urls]
+Homepage = "https://quantro-1.vercel.app"
+Documentation = "https://quantro-1.vercel.app/docs.html"
+Repository = "https://github.com/Lennebraha38/quantro"
+Issues = "https://github.com/Lennebraha38/quantro/issues"
+
+[project.scripts]
+quantro = "quantro.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["python"]
