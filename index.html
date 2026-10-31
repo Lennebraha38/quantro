@@ -7,7 +7,7 @@
       name="description"
       content="Quantro — Kuantum Mekaniği ve Astrofizik alanında ileri araştırmalar yürüten bağımsız ARGE merkezi."
     />
-    <meta name="theme-color" content="#0b0c0e" />
+    <meta name="theme-color" content="#0E0F12" />
     <meta property="og:title" content="Quantro · ARGE Merkezi" />
     <meta
       property="og:description"
@@ -148,14 +148,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,400&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Serif:ital,wght@0,300;0,400;0,500;1,400&display=swap"
       rel="stylesheet"
       media="print"
       onload="this.media = 'all'"
     />
     <noscript
       ><link
-        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,400&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Serif:ital,wght@0,300;0,400;0,500;1,400&display=swap"
         rel="stylesheet"
     /></noscript>
     <link rel="manifest" href="manifest.webmanifest" />
@@ -166,6 +166,32 @@
   </head>
   <body>
     <a href="#main-content" class="skip-link" data-i18n="skip">İçeriğe Geç</a>
+
+    <!-- ══ CANLI KUANTUM TELEMETRİ BARI (ANU QRNG) ══ -->
+    <div class="qtr-telemetry-bar" id="telemetry-bar">
+      <div class="qtr-tel-inner">
+        <div class="qtr-tel-left">
+          <span class="qtr-tel-pulse"></span>
+          <span class="qtr-tel-label">ANU QRNG: <strong id="tel-status">CANLI VAKUM AKIŞI</strong></span>
+          <span class="qtr-tel-sep">|</span>
+          <span>Vakum: <strong id="tel-stream" class="qtr-mono">0x4F8A2B0E1C</strong></span>
+          <span class="qtr-tel-sep">|</span>
+          <span>Entropi: <strong id="tel-entropy" class="qtr-mono">7.989 bits/B</strong></span>
+          <span class="qtr-tel-sep">|</span>
+          <span>Gecikme: <strong id="tel-latency" class="qtr-mono">38ms</strong></span>
+        </div>
+        <div class="qtr-tel-right">
+          <button class="qtr-cmdk-btn" onclick="openCmdk()" aria-label="Arama Ctrl+K">
+            <span>Ara</span>
+            <kbd>Ctrl+K</kbd>
+          </button>
+          <div class="qtr-lang-switch">
+            <button class="qtr-lang-btn active" onclick="setLangDirect('tr')">TR</button>
+            <button class="qtr-lang-btn" onclick="setLangDirect('en')">EN</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- ══ NAV ══ -->
     <nav id="nav">
@@ -196,7 +222,7 @@
           <li><a href="arastirma.html" data-i18n="nav.research">Araştırma</a></li>
           <li><a href="simulasyon.html" data-i18n="nav.sim">Simülasyon</a></li>
           <li><a href="blog.html" data-i18n="nav.blog">Blog</a></li>
-          <li><a href="quantro-lab.html" data-i18n="nav.lab">Lab ⚗</a></li>
+          <li><a href="quantro-lab.html" data-i18n="nav.lab">Lab</a></li>
           <li><a href="docs.html">Docs</a></li>
         </ul>
         <div class="tubelight" id="tubelight">
@@ -214,42 +240,95 @@
       <section id="hero" role="banner" tabindex="-1">
         <canvas id="three-canvas" aria-hidden="true"></canvas>
 
-        <div class="hud hud-tl" aria-hidden="true"></div>
-        <div class="hud hud-tr" aria-hidden="true"></div>
-        <div class="hud hud-bl" aria-hidden="true"></div>
-        <div class="hud hud-br" aria-hidden="true"></div>
-
-        <div class="badge badge-tl" aria-hidden="true">
-          ARŞİV :: QTR-2026 · MONOGRAFİ<br />
-          ALAN :: HİGGS ψ(x,t)<br />
-          GÖZLEM :: GİRİŞİM PLAKASI I
-        </div>
-        <div class="badge badge-tr" aria-hidden="true" id="live-hud">
-          AMP :: 3.80 · ω=0.380 rad/s
-        </div>
-
         <div class="hero-content">
           <div class="hc-wrap">
-            <div class="hero-eyebrow">
-              <span data-i18n="hero.eyebrow"
-                >Quantro · Kuantum &amp; Astrofizik ARGE · Est. 2025</span
-              >
-            </div>
-            <h1 class="hero-h1">
-              <span data-i18n="hero.h1a">Evrenin</span><br />
-              <span class="outline" data-i18n="hero.h1b">Dokusu</span>
-              <span data-i18n="hero.h1c">Titreşiyor</span>
-            </h1>
-            <div class="hero-row">
-              <p class="hero-desc" data-i18n="hero.desc">
-                Kuantum alanlarının simetri kırılmasından galaktik ölçek yapılarına kadar — evrenin
-                en derin katmanlarını araştırıyoruz.
-              </p>
-              <div class="hero-btns">
-                <a href="arastirma.html#domains" class="btn-p" data-i18n="hero.b1"
-                  >Araştırma Alanları</a
-                >
-                <a href="arastirma.html#method" class="btn-g" data-i18n="hero.b2">Metodoloji</a>
+            <div class="qtr-hero-container">
+              <!-- Sol Kolon: Geliştirici Odaklı Başlık & Kurulum -->
+              <div class="qtr-hero-text">
+                <div class="hero-eyebrow">
+                  <span>v1.0.0 Python SDK &amp; Web Playground · MIT</span>
+                </div>
+                <h1 class="hero-h1">
+                  <span>Kuantum Kodla.</span><br />
+                  <span class="outline">Doğrudan Terminalde ve Python'da.</span>
+                </h1>
+                <p class="hero-desc">
+                  Web tarayıcısını sadece bir "vitrin" değil, canlı test laboratuvarı (Playground) olarak kullanın.
+                  Simülasyonları tek tıkla Python/Qiskit koduna aktarın, ANU kuantum vakum dalgalanması motoruna doğrudan bağlanın.
+                </p>
+
+                <!-- Kopyalanabilir Kurulum Kutusu -->
+                <div class="qtr-install-box">
+                  <div class="qtr-install-tabs">
+                    <div>
+                      <button class="qtr-tab-btn active" onclick="switchInstallTab('pip')">pip (Python)</button>
+                      <button class="qtr-tab-btn" onclick="switchInstallTab('npm')">npm (Node.js)</button>
+                    </div>
+                    <span class="qtr-install-tag">v1.0.0 Stable</span>
+                  </div>
+                  <div class="qtr-install-cmd">
+                    <div>
+                      <span class="qtr-cmd-prompt">$</span>
+                      <code id="install-cmd-text">pip install quantro</code>
+                    </div>
+                    <button class="qtr-copy-btn" id="install-copy-btn" onclick="copyInstallCmd()">
+                      <span id="copy-btn-label">Kopyala</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="hero-btns">
+                  <a href="#bento-section" class="btn-p">13 Modülü Keşfet</a>
+                  <a href="quantro-lab.html" class="btn-g">Web Playground (Lab) →</a>
+                  <a href="https://github.com/quantro38/quantro" target="_blank" rel="noopener" class="btn-g" style="border-color: rgba(255,255,255,0.15)">GitHub ↗</a>
+                </div>
+              </div>
+
+              <!-- Sağ Kolon: Canlı Kubit / Bloch Simülatörü Widget'ı -->
+              <div class="qtr-hero-widget">
+                <div class="qtr-hw-head">
+                  <div class="qtr-hw-dots">
+                    <span class="qtr-hw-dot" style="background: rgba(239, 68, 68, 0.6)"></span>
+                    <span class="qtr-hw-dot" style="background: rgba(245, 158, 11, 0.6)"></span>
+                    <span class="qtr-hw-dot" style="background: rgba(16, 185, 129, 0.6)"></span>
+                    <span style="margin-left: 8px; color: var(--text-3)">hero-simulator.py</span>
+                  </div>
+                  <span style="color: #10b981">CANLI DURUM</span>
+                </div>
+
+                <div class="qtr-hw-card">
+                  <div class="qtr-hw-state-row">
+                    <span>Durum Vektörü |ψ⟩:</span>
+                    <strong id="hero-qubit-label" style="color: #fff">|0⟩</strong>
+                  </div>
+                  <div class="qtr-hw-probs">
+                    <div class="qtr-hw-pbox">
+                      <div style="font-size: 10px; color: var(--text-3)">P(|0⟩) Olasılığı</div>
+                      <div class="qtr-hw-pbox-num" id="hero-p0-val" style="color: #10b981">100%</div>
+                      <div style="font-size: 10px; color: var(--text-4)" id="hero-a-val">α = 1.000</div>
+                    </div>
+                    <div class="qtr-hw-pbox">
+                      <div style="font-size: 10px; color: var(--text-3)">P(|1⟩) Olasılığı</div>
+                      <div class="qtr-hw-pbox-num" id="hero-p1-val" style="color: var(--copper-400)">0%</div>
+                      <div style="font-size: 10px; color: var(--text-4)" id="hero-b-val">β = 0.000</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div style="font-family: var(--fm); font-size: 11px; color: var(--text-3); margin-bottom: 8px; display: flex; justify-content: space-between;">
+                  <span>Üniter Kapı Uygula:</span>
+                  <button onclick="applyHeroGate('RESET')" style="background:none; border:none; color:var(--text-4); cursor:pointer; text-decoration:underline; font-size:10px;">Sıfırla (|0⟩)</button>
+                </div>
+                <div class="qtr-hw-gates">
+                  <button class="qtr-hw-gate-btn" onclick="applyHeroGate('H')">Hadamard (H)</button>
+                  <button class="qtr-hw-gate-btn" onclick="applyHeroGate('X')">Pauli-X (NOT)</button>
+                  <button class="qtr-hw-gate-btn" onclick="applyHeroGate('Z')">Pauli-Z (Faz)</button>
+                </div>
+
+                <div class="qtr-hw-foot">
+                  <span>python3 -m quantro.circuit</span>
+                  <button onclick="copyHeroPython()" id="hero-copy-py-btn" style="background:none; border:none; color:#10b981; font-family:var(--fm); font-size:11px; cursor:pointer;">Python Kodu Al →</button>
+                </div>
               </div>
             </div>
           </div>
@@ -260,29 +339,312 @@
           <div class="scroll-ln"></div>
         </div>
       </section>
-      <!-- ══ METRICS ══ -->
+      <!-- ══ METRICS (Doğrulanabilir Fiziksel Sabitler & Kaynak Künyesi — K.03) ══ -->
       <div class="metrics-bar">
         <div class="mb-inner">
-          <div class="mb-item reveal">
-            <div class="mb-num">10<sup>−35</sup></div>
+          <div class="mb-item reveal" data-source="cite">
+            <div class="mb-num">1.616 × 10<sup>−35</sup></div>
             <div class="mb-lbl" data-i18n="m.planck">Planck Uzunluğu · m</div>
+            <div class="mb-src">CODATA 2022 · ℓ<sub>P</sub> = √(ℏG/c³)</div>
           </div>
-          <div class="mb-item reveal d1">
-            <div class="mb-num">13.8<sup>Gyr</sup></div>
+          <div class="mb-item reveal d1" data-source="cite">
+            <div class="mb-num">13.787<sup>Gyr</sup></div>
             <div class="mb-lbl" data-i18n="m.age">Kozmik Yaş</div>
+            <div class="mb-src">Planck PR4 (2020) · ± 0.020 Gyr</div>
           </div>
-          <div class="mb-item reveal d2">
-            <div class="mb-num">ℏ/2</div>
+          <div class="mb-item reveal d2" data-source="equation">
+            <div class="mb-num">Δx·Δp ≥ ℏ/2</div>
             <div class="mb-lbl" data-i18n="m.heis">Heisenberg Sınırı</div>
+            <div class="mb-src">Kennard–Weyl (1927) · [x̂, p̂] = iℏ</div>
           </div>
-          <div class="mb-item reveal d3">
-            <div class="mb-num">125<sup>GeV</sup></div>
+          <div class="mb-item reveal d3" data-source="cite">
+            <div class="mb-num">125.25<sup>GeV</sup></div>
             <div class="mb-lbl" data-i18n="m.higgs">Higgs Bozon Kütlesi</div>
+            <div class="mb-src">PDG 2024 · ATLAS + CMS (± 0.17 GeV/c²)</div>
           </div>
         </div>
       </div>
 
-      <section class="explore" style="background: var(--void)">
+      <!-- ══ 13-MODÜL BENTO GRID (Deep-Tech Vitrin & Kompakt Araçlar) ══ -->
+      <section id="bento-section" class="qtr-bento-section">
+        <div class="qtr-bento-head reveal">
+          <div class="qtr-bento-eyebrow">Açık Kaynak Modül Mimarisi · pip install quantro</div>
+          <h2 class="qtr-bento-title">13 İnteraktif Kuantum &amp; Astrofizik Modülü</h2>
+          <p class="qtr-bento-desc">
+            Her araç hem tarayıcıda canlı laboratuvar (Playground) olarak simüle edilir hem de resmi Python paketimizden doğrudan kodunuza aktarılabilir.
+          </p>
+        </div>
+
+        <div class="qtr-bento-grid">
+          <!-- 1. VİTRİN: KUBİT DEVRE SİMÜLATÖRÜ -->
+          <div class="qtr-bento-card featured reveal">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span class="qtr-card-num">MOD-01 · ÇEKİRDEK</span>
+                <span class="qtr-card-badge">Devre Simülatörü</span>
+              </div>
+              <h3 class="qtr-card-title">Kubit Devre Simülatörü &amp; Durum Vektörü</h3>
+              <p class="qtr-card-desc">
+                N-kubitlik üniter kapı dönüşümleri, Bell &amp; GHZ dolanıklık durumları ve tam durum vektörü simülasyonu.
+              </p>
+              <div class="qtr-card-math">|ψ⟩ = ∑ cᵢ |i⟩,  ∑ |cᵢ|² = 1</div>
+            </div>
+            <div class="qtr-card-actions">
+              <button class="qtr-card-btn" onclick="openModelModal(1)">Model &amp; Matris ↗</button>
+              <div style="display: flex; gap: 6px;">
+                <button class="qtr-card-btn" id="btn-mod-1" onclick="copyModCode(1)">Python</button>
+                <a href="quantro-lab.html#tb2" class="qtr-card-btn" style="border-color: rgba(209,146,92,0.4)">Lab'da Çalıştır →</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. VİTRİN: ANU QRNG -->
+          <div class="qtr-bento-card featured reveal d1">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span class="qtr-card-num">MOD-02 · DONANIM API</span>
+                <span class="qtr-card-badge">Kuantum Rastgelelik</span>
+              </div>
+              <h3 class="qtr-card-title">ANU Kuantum Rastgelelik Motoru</h3>
+              <p class="qtr-card-desc">
+                Avustralya Ulusal Üniversitesi (ANU) kuantum optik laboratuvarından gerçek zamanlı vakum dalgalanması entropisi.
+              </p>
+              <div class="qtr-card-math">S = -∑ pᵢ log₂(pᵢ)  [Shannon Entropisi]</div>
+            </div>
+            <div class="qtr-card-actions">
+              <button class="qtr-card-btn" onclick="openModelModal(2)">Model ↗</button>
+              <div style="display: flex; gap: 6px;">
+                <button class="qtr-card-btn" id="btn-mod-2" onclick="copyModCode(2)">Python</button>
+                <a href="quantro-lab.html#tb1" class="qtr-card-btn" style="border-color: rgba(209,146,92,0.4)">Lab'da Çalıştır →</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. VİTRİN: BB84 QKD -->
+          <div class="qtr-bento-card featured reveal d2">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span class="qtr-card-num">MOD-03 · GÜVENLİK</span>
+                <span class="qtr-card-badge">BB84 Kriptografi</span>
+              </div>
+              <h3 class="qtr-card-title">BB84 Kuantum Anahtar Dağıtımı</h3>
+              <p class="qtr-card-desc">
+                Fotonik polarizasyon, baz seçimi ve Eve dinleme girişimini hata oranıyla (QBER) yakalayan kuantum şifreleme.
+              </p>
+              <div class="qtr-card-math">QBER = E / N_sifted &lt; 11% [Eşik]</div>
+            </div>
+            <div class="qtr-card-actions">
+              <button class="qtr-card-btn" onclick="openModelModal(3)">Model ↗</button>
+              <div style="display: flex; gap: 6px;">
+                <button class="qtr-card-btn" id="btn-mod-3" onclick="copyModCode(3)">Python</button>
+                <a href="quantro-lab.html#tb4" class="qtr-card-btn" style="border-color: rgba(209,146,92,0.4)">Lab'da Çalıştır →</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. BLOCH KÜRESİ -->
+          <div class="qtr-bento-card reveal">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span class="qtr-card-num">MOD-04</span>
+                <span style="font-size: 10px; color: var(--text-4)">HESAPLAMA</span>
+              </div>
+              <h3 class="qtr-card-title">Bloch Küresi Görselleştirici</h3>
+              <p class="qtr-card-desc">Tek kubitlik durumun birim küre üzerinde 3B SU(2) Euler rotasyonları ve izdüşümleri.</p>
+              <div class="qtr-card-math">|ψ⟩ = cos(θ/2)|0⟩ + e^{iφ}sin(θ/2)|1⟩</div>
+            </div>
+            <div class="qtr-card-actions">
+              <button class="qtr-card-btn" onclick="openModelModal(4)">Model ↗</button>
+              <div style="display: flex; gap: 6px;">
+                <button class="qtr-card-btn" id="btn-mod-4" onclick="copyModCode(4)">Python</button>
+                <a href="quantro-lab.html#tb9" class="qtr-card-btn">Lab</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 5. HEISENBERG BELİRSİZLİK -->
+          <div class="qtr-bento-card reveal d1">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span class="qtr-card-num">MOD-05</span>
+                <span style="font-size: 10px; color: var(--text-4)">FİZİK</span>
+              </div>
+              <h3 class="qtr-card-title">Heisenberg Belirsizlik İlkesi</h3>
+              <p class="qtr-card-desc">Konum ve momentum operatörlerinin komütatörü üzerinden alt sınır hesaplama motoru.</p>
+              <div class="qtr-card-math">Δx · Δp ≥ ℏ / 2  ([x̂, p̂] = iℏ)</div>
+            </div>
+            <div class="qtr-card-actions">
+              <button class="qtr-card-btn" onclick="openModelModal(5)">Model ↗</button>
+              <div style="display: flex; gap: 6px;">
+                <button class="qtr-card-btn" id="btn-mod-5" onclick="copyModCode(5)">Python</button>
+                <a href="quantro-lab.html#tb5" class="qtr-card-btn">Lab</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 6. KUANTUM TÜNELLEME -->
+          <div class="qtr-bento-card reveal d2">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span class="qtr-card-num">MOD-06</span>
+                <span style="font-size: 10px; color: var(--text-4)">FİZİK</span>
+              </div>
+              <h3 class="qtr-card-title">Kuantum Tünelleme</h3>
+              <p class="qtr-card-desc">Sonlu dikdörtgen potansiyel bariyerinde dalga fonksiyonu geçirgenlik katsayısı.</p>
+              <div class="qtr-card-math">T = [1 + (V₀² sinh²(κ a))/(4E(V₀-E))]⁻¹</div>
+            </div>
+            <div class="qtr-card-actions">
+              <button class="qtr-card-btn" onclick="openModelModal(6)">Model ↗</button>
+              <div style="display: flex; gap: 6px;">
+                <button class="qtr-card-btn" id="btn-mod-6" onclick="copyModCode(6)">Python</button>
+                <a href="quantro-lab.html#tb11" class="qtr-card-btn">Lab</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 7. ÇİFT YARIK GİRİŞİMİ -->
+          <div class="qtr-bento-card reveal">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span class="qtr-card-num">MOD-07</span>
+                <span style="font-size: 10px; color: var(--text-4)">FİZİK</span>
+              </div>
+              <h3 class="qtr-card-title">Çift Yarık Kuantum Girişimi</h3>
+              <p class="qtr-card-desc">Madde dalgalarının girişim ve kırınım deseni, de Broglie dalga boyu simülasyonu.</p>
+              <div class="qtr-card-math">I(θ) = I₀ cos²(π d sin θ / λ)</div>
+            </div>
+            <div class="qtr-card-actions">
+              <button class="qtr-card-btn" onclick="openModelModal(7)">Model ↗</button>
+              <div style="display: flex; gap: 6px;">
+                <button class="qtr-card-btn" id="btn-mod-7" onclick="copyModCode(7)">Python</button>
+                <a href="quantro-lab.html#tb12" class="qtr-card-btn">Lab</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 8. KUANTUM IŞINLAMA -->
+          <div class="qtr-bento-card reveal d1">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span class="qtr-card-num">MOD-08</span>
+                <span style="font-size: 10px; color: var(--text-4)">HESAPLAMA</span>
+              </div>
+              <h3 class="qtr-card-title">Kuantum Işınlama (Teleportation)</h3>
+              <p class="qtr-card-desc">EPR çifti ve klasik iletişim kanalı kullanarak kuantum durumunun kayıpsız aktarımı.</p>
+              <div class="qtr-card-math">(α|0⟩ + β|1⟩) ⊗ |Φ⁺⟩ ⟶ |ψ⟩_Bob</div>
+            </div>
+            <div class="qtr-card-actions">
+              <button class="qtr-card-btn" onclick="openModelModal(8)">Model ↗</button>
+              <div style="display: flex; gap: 6px;">
+                <button class="qtr-card-btn" id="btn-mod-8" onclick="copyModCode(8)">Python</button>
+                <a href="quantro-lab.html#tb8" class="qtr-card-btn">Lab</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 9. SCHRÖDINGER KEDİSİ -->
+          <div class="qtr-bento-card reveal d2">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span class="qtr-card-num">MOD-09</span>
+                <span style="font-size: 10px; color: var(--text-4)">FİZİK</span>
+              </div>
+              <h3 class="qtr-card-title">Schrödinger'in Kedisi &amp; Dekolerans</h3>
+              <p class="qtr-card-desc">Makroskobik süperpozisyon ve çevre etkileşimiyle dalga fonksiyonunun klasik çöküşü.</p>
+              <div class="qtr-card-math">|ψ⟩ = (|Canlı⟩ + |Ölü⟩) / √2</div>
+            </div>
+            <div class="qtr-card-actions">
+              <button class="qtr-card-btn" onclick="openModelModal(9)">Model ↗</button>
+              <div style="display: flex; gap: 6px;">
+                <button class="qtr-card-btn" id="btn-mod-9" onclick="copyModCode(9)">Python</button>
+                <a href="quantro-lab.html#tb10" class="qtr-card-btn">Lab</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 10. KUANTUM YÜRÜYÜŞÜ -->
+          <div class="qtr-bento-card reveal">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span class="qtr-card-num">MOD-10</span>
+                <span style="font-size: 10px; color: var(--text-4)">HESAPLAMA</span>
+              </div>
+              <h3 class="qtr-card-title">Kuantum Yürüyüşü (Quantum Walk)</h3>
+              <p class="qtr-card-desc">Hadamard parasıyla kuantum süperpozisyonlu 1B kafes yürüyüşü ve ballistik hızlanma.</p>
+              <div class="qtr-card-math">σ_kuantum ~ N  vs  σ_klasik ~ √N</div>
+            </div>
+            <div class="qtr-card-actions">
+              <button class="qtr-card-btn" onclick="openModelModal(10)">Model ↗</button>
+              <div style="display: flex; gap: 6px;">
+                <button class="qtr-card-btn" id="btn-mod-10" onclick="copyModCode(10)">Python</button>
+                <a href="quantro-lab.html#tb13" class="qtr-card-btn">Lab</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 11. KARA DELİK TERMODİNAMİĞİ -->
+          <div class="qtr-bento-card reveal d1">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span class="qtr-card-num">MOD-11</span>
+                <span style="font-size: 10px; color: var(--text-4)">ASTROFİZİK</span>
+              </div>
+              <h3 class="qtr-card-title">Kara Delik Termodinamiği</h3>
+              <p class="qtr-card-desc">Schwarzschild olay ufku yarıçapı, Hawking ışıması sıcaklığı ve alan entropisi.</p>
+              <div class="qtr-card-math">T_H = ℏ c³ / (8π G M k_B)</div>
+            </div>
+            <div class="qtr-card-actions">
+              <button class="qtr-card-btn" onclick="openModelModal(11)">Model ↗</button>
+              <div style="display: flex; gap: 6px;">
+                <button class="qtr-card-btn" id="btn-mod-11" onclick="copyModCode(11)">Python</button>
+                <a href="quantro-lab.html#tb6" class="qtr-card-btn">Lab</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 12. EVREN YAŞI (PLANCK PR4) -->
+          <div class="qtr-bento-card reveal d2">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span class="qtr-card-num">MOD-12</span>
+                <span style="font-size: 10px; color: var(--text-4)">ASTROFİZİK</span>
+              </div>
+              <h3 class="qtr-card-title">Evren Yaşı &amp; Kozmik Genişleme</h3>
+              <p class="qtr-card-desc">Planck PR4 (2020) verileriyle düz Lambda-CDM Friedmann diferansiyel entegrasyonu.</p>
+              <div class="qtr-card-math">t₀ = 13.787 ± 0.020 Gyr (Planck)</div>
+            </div>
+            <div class="qtr-card-actions">
+              <button class="qtr-card-btn" onclick="openModelModal(12)">Model ↗</button>
+              <div style="display: flex; gap: 6px;">
+                <button class="qtr-card-btn" id="btn-mod-12" onclick="copyModCode(12)">Python</button>
+                <a href="quantro-lab.html#tb3" class="qtr-card-btn">Lab</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 13. GÖRELİLİKÇİ DOPPLER -->
+          <div class="qtr-bento-card reveal">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span class="qtr-card-num">MOD-13</span>
+                <span style="font-size: 10px; color: var(--text-4)">ASTROFİZİK</span>
+              </div>
+              <h3 class="qtr-card-title">Görelilikçi Doppler &amp; Kızıla Kayma</h3>
+              <p class="qtr-card-desc">Özel görelilik boylamasına Doppler kayması, Lorentz faktörü ve spektral dönüşüm.</p>
+              <div class="qtr-card-math">1 + z = √((1 + β)/(1 - β))</div>
+            </div>
+            <div class="qtr-card-actions">
+              <button class="qtr-card-btn" onclick="openModelModal(13)">Model ↗</button>
+              <div style="display: flex; gap: 6px;">
+                <button class="qtr-card-btn" id="btn-mod-13" onclick="copyModCode(13)">Python</button>
+                <a href="quantro-lab.html#tb7" class="qtr-card-btn">Lab</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="explore">
         <div class="container">
           <div class="sec-label reveal"><span data-i18n="e.label">Keşfet</span></div>
           <h2 class="sec-h2 reveal">
@@ -319,100 +681,27 @@
         </div>
       </section>
 
-      <section style="background: var(--void); padding: 80px 0" id="blog">
+      <section class="lc-section" id="blog">
         <div class="container">
-          <div
-            class="lc-box"
-            style="
-              background: var(--deep);
-              border: 1px solid rgba(0, 200, 240, 0.12);
-              display: flex;
-              justify-content: space-between;
-              align-items: center;
-              flex-wrap: wrap;
-              gap: 32px;
-              position: relative;
-              overflow: hidden;
-            "
-          >
-            <div
-              style="
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                height: 2px;
-                background: linear-gradient(90deg, var(--cyan), transparent);
-              "
-            ></div>
+          <div class="lc-box vellum-band">
             <div>
-              <div
-                style="
-                  font-family: var(--fm);
-                  font-size: 10px;
-                  letter-spacing: 4px;
-                  text-transform: uppercase;
-                  color: var(--cyan);
-                  margin-bottom: 12px;
-                "
-                data-i18n="b.label"
-              >
-                Araştırma Blogu
+              <div class="lc-eyebrow" data-i18n="b.label">Araştırma Blogu</div>
+              <div class="lc-title">
+                <span data-i18n="b.h2a">Son</span> <span data-i18n="b.h2b">Yazılar</span>
               </div>
-              <div
-                style="
-                  font-family: var(--fd);
-                  font-size: clamp(28px, 4vw, 48px);
-                  font-weight: 400; letter-spacing: -0.02em; text-transform: none;
-                  color: var(--text);
-                  line-height: 1;
-                "
-              >
-                <span data-i18n="b.h2a">Son</span><br /><span data-i18n="b.h2b">Yazılar</span>
-              </div>
-              <div
-                style="
-                  font-size: 14px;
-                  font-weight: 300;
-                  color: var(--muted);
-                  margin-top: 12px;
-                  line-height: 1.7;
-                  max-width: 420px;
-                "
-                data-i18n="b.desc"
-              >
+              <div class="lc-desc" data-i18n="b.desc">
                 Kuantum mekaniği, astrofizik ve araştırma notlarına dair yazılar.
               </div>
             </div>
-            <a
-              href="blog.html"
-              class="lc-cta"
-              style="
-                font-family: var(--fm);
-                font-size: 11px;
-                letter-spacing: 3px;
-                text-transform: uppercase;
-                background: var(--cyan);
-                color: var(--void);
-                padding: 18px 44px;
-                text-decoration: none;
-                font-weight: 700;
-                max-width: 100%;
-                transition: opacity 0.2s;
-              "
-              onmouseover="this.style.opacity = '.85'"
-              onmouseout="this.style.opacity = '1'"
-              data-i18n="b.btn"
-              >✎ Blog'a Git →</a
-            >
+            <a href="blog.html" class="lc-cta" data-i18n="b.btn">Blog'a Git →</a>
           </div>
         </div>
       </section>
       <!-- ══ TOPLULUK ══ -->
-      <section style="background: var(--void); padding: 80px 0" id="topluluk">
+      <section class="lc-section" id="topluluk">
         <div class="container">
           <div class="stat-widget" id="stat-widget">
-            <div class="sec-label" style="opacity: 0.8">
+            <div class="sec-label">
               <span data-i18n="stat.title">Topluluk &amp; Kanıt</span>
             </div>
             <div class="stat-cards" id="stat-cards">
@@ -423,11 +712,11 @@
           </div>
         </div>
       </section>
-      <section style="background: var(--void); padding: 80px 0" id="sss">
+      <section class="lc-section" id="sss">
         <div class="container">
-          <div class="sec-label reveal"><span data-i18n="faq.label">Sık Sorulan Sorular</span></div>
+          <div class="sec-label reveal"><span data-i18n="faq.label">Yöntem ve Sınırlar</span></div>
           <h2 class="sec-h2 reveal">
-            <span data-i18n="faq.h2a">Merak</span><br /><span data-i18n="faq.h2b">Edilenler</span>
+            <span data-i18n="faq.h2a">Merak</span> <span data-i18n="faq.h2b">Edilenler</span>
           </h2>
           <div class="faq-list">
             <details class="faq-item reveal">
@@ -454,95 +743,23 @@
           </div>
         </div>
       </section>
-      <section style="background: var(--void); padding: 80px 0">
+      <section class="lc-section">
         <div class="container">
-          <div
-            class="lc-box"
-            style="
-              background: var(--deep);
-              border: 1px solid rgba(0, 200, 240, 0.12);
-              display: flex;
-              justify-content: space-between;
-              align-items: center;
-              flex-wrap: wrap;
-              gap: 32px;
-              position: relative;
-              overflow: hidden;
-            "
-          >
-            <div
-              style="
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                height: 2px;
-                background: linear-gradient(90deg, var(--cyan), transparent);
-              "
-            ></div>
+          <div class="lc-box">
             <div>
-              <div
-                style="
-                  font-family: var(--fm);
-                  font-size: 10px;
-                  letter-spacing: 4px;
-                  text-transform: uppercase;
-                  color: var(--cyan);
-                  margin-bottom: 12px;
-                "
-                data-i18n="lc.badge"
-              >
+              <div class="lc-eyebrow" data-i18n="lc.badge">
                 Açık Kaynak (MIT) Kuantum Araç Seti · 13 Araç
               </div>
-              <div
-                style="
-                  font-family: var(--fd);
-                  font-size: clamp(28px, 4vw, 48px);
-                  font-weight: 400; letter-spacing: -0.02em; text-transform: none;
-                  color: var(--text);
-                  line-height: 1;
-                "
-              >
-                <span data-i18n="lc.h2a">Quantro Lab'ı</span><br /><span data-i18n="lc.h2b"
-                  >Deneyin</span
-                >
+              <div class="lc-title">
+                <span data-i18n="lc.h2a">Quantro Lab'ı</span>
+                <span data-i18n="lc.h2b">Deneyin</span>
               </div>
-              <div
-                style="
-                  font-size: 14px;
-                  font-weight: 300;
-                  color: var(--muted);
-                  margin-top: 12px;
-                  line-height: 1.7;
-                  max-width: 420px;
-                "
-                data-i18n="lc.desc"
-              >
+              <div class="lc-desc" data-i18n="lc.desc">
                 Kuantum Rastgelelik Motoru, Devre Simülatörü, Evren Yaşı Hesaplayıcı ve daha
                 fazlası.
               </div>
             </div>
-            <a
-              href="quantro-lab.html"
-              class="lc-cta"
-              style="
-                font-family: var(--fm);
-                font-size: 11px;
-                letter-spacing: 3px;
-                text-transform: uppercase;
-                background: var(--cyan);
-                color: var(--void);
-                padding: 18px 44px;
-                text-decoration: none;
-                font-weight: 700;
-                max-width: 100%;
-                transition: opacity 0.2s;
-              "
-              onmouseover="this.style.opacity = '.85'"
-              onmouseout="this.style.opacity = '1'"
-              data-i18n="lc.btn"
-              >⚗ Lab'a Git →</a
-            >
+            <a href="quantro-lab.html" class="lc-cta" data-i18n="lc.btn">Lab'a Git →</a>
           </div>
         </div>
       </section>
@@ -616,100 +833,31 @@
                 target="_blank"
                 rel="noopener"
                 class="cg-val"
-                style="color: var(--cyan); text-decoration: none; transition: opacity 0.2s"
-                onmouseover="this.style.opacity = '.65'"
-                onmouseout="this.style.opacity = '1'"
                 >@quantro38</a
               >
             </div>
           </div>
-          <div
-            class="nl-box reveal d1"
-            style="
-              margin-top: 56px;
-              border: 1px solid rgba(0, 200, 240, 0.15);
-              background: var(--deep);
-              border-radius: 2px;
-              padding: 28px 30px;
-              max-width: 640px;
-              margin-left: auto;
-              margin-right: auto;
-            "
-          >
-            <div
-              style="
-                font-family: var(--fm);
-                font-size: 10px;
-                letter-spacing: 4px;
-                text-transform: uppercase;
-                color: var(--cyan);
-                margin-bottom: 8px;
-              "
-              data-i18n="nl.title"
-            >
-              Bülten
-            </div>
-            <p
-              style="
-                font-size: 14px;
-                font-weight: 300;
-                color: var(--muted);
-                line-height: 1.7;
-                margin: 0 0 16px;
-              "
-              data-i18n="nl.desc"
-            >
+          <div class="nl-box reveal d1">
+            <div class="nl-eyebrow" data-i18n="nl.title">Bülten</div>
+            <p class="nl-desc" data-i18n="nl.desc">
               Araştırma güncellemelerinde ilk siz olun. Ödünsüz paylaşım; spam yok.
             </p>
-            <form
-              id="nl-form"
-              novalidate
-              style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center"
-            >
+            <form id="nl-form" class="nl-form" novalidate>
               <label class="vh" for="nl-email" data-i18n="nl.ph">E-posta adresiniz</label>
               <input
                 type="email"
                 id="nl-email"
+                class="nl-input"
                 placeholder="E-posta adresiniz"
                 data-i18n-ph="nl.ph"
                 required
                 maxlength="254"
                 autocomplete="email"
-                style="
-                  flex: 1 1 220px;
-                  background: var(--void);
-                  border: 1px solid var(--cyanM);
-                  color: var(--text);
-                  padding: 15px 18px;
-                  font: 300 14px/1.4 var(--fm);
-                "
               />
-              <button
-                type="submit"
-                id="nl-submit"
-                style="
-                  font-family: var(--fm);
-                  font-size: 11px;
-                  letter-spacing: 3px;
-                  text-transform: uppercase;
-                  background: var(--cyan);
-                  color: var(--void);
-                  padding: 15px 26px;
-                  border: 0;
-                  font-weight: 700;
-                  cursor: pointer;
-                "
-                data-i18n="nl.btn"
-              >
+              <button type="submit" id="nl-submit" class="nl-btn" data-i18n="nl.btn">
                 Abone Ol
               </button>
-              <p
-                style="flex: 1 1 100%; margin: 6px 0 0"
-                id="nl-status"
-                class="cf-status"
-                role="status"
-                aria-live="polite"
-              ></p>
+              <p id="nl-status" class="cf-status" role="status" aria-live="polite"></p>
             </form>
           </div>
         </div>
@@ -720,20 +868,15 @@
     <footer>
       <div class="footer-inner">
         <a href="index.html" class="footer-logo">Q<span>U</span>ANTRO</a>
+        <span class="footer-founder">Kurucu · <a href="hakkimizda.html#founder" rel="author">Faruk Hilmi AKPINAR</a></span>
         <span class="footer-copy" data-i18n="ft.copy"
-          >© <span id="fyear">2025</span> Quantro ARGE Merkezi</span
+          >© <span id="fyear">2025</span> Quantro ARGE Merkezi · MIT Açık Kaynak</span
         >
-        <span class="footer-sys ft-ai" data-i18n="ft.ai"
-          >İçerik üretiminde yapay zekâ destekli araçlar kullanılabilir; teknik içerik kaynaklarla
-          doğrulanır.</span
-        >
-        <span class="footer-sys">ARŞİV :: QTR-2026 · MONOGRAFİ</span>
         <span class="footer-sys"
           ><a
             href="https://github.com/quantro38/quantro/issues/new"
             target="_blank"
             rel="noopener"
-            style="color: rgba(0, 200, 240, 0.7)"
             data-i18n="ft.bug"
             >Hata bildir / Fikir öner →</a
           ></span
@@ -867,7 +1010,7 @@
         const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setClearColor(0x0b0c0e, 1);
+        renderer.setClearColor(0x0e0f12, 1);
 
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(
@@ -878,7 +1021,7 @@
         );
         camera.position.set(0, 18, 44);
         camera.lookAt(0, 0, 0);
-        scene.fog = new THREE.FogExp2(0x0b0c0e, 0.017);
+        scene.fog = new THREE.FogExp2(0x0e0f12, 0.017);
 
         /* ── Gravitational wave mesh ── */
         const SEGS = 190,
@@ -893,7 +1036,7 @@
           vertexColors: true,
           wireframe: true,
           transparent: true,
-          opacity: 0.5,
+          opacity: 0.42,
         });
         const wireMesh = new THREE.Mesh(geo, wireMat);
         scene.add(wireMesh);
@@ -902,9 +1045,9 @@
         const fGeo = new THREE.PlaneGeometry(SIZE, SIZE, SEGS, SEGS);
         fGeo.rotateX(-Math.PI / 2);
         const fMat = new THREE.MeshBasicMaterial({
-          color: 0x121418,
+          color: 0x131519,
           transparent: true,
-          opacity: 0.65,
+          opacity: 0.7,
           side: THREE.DoubleSide,
         });
         const fMesh = new THREE.Mesh(fGeo, fMat);
@@ -912,7 +1055,7 @@
         scene.add(fMesh);
 
         /* ── Particle field ── */
-        const PC = 3200;
+        const PC = 1600;
         const pG = new THREE.BufferGeometry();
         const pP = new Float32Array(PC * 3);
         const pC = new Float32Array(PC * 3);
@@ -923,45 +1066,45 @@
           pP[i3 + 2] = (Math.random() - 0.5) * 150;
           const b = Math.random();
           if (b > 0.72) {
-            pC[i3] = 0.83;
-            pC[i3 + 1] = 0.66;
-            pC[i3 + 2] = 0.33;
+            pC[i3] = 0.82;
+            pC[i3 + 1] = 0.57;
+            pC[i3 + 2] = 0.36;
           } else if (b > 0.44) {
-            pC[i3] = 0.36;
-            pC[i3 + 1] = 0.66;
-            pC[i3 + 2] = 0.61;
+            pC[i3] = 0.37;
+            pC[i3 + 1] = 0.54;
+            pC[i3 + 2] = 0.48;
           } else {
-            pC[i3] = 0.93;
-            pC[i3 + 1] = 0.9;
-            pC[i3 + 2] = 0.85;
+            pC[i3] = 0.66;
+            pC[i3 + 1] = 0.68;
+            pC[i3 + 2] = 0.71;
           }
         }
         pG.setAttribute("position", new THREE.BufferAttribute(pP, 3));
         pG.setAttribute("color", new THREE.BufferAttribute(pC, 3));
         const pMat = new THREE.PointsMaterial({
-          size: 0.32,
+          size: 0.28,
           vertexColors: true,
           transparent: true,
-          opacity: 0.65,
+          opacity: 0.45,
           sizeAttenuation: true,
         });
         scene.add(new THREE.Points(pG, pMat));
 
-        /* ── Central Higgs glow sphere ── */
-        const sGeo = new THREE.SphereGeometry(1.3, 32, 32);
+        /* ── Central Higgs sphere (Matte Copper) ── */
+        const sGeo = new THREE.SphereGeometry(1.1, 32, 32);
         const sMat = new THREE.MeshBasicMaterial({
-          color: 0xd4a853,
+          color: 0xd1925c,
           transparent: true,
-          opacity: 0.85,
+          opacity: 0.75,
         });
         const sMesh = new THREE.Mesh(sGeo, sMat);
         scene.add(sMesh);
 
         const rGeo = new THREE.RingGeometry(2, 3.6, 64);
         const rMat = new THREE.MeshBasicMaterial({
-          color: 0xd4a853,
+          color: 0xd1925c,
           transparent: true,
-          opacity: 0.07,
+          opacity: 0.06,
           side: THREE.DoubleSide,
         });
         const rMesh = new THREE.Mesh(rGeo, rMat);
@@ -1006,20 +1149,10 @@
           { passive: true },
         );
 
-        /* ── Live HUD ── */
-        const hudEl = document.getElementById("live-hud");
-        let htick = 0;
-        function updateHUD(t) {
-          if (htick++ % 20 !== 0) return;
-          const amp = (3.9 + Math.sin(t) * 0.4).toFixed(2);
-          const freq = (0.38 + Math.sin(t * 0.3) * 0.02).toFixed(3);
-          if (hudEl) hudEl.textContent = `AMP :: ${amp} · ω=${freq} rad/s`;
-        }
-
-        /* ── Color lerp ── */
-        const cCyan = new THREE.Color(0xd4a853);
-        const cPurp = new THREE.Color(0x4a7a72);
-        const cDeep = new THREE.Color(0x14161a);
+        /* ── Color lerp (Grafit -> Patina -> Mat Bakır) ── */
+        const cCyan = new THREE.Color(0xd1925c);
+        const cPurp = new THREE.Color(0x5f8a7a);
+        const cDeep = new THREE.Color(0x1a1d23);
         const tmp = new THREE.Color();
         const posW = geo.attributes.position;
         const posF = fGeo.attributes.position;
@@ -1069,7 +1202,6 @@
           camera.position.z = 44 + Math.sin(t * 0.08) * 3;
           camera.lookAt(0, 0, 0);
 
-          updateHUD(t);
           try {
             renderer.render(scene, camera);
           } catch (e) {
@@ -1104,7 +1236,7 @@
         if (!c) return;
         if (on)
           c.style.background =
-            "radial-gradient(120% 90% at 50% 38%,#1a1814 0%,#111215 55%,#0b0c0e 100%)";
+            "radial-gradient(120% 90% at 50% 38%, #1a1d23 0%, #131519 55%, #0e0f12 100%)";
         else c.style.background = "";
       }
       function threeWatch() {
@@ -1266,5 +1398,111 @@
         navigator.serviceWorker.register("sw.js").catch(function () {});
       }
     </script>
+    <script src="js/qtr-platform.js"></script>
+
+    <!-- ══ MATEMATİKSEL MODEL & KOD MODALI ══ -->
+    <div class="qtr-modal-overlay" id="qtr-model-modal" style="display: none;" onclick="if(event.target===this)closeModelModal()">
+      <div class="qtr-modal-box">
+        <div class="qtr-modal-header">
+          <div>
+            <div style="font-size: 10px; color: var(--text-4)">MATEMATİKSEL VE FİZİKSEL MODEL</div>
+            <h3 id="qtr-modal-title" style="color: #fff; font-size: 14px; font-weight: 600; margin-top: 2px;">Model Başlığı</h3>
+          </div>
+          <button class="qtr-modal-close" onclick="closeModelModal()">✕</button>
+        </div>
+        <div style="font-size: 11px; color: var(--text-3); margin-bottom: 4px;">Formül / Eşitlik:</div>
+        <div class="qtr-code-block" id="qtr-modal-math" style="color: #10b981;">|ψ⟩ = ...</div>
+        
+        <div style="font-size: 11px; color: var(--text-3); margin-bottom: 4px;">Operatör / Üniter Matris:</div>
+        <div class="qtr-code-block" id="qtr-modal-matrix" style="color: var(--copper-300);">U = ...</div>
+
+        <div style="font-size: 11px; color: var(--text-3); margin-bottom: 4px;">Python (Quantro SDK) Kodu:</div>
+        <pre class="qtr-code-block" id="qtr-modal-py">import quantro as qtr...</pre>
+
+        <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 14px;">
+          <button class="qtr-copy-btn" id="qtr-modal-copy-btn" onclick="copyModalPython()" style="background: #fff; color: #000; font-weight: 600;">Python Kodunu Kopyala</button>
+          <button class="qtr-copy-btn" onclick="closeModelModal()">Kapat</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ KOMUT PALETİ (Ctrl + K) ══ -->
+    <div class="qtr-cmdk-overlay" id="qtr-cmdk-modal" style="display: none;" onclick="if(event.target===this)closeCmdk()">
+      <div class="qtr-cmdk-dialog">
+        <div class="qtr-cmdk-input-wrap">
+          <span style="font-family: var(--fm); color: var(--text-4); margin-right: 10px;">⌘</span>
+          <input
+            type="text"
+            id="qtr-cmdk-input"
+            class="qtr-cmdk-input"
+            placeholder="13 modül, Python kütüphanesi veya dokümantasyon ara..."
+            oninput="filterCmdk(this.value)"
+          />
+          <kbd style="font-family: var(--fm); font-size: 10px; color: var(--text-4); border: 1px solid rgba(255,255,255,0.1); padding: 2px 5px; border-radius: 4px;">ESC</kbd>
+        </div>
+        <div class="qtr-cmdk-list" id="qtr-cmdk-list">
+          <div class="qtr-cmdk-item" onclick="openModelModal(1); closeCmdk();">
+            <span>MOD-01: Kubit Devre Simülatörü</span>
+            <span style="font-size: 10px; font-family: var(--fm); color: var(--text-4)">HESAPLAMA</span>
+          </div>
+          <div class="qtr-cmdk-item" onclick="openModelModal(2); closeCmdk();">
+            <span>MOD-02: ANU Canlı Kuantum Rastgelelik (QRNG)</span>
+            <span style="font-size: 10px; font-family: var(--fm); color: var(--text-4)">DONANIM</span>
+          </div>
+          <div class="qtr-cmdk-item" onclick="openModelModal(3); closeCmdk();">
+            <span>MOD-03: BB84 Kuantum Anahtar Dağıtımı</span>
+            <span style="font-size: 10px; font-family: var(--fm); color: var(--text-4)">KRİPTO</span>
+          </div>
+          <div class="qtr-cmdk-item" onclick="openModelModal(4); closeCmdk();">
+            <span>MOD-04: Bloch Küresi 3B Görselleştirici</span>
+            <span style="font-size: 10px; font-family: var(--fm); color: var(--text-4)">HESAPLAMA</span>
+          </div>
+          <div class="qtr-cmdk-item" onclick="openModelModal(5); closeCmdk();">
+            <span>MOD-05: Heisenberg Belirsizlik İlkesi</span>
+            <span style="font-size: 10px; font-family: var(--fm); color: var(--text-4)">FİZİK</span>
+          </div>
+          <div class="qtr-cmdk-item" onclick="openModelModal(6); closeCmdk();">
+            <span>MOD-06: Kuantum Tünelleme Bariyeri</span>
+            <span style="font-size: 10px; font-family: var(--fm); color: var(--text-4)">FİZİK</span>
+          </div>
+          <div class="qtr-cmdk-item" onclick="openModelModal(7); closeCmdk();">
+            <span>MOD-07: Çift Yarık Dalga Girişimi</span>
+            <span style="font-size: 10px; font-family: var(--fm); color: var(--text-4)">FİZİK</span>
+          </div>
+          <div class="qtr-cmdk-item" onclick="openModelModal(8); closeCmdk();">
+            <span>MOD-08: Kuantum Işınlama (Teleportation)</span>
+            <span style="font-size: 10px; font-family: var(--fm); color: var(--text-4)">HESAPLAMA</span>
+          </div>
+          <div class="qtr-cmdk-item" onclick="openModelModal(9); closeCmdk();">
+            <span>MOD-09: Schrödinger'in Kedisi &amp; Dekolerans</span>
+            <span style="font-size: 10px; font-family: var(--fm); color: var(--text-4)">FİZİK</span>
+          </div>
+          <div class="qtr-cmdk-item" onclick="openModelModal(10); closeCmdk();">
+            <span>MOD-10: Kuantum Yürüyüşü (Quantum Walk)</span>
+            <span style="font-size: 10px; font-family: var(--fm); color: var(--text-4)">HESAPLAMA</span>
+          </div>
+          <div class="qtr-cmdk-item" onclick="openModelModal(11); closeCmdk();">
+            <span>MOD-11: Kara Delik Termodinamiği</span>
+            <span style="font-size: 10px; font-family: var(--fm); color: var(--text-4)">ASTRO</span>
+          </div>
+          <div class="qtr-cmdk-item" onclick="openModelModal(12); closeCmdk();">
+            <span>MOD-12: Evren Yaşı &amp; Kozmik Genişleme</span>
+            <span style="font-size: 10px; font-family: var(--fm); color: var(--text-4)">ASTRO</span>
+          </div>
+          <div class="qtr-cmdk-item" onclick="openModelModal(13); closeCmdk();">
+            <span>MOD-13: Görelilikçi Doppler &amp; Kızıla Kayma</span>
+            <span style="font-size: 10px; font-family: var(--fm); color: var(--text-4)">ASTRO</span>
+          </div>
+          <div class="qtr-cmdk-item" onclick="window.location.href='quantro-lab.html'" style="border-top: 1px solid rgba(255,255,255,0.06); color: #10b981;">
+            <span>Canlı Kuantum Laboratuvarı (Web Playground)</span>
+            <span style="font-size: 10px; font-family: var(--fm);">GİT ↗</span>
+          </div>
+          <div class="qtr-cmdk-item" onclick="copyInstallCmd(); closeCmdk();" style="color: var(--copper-300);">
+            <span>$ pip install quantro (Komutu Kopyala)</span>
+            <span style="font-size: 10px; font-family: var(--fm);">TERMINAL</span>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

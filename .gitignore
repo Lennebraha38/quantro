@@ -37,3 +37,14 @@ blob-report/
 
 # Playwright denetim ciktilari (gecici)
 tmp/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+*.egg
+.venv/
+venv/
+ENV/

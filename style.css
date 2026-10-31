@@ -2305,3 +2305,556 @@ footer {
     padding: 0 16px;
   }
 }
+
+/* Kurucu künyesi (footer) */
+.footer-founder {
+  font-family: var(--fm);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--text-2);
+}
+.footer-founder a {
+  color: var(--copper-300);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(209, 146, 92, 0.35);
+}
+.footer-founder a:hover {
+  color: var(--copper-400);
+}
+
+
+/* ═════════════════════════════════════════════════════════════
+   QUANTRO DEEP-TECH PLATFORM STYLES (#09090B / BENTO / CLI)
+   ═════════════════════════════════════════════════════════════ */
+
+/* ── Canlı Kuantum Telemetri Barı ── */
+.qtr-telemetry-bar {
+  width: 100%;
+  background: rgba(9, 9, 11, 0.88);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  font-family: var(--fm);
+  font-size: 11px;
+}
+.qtr-tel-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 20px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--text-3);
+}
+.qtr-tel-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+.qtr-tel-pulse {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+  display: inline-block;
+  animation: qtrPulse 2s infinite ease-in-out;
+}
+@keyframes qtrPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+.qtr-tel-label {
+  color: #10b981;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 10px;
+}
+.qtr-tel-sep {
+  color: rgba(255, 255, 255, 0.15);
+}
+.qtr-mono {
+  color: var(--text-1);
+}
+.qtr-tel-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.qtr-cmdk-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-2);
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.qtr-cmdk-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: var(--text-1);
+}
+.qtr-cmdk-btn kbd {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-size: 9px;
+}
+.qtr-lang-switch {
+  display: flex;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: 2px;
+}
+.qtr-lang-btn {
+  background: none;
+  border: none;
+  color: var(--text-3);
+  font-family: var(--fm);
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.qtr-lang-btn.active {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--text-1);
+  font-weight: 600;
+}
+
+/* ── Hero Grid & Install Box ── */
+.qtr-hero-container {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 48px;
+  align-items: center;
+  margin-top: 24px;
+}
+@media (max-width: 992px) {
+  .qtr-hero-container {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+.qtr-install-box {
+  background: rgba(18, 19, 23, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  backdrop-filter: blur(16px);
+  margin: 20px 0;
+  max-width: 520px;
+}
+.qtr-install-tabs {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 10px;
+  margin-bottom: 12px;
+}
+.qtr-tab-btn {
+  background: none;
+  border: none;
+  color: var(--text-3);
+  font-family: var(--fm);
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.qtr-tab-btn.active {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-1);
+}
+.qtr-install-tag {
+  font-family: var(--fm);
+  font-size: 10px;
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+.qtr-install-cmd {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-family: var(--fm);
+  font-size: 13px;
+}
+.qtr-cmd-prompt {
+  color: #10b981;
+  margin-right: 8px;
+  user-select: none;
+}
+.qtr-copy-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-2);
+  font-family: var(--fm);
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.qtr-copy-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+/* ── Hero Interactive Qubit Widget ── */
+.qtr-hero-widget {
+  background: rgba(18, 19, 23, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 22px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+.qtr-hw-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+  font-family: var(--fm);
+  font-size: 11px;
+}
+.qtr-hw-dots {
+  display: flex;
+  gap: 6px;
+}
+.qtr-hw-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+.qtr-hw-card {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 14px;
+  font-family: var(--fm);
+  margin-bottom: 16px;
+}
+.qtr-hw-state-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text-3);
+  margin-bottom: 10px;
+}
+.qtr-hw-probs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.qtr-hw-pbox {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  padding: 10px;
+}
+.qtr-hw-pbox-num {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 4px 0;
+}
+.qtr-hw-gates {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.qtr-hw-gate-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-1);
+  font-family: var(--fm);
+  font-size: 11px;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.qtr-hw-gate-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.22);
+}
+.qtr-hw-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--fm);
+  font-size: 11px;
+  color: var(--text-3);
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* ── 13-Modül Bento Grid Bölümü ── */
+.qtr-bento-section {
+  max-width: 1280px;
+  margin: 60px auto;
+  padding: 0 20px;
+}
+.qtr-bento-head {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 32px;
+}
+.qtr-bento-eyebrow {
+  font-family: var(--fm);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--copper-400);
+  margin-bottom: 8px;
+}
+.qtr-bento-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.02em;
+}
+.qtr-bento-desc {
+  color: var(--text-3);
+  font-size: 14px;
+  max-width: 640px;
+  margin-top: 6px;
+  line-height: 1.5;
+}
+.qtr-bento-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+@media (max-width: 1024px) {
+  .qtr-bento-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 640px) {
+  .qtr-bento-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.qtr-bento-card {
+  background: rgba(18, 19, 23, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+}
+.qtr-bento-card:hover {
+  background: rgba(24, 25, 30, 0.75);
+  border-color: rgba(255, 255, 255, 0.18);
+  transform: translateY(-2px);
+}
+.qtr-bento-card.featured {
+  background: rgba(22, 24, 30, 0.75);
+  border-color: rgba(209, 146, 92, 0.25);
+}
+.qtr-card-badge {
+  font-family: var(--fm);
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(209, 146, 92, 0.12);
+  color: var(--copper-300);
+  border: 1px solid rgba(209, 146, 92, 0.25);
+}
+.qtr-card-num {
+  font-family: var(--fm);
+  font-size: 11px;
+  color: var(--text-4);
+}
+.qtr-card-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  margin: 10px 0 6px 0;
+  line-height: 1.3;
+}
+.qtr-card-desc {
+  font-size: 12px;
+  color: var(--text-3);
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+.qtr-card-math {
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-family: var(--fm);
+  font-size: 11px;
+  color: var(--text-2);
+  margin-bottom: 14px;
+  overflow-x: auto;
+}
+.qtr-card-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 12px;
+  font-family: var(--fm);
+  font-size: 11px;
+}
+.qtr-card-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-2);
+  padding: 4px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.15s;
+}
+.qtr-card-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+/* ── Modal (Matematiksel Model & Kod) ── */
+.qtr-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.qtr-modal-box {
+  background: #09090b;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 580px;
+  padding: 24px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+  font-family: var(--fm);
+}
+.qtr-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 14px;
+  margin-bottom: 16px;
+}
+.qtr-modal-close {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-3);
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.qtr-modal-close:hover {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.25);
+}
+.qtr-code-block {
+  background: #000;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 11px;
+  color: var(--text-1);
+  line-height: 1.6;
+  overflow-x: auto;
+  margin: 8px 0 16px 0;
+}
+
+/* ── Komut Paleti (Ctrl+K) ── */
+.qtr-cmdk-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
+  z-index: 2100;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 15vh;
+}
+.qtr-cmdk-dialog {
+  background: #09090b;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 520px;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+}
+.qtr-cmdk-input-wrap {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.qtr-cmdk-input {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 14px;
+  width: 100%;
+  outline: none;
+  font-family: var(--fb);
+}
+.qtr-cmdk-list {
+  max-height: 320px;
+  overflow-y: auto;
+  padding: 6px;
+}
+.qtr-cmdk-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--text-2);
+  cursor: pointer;
+  transition: all 0.1s;
+}
+.qtr-cmdk-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}

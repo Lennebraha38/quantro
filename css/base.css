@@ -15,37 +15,64 @@
 }
 
 :root {
-  /* Sıcak Karbon Obsidyen & Arşivsel Parşömen / Usturlap Pirinci Paleti */
-  --void: #0b0c0e;
-  --deep: rgba(18, 20, 24, 0.88);
-  --surface: rgba(25, 28, 34, 0.84);
-  --subtle: #2b2f37;
+  /* Saf Siyah & Metalik Grafit Merdiveni (#09090b / Tailwind zinc-950) */
+  --ink-950: #09090b;
+  --ink-900: #101114;
+  --ink-800: #18191d;
+  --ink-700: #23272f;
+  --ink-600: #2e333c;
 
-  /* Birincil Vurgu: Usturlap Pirinci (geriye dönük uyumluluk için --cyan takma adıyla) */
-  --cyan: #d4a853;
-  --cyanD: rgba(212, 168, 83, 0.12);
-  --cyanM: rgba(212, 168, 83, 0.34);
-  --accent: #d4a853;
-  --verdigris: #5ba89c;
+  /* Vellum (Açık Belge / Uzun-Form Yüzeyi) */
+  --vellum: #f1ede6;
+  --vellum-ink: #16181c;
 
-  /* Metin & Mürekkep Tonları */
-  --text: #ece7dd;
-  --muted: #9e988c;
+  /* Metin Hiyerarşisi */
+  --text-1: #eae7e1;
+  --text-2: #a9aeb6;
+  --text-3: #7e848e;
+  --text-4: #575d67;
 
-  /* Yardımcı Mineral Vurgular */
-  --red: #d46556;
-  --green: #68b88e;
-  --gold: #e2b866;
-  --purple: #b87b56;
+  /* Tek Aksan: Mat Bakır & Oksitlenmiş Patina */
+  --copper-300: #e3b187;
+  --copper-400: #d1925c;
+  --copper-500: #b8763f;
+  --copper-600: #96582d;
+  --copper-800: #4a2b14;
+  --patina: #5f8a7a;
 
-  /* Mimari Çizgiler */
-  --hairline: rgba(236, 231, 221, 0.11);
-  --hairline-strong: rgba(212, 168, 83, 0.36);
+  /* Yapısal Çizgiler ve Mikro Kontrast (border-white/10) */
+  --hair: rgba(255, 255, 255, 0.08);
+  --hair-strong: rgba(255, 255, 255, 0.12);
+  --hair-hover: rgba(255, 255, 255, 0.18);
+  --hairline: rgba(255, 255, 255, 0.08);
+  --hairline-strong: rgba(255, 255, 255, 0.16);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --radius-s: 8px;
+  --radius-m: 12px;
+  --radius-l: 18px;
+  --radius-xl: 24px;
 
-  /* Zamansız Monografi Tipografi Üçlüsü */
-  --fd: "Newsreader", "Cormorant Garamond", Georgia, serif;
-  --fb: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --fm: "IBM Plex Mono", "Courier New", monospace;
+  /* Geriye Dönük Token Eşlemeleri (Bileşen Uyumluluğu) */
+  --void: #09090b;
+  --deep: #101114;
+  --surface: #18191d;
+  --subtle: #23272f;
+  --cyan: #d1925c;
+  --cyanD: rgba(209, 146, 92, 0.1);
+  --cyanM: rgba(209, 146, 92, 0.38);
+  --text: #eae7e1;
+  --muted: #7e848e;
+  --red: #d46a6a;
+  --green: #5f8a7a;
+  --gold: #d1925c;
+  --purple: #8e7968;
+
+  /* Modern Tipografi (Inter/Geist + JetBrains Mono) */
+  --fd: "Inter", "IBM Plex Serif", Georgia, serif;
+  --fb:
+    "Inter", "IBM Plex Sans", -apple-system, BlinkMacSystemFont,
+    sans-serif;
+  --fm: "JetBrains Mono", "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
 }
 
 html {
